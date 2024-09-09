@@ -2,11 +2,19 @@
     margin: 0px;
     padding: 0px;;
 }
-
+:root {
+    --graphite: rgb(29, 30, 24);
+    --mainColor: rgba(228,45,45);
+    --light: rgb(255, 255, 255);
+    --light-trans-glow: rgba(255, 255, 255, 0.400);
+    --light-trans-glow-less: rgba(255, 255, 255, 0.200);
+    --light-trans-2Shine: rgba(255, 255, 255, 0.500);
+    --light-trans-text: rgba(255, 255, 255, 0.750);
+    --light-text: rgba(255, 255, 255, 0.7);
+}
 .v-main {
     border: 2px solid rgb(13, 0, 255);
     min-height: 100svh;
-    background-color: white;
     color: black;
 
     display: flex;
@@ -14,8 +22,194 @@
     justify-content: center;
 
     #menuComponent, #footerComponent {
-        background-color: rgb(255, 0, 0);
         text-align: center;
+    }
+
+    .view {
+        flex: 1;
+        text-align: center;
+    }
+    .glow:hover, .justGlow {
+        color: var(--light);       
+        animation: neonGlow 0.5s ease-in-out infinite alternate;
+    }
+    .glowLess:hover, .justGlowless {
+        color: var(--light);       
+        animation: neonGlowLess 0.5s ease-in-out infinite alternate;
+    }
+    .glowBox, .justGlowBox {
+        color: var(--light);       
+        animation: neonGlowBox 0.5s ease-in-out infinite alternate;
+    }
+    @keyframes neonGlow {
+        from {
+            text-shadow:
+            0 0 1.5px var(--light-trans-glow),
+            0 0 2.5px var(--light-trans-glow),
+            0 0 5px var(--light-trans-glow),
+            0 0 10px var(--light-trans-glow),
+            0 0 20px var(--light-trans-glow),
+            0 0 25px var(--light-trans-glow),
+            0 0 30px var(--light-trans-glow),
+            0 0 33px var(--light-trans-glow);
+        }
+    
+        to {
+            text-shadow:
+                0 0 2.5px var(--light-trans-glow),
+                0 0 4px var(--light-trans-glow),
+                0 0 8px var(--light-trans-glow),
+                0 0 15px var(--light-trans-glow),
+                0 0 30px var(--light-trans-glow),
+                0 0 33px var(--light-trans-glow),
+                0 0 45px var(--light-trans-glow),
+                0 0 60px var(--light-trans-glow);
+        }
+    }
+
+    @keyframes neonGlowLess {
+        from {
+            text-shadow:
+            0 0 1.5px var(--light-trans-glow-less),
+            0 0 2.5px var(--light-trans-glow-less),
+            0 0 5px var(--light-trans-glow-less),
+            0 0 10px var(--light-trans-glow-less),
+            0 0 20px var(--light-trans-glow-less),
+            0 0 25px var(--light-trans-glow-less),
+            0 0 30px var(--light-trans-glow-less),
+            0 0 33px var(--light-trans-glow-less);
+        }
+    
+        to {
+            text-shadow:
+                0 0 2.5px var(--light-trans-glow-less),
+                0 0 4px var(--light-trans-glow-less),
+                0 0 8px var(--light-trans-glow-less),
+                0 0 15px var(--light-trans-glow-less),
+                0 0 30px var(--light-trans-glow-less),
+                0 0 33px var(--light-trans-glow-less),
+                0 0 45px var(--light-trans-glow-less),
+                0 0 60px var(--light-trans-glow-less);
+        }
+    }
+    @keyframes neonGlowBox {
+        from {
+            box-shadow:
+            0 0 1.5px var(--light-trans-glow),
+            0 0 2.5px var(--light-trans-glow),
+            0 0 5px var(--light-trans-glow),
+            0 0 10px var(--light-trans-glow),
+            0 0 20px var(--light-trans-glow),
+            0 0 25px var(--light-trans-glow),
+            0 0 30px var(--light-trans-glow),
+            0 0 33px var(--light-trans-glow);
+        }
+    
+        to {
+            box-shadow:
+                0 0 2.5px var(--light-trans-glow),
+                0 0 4px var(--light-trans-glow),
+                0 0 8px var(--light-trans-glow),
+                0 0 15px var(--light-trans-glow),
+                0 0 30px var(--light-trans-glow),
+                0 0 33px var(--light-trans-glow),
+                0 0 45px var(--light-trans-glow),
+                0 0 60px var(--light-trans-glow);
+        }
+    }
+    @keyframes neonLogo {
+        0% {
+            filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(80%) contrast(60%) drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px #fff) drop-shadow(0 0 20px #fff);;
+        }
+        100% {
+            filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(80%) contrast(60%)  drop-shadow(0 0 10px #fff) drop-shadow(0 0 20px #fff) drop-shadow(0 0 30px #fff)
+        }
+    }
+}
+.light{
+    background-color: white;
+    #menuComponent, #footerComponent, .burgerLinks {
+        background-color: var(--mainColor);
+        text-align: center;
+    }
+
+    p, .links > a {
+        color: var(--light-text);
+    }
+
+    .logo {
+        img {
+            filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(75%) contrast(102%);
+        }
+    }
+
+    .links {
+        a:hover {
+            color: var(--light);
+        }
+        a:after {
+            color: var(--light);
+        }
+        .router-link-exact-active {
+            color: var(--light);
+        }
+    }
+
+    .icons {
+        .v-icon {
+            color: var(--light-text);
+        }
+        .router-link-exact-active .v-icon, .v-icon:hover {
+            color: var(--light);
+        }
+    }
+
+    .view {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+.dark {
+    background-color: rgb(41, 41, 41);
+    #menuComponent, #footerComponent, .burgerLinks {
+        background-color: var(--graphite);
+        text-align: center;
+
+        p, .links > a, .icons .v-icon {
+            color: var(--light-trans-text);
+        }
+
+        
+        .logo {
+            img {
+                filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%) drop-shadow(0 0 10px #fff);
+            }
+        }
+
+        .links {
+            a:hover {
+                color: var(--light-trans-text);
+            }
+            a:after {
+                color: var(--light-trans-text);
+            }
+            .router-link-exact-active {
+                color: var(--light-trans-text);
+                animation: neonGlow 0.5s ease-in-out infinite alternate;
+            }
+        }
+
+        .icons {
+            .v-icon {
+                color: var(--light-trans-text);
+            }
+            .router-link-exact-active {
+                color: var(--light-trans-text);
+                animation: neonGlow 0.5s ease-in-out infinite alternate;
+            }
+        }
+
     }
     .view {
         flex: 1;
