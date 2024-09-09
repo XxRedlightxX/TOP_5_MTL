@@ -1,15 +1,43 @@
 <template>
-    <div id="menuComponent">
-        <h1> Menu Component</h1>
+    <v-app-bar :elevation="2"  id="menuComponent">
 
-        <div class="links">
-            <router-link to="/">Home</router-link>
-            <router-link to="/Events">Events</router-link>
-            <router-link to="/Profile">Profile</router-link>
+        <div class="allMenu">
+            <router-link  to="/" class="logo">
+                <img src="/src/assets/Logo-Gem.svg" alt="Logo Gem">
+            </router-link>
+            
+            <div class="links">
+                <router-link to="/">Home</router-link>
+                <router-link to="/Events">Events</router-link>
+            </div>
+
+            <div class="icons">
+                <router-link to="/Profile" class="profile">
+                    <v-icon icon="mdi-account-circle" class="icon"/>
+                </router-link>
+                <v-icon :icon="actualMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'" class="icon" @click="changeMode()"/>
+            </div>
         </div>
-    </div>
+
+    </v-app-bar>
 </template>
 
-<script setup></script>
+<script setup>
+    import storageManager from "../JS/LocalStaorageManager.js"
+    import { ref } from 'vue'
+
+    let actualMode = ref(storageManager.getMode());
+
+    if (actualMode.value === null) {
+        storageManager.setMode(true);
+        actualMode.value = storageManager.getMode();
+    }
+
+    const changeMode = () => {
+        console.log("new val = " + !actualMode.value)
+        storageManager.setMode(!actualMode.value);
+        actualMode.value = !actualMode.value
+    }
+</script>
 
 <style src="../styles/MenuComponentStyle.scss"></style>

@@ -6,7 +6,7 @@
             <router-link to="/Profile">Profile</router-link>
         </div>
 
-        <h1> Footer Component</h1>
+        <p>&copy Footer Component</p>
     </div>
 </template>
 
