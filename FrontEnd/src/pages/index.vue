@@ -1,4 +1,5 @@
 <template>
+   <AppFooter />
   <HelloWorld />
 </template>
 
