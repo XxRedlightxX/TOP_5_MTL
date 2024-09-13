@@ -1,24 +1,27 @@
 <template>
     <v-app-bar :elevation="2"  id="menuComponent">
-
-        <div :class="['allMenu', {'burgerLinks' : seeBurgermenu}]" >
-            <v-icon icon="mdi-window-close" :class="['icon', 'iconClose', {'justGlow' : !actualMode}]" @click="changeSeeBurgermenu()"/>
-            <router-link  to="/" class="logo">
-                <img src="/src/assets/Logo-Gem.svg" alt="Logo Gem" title="Go to Home Page">
-            </router-link>
-            
-            <div class="links">
-                <router-link to="/" :class="{'glow' : !actualMode}">Home</router-link>
-                <router-link to="/Events" :class="{'glow' : !actualMode}">Events</router-link>
-            </div>
-
-            <div class="icons">
-                <router-link to="/Profile" class="profile">
-                    <v-icon icon="mdi-account-circle" class="icon" :class="{'glow' : !actualMode}"/>
+        
+        <transition name="slide">
+        <div v-if="seeBurgermenu" :class="['allMenu', {'burgerLinks' : seeBurgermenu}]" @click.self="changeSeeBurgermenu()">
+            <div class="smallMenu">
+                <v-icon icon="mdi-window-close" :class="['icon', 'iconClose', {'justGlow' : !actualMode}]" @click="changeSeeBurgermenu()"/>
+                <router-link  to="/" class="logo">
+                    <img src="/src/assets/Logo-Gem.svg" alt="Logo Gem" title="Go to Home Page">
                 </router-link>
-                <v-icon :icon="!actualMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'" :class="['icon', {'justGlow' : !actualMode}]" @click="changeMode()"/>
+                
+                <div class="links">
+                    <router-link to="/" :class="{'glow' : !actualMode}">Home</router-link>
+                    <router-link to="/Events" :class="{'glow' : !actualMode}">Events</router-link>
+                </div>
+                <div class="icons">
+                    <router-link to="/Profile" class="profile">
+                        <v-icon icon="mdi-account-circle" class="icon" :class="{'glow' : !actualMode}"/>
+                    </router-link>
+                    <v-icon :icon="!actualMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'" :class="['icon', {'justGlow' : !actualMode}]" @click="changeMode()"/>
+                </div>
             </div>
         </div>
+        </transition>
 
         <div class="BurgerMenu">
                 <input type="checkbox" name="showMenu" id="showMenu" v-model="seeBurgermenu">
@@ -36,6 +39,18 @@
     let actualMode = ref(storageManager.getMode());
     let seeBurgermenu = ref(false);
 
+    function getDeviceDimensions() {
+        // Obtenir la largeur et la hauteur de la fenêtre
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        
+        // Retourner un objet avec les dimensions
+        return {
+            width: width,
+            height: height
+        };
+    }
+
     if (actualMode.value === null) {
         storageManager.setMode(true);
         actualMode.value = storageManager.getMode();
@@ -48,7 +63,11 @@
     }
 
     const changeSeeBurgermenu = () => {
-        seeBurgermenu.value = false;
+        const dimensions = getDeviceDimensions(); // Appel de la fonction
+        console.log("click : " + dimensions.width); // Utilisation de la valeur retournée
+        if (dimensions.width <= 1025) { // Vérification de la largeur
+            seeBurgermenu.value = !seeBurgermenu.value;
+        }
     }
 </script>
 

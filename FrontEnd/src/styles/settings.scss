@@ -128,7 +128,7 @@
 }
 .light{
     background-color: white;
-    #menuComponent, #footerComponent, .burgerLinks {
+    .smallMenu, #footerComponent {
         background-color: var(--mainColor);
         text-align: center;
     }
@@ -172,7 +172,7 @@
 
 .dark {
     background-color: rgb(41, 41, 41);
-    #menuComponent, #footerComponent, .burgerLinks {
+    .smallMenu, #footerComponent {
         background-color: var(--graphite);
         text-align: center;
 
