@@ -2,6 +2,7 @@
     <v-app-bar :elevation="2"  id="menuComponent">
 
         <div :class="['allMenu', {'burgerLinks' : seeBurgermenu}]" >
+            <v-icon icon="mdi-window-close" :class="['icon', 'iconClose', {'justGlow' : !actualMode}]" @click="changeSeeBurgermenu()"/>
             <router-link  to="/" class="logo">
                 <img src="/src/assets/Logo-Gem.svg" alt="Logo Gem" title="Go to Home Page">
             </router-link>
@@ -44,6 +45,10 @@
         console.log("new val = " + !actualMode.value)
         storageManager.setMode(!actualMode.value);
         actualMode.value = !actualMode.value
+    }
+
+    const changeSeeBurgermenu = () => {
+        seeBurgermenu.value = false;
     }
 </script>
 

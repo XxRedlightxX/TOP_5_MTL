@@ -125,8 +125,13 @@
         position: fixed;
         top: 101%;
         height: 92.5svh;
-        padding-top: 10%;
+        padding-top: 2%;
 
+        .iconClose {
+            font-size: 3rem;
+            align-self: flex-end;
+            margin-bottom: 8%;
+        }
         .logo {
             display: block;
             width: 100%;
@@ -162,7 +167,7 @@
 
 @media screen and (max-width: 770px) {
     .burgerLinks {
-        height: 95svh;
+        height: 92.5svh;
         .links {
             a {
                 font-size: 4rem;
