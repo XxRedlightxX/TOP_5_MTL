@@ -35,7 +35,7 @@
     }
     .glowLess:hover, .justGlowless {
         color: var(--light);       
-        animation: neonGlowLess 0.5s ease-in-out infinite alternate;
+        
     }
     .glowBox, .justGlowBox {
         color: var(--light);       
@@ -137,12 +137,6 @@
         color: var(--light-text);
     }
 
-    .logo {
-        img {
-            filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(75%) contrast(102%);
-        }
-    }
-
     .links {
         a:hover {
             color: var(--light);
@@ -180,12 +174,6 @@
             color: var(--light-trans-text);
         }
 
-        
-        .logo {
-            img {
-                filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%) drop-shadow(0 0 10px #fff);
-            }
-        }
 
         .links {
             a:hover {

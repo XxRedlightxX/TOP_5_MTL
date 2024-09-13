@@ -39,4 +39,4 @@
   });
 </script>
 
-<style src="../../src/styles/settings.scss"></style>
+<style src="./styles/settings.scss"></style>

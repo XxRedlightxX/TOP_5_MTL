@@ -3,7 +3,7 @@
     display: block;
 
     .allMenu {
-        .logo {
+        #LogoComponent {
             text-decoration: none;
             border: 2px solid black;
             img {
@@ -96,8 +96,9 @@
             width: 100%;
         }
 
-        .logo {
+        #LogoComponent {
             width: 10%;
+            font-size: 20px;
             img {
                 width: 60%;
             }
@@ -158,7 +159,7 @@
     .allMenu {
         display: none;
 
-        .logo {
+        #LogoComponent {
             display: none;
         }
 
@@ -201,9 +202,10 @@
             align-self: flex-end;
             margin-bottom: 8%;
         }
-        .logo {
+        #LogoComponent {
             display: block;
             width: 100%;
+            font-size: 90px;
 
             img {
                 width: 40%;
@@ -239,6 +241,9 @@
         //top: 90%;
         //height: 94svh;
         padding-top: 13%;
+        #LogoComponent {
+            font-size: 35px;
+        }
         .links {
             a {
                 font-size: 4rem;
@@ -257,6 +262,9 @@
         //top: 90%;
         //height: 94svh;
         padding-top: 10%;
+        #LogoComponent {
+            font-size: 45px;
+        }
         .links {
             a {
                 font-size: 4rem;

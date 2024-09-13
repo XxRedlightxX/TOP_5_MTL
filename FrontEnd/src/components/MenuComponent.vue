@@ -5,9 +5,10 @@
         <div v-if="seeBurgermenu" :class="['allMenu', {'burgerLinks' : seeBurgermenu}]" @click.self="changeSeeBurgermenu()">
             <div class="smallMenu">
                 <v-icon icon="mdi-window-close" :class="['icon', 'iconClose', {'justGlow' : !actualMode}]" @click="changeSeeBurgermenu()"/>
-                <router-link  to="/" class="logo">
+                <!--<router-link  to="/" class="logo">
                     <img src="/src/assets/Logo-Gem.svg" alt="Logo Gem" title="Go to Home Page">
-                </router-link>
+                </router-link>-->
+                <Logo title="Go to Home Page" /> 
                 
                 <div class="links">
                     <router-link to="/" :class="{'glow' : !actualMode}">Home</router-link>
@@ -34,10 +35,11 @@
 
 <script setup>
     import storageManager from "../JS/LocalStaorageManager.js"
+    import Logo from "../components/LogoComponent.vue"
     import { ref } from 'vue'
 
     let actualMode = ref(storageManager.getMode());
-    let seeBurgermenu = ref(false);
+    let seeBurgermenu = ref(true);
 
     function getDeviceDimensions() {
         // Obtenir la largeur et la hauteur de la fenêtre
@@ -50,7 +52,12 @@
             height: height
         };
     }
+    const dimensions = getDeviceDimensions();
 
+    if (dimensions.width <= 1025){
+        seeBurgermenu.value = false
+    }
+    
     if (actualMode.value === null) {
         storageManager.setMode(true);
         actualMode.value = storageManager.getMode();
@@ -63,7 +70,7 @@
     }
 
     const changeSeeBurgermenu = () => {
-        const dimensions = getDeviceDimensions(); // Appel de la fonction
+        //const dimensions = getDeviceDimensions(); // Appel de la fonction
         console.log("click : " + dimensions.width); // Utilisation de la valeur retournée
         if (dimensions.width <= 1025) { // Vérification de la largeur
             seeBurgermenu.value = !seeBurgermenu.value;
