@@ -1,21 +1,18 @@
 #footerComponent {
     border: 2px solid rgb(255, 0, 0);
 
-    h1 {
-        font-size: 1rem;
-    }
     .links {
+        padding-top: 1%;
         width: 100%;
         display: flex;
         flex-direction: row;
-        justify-content: center;
         gap: 5%;
 
         a {
             text-decoration: none;
             color: black;
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1rem;
+            font-weight: normal;
         }
         a:after {
             text-decoration: none;
@@ -24,5 +21,20 @@
         .router-link-exact-active, a:hover{
             color: white;
         }
+    }
+
+    h1 {
+        font-size: 1rem;
+    }
+}
+@media screen and (min-width: 1025px) {
+    .links {
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 1025px) {
+    .links {
+        justify-content: space-around;
     }
 }

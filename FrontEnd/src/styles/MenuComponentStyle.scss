@@ -3,29 +3,108 @@
     display: block;
 
     .allMenu {
-        width: 75%;
-        border: 2px solid white;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        margin: auto;
-        height: 100%;
-
-        .logo {
-            width: 10%;
+        #LogoComponent {
             text-decoration: none;
-            color: white;
             border: 2px solid black;
             img {
-                width: 60%;
                 padding-top: 5%;
                 border: 2px solid rgb(21, 99, 226);
+            }
+
+            img:hover {
+                cursor: pointer;
             }
         }
 
         .links {
             border: 2px solid black;
+    
+            a {
+                text-decoration: none;
+                font-weight: bold;
+            }
+            a:after {
+                text-decoration: none;
+            }
+        }
+        .icons {
+            border: 2px solid black;
+
+            .profile {
+                text-decoration: none;
+            }
+        }
+    }
+    
+    .BurgerMenu {
+        border: 2px solid black;
+        input {
+            display: none;
+        }
+    }
+    /* Classes de transition */
+    .slide-enter-active, .slide-leave-active {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .slide-enter-from {
+        transform: translateX(-100%); /* Hors de l'écran au début de l'entrée */
+    }
+
+    .slide-enter-to {
+        transform: translateX(0); /* Dans l'écran à la fin de l'entrée */
+    }
+
+    .slide-leave-from {
+        transform: translateX(0); /* À l'écran au début de la sortie */
+    }
+
+    .slide-leave-to {
+        transform: translateX(-100%); /* Hors de l'écran à la fin de la sortie */
+    }
+}
+
+
+
+@media screen and (min-width: 1025px) {
+    .dark {
+        #menuComponent{
+            background-color: var(--graphite);
+        }
+    }
+    .light {
+        #menuComponent{
+            background-color: var(--mainColor);
+        }
+    }
+    .allMenu {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 75%;
+        margin: auto;
+
+        .smallMenu {
+            border: 2px solid white;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin: auto;
+            height: 100%;
+            width: 100%;
+        }
+
+        #LogoComponent {
+            width: 10%;
+            font-size: 20px;
+            img {
+                width: 60%;
+            }
+        }
+
+        .links {
             width: 80%;
             display: flex;
             flex-direction: row;
@@ -34,42 +113,167 @@
             gap: 5%;
     
             a {
-                text-decoration: none;
-                color: black;
                 font-size: 1.5rem;
-                font-weight: bold;
-            }
-            a:hover {
-                color: white;
-            }
-            a:after {
-                text-decoration: none;
-                color: black;
-            }
-            .router-link-exact-active {
-                background-color: rgba(255, 255, 255, 0.4);
-                color: white;
             }
         }
         .icons {
             width: 10%;
-            border: 2px solid black;
 
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-
-            .profile {
-                text-decoration: none;
-                color: white;
-            }
-            .router-link-exact-active {
-                background-color: rgba(255, 255, 255, 0.4);
-                color: white;
-            }
             .v-icon {
                 font-size: 2.4rem;
             }
         }
+        .burgerLinks, .iconClose {
+            display: none;
+        }
     }
+    
+    .BurgerMenu {
+        display: none;
+    }
+}
+@media screen and (max-width: 1025px) {
+    .dark {
+        .BurgerMenut{
+            background-color: var(--graphite);
+        }
+    }
+    .light {
+        .BurgerMenu{
+            background-color: var(--mainColor);
+        }
+    }
+    .BurgerMenu {
+        display: block;
+        width: 100%;
+        text-align: right;
+        z-index: 1000;
+        .v-icon {
+            font-size: 4rem;
+        }
+    }
+
+    .allMenu {
+        display: none;
+
+        #LogoComponent {
+            display: none;
+        }
+
+        .links {
+            display: none;
+        }
+        .icons {
+            display: none;
+        }
+    }
+    .burgerLinks {
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        width: 100%;
+        position: fixed;
+        top: 0%;
+        height: 100svh;
+        padding: 0% 0% 0% 0%;
+        margin: 0px;
+        background-color: rgba(255, 0, 0, 0);
+        border: 2px solid red;
+
+
+        .smallMenu {
+            display: flex;
+            flex-direction: column;
+            justify-content: baseline;
+            width: 90%;
+            background-color: rgba(255, 0, 0, 0);
+            ;
+            //position: fixed;
+            //top: 101%;
+            height: 100%;
+            padding-top: 10%;
+            border: 2px solid rgb(18, 192, 215);
+        }
+        .iconClose {
+            font-size: 3rem;
+            align-self: flex-end;
+            margin-bottom: 8%;
+        }
+        #LogoComponent {
+            display: block;
+            width: 100%;
+            font-size: 90px;
+
+            img {
+                width: 40%;
+            }
+        }
+
+        .links {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 5%;
+
+            a {
+                font-size: 3rem;
+            }
+        }
+        .icons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            justify-self: flex-end;
+
+            .v-icon {
+                font-size: 4rem;
+            }
+        }
+    } 
+}
+
+@media screen and (max-width: 760px) {
+    .burgerLinks {
+        //top: 90%;
+        //height: 94svh;
+        padding-top: 13%;
+        #LogoComponent {
+            font-size: 35px;
+        }
+        .links {
+            a {
+                font-size: 4rem;
+            }
+        }
+        .icons {
+            .v-icon {
+                font-size: 5rem;
+            }
+        }
+    } 
+}
+
+@media screen and (max-width: 550px) and (min-width: 500px) {
+    .burgerLinks {
+        //top: 90%;
+        //height: 94svh;
+        padding-top: 10%;
+        #LogoComponent {
+            font-size: 45px;
+        }
+        .links {
+            a {
+                font-size: 4rem;
+            }
+        }
+        .icons {
+            .v-icon {
+                font-size: 5rem;
+            }
+        }
+    } 
 }
