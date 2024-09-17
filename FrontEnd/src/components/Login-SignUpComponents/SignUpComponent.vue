@@ -1,6 +1,8 @@
 <template>
     <div id="signUpComponent">
         <h1> SignUp Component</h1>
+
+        
     </div>
 </template>
 
