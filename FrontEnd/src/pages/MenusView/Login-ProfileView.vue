@@ -2,13 +2,13 @@
     <div id="login-profileView">
         <h1> Login - Profile View</h1>
 
-        Hi my name is Gabriel
+       
         <LoginTest></LoginTest>
     </div>
 </template>
 
 <script setup>
-    import LoginTest from "../../components/Login-SignUpComponents/LoginComponent.vue"
+    import LoginTest from "../../components/Login-SignUpComponents/Login-SignUpComponent.vue"
     
 </script>
 
