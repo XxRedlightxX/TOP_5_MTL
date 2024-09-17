@@ -1,36 +1,92 @@
-
-/**
- * router/index.ts
- *
- * Automatic routes for `./src/pages/*.vue`
- */
-
 // Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+import { createRouter, createWebHistory } from 'vue-router'
+import 'vuetify/dist/vuetify.css';
+
+const routes = [
+  {
+    path: '/',
+    //component: () => import('@/layouts/default/Default.vue'),
+    children: [
+                          // Vue : MenusView
+      {
+        path: '/',
+        name: 'Home',
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import('@/pages/MenusView/HomeView.vue'),
+      },
+      {
+        path: '/Events',
+        name: 'Events',
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import('@/pages/MenusView/AllEventsView.vue'),
+      },
+
+      {
+        path: '/Login',
+        name: 'Login',
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import('@/pages/MenusView/AllEventsView.vue'),
+      },
+      {
+        path: '/Profile',
+        name: 'Profile',
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import('@/pages/MenusView/Login-ProfileView.vue'),
+      },
+
+                        // Vue : OtherView
+      {
+        path: '/Event',
+        name: 'Event',
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import('@/pages/OtherView/EventPageView.vue'),
+      },
+
+                          // Vue : ProfilesView
+      {
+        path: '/Gestion Profile',
+        name: 'Gestion Profile',
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import('@/pages/ProfilesView/GestionProfileView.vue'),
+      },
+      {
+        path: '/Gestion Event',
+        name: 'Gestion Event',
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import('@/pages/ProfilesView/GestionEventView.vue'),
+      },
+
+
+                        // Vue : ErroView
+      {
+        path: '/error',
+        name: 'error',
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import('@/pages/ErrorView.vue'),
+      },
+    ],
+  },
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
-})
-
-// Workaround for https://github.com/vitejs/vite/issues/11804
-router.onError((err, to) => {
-  if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
-    if (!localStorage.getItem('vuetify:dynamic-reload')) {
-      console.log('Reloading page to fix dynamic import error')
-      localStorage.setItem('vuetify:dynamic-reload', 'true')
-      location.assign(to.fullPath)
-    } else {
-      console.error('Dynamic import error, reloading page did not fix it', err)
-    }
-  } else {
-    console.error(err)
-  }
-})
-
-router.isReady().then(() => {
-  localStorage.removeItem('vuetify:dynamic-reload')
 })
 
 export default router

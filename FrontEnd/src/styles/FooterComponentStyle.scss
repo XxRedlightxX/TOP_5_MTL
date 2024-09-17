@@ -1,0 +1,28 @@
+#footerComponent {
+    border: 2px solid rgb(255, 0, 0);
+
+    h1 {
+        font-size: 1rem;
+    }
+    .links {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 5%;
+
+        a {
+            text-decoration: none;
+            color: black;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        a:after {
+            text-decoration: none;
+            color: black;
+        }
+        .router-link-exact-active, a:hover{
+            color: white;
+        }
+    }
+}
