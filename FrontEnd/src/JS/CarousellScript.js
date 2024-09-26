@@ -1,6 +1,26 @@
+import LocalStorageManager from "@/JS/LocalStaorageManager";
+import { ref, onMounted, onUnmounted } from 'vue'
 const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque."
-//import { from } from "core-js/core/array"
-//import mont-royal-img from "../assets/HomeCarousel/Mont-royal.jpg";
+
+const actualMode = ref(LocalStorageManager.getMode());
+
+if (actualMode.value == null){
+  LocalStorageManager.setMode(true);
+  actualMode.value = LocalStorageManager.getMode();
+}
+const handleModeChange = (event) => {
+  actualMode.value = JSON.parse(event.detail.storage);
+};
+
+// Add event listener for mode changes
+onMounted(() => {
+  window.addEventListener('mode-changed', handleModeChange);
+});
+
+// Remove event listener when component is unmounted
+onUnmounted(() => {
+  window.removeEventListener('mode-changed', handleModeChange);
+});
 
 const currentSlider = [
     {image : "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text},
@@ -8,13 +28,19 @@ const currentSlider = [
     {image : "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text},
     {image : "/src/assets/HomeCarousel/Jardin-botanique.jpg", title: "Jardin Botanique", desc: text},
 ]
+const currentSliderNuit = [
+  {image : "/src/assets/HomeCarousel/Pont-Jaque-Cartier-Nuit.jpg", title: "Mont-Royal", desc: text},
+  {image : "/src/assets/HomeCarousel/Bateau-mouche-nuit.jpg", title: "Bateau Mouche de nuit", desc: text},
+  {image : "/src/assets/HomeCarousel/Casino-nuit.jpg", title: "Casino", desc: text},
+  {image : "/src/assets/HomeCarousel/La-voute-nuit.jpg", title: "La Voute", desc: text},
+]
 
 export default {
     name: "GameCarousel", // Nom du composant Vue.js
     data() {
       return {
         // Tableau pour stocker les éléments du carrousel
-        carouselItems: currentSlider,
+        carouselItems: actualMode.value ? currentSlider : currentSliderNuit,
         // Temps avant que l'animation de transition ne se termine (en millisecondes)
         timeRunning: 3000,
         // Temps avant de passer automatiquement à l'élément suivant (en millisecondes)
@@ -69,11 +95,11 @@ export default {
   
             try {
               const url = await getDownloadURL(imageRef); // Récupère l'URL de l'image
-              return { ...game, image: url }; // Retourne l'objet jeu avec l'URL de l'image
+              return { /src.game, image: url }; // Retourne l'objet jeu avec l'URL de l'image
             } catch (error) {
               // En cas d'erreur, utilise une image par défaut
               console.error(`Error fetching image for ${game.title}:`, error);
-              return { ...game, image: "../assets/imageJeuxLogo/Mario.png" }; // Image de secours
+              return { /src.game, image: "/src/assets/imageJeuxLogo/Mario.png" }; // Image de secours
             }
           });
   

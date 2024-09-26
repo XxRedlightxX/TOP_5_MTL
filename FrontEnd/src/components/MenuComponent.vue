@@ -13,8 +13,6 @@
                 <div class="links">
                     <router-link to="/" :class="{'glow' : !actualMode}">Home</router-link>
                     <router-link to="/Events" :class="{'glow' : !actualMode}">Events</router-link>
-                    <router-link to="/Login">Login Test</router-link>
-                    <router-link to="/EventDetail">Page Détail</router-link>
                 </div>
                 <div class="icons">
                     <router-link to="/Profile" class="profile">

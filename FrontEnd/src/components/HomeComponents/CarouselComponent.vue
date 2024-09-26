@@ -11,8 +11,8 @@
                 <div :class="index == 0 ? 'title' : 'lostTitle'">{{ item.title }}</div>
 
                     <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
-                        <router-link class="btn roundBorderSmall">Voir l'evenement</router-link>
-                        <router-link class="btn roundBorderSmall">Découvrir les Organisateurs</router-link>
+                        <router-link :to="{ name: 'Event', params: { event: item } }" class="btn roundBorderSmall">Voir l'evenement</router-link>
+                        <router-link :to="{ name: 'Event', params: { event: item } }" class="btn roundBorderSmall">Découvrir les Organisateurs</router-link>
                     </div>
                     <div :class="index == 0 ? 'desc' : 'lostdesc'">
                         <p>{{ item.desc }}</p>
@@ -40,6 +40,37 @@
 </template>
 
 <script src="../../JS/CarousellScript.js">
+    /*import GameCarousell from "../../JS/CarousellScript.js"
+    import LocalStorageManager from "@/JS/LocalStaorageManager";
+    import { ref, onMounted, onUnmounted } from 'vue'
+
+    const actualMode = ref(LocalStorageManager.getMode());
+    const listSlider = ref(GameCarousell.carouselItems);
+    if (actualMode.value == null){
+    LocalStorageManager.setMode(true);
+    actualMode.value = LocalStorageManager.getMode();
+    }
+    const handleModeChange = (event) => {
+    actualMode.value = JSON.parse(event.detail.storage);
+    console.log("valueeeee " , actualMode.value)
+    };
+
+    // Add event listener for mode changes
+    onMounted(() => {
+    window.addEventListener('mode-changed', handleModeChange);
+    });
+
+    // Remove event listener when component is unmounted
+    onUnmounted(() => {
+    window.removeEventListener('mode-changed', handleModeChange);
+    });
+
+    if(actualMode.value == true){
+        listSlider.value = GameCarousell.carouselItems
+    }
+    else {
+        listSlider.value = GameCarousell.carouselItemsNuit
+    }*/
 </script>
 
 <style src="../../styles/HomesStyles/CarrouselComponentStyle.scss"></style>

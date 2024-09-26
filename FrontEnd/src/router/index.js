@@ -25,15 +25,6 @@ const routes = [
         component: () => import('@/pages/MenusView/AllEventsView.vue'),
       },
 
-      {
-        path: '/EventDetail',
-        name: 'EventDetail',
-        // route level code-splitting
-        // this generates a separate chunk (Home-[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import('@/pages/MenusView/EventDetail.vue'),
-      },
-
 
       {
         path: '/Login',
@@ -63,12 +54,13 @@ const routes = [
 
                         // Vue : OtherView
       {
-        path: '/Event',
+        path: '/Event/:event',
         name: 'Event',
         // route level code-splitting
         // this generates a separate chunk (Home-[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import('@/pages/OtherView/EventPageView.vue'),
+        component: () => import('@/pages/OtherView/EventView.vue'),
+        props: true, 
       },
 
                           // Vue : ProfilesView

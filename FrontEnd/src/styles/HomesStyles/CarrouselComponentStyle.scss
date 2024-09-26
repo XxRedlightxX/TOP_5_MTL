@@ -49,10 +49,12 @@
                 width: 30%;
                 left: 12.4%;
                 //transform: translateX(-50%);
+                z-index: 9000;
                 box-sizing: border-box;
                 color: var(--light);
                 text-shadow: 0 5px 10px #0004;
                 height: 72%;
+                border: 2px solid red;
                 .title{
                     width: 100%;
                     font-size: 3em;
@@ -60,7 +62,12 @@
                     font-weight: bold;
                     line-height: 1.3em;
                     display: block;
+                    z-index: 10000;
+                    border: 2px solid red;
 
+                }
+                .title:hover {
+                    color: red;
                 }
                 .lostTitle, .lostdesc {
                     width: 100%;
@@ -72,48 +79,50 @@
                     font-size: 1.4rem;
                     width: 100%;
                     height: 70%;
-                    z-index: 2000;
+                    z-index: 10000;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
+                    border: 2px solid red;
 
 
                     p {
                         margin-top:  -15%;
+                        z-index: 10000;
                         color: var(--light-trans-text);
                     }
                 }
+                .desc:hover {
+                    background-color: #f1683a;
+                }
                 .lostBouttons{
                     display: none;
+                    z-index: 10;
                 }
                 .buttons{
                     display: flex;
                     flex-direction: row;
                     gap: 5%;
+                    z-index: 10000;
                     margin-top: 20px;
+                    border: 2px solid red;
 
                     .btn{
-                        border: none;
+                        //border: none;
+                        z-index: 10000;
+                        border: 2px solid var(--light);
                         background-color: var(--light-trans);
                         padding: 2% 2%;
                         letter-spacing: 3px;
                         font-family: Poppins;
                         font-weight: 500;
-                        color: black;
-                    }
-                    .btn:nth-child(1):hover{
-                        background-color: rgba(114, 114, 114, 0);
-                        border: 2px solid rgb(255, 255, 255);
                         color: var(--light);
+                        text-decoration: none;
                     }
-                    .btn:nth-child(2){
-                        background: rgba(114, 114, 114, 0);
-                        border: 2px solid rgba(255, 253, 253, 0.128);
-                        color: var(--light-trans-2);
-                    }
-                    .btn:nth-child(2):hover{
-                        background: rgba(128, 128, 128, 0.432);
-                        //color: var(--light-trans-3-hover);
+                    .btn:hover{
+                        background-color: var(--light05);
+                        border: 2px solid var(--light);
+                        cursor: pointer;
                     }
                 }
             }
