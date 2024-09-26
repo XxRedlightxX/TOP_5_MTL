@@ -1,9 +1,17 @@
 <template>
     <div id="homeView">
-        <h1> Home View</h1>
+        <Carousel/>
+        <IntroText/>
+        <NewEvent/>
+        <Contact/>
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+    import Carousel from "../../components/HomeComponents/CarouselComponent.vue"
+    import IntroText from "../../components/HomeComponents/IntroTextComponent.vue"
+    import NewEvent from "../../components/HomeComponents/NewEventComponents/NewEventComponent.vue"
+    import Contact from "../../components/HomeComponents/ContactComponent.vue"
+</script>
 
 <style src="../../styles/MenusViewStyles/HomeViewStyle.scss"></style>

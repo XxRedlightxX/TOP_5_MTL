@@ -4,7 +4,7 @@
         <div class="Conteneur_login">
        
 
-       <div class="login_form">
+          <div class="login_form">
           
            <form action="#">
              <h3>Log in with</h3>
@@ -41,6 +41,7 @@
              <p class="sign_up">Don't have an account? <a href="#">Sign up</a></p>
            </form>
          </div>
+         
     </div>
 </div>
 </template>

@@ -2,7 +2,7 @@
     <div id="login-SignUpComponent">
         <h1> Login - SignUp Component</h1>
 
-            <Login></Login>
+        <!--<Login></Login>-->
         <SignUp></SignUp>
         
     </div>

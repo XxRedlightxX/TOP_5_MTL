@@ -1,3 +1,17 @@
 #newEventComponent {
     border: 2px solid rgb(255, 0, 0);
+    height: 200px;
+    width: 75%;
+    margin: auto;
+    background-color: black;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    align-items: center;
+    gap: 1%;
+
+    #singleNewEventComponent {
+        width: 30%;
+        height: 75%;
+    }
 }

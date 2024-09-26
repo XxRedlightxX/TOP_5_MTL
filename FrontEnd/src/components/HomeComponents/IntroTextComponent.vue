@@ -1,9 +1,12 @@
 <template>
     <div id="introTextComponent">
-        <h1> Intro text Component</h1>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestias labore quasi,
+             voluptatibus nostrum aliquid soluta deleniti distinctio aspernatur numquam laborum
+              necessitatibus laboriosam temporibus ratione commodi optio atque inventore. Neque, quo.
+        </p>
     </div>
 </template>
 
 <script setup></script>
 
-<style src="../../styles/HomesStyles/IntrotextComponentStyle.scss">
+<style src="../../styles/HomesStyles/IntrotextComponentStyle.scss"></style>

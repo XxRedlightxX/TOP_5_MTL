@@ -4,8 +4,13 @@
 }
 :root {
     --graphite: rgb(29, 30, 24);
+    --graphite0: rgba(29, 30, 24, 0);
+    --graphite015: rgba(29, 30, 24, 0.15);
+    --graphite06: rgba(29, 30, 24, 0.6);
     --mainColor: rgba(228,45,45);
     --light: rgb(255, 255, 255);
+    --light0: rgba(255, 255, 255, 0);
+    --dark: rgb(0, 0, 0);
     --light-trans-glow: rgba(255, 255, 255, 0.400);
     --light-trans-glow-less: rgba(255, 255, 255, 0.200);
     --light-trans-2Shine: rgba(255, 255, 255, 0.500);
@@ -165,7 +170,7 @@
 }
 
 .dark {
-    background-color: rgb(41, 41, 41);
+    background-color: var(--graphite);
     .smallMenu, #footerComponent {
         background-color: var(--graphite);
         text-align: center;
