@@ -25,12 +25,28 @@
         padding: 2% 2%;
         height: 90%;
 
-        h2 {
-            font-size: 2rem;
+        .top {
+            display: flex;
+            h2 {
+                width: 90%;
+                font-size: 2rem;
+            }
+            .icon {
+                width: 10%;
+                border-bottom: 2px solid rgb(0, 0, 0);
+                border-left: 2px solid rgb(0, 0, 0);
+                padding: 0px;
+                font-size: 3.1rem;
+                color: black;
+            }
         }
+
         p {
             font-size: 1.5rem;
             color: black;
+        }
+        .ratings {
+            //border: 2px solid red;
         }
     }
 }
