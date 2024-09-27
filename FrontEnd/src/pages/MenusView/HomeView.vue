@@ -2,7 +2,8 @@
     <div id="homeView">
         <Carousel/>
         <IntroText/>
-        <NewEvent/>
+        <!--<NewEvent/>-->
+        <NewEventTest/>
         <Contact/>
     </div>
 </template>
@@ -11,6 +12,7 @@
     import Carousel from "../../components/HomeComponents/CarouselComponent.vue"
     import IntroText from "../../components/HomeComponents/IntroTextComponent.vue"
     import NewEvent from "../../components/HomeComponents/NewEventComponents/NewEventComponent.vue"
+    import NewEventTest from "../../components/HomeComponents/NewEventComponents/testSlider.vue"
     import Contact from "../../components/HomeComponents/ContactComponent.vue"
 </script>
 
