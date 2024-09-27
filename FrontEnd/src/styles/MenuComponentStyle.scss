@@ -1,14 +1,11 @@
 #menuComponent {
-    border: 2px solid rgb(255, 0, 0);
     display: block;
 
     .allMenu {
         #LogoComponent {
             text-decoration: none;
-            border: 2px solid black;
             img {
                 padding-top: 5%;
-                border: 2px solid rgb(21, 99, 226);
             }
 
             img:hover {
@@ -17,7 +14,6 @@
         }
 
         .links {
-            border: 2px solid black;
     
             a {
                 text-decoration: none;
@@ -28,7 +24,6 @@
             }
         }
         .icons {
-            border: 2px solid black;
 
             .profile {
                 text-decoration: none;
@@ -37,7 +32,6 @@
     }
     
     .BurgerMenu {
-        border: 2px solid black;
         input {
             display: none;
         }
@@ -86,7 +80,6 @@
         margin: auto;
 
         .smallMenu {
-            border: 2px solid white;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -181,7 +174,6 @@
         padding: 0% 0% 0% 0%;
         margin: 0px;
         background-color: rgba(255, 0, 0, 0);
-        border: 2px solid red;
 
 
         .smallMenu {
@@ -195,7 +187,6 @@
             //top: 101%;
             height: 100%;
             padding-top: 10%;
-            border: 2px solid rgb(18, 192, 215);
         }
         .iconClose {
             font-size: 3rem;

@@ -6,7 +6,8 @@
 </template>
 
 <script setup>
-import PageDetail from "../../components/EventComponents/SingleEventComponent.vue"
+    import PageDetail from "../../components/EventComponents/SingleEventComponent.vue"
 </script>
+
 
 <style src="../../styles/EventsStyles/EventView.scss"></style>

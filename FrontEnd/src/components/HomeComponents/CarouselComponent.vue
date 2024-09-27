@@ -11,8 +11,8 @@
                 <div :class="index == 0 ? 'title' : 'lostTitle'">{{ item.title }}</div>
 
                     <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
-                        <router-link :to="{ name: '/Event/:event', params: { event: item } }" class="btn roundBorderSmall">Voir l'evenement</router-link>
-                        <router-link :to="{ name: 'Event', params: { event: item } }" class="btn roundBorderSmall">Découvrir les Organisateurs</router-link>
+                        <router-link to="/Event" class="btn roundBorderSmall" @click="setEvent(item)">Voir l'evenement</router-link>
+                        <router-link to="/Event" class="btn roundBorderSmall" @click="setEvent(item)">Découvrir les Organisateurs</router-link>
                     </div>
                     <div :class="index == 0 ? 'desc' : 'lostdesc'">
                         <p>{{ item.desc }}</p>
@@ -39,38 +39,102 @@
     </div>
 </template>
 
-<script src="../../JS/CarousellScript.js">
-    /*import GameCarousell from "../../JS/CarousellScript.js"
-    import LocalStorageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted } from 'vue'
+<script>
+import LocalStorageManager from "@/JS/LocalStaorageManager";
+import { ref, onMounted, onUnmounted } from 'vue'
 
-    const actualMode = ref(LocalStorageManager.getMode());
-    const listSlider = ref(GameCarousell.carouselItems);
-    if (actualMode.value == null){
+
+const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque."
+const actualMode = ref(LocalStorageManager.getMode());
+
+if (actualMode.value == null){
     LocalStorageManager.setMode(true);
     actualMode.value = LocalStorageManager.getMode();
-    }
-    const handleModeChange = (event) => {
+}
+const handleModeChange = (event) => {
     actualMode.value = JSON.parse(event.detail.storage);
-    console.log("valueeeee " , actualMode.value)
-    };
+};
 
-    // Add event listener for mode changes
-    onMounted(() => {
+// Add event listener for mode changes
+onMounted(() => {
     window.addEventListener('mode-changed', handleModeChange);
-    });
+});
 
-    // Remove event listener when component is unmounted
-    onUnmounted(() => {
+// Remove event listener when component is unmounted
+onUnmounted(() => {
     window.removeEventListener('mode-changed', handleModeChange);
-    });
+});
 
-    if(actualMode.value == true){
-        listSlider.value = GameCarousell.carouselItems
-    }
-    else {
-        listSlider.value = GameCarousell.carouselItemsNuit
-    }*/
+const currentSlider = [
+    {image : "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text, rating: 1 },
+    {image : "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 },
+    {image : "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text, rating: 5 },
+    {image : "/src/assets/HomeCarousel/Jardin-botanique.jpg", title: "Jardin Botanique", desc: text, rating: 4 }
+]
+const currentSliderNuit = [
+    {image : "/src/assets/HomeCarousel/Pont-Jaque-Cartier-Nuit.jpg", title: "Pont Jacque Cartier", desc: text, rating: 1 },
+    {image : "/src/assets/HomeCarousel/Bateau-mouche-nuit.jpg", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
+    {image : "/src/assets/HomeCarousel/Casino-nuit.jpg", title: "Casino", desc: text, rating: 2 },
+    {image : "/src/assets/HomeCarousel/La-voute-nuit.jpg", title: "La Voute", desc: text, rating: 3.5 }
+]
+
+export default {
+data() {
+  return {
+    // Tableau pour stocker les éléments du carrousel
+    carouselItems: actualMode.value ? currentSlider : currentSliderNuit,
+    // Temps avant que l'animation de transition ne se termine (en millisecondes)
+    timeRunning: 3000,
+    // Temps avant de passer automatiquement à l'élément suivant (en millisecondes)
+    timeAutoNext: 5000,
+    // Stocke l'ID du timeout pour réinitialiser le slider
+    runTimeOut: null,
+    // Stocke l'ID du timeout pour passer automatiquement à l'élément suivant
+    runNextAuto: null,
+  };
+},
+methods: {
+  setEvent(value) {
+    LocalStorageManager.setEvent(value);
+    console.log("Event value: ", value);
+  },
+  handleClick(event, item) {
+    event.preventDefault(); // Empêche la navigation immédiate
+    this.setEvent(item);
+    // Après avoir défini l'event, autorise la navigation
+    this.$router.push({ name: 'Event' });
+  },
+    // Fonction pour afficher l'élément suivant ou précédent du carrousel
+    showSlider(direction) {
+        // Si la direction est "next", déplace le premier élément à la fin du tableau
+        if (direction === "next") {
+            this.carouselItems.push(this.carouselItems.shift());
+        } else { // Sinon, déplace le dernier élément au début du tableau
+            this.carouselItems.unshift(this.carouselItems.pop());
+        }
+        // Réinitialise le slider après l'animation
+        this.resetSlider();
+    },
+        // Réinitialise le slider en supprimant les classes CSS et réinitialise les timers
+    resetSlider() {
+        clearTimeout(this.runTimeOut); // Annule tout timeout existant pour l'animation
+        this.runTimeOut = setTimeout(() => {
+            // Supprime les classes CSS 'next' et 'prev' après l'animation
+            this.$el.classList.remove("next", "prev");
+        }, this.timeRunning);
+    
+        clearTimeout(this.runNextAuto); // Annule tout timeout pour l'automatisation suivante
+        this.setNextAuto(); // Redéfinit le timeout pour passer à l'élément suivant
+    },
+        // Définir un timeout pour passer automatiquement à l'élément suivant
+    setNextAuto() {
+        this.runNextAuto = setTimeout(() => {
+            this.showSlider("next"); // Passe à l'élément suivant automatiquement
+        }, this.timeAutoNext);
+    },
+    
+}
+};
 </script>
 
 <style src="../../styles/HomesStyles/CarrouselComponentStyle.scss"></style>
