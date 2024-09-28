@@ -1,0 +1,40 @@
+
+
+#EventOverview{
+
+   
+    width: 40%;
+    padding-top: 10px;
+    
+    margin-left: 237px;
+    
+
+    p {
+        color: black;
+    }
+
+    .info {
+        background-color: white;
+        margin: 20px 0;
+        border: 5px solid rgba(255, 255, 255, .5);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-style: dashed;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+
+        > div {
+            gap: 21em;
+        }
+
+
+        img {
+            max-width: 50px;
+            border-radius: 13px;
+        }
+    }
+    
+
+
+}
