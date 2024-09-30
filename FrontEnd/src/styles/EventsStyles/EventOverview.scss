@@ -1,13 +1,9 @@
-
-
 #EventOverview{
-
-   
     width: 40%;
     padding-top: 10px;
-    
-    margin-left: 237px;
-    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     p {
         color: black;
