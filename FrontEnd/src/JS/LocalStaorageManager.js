@@ -23,6 +23,19 @@ const StorageManager = {
     getEvent() {
         const event = localStorage.getItem("event");
         return event ? JSON.parse(event) : null;
+    },
+
+    setLang(value) {
+        localStorage.setItem("lang", JSON.stringify(value));
+        window.dispatchEvent(new CustomEvent('lang-changed', {
+            detail: {
+                storage: localStorage.getItem('lang')
+            }
+        }));
+    },
+    getLang() {
+        const lang = localStorage.getItem("lang");
+        return lang ? JSON.parse(lang) : null;
     }
   };
   export default StorageManager;

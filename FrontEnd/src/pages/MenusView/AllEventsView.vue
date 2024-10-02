@@ -7,3 +7,4 @@
 <script setup></script>
 
 <style src="../../styles/MenusViewStyles/AllEventViewStyle.scss"></style>
+<style src="../../styles/MenusViewStyles/AllEventViewStyle.scss"></style>

@@ -2,7 +2,7 @@
     <div id="homeView">
         <Carousel/>
         <IntroText/>
-        <NewEvent/>
+        <NewEvent/><!---->
         <Contact/>
     </div>
 </template>
