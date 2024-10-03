@@ -36,6 +36,19 @@ const StorageManager = {
     getLang() {
         const lang = localStorage.getItem("lang");
         return lang ? JSON.parse(lang) : null;
+    },
+
+    setLogin(value) {
+        localStorage.setItem("login", JSON.stringify(value));
+        window.dispatchEvent(new CustomEvent('login-changed', {
+            detail: {
+                storage: localStorage.getItem('login')
+            }
+        }));
+    },
+    getLogin() {
+        const login = localStorage.getItem("login");
+        return login ? JSON.parse(login) : null;
     }
   };
   export default StorageManager;

@@ -1,5 +1,5 @@
 <template>
-  <form class="sign-in" @submit.prevent="submitForm('signin')">
+  <form class="sign-in" @submit="Login()">
 
     <h2>{{actualLang ? 'Sign In' : 'Connectez-Vous'}}</h2>
 
@@ -28,86 +28,41 @@
     import { ref, onMounted, onUnmounted} from "vue";
   
     let actualLang = ref(storageManager.getLang());
+    let isLogged = ref(storageManager.getLogin());
+
+    const Login = () => {
+        storageManager.setLogin(true);
+        isLogged.value = storageManager.getLogin();
+    }
 
     if (actualLang.value === null) {
         storageManager.setLang(true);
         actualLang.value = storageManager.getLang();
     }
 
+    if (isLogged.value === null) {
+        storageManager.setLogin(false);
+        isLogged.value = storageManager.getLogin();
+    }
+
     // Function to handle mode change event
     const handleLangChange = (event) => {
         actualLang.value = JSON.parse(event.detail.storage);
     };
-    // Add event listener for mode changes
+    const handleLoginChange = (event) => {
+        isLogged.value = JSON.parse(event.detail.storage);
+    };
+
     onMounted(() => {
         window.addEventListener('lang-changed', handleLangChange);
+        window.addEventListener('login-changed', handleLoginChange);
     });
 
     // Remove event listener when component is unmounted
     onUnmounted(() => {
         window.removeEventListener('lang-changed', handleLangChange);
+        window.removeEventListener('login-changed', handleLoginChange);
     });
 </script>
 
-<style lang="scss">
-  .sign-in {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    flex-direction: column;
-    padding: 5% 3%;
-    
-    text-align: center;
-    background: linear-gradient(to bottom, #efefef, #ccc);
-
-    .v-text-field {
-      border: none;
-      padding: 8px 15px;
-      margin: 6px 0;
-      width: 100%;
-      max-height: 65px;
-      overflow: hidden;
-
-      &:focus {
-        outline: none;
-        background-color: #fff;
-      }
-    }
-    .forgot {
-      color: black;
-      text-decoration: none;
-    }
-    .forgot:hover {
-      color: red;
-      cursor: pointer;
-    }
-    button {
-      border-radius: 20px;
-      border: 1px solid #009345;
-      background-color: #009345;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: bold;
-      padding: 10px 40px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: transform .1s ease-in;
-
-      &:active {
-        transform: scale(.9);
-      }
-
-      &:focus {
-        outline: none;
-      }
-    }
-    button:hover {
-      background-color: #0093458d;
-    }
-    button.invert {
-      background-color: transparent;
-      border-color: #fff;
-    }
-  }
-</style>
+<style src="../../styles/Login-SignUpStyles/SignInComponentStyle.scss"></style>

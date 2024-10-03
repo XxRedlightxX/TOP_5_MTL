@@ -1,4 +1,4 @@
-.sign-up {
+.sign-in {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -20,15 +20,6 @@
         outline: none;
         background-color: #fff;
       }
-    }
-    .sub {
-        width: 100%;
-        display: flex;
-        flex-direction: row;   
-        justify-content: space-between;
-        .v-text-field {
-            width: 50%;
-        }
     }
     .forgot {
       color: black;
