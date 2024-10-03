@@ -39,7 +39,31 @@
     </form>
 </template>
 
-<script setup></script>
+<script setup>
+    import storageManager from "@/JS/LocalStaorageManager";
+    import { ref, onMounted, onUnmounted} from "vue";
+  
+    let actualLang = ref(storageManager.getLang());
+
+    if (actualLang.value === null) {
+        storageManager.setLang(true);
+        actualLang.value = storageManager.getLang();
+    }
+
+    // Function to handle mode change event
+    const handleLangChange = (event) => {
+        actualLang.value = JSON.parse(event.detail.storage);
+    };
+    // Add event listener for mode changes
+    onMounted(() => {
+        window.addEventListener('lang-changed', handleLangChange);
+    });
+
+    // Remove event listener when component is unmounted
+    onUnmounted(() => {
+        window.removeEventListener('lang-changed', handleLangChange);
+    });
+</script>
 
 <style lang="scss">
   .sign-up {
@@ -51,8 +75,6 @@
     
     text-align: center;
     background: linear-gradient(to bottom, #efefef, #ccc);
-
-    border: 2px solid red;
 
     .v-text-field {
       border: none;
