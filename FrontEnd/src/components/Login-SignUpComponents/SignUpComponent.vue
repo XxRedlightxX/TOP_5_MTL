@@ -1,47 +1,116 @@
 <template>
-    <div id="signUpComponent">
-        
+    <form class="sign-up" @submit.prevent="submitForm('signup')">
 
-        <div class="info2">
-            <h2>Register</h2>
-            <form action="#">
-                <div class="form">
-                    <div class="input_box">
-                        <label for="fname">Username </label>
-                        <input type="text" id="fname" name="fname" placeholder="Enter Username"><br><br>
-                    </div>
-                    <div class="input_box">
-                        <label for="lname">Password  </label>
-                        <input type="text" id="lname" name="lname" placeholder="Enter Password"><br><br>
-                    </div>
-                    <div class="input_box">
-                        <label for="lname"> Confirm Password  </label>
-                        
-                        <input type="text" id="lname" name="lname" placeholder="Retype Password"><br><br>
-                    </div>
-                    <div class="row">
-                        <div >
-                            <label for="email">Email  </label>
-                            <input type="text" id="email" name="email">
-                        </div>
-                        <div >
-                            <label for="phone">Phone Number  </label>
-                            <input type="text" id="phone" name="phone">
-                        </div>
-                    </div>
-                    <label for="lname"> Date  </label>
-                    <input type="date" id="lname" name="lname"><br><br>
-                </div>
-            <button type="submit">Log In</button>
-            
-          </form>
-        </div>  
-        
-    
+        <h2>{{actualLang ? 'sign-up' : 'Inscrivez-Vous'}}</h2>
 
-    </div>
+        <v-text-field
+            :rules="Name"
+            hide-details="auto"
+            :label="actualLang ? 'Username' : 'Nom d\'utilisateur'"
+        ></v-text-field>
+
+        <div class="sub">
+            <v-text-field
+                :rules="Email"
+                hide-details="auto"
+                :label="actualLang ? 'Email' : 'Email'"
+            ></v-text-field>
+
+            <v-text-field
+                :rules="Number"
+                hide-details="auto"
+                :label="actualLang ? 'Phone' : 'Telephone'"
+            ></v-text-field>
+        </div>
+
+        <v-text-field
+            :rules="Password"
+            hide-details="auto"
+            :label="actualLang ? 'Password' : 'Mot de passe'"
+        ></v-text-field>
+
+        <v-text-field
+            :rules="Password"
+            hide-details="auto"
+            :label="actualLang ? 'Password confirm' : 'Confirmer le mot de passe'"
+        ></v-text-field>
+
+        <button type="submit">{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
+    </form>
 </template>
 
 <script setup></script>
 
-<style src="../../styles/Login-SignUpStyles/SignUpComponentStyle.scss"></style>
+<style lang="scss">
+  .sign-up {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    padding: 5% 3%;
+    
+    text-align: center;
+    background: linear-gradient(to bottom, #efefef, #ccc);
+
+    border: 2px solid red;
+
+    .v-text-field {
+      border: none;
+      padding: 8px 15px;
+      margin: 6px 0;
+      width: 100%;
+      max-height: 65px;
+      overflow: hidden;
+
+      &:focus {
+        outline: none;
+        background-color: #fff;
+      }
+    }
+    .sub {
+        width: 100%;
+        display: flex;
+        flex-direction: row;   
+        justify-content: space-between;
+        .v-text-field {
+            width: 50%;
+        }
+    }
+    .forgot {
+      color: black;
+      text-decoration: none;
+    }
+    .forgot:hover {
+      color: red;
+      cursor: pointer;
+    }
+    button {
+      border-radius: 20px;
+      border: 1px solid #009345;
+      background-color: #009345;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 10px 40px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform .1s ease-in;
+
+      &:active {
+        transform: scale(.9);
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+    button:hover {
+      background-color: #0093458d;
+    }
+    button.invert {
+      background-color: transparent;
+      border-color: #fff;
+    }
+  }
+</style>
