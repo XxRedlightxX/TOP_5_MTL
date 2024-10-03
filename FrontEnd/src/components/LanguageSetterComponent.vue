@@ -27,14 +27,14 @@
 <style lang="scss">
     #languageSetter {
         display: block;
-        width: 90px;
-        height: 90px;
+        width: 60px;
+        height: 60px;
         border: 2px solid red;
         text-align: center;
         border-radius: 50%;
         position: fixed;
-        bottom: 10%;
-        right: 3%;
+        bottom: 9%;
+        right: 2%;
         z-index: 1000;
         cursor: pointer;
         p {
@@ -42,7 +42,7 @@
             height: 100%;
             align-content: center;
             color: black;
-            font-size: 3rem;
+            font-size: 2rem;
             border-radius: 50%;
             align-self: center;
         }

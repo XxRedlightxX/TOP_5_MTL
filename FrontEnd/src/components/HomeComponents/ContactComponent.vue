@@ -1,8 +1,8 @@
 <template>
     <div id="contactComponent">
         <div class="header">
-            <h3 v-if="actualLang">Contact Us</h3>
-            <h3 v-else>Contacter nous</h3>
+            <h3> {{ actualLang ? 'Contact Us' : 'Contacter nous' }} </h3>
+            
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta facilis enim quas laboriosam consequuntur 
                 itaque veritatis, officiis consequatur, quidem illum, ad saepe quos. Nobis, repudiandae molestiae! Obcaecati 
                 nihil beatae veritatis?</p>
@@ -14,8 +14,7 @@
                 <div>
                     <v-icon icon="mdi-map-marker" class="icon glow"/>
                     <div>
-                        <h4 v-if="actualLang">Address</h4>
-                        <h4 v-else>Adresse</h4>
+                        <h4>{{ actualLang ? 'Address' : 'Adresse' }}</h4>
                         <p>0000 rue Montreal, A0A 0A0, Qc, CA</p>
                     </div>
                 </div>
@@ -23,8 +22,7 @@
                 <div>
                     <v-icon icon="mdi-phone" class="icon glow"/>
                     <div>
-                        <h4 v-if="actualLang">Phone</h4>
-                        <h4 v-else>Telephone</h4>
+                        <h4>{{ actualLang ? 'Phone' : 'Telephone' }}</h4>
                         <p>(000) 000 0000</p>
                     </div>
                 </div>
@@ -40,8 +38,7 @@
             </div>
             <div class="right">
                 <form action="#" method="post">
-                    <h3 v-if="actualLang">Send Message</h3>
-                    <h3 v-else>Envoyez votre message</h3>
+                    <h3>{{ actualLang ? 'Send Message' : 'Envoyez votre message' }}</h3>
 
                     <v-text-field
                         :rules="Name"
@@ -58,12 +55,12 @@
                     <v-textarea :label="actualLang ? 'Type your Message' : 'Entrez votre message'"></v-textarea>
 
                     <input type="button" :value="actualLang ? 'Send' : 'Envoyer'">
-
                 </form>
             </div>
         </div>
     </div>
 </template>
+
 
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager"
