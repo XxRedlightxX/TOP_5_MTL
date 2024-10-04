@@ -4,4 +4,15 @@
     border-style: dotted;
     
     
+    .sub {
+        width: 75%;
+        margin: auto;
+        display: flex;
+        flex-direction: row;
+    }
+    #EventMap {
+        width: 75%;
+        margin: 2% auto;
+        padding: 0px;
+    }
 }

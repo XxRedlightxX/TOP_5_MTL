@@ -1,10 +1,11 @@
 #newEventComponent {
     width: 75%;
-    height: 20%;
+    height: 400px;
     margin: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border: 2px solidred;
     .swiper {
         width: 30%;
         height: 90%;
@@ -44,9 +45,6 @@
         p {
             font-size: 1.5rem;
             color: black;
-        }
-        .ratings {
-            //border: 2px solid red;
         }
     }
 }

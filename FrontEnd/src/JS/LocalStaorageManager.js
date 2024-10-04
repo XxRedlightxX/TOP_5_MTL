@@ -23,6 +23,32 @@ const StorageManager = {
     getEvent() {
         const event = localStorage.getItem("event");
         return event ? JSON.parse(event) : null;
+    },
+
+    setLang(value) {
+        localStorage.setItem("lang", JSON.stringify(value));
+        window.dispatchEvent(new CustomEvent('lang-changed', {
+            detail: {
+                storage: localStorage.getItem('lang')
+            }
+        }));
+    },
+    getLang() {
+        const lang = localStorage.getItem("lang");
+        return lang ? JSON.parse(lang) : null;
+    },
+
+    setLogin(value) {
+        localStorage.setItem("login", JSON.stringify(value));
+        window.dispatchEvent(new CustomEvent('login-changed', {
+            detail: {
+                storage: localStorage.getItem('login')
+            }
+        }));
+    },
+    getLogin() {
+        const login = localStorage.getItem("login");
+        return login ? JSON.parse(login) : null;
     }
   };
   export default StorageManager;

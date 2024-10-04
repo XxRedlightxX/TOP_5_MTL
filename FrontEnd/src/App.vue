@@ -4,7 +4,7 @@
       <Menu />
 
       <router-view class="view"/>
-      
+      <Language/>
       <Footer />
     </v-main>
   </v-app>
@@ -13,6 +13,7 @@
 <script setup>
   import Menu from "./components/MenuComponent.vue";
   import Footer from "./components/FooterComponent.vue";
+  import Language from "./components/LanguageSetterComponent.vue";
   import storageManager from "@/JS/LocalStaorageManager"
   import { ref, onMounted, onUnmounted} from "vue";
 

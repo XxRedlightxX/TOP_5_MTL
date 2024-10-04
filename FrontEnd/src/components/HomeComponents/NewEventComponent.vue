@@ -43,7 +43,7 @@
 
 <script setup>
   import { Swiper, SwiperSlide } from 'swiper/vue';
-  import { ref, onMounted, onUnmounted } from 'vue'
+  import { ref, onMounted, onUnmounted, watch } from 'vue';
   import 'swiper/css';
   import 'swiper/css/effect-cards';
   import 'swiper/css/autoplay';
@@ -61,6 +61,7 @@
       LocalStorageManager.setMode(true);
       actualMode.value = LocalStorageManager.getMode();
   }
+
   const handleModeChange = (event) => {
       actualMode.value = JSON.parse(event.detail.storage);
   };
@@ -74,6 +75,7 @@
   onUnmounted(() => {
       window.removeEventListener('mode-changed', handleModeChange);
   });
+
   const newEventJours = [
     { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text, rating: 3 },
     { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 5 },
@@ -83,7 +85,7 @@
     { image: "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text, rating: 4 },
     { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text, rating: 3.5 },
     { image: "/src/assets/HomeCarousel/Jardin-botanique.jpg", title: "Jardin Botanique", desc: text, rating: 1.5 },
-    { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 4.5 },
+    { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 4.5 }
   ];
 
   const newEventNuit = [
@@ -97,10 +99,15 @@
     {image : "/src/assets/HomeCarousel/Casino-nuit.jpg", title: "Casino", desc: text, rating: 2 },
     {image : "/src/assets/HomeCarousel/La-voute-nuit.jpg", title: "La Voute", desc: text, rating: 3.5 }
   ];
-  
+
   let newEvent = ref(null);
   newEvent.value = actualMode.value ? newEventJours : newEventNuit;
-  
+
+  // Correction du watcher
+  watch(actualMode, (newVal, oldVal) => {
+    newEvent.value = newVal ? newEventJours : newEventNuit;
+  });
+
   // Fonction pour mettre à jour l'index du slide actif
   const onSlideChange = (swiper) => {
     indexSlide.value = swiper.activeIndex;
@@ -108,9 +115,10 @@
 
   const setEvent = (value) => {
     LocalStorageManager.setEvent(value);
-    console.log("event value : ", value)
-  }
+    console.log("event value : ", value);
+  };
 </script>
 
 
-<style src="../../../styles/HomesStyles/NewEventComponentStyle/NewEventComponentStyle.scss"></style>
+
+<style src="../../styles/HomesStyles/NewEventComponentStyle/NewEventComponentStyle.scss"></style>

@@ -8,17 +8,23 @@
                 <!--<router-link  to="/" class="logo">
                     <img src="/src/assets/Logo-Gem.svg" alt="Logo Gem" title="Go to Home Page">
                 </router-link>-->
-                <Logo title="Go to Home Page" /> 
+                <Logo :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'" /> 
                 
                 <div class="links">
-                    <router-link to="/" :class="{'glow' : !actualMode}">Home</router-link>
-                    <router-link to="/Events" :class="{'glow' : !actualMode}">Events</router-link>
+                    <router-link to="/" :class="{'glow' : !actualMode}" :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'">{{actualLang ? 'Home' : 'Accueil'}}</router-link>
+                    <router-link to="/Events" :class="{'glow' : !actualMode}" :title="actualLang ? 'Go to Event Page' : 'Allez a la page d\'aEvenement'">{{actualLang ? 'Events' : 'Evenement'}}</router-link>
                 </div>
                 <div class="icons">
-                    <router-link to="/Profile" class="profile">
+                    <router-link to="/Profile" class="profile" :title="actualLang ? 'Go to Profile Page' : 'Allez a la page Profile'">
                         <v-icon icon="mdi-account-circle" class="icon" :class="{'glow' : !actualMode}"/>
                     </router-link>
-                    <v-icon :icon="!actualMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'" :class="['icon', {'justGlow' : !actualMode}]" @click="changeMode()"/>
+                    <v-icon 
+                        :icon="!actualMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'" 
+                        :class="['icon', { 'justGlow': !actualMode }]" 
+                        @click="changeMode()" 
+                        :title="actualLang ? (actualMode ? 'Go to Night Mode' : 'Go to Light Mode') : (actualMode ? 'Passez en mode Nuit' : 'Passez en mode Jour')"
+                        />
+
                 </div>
             </div>
         </div>
@@ -36,9 +42,10 @@
 <script setup>
     import storageManager from "../JS/LocalStaorageManager.js"
     import Logo from "../components/LogoComponent.vue"
-    import { ref } from 'vue'
+    import { ref, onMounted, onUnmounted } from 'vue'
 
     let actualMode = ref(storageManager.getMode());
+    let actualLang = ref(storageManager.getLang());
     let seeBurgermenu = ref(true);
 
     function getDeviceDimensions() {
@@ -63,6 +70,11 @@
         actualMode.value = storageManager.getMode();
     }
 
+    if (actualLang.value === null) {
+        storageManager.setLang(true);
+        actualLang.value = storageManager.getLang();
+    }
+
     const changeMode = () => {
         console.log("new val = " + !actualMode.value)
         storageManager.setMode(!actualMode.value);
@@ -76,6 +88,20 @@
             seeBurgermenu.value = !seeBurgermenu.value;
         }
     }
+
+        // Function to handle mode change event
+        const handleLangChange = (event) => {
+        actualLang.value = JSON.parse(event.detail.storage);
+    };
+    // Add event listener for mode changes
+    onMounted(() => {
+        window.addEventListener('lang-changed', handleLangChange);
+    });
+
+    // Remove event listener when component is unmounted
+    onUnmounted(() => {
+        window.removeEventListener('lang-changed', handleLangChange);
+    });
 </script>
 
 <style src="../styles/MenuComponentStyle.scss"></style>

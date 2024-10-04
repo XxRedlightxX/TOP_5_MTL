@@ -2,8 +2,10 @@
     <div id="eventView">
 
         <PageDetail></PageDetail>
-        <PageDescription></PageDescription>
-        <PageCommentaire></PageCommentaire>
+        <div class="sub">    
+            <PageDescription></PageDescription>
+            <PageCommentaire></PageCommentaire>
+        </div>
         <PageMap></PageMap>
     </div>
 </template>

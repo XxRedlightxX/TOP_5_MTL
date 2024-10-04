@@ -21,6 +21,7 @@
 .v-main {
     min-height: 100svh;
     color: black;
+    border: 2px solid rgb(255, 0, 0);
 
     display: flex;
     flex-direction: column;
@@ -31,8 +32,9 @@
     }
 
     .view {
-        flex: 1;
+        flex-grow: 1;
         text-align: center;
+        border: 2px solid blue;
     }
     .glow:hover, .justGlow {
         color: var(--light);       

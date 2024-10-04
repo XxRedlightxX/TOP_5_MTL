@@ -1,42 +1,26 @@
 <template>
-    <form class="sign-up" @submit=" Login()">
+  <form class="sign-in" @submit="Login()">
 
-        <h2>{{actualLang ? 'sign-up' : 'Inscrivez-Vous'}}</h2>
+    <h2>{{actualLang ? 'Sign In' : 'Connectez-Vous'}}</h2>
 
-        <v-text-field
-            :rules="Name"
-            hide-details="auto"
-            :label="actualLang ? 'Username' : 'Nom d\'utilisateur'"
-        ></v-text-field>
+    <v-text-field
+        :rules="Email"
+        hide-details="auto"
+        :label="actualLang ? 'Email' : 'Email'"
+    ></v-text-field>
 
-        <div class="sub">
-            <v-text-field
-                :rules="Email"
-                hide-details="auto"
-                :label="actualLang ? 'Email' : 'Email'"
-            ></v-text-field>
+    <v-text-field
+        :rules="Password"
+        hide-details="auto"
+        :label="actualLang ? 'Password' : 'Mot de passe'"
+    ></v-text-field>
 
-            <v-text-field
-                :rules="Number"
-                hide-details="auto"
-                :label="actualLang ? 'Phone' : 'Telephone'"
-            ></v-text-field>
-        </div>
+    <a href="#" class="forgot">{{actualLang ? 'Forgot your password ?' : 'Vous avez oublié votre mot de passe ?'}}</a>
 
-        <v-text-field
-            :rules="Password"
-            hide-details="auto"
-            :label="actualLang ? 'Password' : 'Mot de passe'"
-        ></v-text-field>
+    <button type="submit">{{actualLang ? 'Sign In' : 'Se connecter'}}</button>
 
-        <v-text-field
-            :rules="Password"
-            hide-details="auto"
-            :label="actualLang ? 'Password confirm' : 'Confirmer le mot de passe'"
-        ></v-text-field>
+  </form>
 
-        <button type="submit">{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
-    </form>
 </template>
 
 <script setup>
@@ -81,4 +65,4 @@
     });
 </script>
 
-<style src="../../styles/Login-SignUpStyles//SignUpComponentStyle.scss"></style>
+<style src="../../styles/Login-SignUpStyles/SignInComponentStyle.scss"></style>
