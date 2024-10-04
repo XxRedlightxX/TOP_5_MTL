@@ -1,19 +1,12 @@
 <template>
-    <div id="profileComponent">
-        <div class="top">
-            <ProfileHead/>
-            <ProfileOther/>
-        </div>
-        <ProfileList/>
+    <div id="profileOtherComponent">
+        <h1>Profile other</h1>
     </div>
   </template>
   
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted} from "vue";
-    import ProfileHead from "./ProfileHeaderComponent.vue";
-    import ProfileOther from "./ProfileOtherComponent.vue"
-    import ProfileList from "./ProfileListEventComponent.vue"
 
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
@@ -54,4 +47,11 @@
     });
 </script>
 
-<style src="../../styles/ProfilesStyles/ProfileComponentStyle.scss"></style>
+<style>
+    #profileOtherComponent {
+        width: 100%;
+        height: 100%;
+        border: 2px solid blue;
+        padding: 6% 0%;
+    }
+</style>
