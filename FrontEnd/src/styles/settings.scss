@@ -6,13 +6,16 @@
     --graphite: rgb(29, 30, 24);
     --graphite0: rgba(29, 30, 24, 0);
     --graphite015: rgba(29, 30, 24, 0.15);
+    --graphite02: rgba(29, 30, 24, 0.2);
     --graphite06: rgba(29, 30, 24, 0.6);
+    --graphite08: rgba(29, 30, 24, 0.8);
     --mainColor: rgba(228,45,45);
     --light: rgb(255, 255, 255);
     --light0: rgba(255, 255, 255, 0);
     --light05: rgba(255, 255, 255, 0.5);
     --dark: rgb(0, 0, 0);
     --light-trans-glow: rgba(255, 255, 255, 0.400);
+    --light-trans015: rgba(255, 255, 255, 0.15);
     --light-trans-glow-less: rgba(255, 255, 255, 0.200);
     --light-trans-2Shine: rgba(255, 255, 255, 0.500);
     --light-trans-text: rgba(255, 255, 255, 0.750);
@@ -35,19 +38,60 @@
         flex-grow: 1;
         text-align: center;
         border: 2px solid blue;
+        //background: linear-gradient(to bottom, var(--light-trans-glow-less), var(--light-trans-text));
+    }
+    .glass {
+        /* From https://css.glass */
+        background: rgba(255, 255, 255, 0.06);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        border: 1px solid rgba(255, 255, 255, 0);
+    }
+    .glass2, .glass3 {
+        /* From https://css.glass */
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        //border: 1px solid rgba(255, 255, 255, 0);
+    }
+    .glass5 {
+        /* From https://css.glass */
+        background: rgba(0, 0, 0, 0.23);
+        //border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(4.7px);
+        -webkit-backdrop-filter: blur(4.7px);
+    }
+    .glass3:hover {
+        /* From https://css.glass */
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        //border: 1px solid rgba(255, 255, 255, 0);
+    }
+    .glass4 {
+        /* From https://css.glass */
+        background: rgba(255, 255, 255, 0.62);
+        //border-radius: 0px;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        border: 1px solid rgba(255, 255, 255, 0);
     }
     .glow:hover, .justGlow {
         color: var(--light);       
         animation: neonGlow 0.5s ease-in-out infinite alternate;
     }
     .glowLess:hover, .justGlowless {
-        color: var(--light);       
+        color: var(--light);
+        animation: neonGlowLess 0.5s ease-in-out infinite alternate;      
         
     }
     .glowBox, .justGlowBox {
         color: var(--light);       
         animation: neonGlowBox 0.5s ease-in-out infinite alternate;
     }
+
     @keyframes neonGlow {
         from {
             text-shadow:
@@ -134,7 +178,7 @@
     }
 }
 .light{
-    background-color: white;
+    background: linear-gradient(to bottom, #efefef, #ccc);
     .smallMenu, #footerComponent {
         background-color: var(--mainColor);
         text-align: center;
@@ -172,7 +216,8 @@
 }
 
 .dark {
-    background-color: var(--graphite);
+    background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
+    background-color: var(--graphite015);
     .smallMenu, #footerComponent {
         background-color: var(--graphite);
         text-align: center;

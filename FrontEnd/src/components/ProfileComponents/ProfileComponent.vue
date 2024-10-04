@@ -1,8 +1,8 @@
 <template>
-    <div id="profileComponent">
+    <div id="profileComponent" class="glass">
         <div class="top">
-            <ProfileHead/>
-            <ProfileOther/>
+            <ProfileHead class="glass"></ProfileHead>
+            <ProfileOther class="glass"></ProfileOther>
         </div>
         <ProfileList/>
     </div>

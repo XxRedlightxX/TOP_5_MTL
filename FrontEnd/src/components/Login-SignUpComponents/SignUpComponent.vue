@@ -1,38 +1,63 @@
 <template>
-    <form class="sign-up" @submit=" Login()">
+    <form class="sign-up glass" @submit=" Login()">
 
         <h2>{{actualLang ? 'sign-up' : 'Inscrivez-Vous'}}</h2>
 
         <v-text-field
             :rules="Name"
+            hint="this field is mendatory"
+            :label="actualLang ? 'Username*' : 'Nom d\'utilisateur*'"
+            type="input"
+            clearable
+            persistent-hint
+            persistent-clear 
             hide-details="auto"
-            :label="actualLang ? 'Username' : 'Nom d\'utilisateur'"
         ></v-text-field>
 
         <div class="sub">
             <v-text-field
                 :rules="Email"
+                hint="this field is mendatory"
+                :label="actualLang ? 'Email*' : 'Email*'"
+                type="input"
+                clearable
+                persistent-hint
+                persistent-clear 
                 hide-details="auto"
-                :label="actualLang ? 'Email' : 'Email'"
             ></v-text-field>
 
             <v-text-field
                 :rules="Number"
-                hide-details="auto"
+                hint="this field is not mendatory"
                 :label="actualLang ? 'Phone' : 'Telephone'"
+                type="input"
+                clearable
+                persistent-hint
+                persistent-clear 
+                hide-details="auto"
             ></v-text-field>
         </div>
 
         <v-text-field
             :rules="Password"
+            hint="this field is mendatory"
+            :label="actualLang ? 'Password*' : 'Mot de passe*'"
+            type="input"
+            clearable
+            persistent-hint
+            persistent-clear 
             hide-details="auto"
-            :label="actualLang ? 'Password' : 'Mot de passe'"
         ></v-text-field>
 
         <v-text-field
             :rules="Password"
+            hint="this field is mendatory"
+            :label="actualLang ? 'Password confirm*' : 'Confirmer le mot de passe*'"
+            type="input"
+            clearable
+            persistent-hint
+            persistent-clear 
             hide-details="auto"
-            :label="actualLang ? 'Password confirm' : 'Confirmer le mot de passe'"
         ></v-text-field>
 
         <button type="submit">{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>

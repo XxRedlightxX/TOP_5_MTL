@@ -4,9 +4,10 @@
     justify-content: space-around;
     flex-direction: column;
     padding: 5% 3%;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
     
     text-align: center;
-    background: linear-gradient(to bottom, #efefef, #ccc);
 
     .v-text-field {
       border: none;
@@ -18,7 +19,6 @@
 
       &:focus {
         outline: none;
-        background-color: #fff;
       }
     }
     .sub {
@@ -30,18 +30,10 @@
             width: 50%;
         }
     }
-    .forgot {
-      color: black;
-      text-decoration: none;
-    }
-    .forgot:hover {
-      color: red;
-      cursor: pointer;
-    }
     button {
-      border-radius: 20px;
-      border: 1px solid #009345;
-      background-color: #009345;
+      border-radius: 5px;
+      //border: 1px solid #009345;
+      background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
       color: #fff;
       font-size: 1rem;
       font-weight: bold;
@@ -60,10 +52,35 @@
       }
     }
     button:hover {
-      background-color: #0093458d;
+      background: linear-gradient(to bottom, var(--graphite015), var(--graphite06));
     }
-    button.invert {
-      background-color: transparent;
-      border-color: #fff;
+  }
+
+  .light {
+    .sign-up {
+      .v-field__overlay {
+        color: var(--graphite08);
+        background-color: var(--graphite);
+        //background-color: red;
+  
+        &:focus {
+          outline: none;
+          //background-color: var(--graphite02);
+        }
+      }
+    }
+  }
+
+  .dark {
+    .sign-up {
+      .v-field__overlay {
+        color: var(--light-text);
+        background-color: var(--light);
+  
+        &:focus {
+          outline: none;
+          //background-color: var(--light-trans-glow-less);
+        }
+      }
     }
   }

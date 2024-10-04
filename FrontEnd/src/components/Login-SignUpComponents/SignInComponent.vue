@@ -1,18 +1,26 @@
 <template>
-  <form class="sign-in" @submit="Login()">
+  <form class="sign-in glass" @submit="Login()">
 
     <h2>{{actualLang ? 'Sign In' : 'Connectez-Vous'}}</h2>
 
     <v-text-field
         :rules="Email"
-        hide-details="auto"
         :label="actualLang ? 'Email' : 'Email'"
+        type="input"
+        clearable
+        persistent-hint
+        persistent-clear 
+        hide-details="auto"
     ></v-text-field>
 
     <v-text-field
         :rules="Password"
-        hide-details="auto"
         :label="actualLang ? 'Password' : 'Mot de passe'"
+        type="input"
+        clearable
+        persistent-hint
+        persistent-clear 
+        hide-details="auto"
     ></v-text-field>
 
     <a href="#" class="forgot">{{actualLang ? 'Forgot your password ?' : 'Vous avez oublié votre mot de passe ?'}}</a>

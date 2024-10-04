@@ -1,8 +1,8 @@
 <template>
     <div id="profileListEventComponent">
-        <div class="head">
+        <div class="head  glass">
             <h4>Header text</h4>
-            <button @click="Logout()">Logout</button>
+            <v-icon icon="mdi-plus-box-multiple" :class="['icon', {'justGlowless' : !actualMode}]"/>
         </div>
 
         <div class="body">
@@ -61,50 +61,46 @@
 
 <style lang="scss">
     #profileListEventComponent {
-        border: 2px solid red;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
 
         .head {
-            border: 2px solid rgb(10, 219, 111);
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
+            padding: 0% 1.6% 0% 0%;
 
             h4 {
-                flex: 4;
-                border: 2px solid black;
-                color: black;
+                flex: 1;
+                color: var(--graphite08);
                 font-size: 2rem;
             }
 
-            button {
-                flex: 1;
-                border: 2px solid black;
-                background-color: rgba(244, 0, 0, 0.5);
-                padding: 1% 2%;
-                color: black;
-                font-weight: bold;
+            .icon {
+                padding: 2% 4%;
+                color: var(--graphite06);
+                font-size: 3.2rem;
             }
-            button:hover {
-                background-color: rgba(255, 0, 0, 0.3);
+            .icon:hover {
+                cursor: pointer;
+                color: var(--graphite);
             }
         }
 
         .body {
             flex: 1;
-            border: 2px solid rgb(10, 21, 222);
-            padding: 1% 1%;
+            margin-top: 1%;
+            padding: 0% 1% 0% 0%;
             
-            max-height: 320px;
+            max-height: 500px;
             overflow: auto;
             scrollbar-width: thin;
             scrollbar-color: var(--graphite015) rgba(255, 255, 255, 0.06);
 
             #profileSingleEventComponent {
-                margin-top: 2%;
+                margin-bottom: 2%;
             }
         }
     }

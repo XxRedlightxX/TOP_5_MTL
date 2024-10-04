@@ -18,8 +18,10 @@
         </div>
 
         <div class="last">
-            <button @click="Logout()">Logout</button>
-            <button @click="Logout()">Logout</button>
+            
+            <v-icon icon="mdi-account-edit" :class="['icon', {'justGlowless' : !actualMode}]"/>
+            <v-icon icon="mdi-logout" :class="['icon', {'justGlowless' : !actualMode}]" @click="Logout()"/>
+
         </div>
         
     </div>
@@ -71,14 +73,15 @@
 
 <style lang="scss">
     #profileHeaderComponent {
-        border: 2px solid red;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        padding: 2% 1% 2% 2%;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, .2),
+                    0 10px 10px rgba(0, 0, 0, .2);
 
         .first {
             width: 30%;
-            border: 2px solid black;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -91,37 +94,35 @@
 
 
         .middle {
-            width: 45%;
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            border: 2px solid black;
+            padding: 0% 5%;
 
             h2 {
-                color: black;
+                color: var(--graphite08);
             }
             p {
-                color: black;
+                color: var(--graphite08);
             }
         }
 
         .last {
-            width: 15%;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            border: 2px solid black;
-            padding: 0% 1%;
+            align-items: center;
+            padding: 0%;
 
-            button {
-                border: 2px solid black;
-                background-color: rgba(244, 0, 0, 0.5);
-                padding: 1% 2%;
-                color: black;
-                font-weight: bold;
+            .icon {
+                padding: 2% 4%;
+                color: var(--graphite06);
+                font-size: 3.2rem;
             }
-            button:hover {
-                background-color: rgba(255, 0, 0, 0.3);
+            .icon:hover {
+                cursor: pointer;
+                color: var(--graphite);
             }
         }
     }

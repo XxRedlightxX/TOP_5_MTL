@@ -1,5 +1,5 @@
 <template>
-    <div id="profileSingleEventComponent">
+    <div id="profileSingleEventComponent" class="glass">
         <div class="first">
             <img :src="imgAvatar" alt="#">
         </div>
@@ -17,8 +17,8 @@
 
         <div class="last">
 
-            <button @click="Logout()">Logout</button>
-            <button @click="Logout()">Logout</button>
+            <v-icon icon="mdi-folder-edit" :class="['icon', {'justGlowless' : !actualMode}]"/>
+            <v-icon icon="mdi-delete-circle" :class="['icon', {'justGlowless' : !actualMode}]"/>
 
         </div>
 
@@ -71,13 +71,12 @@
 
 <style lang="scss">
     #profileSingleEventComponent {
-        border: 2px solid red;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
         .first {
             width: 20%;
-            border: 2px solid black;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -89,37 +88,37 @@
 
 
         .middle {
-            width: 55%;
+            flex: 1;
+            //width: 55%;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            border: 2px solid black;
 
             h2 {
-                color: black;
+                color: var(--graphite08);
             }
             p {
-                color: black;
+                color: var(--graphite08);
             }
         }
 
         .last {
-            width: 15%;
+            //width: 15%;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            border: 2px solid black;
-            padding: 0% 1%;
+            align-items: center;
+            padding: 0%;
 
-            button {
-                border: 2px solid black;
-                background-color: rgba(244, 0, 0, 0.5);
-                padding: 1% 2%;
-                color: black;
-                font-weight: bold;
+
+            .icon {
+                padding: 2% 4%;
+                color: var(--graphite06);
+                font-size: 3.2rem;
             }
-            button:hover {
-                background-color: rgba(255, 0, 0, 0.3);
+            .icon:hover {
+                cursor: pointer;
+                color: var(--graphite);
             }
         }
     }
