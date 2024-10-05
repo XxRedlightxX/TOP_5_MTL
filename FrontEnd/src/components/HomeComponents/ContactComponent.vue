@@ -12,7 +12,10 @@
             <div class="left">
 
                 <div>
-                    <v-icon icon="mdi-map-marker" class="icon glow"/>
+                    <div class="iconContainer">
+                        <v-icon icon="mdi-map-marker" class="icon glow"/>
+                    </div>
+                    
                     <div>
                         <h4>{{ actualLang ? 'Address' : 'Adresse' }}</h4>
                         <p>0000 rue Montreal, A0A 0A0, Qc, CA</p>
@@ -20,7 +23,9 @@
                 </div>
 
                 <div>
-                    <v-icon icon="mdi-phone" class="icon glow"/>
+                    <div class="iconContainer">
+                        <v-icon icon="mdi-phone" class="icon glow"/>
+                    </div>
                     <div>
                         <h4>{{ actualLang ? 'Phone' : 'Telephone' }}</h4>
                         <p>(000) 000 0000</p>
@@ -28,7 +33,9 @@
                 </div>
 
                 <div>
-                    <v-icon icon="mdi-email" class="icon glow"/>
+                    <div class="iconContainer">
+                        <v-icon icon="mdi-email" class="icon glow"/>
+                    </div>
                     <div>
                         <h4>Email</h4>
                         <p>Email@Email.Email</p>
@@ -37,7 +44,7 @@
 
             </div>
             <div class="right">
-                <form action="#" method="post">
+                <form action="#" method="post" class="glass">
                     <h3>{{ actualLang ? 'Send Message' : 'Envoyez votre message' }}</h3>
 
                     <v-text-field

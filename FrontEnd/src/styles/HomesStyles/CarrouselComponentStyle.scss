@@ -3,7 +3,7 @@
 /* carousel */
 #carouselComponent {
     height: 80svh;
-    margin-top: -6%;
+    //margin-top: -6%;
     width: 100%;
     margin: auto;
     overflow: hidden;
@@ -338,12 +338,14 @@
 
 .light {
     #carouselComponent {
-        .list > .item > .content > .desc p, .thumbnail .title {
-            color: var(--graphite);
+        .list > .item > .content > .desc p{
+            color: var(--light-text);
+        }
+        .thumbnail .title {
+            color: var(--graphite06);
         }
         .overlayGrad {
-            background: linear-gradient(180deg, var(--light0) 0%, var(--light0) 60%,  var(--light) 95%);
-            //background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.15) 70%,rgba(255, 255, 255, 0.6) 85%, rgb(255, 255, 255) 95%);
+            background: linear-gradient(180deg, rgba(227,227,227,0) 0%, rgba(227,227,227,0) 60%,  rgba(227,227,227,255) 95%);
         }
         .arrows{
             button{
@@ -359,10 +361,10 @@
 .dark {
     #carouselComponent {
         .list > .item > .content > .desc p, .thumbnail .title {
-            color: var(--light-trans-text);
+            color: var(--light-text);
         }
         .content .title {
-            color: var(--light-trans-text);
+            color: var(--light-text);
             animation: neonGlow 0.5s ease-in-out infinite alternate;
         }
         .overlayGrad {
@@ -371,7 +373,7 @@
             /* arrows */
         .arrows{
             button{
-                color: var(--light-trans-text);
+                color: var(--light-text);
                 animation: neonGlow 0.5s ease-in-out infinite alternate;
             }
             button:hover{

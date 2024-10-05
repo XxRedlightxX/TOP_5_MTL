@@ -8,7 +8,7 @@
                 <!--<router-link  to="/" class="logo">
                     <img src="/src/assets/Logo-Gem.svg" alt="Logo Gem" title="Go to Home Page">
                 </router-link>-->
-                <Logo :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'" /> 
+                <Logo2 :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'" /> 
                 
                 <div class="links">
                     <router-link to="/" :class="{'glow' : !actualMode}" :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'">{{actualLang ? 'Home' : 'Accueil'}}</router-link>
@@ -42,6 +42,7 @@
 <script setup>
     import storageManager from "../JS/LocalStaorageManager.js"
     import Logo from "../components/LogoComponent.vue"
+    import Logo2 from "../components/Logo2Component.vue"
     import { ref, onMounted, onUnmounted } from 'vue'
 
     let actualMode = ref(storageManager.getMode());

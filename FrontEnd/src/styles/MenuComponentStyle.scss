@@ -1,8 +1,14 @@
 #menuComponent {
     display: block;
+    /* From https://css.glass */
+    background: rgba(29, 30, 24, 0.23);
+    //border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.7px);
+    -webkit-backdrop-filter: blur(15px);
 
     .allMenu {
-        #LogoComponent {
+        /*#LogoComponent {
             text-decoration: none;
             img {
                 padding-top: 5%;
@@ -10,6 +16,12 @@
 
             img:hover {
                 cursor: pointer;
+            }
+        }*/
+        .smallMenu {
+            #logo2Component {
+                width: 10%;
+                height: 65px;
             }
         }
 
@@ -57,20 +69,58 @@
         transform: translateX(-100%); /* Hors de l'écran à la fin de la sortie */
     }
 }
+.light {
+    #menuComponent{
+        
+        .allMenu {
+    
+            .links {
+        
+                a {
+                    color: var(--graphite);
+                }
+                a:hover, .router-link-exact-active {
+                    color: var(--light);
+                }
+            }
+            .profile {
+                color: var(--graphite);
+            }
+            .icons {
+                color: var(--graphite);
+            }
+            .icons .icon:hover, .profile:hover, .router-link-exact-active {
+                color: var(--light);
+            }
+        }
+    }
+}
+.dark {
+    #menuComponent{
+        
+        .allMenu {
+    
+            .links {
+        
+                a {
+                    //color: var(--light-text);
+                    color: var(--light-trans-text);
+                }
+            }
+            .profile {
+                color: var(--light-trans-text);
+            }
+            .icons {
+                color: var(--light-trans-text);
+            }
+        }
+    }
+}
 
 
 
 @media screen and (min-width: 1025px) {
-    .dark {
-        #menuComponent{
-            background-color: var(--graphite);
-        }
-    }
-    .light {
-        #menuComponent{
-            background-color: var(--mainColor);
-        }
-    }
+
     .allMenu {
         display: flex;
         flex-direction: row;

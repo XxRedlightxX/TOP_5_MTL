@@ -4,7 +4,24 @@
 
     p {
         font-size: 1.6rem;
-        color: black;
         margin: 5% 3%;
+    }
+}
+
+.light {
+    #introTextComponent {
+    
+        p {
+            color: var(--graphite06);
+        }
+    }
+}
+
+.dark {
+    #introTextComponent {
+    
+        p {
+            color: var(--light-text);
+        }
     }
 }
