@@ -44,7 +44,10 @@
 
             </div>
             <div class="right">
-                <form action="#" method="post" class="glass">
+                <div class="overlay">
+                    <div class="seeTrought"></div>
+                </div>
+                <form action="#" method="post">
                     <h3>{{ actualLang ? 'Send Message' : 'Envoyez votre message' }}</h3>
 
                     <v-text-field
