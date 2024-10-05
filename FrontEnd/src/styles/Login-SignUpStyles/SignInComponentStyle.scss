@@ -64,15 +64,13 @@
   }
 
   .light {
-    .sign-up {
+    .sign-in {
       .v-field__overlay {
         color: var(--graphite08);
         background-color: var(--graphite);
-        //background-color: red;
   
         &:focus {
           outline: none;
-          //background-color: var(--graphite02);
         }
       }
       .forgot {
@@ -85,21 +83,34 @@
   }
 
   .dark {
-    .sign-up {
+    .sign-in{
       .v-field__overlay {
-        color: var(--light-text);
+        //color: var(--light-text);
         background-color: var(--light);
-  
+
         &:focus {
           outline: none;
           //background-color: var(--light-trans-glow-less);
         }
       }
-      .forgot {
+      .v-label, .v-field__input, h2, .mdi-close-circle:hover  {
+        color: var(--light-text);
+      }
+      .forgot, .mdi-close-circle {
         color: var(--light-trans-2Shine);
       }
       .forgot:hover {
-        color: var();
+        color: var(--light);
+        animation: neonGlowLess 0.5s ease-in-out infinite alternate;  
+      }
+      button {
+        background: linear-gradient(to bottom, var(--light-trans-glow-less), var(--light-trans-2Shine));
+        color: var(--graphite08);
+      }
+      button:hover {
+        color: var(--light);
+        animation: neonGlowLess 0.5s ease-in-out infinite alternate;
+        background: linear-gradient(to bottom, var(--light-trans015), var(--light-trans-glow-less));
       }
     }
   }

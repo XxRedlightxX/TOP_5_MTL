@@ -17,8 +17,8 @@
 
         <div class="last">
 
-            <v-icon icon="mdi-folder-edit" :class="['icon', {'justGlowless' : !actualMode}]"/>
-            <v-icon icon="mdi-delete-circle" :class="['icon', {'justGlowless' : !actualMode}]"/>
+            <v-icon icon="mdi-folder-edit" :class="['icon', {'glowLess' : !actualMode}]"/>
+            <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]"/>
 
         </div>
 
@@ -93,13 +93,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-
-            h2 {
-                color: var(--graphite08);
-            }
-            p {
-                color: var(--graphite08);
-            }
+            padding: 0% 5%;
         }
 
         .last {
@@ -113,12 +107,45 @@
 
             .icon {
                 padding: 2% 4%;
-                color: var(--graphite06);
                 font-size: 3.2rem;
             }
             .icon:hover {
                 cursor: pointer;
-                color: var(--graphite);
+            }
+        }
+    }
+
+    .light {
+        #profileSingleEventComponent {
+            .middle {
+                h2, p {
+                    color: var(--graphite08);
+                }
+            }
+
+            .last {
+                .icon {
+                    color: var(--graphite06);
+                }
+                .icon:hover {
+                    color: var(--graphite);
+                }
+            }
+        }
+    }
+
+    .dark {
+        #profileSingleEventComponent {
+            .middle {
+                h2, p {
+                    color: var(--light-trans-text);
+                }
+            }
+
+            .last {
+                .icon {
+                    color: var(--light-trans-2Shine);
+                }
             }
         }
     }

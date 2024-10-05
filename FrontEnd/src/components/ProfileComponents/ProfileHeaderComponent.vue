@@ -19,8 +19,8 @@
 
         <div class="last">
             
-            <v-icon icon="mdi-account-edit" :class="['icon', {'justGlowless' : !actualMode}]"/>
-            <v-icon icon="mdi-logout" :class="['icon', {'justGlowless' : !actualMode}]" @click="Logout()"/>
+            <v-icon icon="mdi-account-edit" :class="['icon', {'glowLess' : !actualMode}]"/>
+            <v-icon icon="mdi-logout" :class="['icon', {'glowLess' : !actualMode}]" @click="Logout()"/>
 
         </div>
         
@@ -77,8 +77,6 @@
         flex-direction: row;
         justify-content: space-between;
         padding: 2% 1% 2% 2%;
-        box-shadow: 0 15px 30px rgba(0, 0, 0, .2),
-                    0 10px 10px rgba(0, 0, 0, .2);
 
         .first {
             width: 30%;
@@ -99,13 +97,6 @@
             flex-direction: column;
             justify-content: space-around;
             padding: 0% 5%;
-
-            h2 {
-                color: var(--graphite08);
-            }
-            p {
-                color: var(--graphite08);
-            }
         }
 
         .last {
@@ -123,6 +114,50 @@
             .icon:hover {
                 cursor: pointer;
                 color: var(--graphite);
+            }
+        }
+    }
+    .light {
+        #profileHeaderComponent {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, .2),
+                        0 10px 10px rgba(0, 0, 0, .2);
+
+
+            .middle {
+
+                h2, p {
+                    color: var(--graphite08);
+                }
+            }
+
+            .last {
+                .icon {
+                    color: var(--graphite06);
+                }
+                .icon:hover {
+                    color: var(--graphite);
+                }
+            }
+        }
+    }
+
+    .dark {
+        #profileHeaderComponent {
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2),
+                        0 10px 10px rgba(255, 255, 255, 0.2);
+
+
+            .middle {
+
+                h2, p {
+                    color: var(--light-trans-text);
+                }
+            }
+
+            .last {
+                .icon {
+                    color: var(--light-trans-2Shine);
+                }
             }
         }
     }

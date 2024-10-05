@@ -70,22 +70,19 @@
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
-            padding: 0% 1.6% 0% 0%;
+            padding: 0% 0.7% 0% 0%;
 
             h4 {
                 flex: 1;
-                color: var(--graphite08);
                 font-size: 2rem;
             }
 
             .icon {
                 padding: 2% 4%;
-                color: var(--graphite06);
                 font-size: 3.2rem;
             }
             .icon:hover {
                 cursor: pointer;
-                color: var(--graphite);
             }
         }
 
@@ -97,10 +94,49 @@
             max-height: 500px;
             overflow: auto;
             scrollbar-width: thin;
-            scrollbar-color: var(--graphite015) rgba(255, 255, 255, 0.06);
 
             #profileSingleEventComponent {
                 margin-bottom: 2%;
+            }
+        }
+    }
+    .light {
+        #profileListEventComponent {
+            .head {
+                h4 {
+                    color: var(--graphite08);
+                }
+
+                .icon {
+                    color: var(--graphite06);
+                }
+                .icon:hover {
+                    color: var(--graphite);
+                }
+            }
+
+            .body {
+                scrollbar-color: var(--graphite015) rgba(255, 255, 255, 0.06);
+            }
+        }
+    }
+    .dark {
+        #profileListEventComponent {
+            .head {
+                h4 {
+                    color: var(--light-trans-text);
+                }
+
+                .icon {
+                    color: var(--light-trans-2Shine);
+                }
+                .icon:hover {
+                    color: var(--light-trans015);
+                }
+            }
+
+            .body {
+                scrollbar-color: var(--light-text) rgba(255, 255, 255, 0.06);
             }
         }
     }

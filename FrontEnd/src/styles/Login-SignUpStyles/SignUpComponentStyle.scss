@@ -32,9 +32,6 @@
     }
     button {
       border-radius: 5px;
-      //border: 1px solid #009345;
-      background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
-      color: #fff;
       font-size: 1rem;
       font-weight: bold;
       padding: 10px 40px;
@@ -51,9 +48,6 @@
         outline: none;
       }
     }
-    button:hover {
-      background: linear-gradient(to bottom, var(--graphite015), var(--graphite06));
-    }
   }
 
   .light {
@@ -68,19 +62,41 @@
           //background-color: var(--graphite02);
         }
       }
+      button {
+        background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
+        color: #fff;
+      }
+      button:hover {
+        background: linear-gradient(to bottom, var(--graphite015), var(--graphite06));
+      }
     }
   }
 
   .dark {
     .sign-up {
       .v-field__overlay {
-        color: var(--light-text);
+        //color: var(--light-text);
         background-color: var(--light);
-  
+
         &:focus {
           outline: none;
           //background-color: var(--light-trans-glow-less);
         }
+      }
+      .v-label, .v-field__input, h2, .mdi-close-circle:hover  {
+        color: var(--light-text);
+      }
+      .mdi-close-circle {
+        color: var(--light-trans-2Shine);
+      }
+      button {
+        background: linear-gradient(to bottom, var(--light-trans-glow-less), var(--light-trans-2Shine));
+        color: var(--graphite08);
+      }
+      button:hover {
+        color: var(--light);
+        animation: neonGlowLess 0.5s ease-in-out infinite alternate;
+        background: linear-gradient(to bottom, var(--light-trans015), var(--light-trans-glow-less));
       }
     }
   }
