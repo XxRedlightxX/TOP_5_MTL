@@ -1,0 +1,82 @@
+#profileSingleEventComponent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .first {
+        width: 20%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        img {
+            width: 100%;
+        }
+    }
+
+
+    .middle {
+        flex: 1;
+        //width: 55%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 0% 5%;
+    }
+
+    .last {
+        //width: 15%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0%;
+
+        .router {
+            padding: 0px;
+        }
+        .icon {
+            padding: 2% 4%;
+            font-size: 3.2rem;
+        }
+        .icon:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.light {
+    #profileSingleEventComponent {
+        .middle {
+            h2, p {
+                color: var(--graphite08);
+            }
+        }
+
+        .last {
+            .icon {
+                color: var(--graphite06);
+            }
+            .icon:hover {
+                color: var(--graphite);
+            }
+        }
+    }
+}
+
+.dark {
+    #profileSingleEventComponent {
+        .middle {
+            h2, p {
+                color: var(--light-trans-text);
+            }
+        }
+
+        .last {
+            .icon {
+                color: var(--light-trans-2Shine);
+            }
+        }
+    }
+}

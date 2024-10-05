@@ -69,6 +69,14 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () => import('@/pages/ProfilesView/GestionEventView.vue'),
       },
+      {
+        path: '/Add Event',
+        name: 'Add Event',
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import('@/pages/ProfilesView/AddEventView.vue'),
+      },
 
 
                         // Vue : ErroView

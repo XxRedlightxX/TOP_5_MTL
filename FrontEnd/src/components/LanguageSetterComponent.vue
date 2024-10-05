@@ -132,7 +132,7 @@
         }
 
         100% {
-            transform: translateY(40px);
+            transform: translateY(10px);
             width: 59px;
             height: 69px;
         }

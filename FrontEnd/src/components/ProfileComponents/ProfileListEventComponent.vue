@@ -1,143 +1,92 @@
 <template>
     <div id="profileListEventComponent">
-        <div class="head  glass">
-            <h4>Header text</h4>
-            <v-icon icon="mdi-plus-box-multiple" :class="['icon', {'justGlowless' : !actualMode}]"/>
-        </div>
+      <div class="head glass">
+        <h4>{{  actualLang ? 'List of event you add' : 'Les evenements que vous avez ajoute' }}</h4>
+        
+        <router-link to="/Add Event" class="router">
+            <v-icon icon="mdi-plus-box-multiple" :class="['icon', {'justGlowless' : !actualMode}]" :title="actualLang ? 'Add an Event' : 'Ajouter un evenement'"/>
+        </router-link>
 
-        <div class="body">
-            <ProfileSingleEvent/>
-            <ProfileSingleEvent/>
-            <ProfileSingleEvent/>
-            <ProfileSingleEvent/>
-            <ProfileSingleEvent/>
-        </div>
+      </div>
+  
+      <div class="body">
+        <ProfileSingleEvent v-for="(item, index) in theOrganisator.listEvent" :key="index" :event="item"/>
+      </div>
     </div>
   </template>
   
-<script setup>
-    import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted} from "vue";
-    import ProfileSingleEvent from "./ProfileSingleEventComponent.vue"
-
-    let actualLang = ref(storageManager.getLang());
-    let isLogged = ref(storageManager.getLogin());
-
-    const Logout = () => {
-        storageManager.setLogin(false);
-        isLogged.value = storageManager.getLogin();
-    }
-
-    if (actualLang.value === null) {
-        storageManager.setLang(true);
-        actualLang.value = storageManager.getLang();
-    }
-
-    if (isLogged.value === null) {
-        Logout();
-    }
-
-
-    // Function to handle mode change event
-    const handleLangChange = (event) => {
-        actualLang.value = JSON.parse(event.detail.storage);
+  <script setup>
+  import storageManager from "@/JS/LocalStaorageManager";
+  import { ref, onMounted, onUnmounted } from "vue";
+  import ProfileSingleEvent from "./ProfileSingleEventComponent.vue";
+  
+  const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
+  const organisator = {
+      avatar: "/src/assets/p1.jpg",
+      username: "Debrazer",
+      desc: text,
+      listEvent: [
+        { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text, rating: 1 },
+        { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 },
+        { image: "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text, rating: 5 },
+        { image: "/src/assets/HomeCarousel/Jardin-botanique.jpg", title: "Jardin Botanique", desc: text, rating: 4 },
+        { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 }
+      ]
     };
-        // Function to handle mode change event
-    const handleLoginChange = (event) => {
-        isLogged.value = JSON.parse(event.detail.storage);
-    };
-    // Add event listener for mode changes
-    onMounted(() => {
-        window.addEventListener('lang-changed', handleLangChange);
-        window.addEventListener('login-changed', handleLoginChange);
-    });
+  
+  let actualLang = ref(storageManager.getLang());
+  let isLogged = ref(storageManager.getLogin());
+  let theOrganisator = ref(storageManager.getOrganisator());
+  
+  const Logout = () => {
+    storageManager.setLogin(false);
+    isLogged.value = storageManager.getLogin();
+  };
+  
+  if (actualLang.value === null) {
+    storageManager.setLang(true);
+    actualLang.value = storageManager.getLang();
+  }
+  
+  if (isLogged.value === null) {
+    Logout();
+  }
+  
+  if (theOrganisator.value === null) {
+    theOrganisator.value = organisator;
+  }
+  
+  // Function to handle mode change event
+  const handleLangChange = (event) => {
+    actualLang.value = JSON.parse(event.detail.storage);
+  };
+  
+  // Function to handle mode change event
+  const handleLoginChange = (event) => {
+    isLogged.value = JSON.parse(event.detail.storage);
+  };
+  
+  // Function to handle mode change event
+  const handleOrganisatorChange = (event) => {
+    theOrganisator.value = JSON.parse(event.detail.storage);
+  };
+  
+  // Add event listener for mode changes
+  onMounted(() => {
+    window.addEventListener('lang-changed', handleLangChange);
+    window.addEventListener('login-changed', handleLoginChange);
+    window.addEventListener('organisator-changed', handleOrganisatorChange);
+  });
+  
+  // Remove event listener when component is unmounted
+  onUnmounted(() => {
+    window.removeEventListener('lang-changed', handleLangChange);
+    window.removeEventListener('login-changed', handleLoginChange);
+    window.removeEventListener('organisator-changed', handleOrganisatorChange);
+  });
+  
+  console.log(theOrganisator.value);
+  </script>
+  
 
-    // Remove event listener when component is unmounted
-    onUnmounted(() => {
-        window.removeEventListener('lang-changed', handleLangChange);
-        window.removeEventListener('login-changed', handleLoginChange);
-    });
-</script>
-
-<style lang="scss">
-    #profileListEventComponent {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        .head {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0% 0.7% 0% 0%;
-
-            h4 {
-                flex: 1;
-                font-size: 2rem;
-            }
-
-            .icon {
-                padding: 2% 4%;
-                font-size: 3.2rem;
-            }
-            .icon:hover {
-                cursor: pointer;
-            }
-        }
-
-        .body {
-            flex: 1;
-            margin-top: 1%;
-            padding: 0% 1% 0% 0%;
-            
-            max-height: 500px;
-            overflow: auto;
-            scrollbar-width: thin;
-
-            #profileSingleEventComponent {
-                margin-bottom: 2%;
-            }
-        }
-    }
-    .light {
-        #profileListEventComponent {
-            .head {
-                h4 {
-                    color: var(--graphite08);
-                }
-
-                .icon {
-                    color: var(--graphite06);
-                }
-                .icon:hover {
-                    color: var(--graphite);
-                }
-            }
-
-            .body {
-                scrollbar-color: var(--graphite015) rgba(255, 255, 255, 0.06);
-            }
-        }
-    }
-    .dark {
-        #profileListEventComponent {
-            .head {
-                h4 {
-                    color: var(--light-trans-text);
-                }
-
-                .icon {
-                    color: var(--light-trans-2Shine);
-                }
-                .icon:hover {
-                    color: var(--light-trans015);
-                }
-            }
-
-            .body {
-                scrollbar-color: var(--light-text) rgba(255, 255, 255, 0.06);
-            }
-        }
-    }
-</style>
+<style src="../../styles/ProfilesStyles/profileListEventComponentStyle.scss"></style>

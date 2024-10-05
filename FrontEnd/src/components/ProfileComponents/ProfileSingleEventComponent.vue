@@ -1,25 +1,22 @@
 <template>
     <div id="profileSingleEventComponent" class="glass">
         <div class="first">
-            <img :src="imgAvatar" alt="#">
+            <img :src="props.event.image" alt="#">
         </div>
 
         <div class="middle">
             
-            <h2>FullName</h2>
+            <h2>{{ props.event.title }}</h2>
 
-            <p> 
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam inventore tempore quis 
-                voluptatibus similique porro, aperiam fugit accusantium! Impedit repudiandae reprehenderit
-            </p>
+            <p>{{ props.event.desc }}</p>
 
         </div>
 
         <div class="last">
-
-            <v-icon icon="mdi-folder-edit" :class="['icon', {'glowLess' : !actualMode}]"/>
-            <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]"/>
-
+            <router-link to="/Gestion Event" class="router">
+                <v-icon icon="mdi-folder-edit" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Edit this Event' : 'Modifier cet evenement'"/>
+            </router-link>
+            <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Delette this Event' : 'Supprimer cet evenement'"/>
         </div>
 
     </div>
@@ -27,12 +24,16 @@
   
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted} from "vue";
-    import imgAvatar from "/src/assets/HomeCarousel/Jardin-botanique.jpg"
+    import { ref, onMounted, onUnmounted, defineProps} from "vue";
 
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
 
+    const props = defineProps({
+        event: Object, // Boolean type prop
+    });
+
+    console.log('props : ', props.event)
     const Logout = () => {
         storageManager.setLogin(false);
         isLogged.value = storageManager.getLogin();
@@ -69,84 +70,4 @@
     });
 </script>
 
-<style lang="scss">
-    #profileSingleEventComponent {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-
-        .first {
-            width: 20%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            img {
-                width: 100%;
-            }
-        }
-
-
-        .middle {
-            flex: 1;
-            //width: 55%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            padding: 0% 5%;
-        }
-
-        .last {
-            //width: 15%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
-            padding: 0%;
-
-
-            .icon {
-                padding: 2% 4%;
-                font-size: 3.2rem;
-            }
-            .icon:hover {
-                cursor: pointer;
-            }
-        }
-    }
-
-    .light {
-        #profileSingleEventComponent {
-            .middle {
-                h2, p {
-                    color: var(--graphite08);
-                }
-            }
-
-            .last {
-                .icon {
-                    color: var(--graphite06);
-                }
-                .icon:hover {
-                    color: var(--graphite);
-                }
-            }
-        }
-    }
-
-    .dark {
-        #profileSingleEventComponent {
-            .middle {
-                h2, p {
-                    color: var(--light-trans-text);
-                }
-            }
-
-            .last {
-                .icon {
-                    color: var(--light-trans-2Shine);
-                }
-            }
-        }
-    }
-</style>
+<style src="../../styles/ProfilesStyles/profileSingleEventComponentStyle.scss"></style>
