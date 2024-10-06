@@ -12,7 +12,7 @@
 
         </div>
 
-        <div class="last">
+        <div class="last"  v-show="props.himself">
             <router-link to="/Gestion Event" class="router">
                 <v-icon icon="mdi-folder-edit" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Edit this Event' : 'Modifier cet evenement'"/>
             </router-link>
@@ -26,11 +26,13 @@
     import storageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted, defineProps} from "vue";
 
+
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
 
     const props = defineProps({
         event: Object, // Boolean type prop
+        himself: Boolean, // Boolean type prop
     });
 
     console.log('props : ', props.event)

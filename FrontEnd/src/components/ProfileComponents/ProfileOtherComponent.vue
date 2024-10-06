@@ -6,7 +6,12 @@
   
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted} from "vue";
+    import { ref, onMounted, onUnmounted, defineProps} from "vue";
+
+    const props = defineProps({
+        himself: Boolean, // Boolean type prop
+        user: Object
+    });
 
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());

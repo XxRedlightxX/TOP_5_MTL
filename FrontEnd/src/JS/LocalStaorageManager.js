@@ -56,6 +56,21 @@ const StorageManager = {
         return login ? JSON.parse(login) : null;
     },
 
+
+    // gere l'utilisateur a afficher
+    setLogUser(value) {
+        localStorage.setItem("logUser", JSON.stringify(value));
+        window.dispatchEvent(new CustomEvent('logUser-changed', {
+            detail: {
+                storage: localStorage.getItem('logUser')
+            }
+        }));
+    },
+    getLogUser() {
+        const logUser = localStorage.getItem("logUser");
+        return logUser ? JSON.parse(logUser) : null;
+    },
+
     // gere l'organisateur a afficher
     setOrganisator(value) {
         localStorage.setItem("organisator", JSON.stringify(value));

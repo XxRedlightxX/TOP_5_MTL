@@ -1,9 +1,7 @@
 #menuComponent {
     display: block;
     /* From https://css.glass */
-    background: rgba(29, 30, 24, 0.23);
     //border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(4.7px);
     -webkit-backdrop-filter: blur(15px);
 
@@ -18,12 +16,6 @@
                 cursor: pointer;
             }
         }*/
-        .smallMenu {
-            #logo2Component {
-                width: 10%;
-                height: 65px;
-            }
-        }
 
         .links {
     
@@ -69,58 +61,8 @@
         transform: translateX(-100%); /* Hors de l'écran à la fin de la sortie */
     }
 }
-.light {
-    #menuComponent{
-        
-        .allMenu {
-    
-            .links {
-        
-                a {
-                    color: var(--graphite);
-                }
-                a:hover, .router-link-exact-active {
-                    color: var(--light);
-                }
-            }
-            .profile {
-                color: var(--graphite);
-            }
-            .icons {
-                color: var(--graphite);
-            }
-            .icons .icon:hover, .profile:hover, .router-link-exact-active {
-                color: var(--light);
-            }
-        }
-    }
-}
-.dark {
-    #menuComponent{
-        
-        .allMenu {
-    
-            .links {
-        
-                a {
-                    //color: var(--light-text);
-                    color: var(--light-trans-text);
-                }
-            }
-            .profile {
-                color: var(--light-trans-text);
-            }
-            .icons {
-                color: var(--light-trans-text);
-            }
-        }
-    }
-}
-
-
 
 @media screen and (min-width: 1025px) {
-
     .allMenu {
         display: flex;
         flex-direction: row;
@@ -139,12 +81,9 @@
             width: 100%;
         }
 
-        #LogoComponent {
+        #logo2Component {
             width: 10%;
-            font-size: 20px;
-            img {
-                width: 60%;
-            }
+            height: 65px;
         }
 
         .links {
@@ -177,23 +116,62 @@
     .BurgerMenu {
         display: none;
     }
+    .light {
+        #menuComponent{
+            background: rgba(29, 30, 24, 0.23);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            .allMenu {
+        
+                .links {
+            
+                    a {
+                        color: var(--graphite);
+                    }
+                    a:hover, .router-link-exact-active {
+                        color: var(--light);
+                    }
+                }
+                .profile {
+                    color: var(--graphite);
+                }
+                .icons {
+                    color: var(--graphite);
+                }
+                .icons .icon:hover, .profile:hover, .router-link-exact-active {
+                    color: var(--light);
+                }
+            }
+        }
+    }
+    .dark {
+        #menuComponent{
+            background: rgba(29, 30, 24, 0.23);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            .allMenu {
+        
+                .links {
+            
+                    a {
+                        //color: var(--light-text);
+                        color: var(--light-trans-text);
+                    }
+                }
+                .profile {
+                    color: var(--light-trans-text);
+                }
+                .icons {
+                    color: var(--light-trans-text);
+                }
+            }
+        }
+    }
 }
 @media screen and (max-width: 1025px) {
-    .dark {
-        .BurgerMenut{
-            background-color: var(--graphite);
-        }
-    }
-    .light {
-        .BurgerMenu{
-            background-color: var(--mainColor);
-        }
-    }
     .BurgerMenu {
         display: block;
         width: 100%;
         text-align: right;
-        z-index: 1000;
+        z-index: 100000;
         .v-icon {
             font-size: 4rem;
         }
@@ -223,7 +201,7 @@
         height: 100svh;
         padding: 0% 0% 0% 0%;
         margin: 0px;
-        background-color: rgba(255, 0, 0, 0);
+        //background-color: rgba(255, 0, 0, 0);
 
 
         .smallMenu {
@@ -231,25 +209,35 @@
             flex-direction: column;
             justify-content: baseline;
             width: 90%;
-            background-color: rgba(255, 0, 0, 0);
-            ;
+            //border-radius: 16px;
+            
             //position: fixed;
             //top: 101%;
             height: 100%;
-            padding-top: 10%;
+            //padding-top: 10%;
         }
         .iconClose {
             font-size: 3rem;
             align-self: flex-end;
-            margin-bottom: 8%;
+            margin: 8% 0% 0% 0%;
         }
-        #LogoComponent {
-            display: block;
-            width: 100%;
-            font-size: 90px;
+        
+        .iconClose:hover {
+            color: var(--light);       
+            animation: neonGlowLess 0.5s ease-in-out infinite alternate;  
+        }
+        #logo2Component {
+            width: 60%;
+            height: 45%;
+            margin: auto;
 
-            img {
-                width: 40%;
+            .drop, .drop:hover {
+                cursor: initial;
+                p {
+                    font-size: 3rem;
+                    color: var(--light-trans-text);       
+                    animation: neonGlowLess 0.5s ease-in-out infinite alternate;   
+                }
             }
         }
 
@@ -262,6 +250,11 @@
 
             a {
                 font-size: 3rem;
+                color: var(--light-trans-text);
+            }
+            a:hover, .router-link-exact-active {
+                color: var(--light);       
+                animation: neonGlowLess 0.5s ease-in-out infinite alternate;  
             }
         }
         .icons {
@@ -272,9 +265,97 @@
 
             .v-icon {
                 font-size: 4rem;
+                color: var(--light-trans-text);
+            }
+            .v-icon:hover, .router-link-exact-active {
+                color: var(--light);       
+                animation: neonGlowLess 0.5s ease-in-out infinite alternate;  
             }
         }
-    } 
+    }
+
+    .light {
+        .burgerLinks .smallMenu, .BurgerMenu {
+            /* From https://css.glass */
+            background: rgba(30, 24, 24, 0.9);
+            //border-radius: 16px;
+            //box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(18.9px);
+            -webkit-backdrop-filter: blur(18.9px);
+        }
+        .burgerLinks {
+            .iconClose {
+                color: var(--light-trans-text); 
+            }
+            
+            .iconClose:hover {
+                color: var(--light);       
+            }
+            #logo2Component {
+                .drop, .drop:hover {
+                        color: var(--light-trans-text);        
+                    }
+                }
+        }
+    
+        .links {
+    
+            a {
+                color: var(--light-trans-text);
+            }
+            a:hover, .router-link-exact-active {
+                color: var(--light);
+            }
+        }
+        .icons {
+            .v-icon {
+                color: var(--light-trans-text);
+            }
+            .v-icon:hover, .router-link-exact-active {
+                color: var(--light);
+            }
+        }
+    }
+
+    .dark {    
+        .burgerLinks .smallMenu, .BurgerMenu {
+            background: rgba(29, 30, 24, 0.23);
+            backdrop-filter: blur(18.9px);
+            -webkit-backdrop-filter: blur(18.9px);
+        }
+        .burgerLinks {
+            .iconClose {
+                color: var(--light-trans-text); 
+            }
+            
+            .iconClose:hover {
+                color: var(--light);       
+            }
+            #logo2Component {
+                .drop, .drop:hover {
+                        color: var(--light-trans-text);        
+                    }
+                }
+        }
+    
+        .links {
+    
+            a {
+                color: var(--light-trans-text);
+            }
+            a:hover, .router-link-exact-active {
+                color: var(--light);
+            }
+        }
+        .icons {
+            .v-icon {
+                color: var(--light-trans-text);
+            }
+            .v-icon:hover, .router-link-exact-active {
+                color: var(--light);
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 760px) {
@@ -294,6 +375,10 @@
             .v-icon {
                 font-size: 5rem;
             }
+        }
+        #logo2Component {
+            width: 90%;
+            height: 50%;
         }
     } 
 }

@@ -1,5 +1,5 @@
 <template>
-    <div @click="changeLang()" id="logo2Component"  class="drop">
+    <div id="logo2Component"  >
         <div class="drop">
             <p>MTL's <br> source</p>
         </div>

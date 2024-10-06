@@ -2,7 +2,7 @@
     <div id="login-profileView">
         <SignIn_SignUp v-if="!isLogged"/>
 
-        <Profile v-else/>
+        <Profile v-else  :himself="true"/>
     </div>
 </template>
 
