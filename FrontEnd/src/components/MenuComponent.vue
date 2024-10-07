@@ -20,7 +20,7 @@
                     </router-link>
                     <v-icon 
                         :icon="!actualMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'" 
-                        :class="['icon', { 'justGlow': !actualMode }]" 
+                        :class="['icon', 'iconn', { 'justGlow': !actualMode }]" 
                         @click="changeMode()" 
                         :title="actualLang ? (actualMode ? 'Go to Night Mode' : 'Go to Light Mode') : (actualMode ? 'Passez en mode Nuit' : 'Passez en mode Jour')"
                         />

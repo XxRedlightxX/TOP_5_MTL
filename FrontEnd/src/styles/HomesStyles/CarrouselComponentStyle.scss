@@ -101,17 +101,27 @@
                         //border: none;
                         z-index: 100;
                         border: 2px solid var(--light05);
-                        background-color: var(--light-trans);
+                        //background-color: var(--light-trans);
                         padding: 2% 2%;
                         letter-spacing: 3px;
                         font-family: Poppins;
                         font-weight: 500;
                         color: var(--light);
                         text-decoration: none;
+                        background: transparent;
+                        border-radius: 47% 53% 70% 30% / 40% 37% 63% 60% ;
+                        box-shadow: 5px 5px 10px #0008,
+                            10px 6px 15px #0008 inset,
+                            -5px -5px 8px #f5f5ff inset,
+                            10px 6px 15px #0004 inset;
+                    }
+                    .btn:nth-child(1){
+                        border-radius: 47% 53% 44% 56% / 55% 32% 68% 45% ;
+                
                     }
                     .btn:hover{
-                        background-color: var(--light05);
-                        border: 2px solid var(--light);
+                        box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                            15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
                         cursor: pointer;
                     }
                 }
@@ -166,7 +176,7 @@
         width: 45%;
         display: flex;
         justify-content: space-between;
-        gap: 10px;
+        //gap: 10px;
         align-items: center;
 
         button{

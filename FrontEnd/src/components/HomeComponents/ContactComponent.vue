@@ -48,18 +48,28 @@
                     <div class="seeTrought"></div>
                 </div>
                 <form action="#" method="post">
-                    <h3>{{ actualLang ? 'Send Message' : 'Envoyez votre message' }}</h3>
+                    <h3>{{ actualLang ? 'Send Message' : 'Votre message' }}</h3>
 
                     <v-text-field
                         :rules="Name"
                         hide-details="auto"
                         :label="actualLang ? 'Full name' : 'Nom complet'"
+                        
+                        hint="this field is mendatory"
+                        type="input"
+                        clearable
+                        persistent-clear 
                     ></v-text-field>
 
                     <v-text-field
                         :rules="Email"
                         hide-details="auto"
                         :label="actualLang ? 'Email' : 'Email'"
+                        
+                        hint="this field is mendatory"
+                        type="input"
+                        clearable
+                        persistent-clear 
                     ></v-text-field>
 
                     <v-textarea :label="actualLang ? 'Type your Message' : 'Entrez votre message'"></v-textarea>

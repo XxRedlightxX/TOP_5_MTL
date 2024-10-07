@@ -1,5 +1,5 @@
 <template>
-    <form class="sign-up glass" @submit=" Login()">
+    <form class="sign-up glass">
 
         <h2>{{actualLang ? 'sign-up' : 'Inscrivez-Vous'}}</h2>
 
@@ -9,7 +9,6 @@
             :label="actualLang ? 'Username*' : 'Nom d\'utilisateur*'"
             type="input"
             clearable
-            persistent-hint
             persistent-clear 
             hide-details="auto"
         ></v-text-field>
@@ -21,7 +20,6 @@
                 :label="actualLang ? 'Email*' : 'Email*'"
                 type="input"
                 clearable
-                persistent-hint
                 persistent-clear 
                 hide-details="auto"
             ></v-text-field>
@@ -32,7 +30,6 @@
                 :label="actualLang ? 'Phone' : 'Telephone'"
                 type="input"
                 clearable
-                persistent-hint
                 persistent-clear 
                 hide-details="auto"
             ></v-text-field>
@@ -44,7 +41,6 @@
             :label="actualLang ? 'Password*' : 'Mot de passe*'"
             type="input"
             clearable
-            persistent-hint
             persistent-clear 
             hide-details="auto"
         ></v-text-field>
@@ -55,18 +51,19 @@
             :label="actualLang ? 'Password confirm*' : 'Confirmer le mot de passe*'"
             type="input"
             clearable
-            persistent-hint
             persistent-clear 
             hide-details="auto"
         ></v-text-field>
 
-        <button type="submit">{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
+        <!--<button type="submit">{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>-->
+        <waterButton :text="actualLang ? 'Sign Up' : 'S\'inscrire'" :type="true" @click=" Login()"/>
     </form>
 </template>
 
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted} from "vue";
+    import waterButton from "../WaterButtonComponent.vue"
   
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());

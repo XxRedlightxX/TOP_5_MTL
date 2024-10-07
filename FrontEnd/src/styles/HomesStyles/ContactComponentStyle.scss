@@ -66,8 +66,7 @@
             padding-right: 10%;
             position: relative;
 
-            .overlay {
-                border: 2px solid red;
+            /*.overlay {
                 width: 81%;
                 height: 100%;
                 position: absolute;
@@ -82,20 +81,20 @@
                 
                     //backdrop-filter: blur(0px);
                     background: transparent;
-                    border-radius: 40% 48% 37% 63% / 50% 52% 48% 52%;
+                    border-radius: 47% 53% 70% 30% / 30% 43% 57% 70%;
                 }
-            }
+            }*/
             form {
                 width: 100%;
                 padding: 5% 5%;
                 overflow-x: hidden;
-                //border-radius: 50%;
+                padding: 1% 5%;
+                border-radius: 49% 51% 53% 47% / 43% 33% 67% 57% ;
+                transition: all 0.3s;
+                //border-radius: 47% 53% 70% 30% / 30% 43% 57% 70%;
 
                 h3 {
                     margin-bottom: 2%;
-                }
-                .v-field__field {
-                    border-radius: 40% 48% 37% 63% / 50% 52% 48% 52%;
                 }
                 .v-input {
                     margin-bottom: 2%;
@@ -106,6 +105,9 @@
                     border-radius: 5px;
                 }
                 
+            }
+            form:hover {
+                border-radius: 49% 51% 49% 51% / 31% 26% 74% 69% ;
             }
         }
     }
@@ -148,15 +150,18 @@
             }
 
             .right {
-                .overlay {
+                /*.overlay {
                     
                     .seeTrought {
                         box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
                                 15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
                     }
-                }
+                }*/
                 form {
-                    //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);        
+                    background: transparent;
+                    
+                    box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.1), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                            15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);     
 
                     h3 {
                         color: var(--graphite);

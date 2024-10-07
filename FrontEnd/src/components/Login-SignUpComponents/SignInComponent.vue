@@ -1,5 +1,5 @@
 <template>
-  <form class="sign-in glass" @submit="Login()">
+  <form class="sign-in glass">
 
     <h2>{{actualLang ? 'Sign In' : 'Connectez-Vous'}}</h2>
 
@@ -8,7 +8,6 @@
         :label="actualLang ? 'Email' : 'Email'"
         type="input"
         clearable
-        persistent-hint
         persistent-clear 
         hide-details="auto"
     ></v-text-field>
@@ -18,14 +17,14 @@
         :label="actualLang ? 'Password' : 'Mot de passe'"
         type="input"
         clearable
-        persistent-hint
         persistent-clear 
         hide-details="auto"
     ></v-text-field>
 
     <a href="#" class="forgot">{{actualLang ? 'Forgot your password ?' : 'Vous avez oublié votre mot de passe ?'}}</a>
 
-    <button type="submit">{{actualLang ? 'Sign In' : 'Se connecter'}}</button>
+    <!--<button type="submit">{{actualLang ? 'Sign In' : 'Se connecter'}}</button>-->
+    <waterButton :text="actualLang ? 'Sign In' : 'Se connecter'" :type="true" @click="Login()"/>
 
   </form>
 
@@ -34,6 +33,7 @@
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted} from "vue";
+    import waterButton from "../WaterButtonComponent.vue"
   
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
