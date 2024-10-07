@@ -29,6 +29,7 @@
 
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
+    let actualMode = ref(storageManager.getMode());
 
     const props = defineProps({
         event: Object, // Boolean type prop
@@ -49,6 +50,10 @@
     if (isLogged.value === null) {
         Logout();
     }
+    if (actualMode.value === null) {
+        storageManager.setMode(true);
+        actualMode.value = storageManager.getMode();
+    }
 
 
     // Function to handle mode change event
@@ -59,16 +64,21 @@
     const handleLoginChange = (event) => {
         isLogged.value = JSON.parse(event.detail.storage);
     };
+    const handleModeChange = (event) => {
+        actualMode.value = JSON.parse(event.detail.storage);
+    };
     // Add event listener for mode changes
     onMounted(() => {
         window.addEventListener('lang-changed', handleLangChange);
         window.addEventListener('login-changed', handleLoginChange);
+        window.addEventListener('mode-changed', handleModeChange);
     });
 
     // Remove event listener when component is unmounted
     onUnmounted(() => {
         window.removeEventListener('lang-changed', handleLangChange);
         window.removeEventListener('login-changed', handleLoginChange);
+        window.removeEventListener('mode-changed', handleModeChange);
     });
 </script>
 

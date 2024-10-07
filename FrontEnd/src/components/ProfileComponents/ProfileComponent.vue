@@ -1,8 +1,8 @@
 <template>
     <div id="profileComponent" class="glass">
         <div class="top">
-            <ProfileHead class="glass" :himself="props.himself" :user="theOrganisator"></ProfileHead>
-            <ProfileOther class="glass" v-show="props.himself" :user="theOrganisator"></ProfileOther>
+            <ProfileHead :class="!actualMode ? 'glass' : ''" :himself="props.himself" :user="theOrganisator"></ProfileHead>
+            <ProfileOther :class="!actualMode ? 'glass' : ''" v-show="props.himself" :user="theOrganisator"></ProfileOther>
         </div>
         <ProfileList :himself="props.himself" :user="theOrganisator"></ProfileList>
     </div>
@@ -35,6 +35,7 @@
 
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
+    let actualMode = ref(storageManager.getMode());
     let theOrganisator = ref(null);
 
     if (props.himself){
@@ -61,7 +62,10 @@
     if (theOrganisator.value === null) {
         theOrganisator.value = organisator;
     }
-
+    if (actualMode.value === null) {
+        storageManager.setMode(true);
+        actualMode.value = storageManager.getMode();
+    }
     // Function to handle mode change event
     const handleLangChange = (event) => {
         actualLang.value = JSON.parse(event.detail.storage);
@@ -73,11 +77,15 @@
     const handleOrganisatorChange = (event) => {
         theOrganisator.value = JSON.parse(event.detail.storage);
     };
+    const handleModeChange = (event) => {
+        actualMode.value = JSON.parse(event.detail.storage);
+    };
     // Add event listener for mode changes
     onMounted(() => {
         window.addEventListener('lang-changed', handleLangChange);
         window.addEventListener('login-changed', handleLoginChange);
         window.addEventListener('organisator-changed', handleOrganisatorChange);
+        window.addEventListener('mode-changed', handleModeChange);
     });
     
     // Remove event listener when component is unmounted
@@ -85,7 +93,10 @@
         window.removeEventListener('lang-changed', handleLangChange);
         window.removeEventListener('login-changed', handleLoginChange);
         window.removeEventListener('organisator-changed', handleOrganisatorChange);
+        window.removeEventListener('mode-changed', handleModeChange);
     });
+
+    console.log('mode : ', actualMode.value);
 </script>
 
 <style src="../../styles/ProfilesStyles/ProfileComponentStyle.scss"></style>
