@@ -141,12 +141,13 @@
 
             </div>
             <div class="event_description">
-                <h3>Acoustic Serenade Showcase</h3>
+                <h2>Acoustic Serenade Showcase</h2>
                 <div class="event_description_infos">
-                    <img src="../../assets/location.svg" alt="">
-                    Montreal, Vieux-Port
-                    <img src="../../assets/clock.svg" alt="">
+                    <div class="d1"><img src="../../assets/location.svg" alt="">
+                    Montreal, Vieux-Port</div>
+                    <div class="d2"><img src="../../assets/clock.svg" alt="">
                     Octobre 11 - 16:00pm
+                </div>
                 </div>
 
             </div>
