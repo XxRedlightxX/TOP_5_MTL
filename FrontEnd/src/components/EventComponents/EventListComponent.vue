@@ -1,7 +1,7 @@
 <template>
 
     <div id="eventListComponent">
-      <section class="product"> 
+      <!--<section class="product"> 
       <h2 class="product-category">Up Coming</h2>
         <button class="pre-btn"><img src="../../assets/arrow.png" alt=""></button>
         <button class="nxt-btn"><img src="../../assets/arrow.png" alt=""></button>
@@ -128,7 +128,33 @@
             </div>
         </div>
       </section>
-    </div>
+        
+
+    -->
+      <div class="event">
+        <button class="pre-btn"><img src="../../assets/arrow.png" alt=""></button>
+        <button class="nxt-btn"><img src="../../assets/arrow.png" alt=""></button>
+        <div class="event_card">
+            <div class="event_card_photo">
+                <span class="overlay"> <img src="../../assets/heart.svg" alt=""></span>
+                <img src="../../assets/HomeCarousel/Jardin-botanique.jpg" class="product-thumb" alt="">
+
+            </div>
+            <div class="event_description">
+                <h3>Acoustic Serenade Showcase</h3>
+                <div class="event_description_infos">
+                    <img src="../../assets/location.svg" alt="">
+                    Montreal, Vieux-Port
+                    <img src="../../assets/clock.svg" alt="">
+                    Octobre 11 - 16:00pm
+                </div>
+
+            </div>
+        </div>
+      </div>
+
+</div>
+
 </template>
 
 <script setup >

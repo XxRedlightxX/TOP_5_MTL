@@ -3,7 +3,7 @@
     
     
    
-    .product {
+    /*.product {
       position: relative;
       overflow: hidden;
       padding: auto;
@@ -184,5 +184,68 @@
           margin-bottom: 10px;
         }
       }
+    }*/
+
+    
+    min-height: 700px;
+    box-sizing: border-box;
+
+    img {
+      height: 15px;
+    }
+
+    .event_card {
+      border-style: groove;
+      height: 450px;
+      width: 500px;
+      position: relative; /* Ensure the overlay is positioned relative to the event card */
+
+      &_photo {
+        border-style: dotted;
+        
+        position: relative;
+        .overlay {
+          position: absolute;
+          top: 0;
+          right: 0; /* Align the overlay to the right */
+          
+          color: black;
+          background-color: #fff;
+          border-radius: 60px;
+          border-color: #fff;
+          border-style: dashed;
+          margin: 10px 10px;
+          
+          width: 10%;
+          height: 15%; /* Make the overlay cover the entire image */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: 0.5s ease;
+          opacity: 1; /* Initially hidden */
+          font-size: 10px;
+          text-align: center;
+
+          img {
+            height: 30px;
+            filter: invert(35%) sepia(36%) saturate(7009%) hue-rotate(2deg) brightness(104%) contrast(88%);
+          }
+        
+        }
+
+        
+    }
+
+      &_photo img {
+        height: 35vh;
+        width: 100%;
+        border-radius: 10px;
+        padding: 2px;
+        
+        
+
+      }
+
+
     }
 }
