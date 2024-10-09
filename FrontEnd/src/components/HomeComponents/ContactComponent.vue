@@ -44,9 +44,7 @@
 
             </div>
             <div class="right">
-                <div class="overlay">
-                    <div class="seeTrought"></div>
-                </div>
+                
                 <form action="#" method="post">
                     <h3>{{ actualLang ? 'Send Message' : 'Votre message' }}</h3>
 

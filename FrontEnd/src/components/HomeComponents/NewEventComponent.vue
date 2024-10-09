@@ -26,17 +26,7 @@
 
       </div>
       <p>{{ newEvent[indexSlide].desc }}</p>
-      <div class="ratings">
-        <v-rating
-          readonly
-          half-increments
-          :length="5"
-          :size="32"
-          :model-value="newEvent[indexSlide].rating"
-          active-color="primary"
-          class="rat"
-        />
-      </div>
+      <Ratings :rating="newEvent[indexSlide].rating"/>
     </div>
   </div>
 </template>
@@ -49,6 +39,7 @@
   import 'swiper/css/autoplay';
   import { EffectCards, Autoplay } from 'swiper/modules';
   import LocalStorageManager from "@/JS/LocalStaorageManager";
+  import Ratings from "../RatingComponent.vue"
 
   const modules = [EffectCards, Autoplay];
   const indexSlide = ref(0);

@@ -98,7 +98,10 @@
 .dark {
     #footerComponent {
         background: rgba(29, 30, 24, 0.23);
-    
+        animation: footerNeonGlowBox 0.5s ease-in-out infinite alternate;
+        .waveContainer {
+            display: none;
+        }
         .links {
             background: rgba(29, 30, 24, 0.4);
             a {
@@ -115,6 +118,17 @@
     
         p {
             color: var(--light-trans-text);
+        }
+    }
+    @keyframes footerNeonGlowBox {
+        from {
+            box-shadow:
+            0px -7px 14px -3px var(--light-trans-glow)
+        }
+    
+        to {
+            box-shadow:
+            7px -9px 17px -3px var(--light-trans-glow)
         }
     }
 }

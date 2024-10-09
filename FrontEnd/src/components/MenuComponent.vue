@@ -5,18 +5,15 @@
         <div v-if="seeBurgermenu" :class="['allMenu', {'burgerLinks' : seeBurgermenu}]" @click.self="changeSeeBurgermenu()">
             <div class="smallMenu">
                 <v-icon icon="mdi-window-close" :class="['icon', 'iconClose', {'justGlow' : !actualMode}]" @click="changeSeeBurgermenu()"/>
-                <!--<router-link  to="/" class="logo">
-                    <img src="/src/assets/Logo-Gem.svg" alt="Logo Gem" title="Go to Home Page">
-                </router-link>-->
                 <Logo2 :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'" /> 
                 
                 <div class="links">
-                    <router-link to="/" :class="{'glow' : !actualMode}" :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'">{{actualLang ? 'Home' : 'Accueil'}}</router-link>
-                    <router-link to="/Events" :class="{'glow' : !actualMode}" :title="actualLang ? 'Go to Event Page' : 'Allez a la page d\'aEvenement'">{{actualLang ? 'Events' : 'Evenement'}}</router-link>
+                    <router-link to="/" :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'">{{actualLang ? 'Home' : 'Accueil'}}</router-link>
+                    <router-link to="/Events" :title="actualLang ? 'Go to Event Page' : 'Allez a la page d\'aEvenement'">{{actualLang ? 'Events' : 'Evenement'}}</router-link>
                 </div>
                 <div class="icons">
                     <router-link to="/Profile" class="profile" :title="actualLang ? 'Go to Profile Page' : 'Allez a la page Profile'">
-                        <v-icon icon="mdi-account-circle" class="icon" :class="{'glow' : !actualMode}"/>
+                        <v-icon icon="mdi-account-circle" class="icon"/>
                     </router-link>
                     <v-icon 
                         :icon="!actualMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'" 
