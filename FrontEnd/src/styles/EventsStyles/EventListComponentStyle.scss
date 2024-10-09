@@ -2,7 +2,7 @@
 #eventListComponent {
  
     
-   
+   box-sizing:  border-box;
     /*.product {
       position: relative;
       overflow: hidden;
@@ -186,11 +186,20 @@
         }
       }
     }*/
+
+    .product-category {
+      
+      text-align: left;
+      margin: 0px 6vw 12px; 
+
+      
+    }
   .event {
       position: relative;
       overflow: hidden;
       padding: auto;
       border-style: dashed;
+
 
       
 
@@ -236,11 +245,11 @@
       
 
         .event-container {
-          padding: 0 8vw;
+          padding: 0 6vw;
           display: flex;
           overflow-x: auto;
           scroll-behavior: smooth;
-          border-style: double;
+          border-radius: 30px;
           gap: 2em;
 
           &::-webkit-scrollbar {
