@@ -134,25 +134,33 @@
       <div class="event">
         <button class="pre-btn"><img src="../../assets/arrow.png" alt=""></button>
         <button class="nxt-btn"><img src="../../assets/arrow.png" alt=""></button>
-        <div class="event_card">
-            <div class="event_card_photo">
-                <span class="overlay"> <img src="../../assets/heart.svg" alt=""></span>
-                <img src="../../assets/HomeCarousel/Jardin-botanique.jpg" class="product-thumb" alt="">
+        <div class="event-container">
+            <div class="event_card"   v-for="(item, index) in newEvent" :key="index">
+                <div class="event_card_photo">
+                    <span class="overlay"> <img src="../../assets/heart.svg" alt=""></span>
+                    <img :src="item.image" class="product-thumb" alt="">
 
-            </div>
-            <div class="event_description">
-                <h2>Acoustic Serenade Showcase</h2>
-                <div class="event_description_infos">
-                    <div class="d1"><img src="../../assets/location.svg" alt="">
-                    Montreal, Vieux-Port</div>
-                    <div class="d2"><img src="../../assets/clock.svg" alt="">
-                    Octobre 11 - 16:00pm
                 </div>
-                </div>
+                <div class="event_description">
+                    <h2>Acoustic Serenade Showcase</h2>
+                    <div class="event_description_infos">
+                        <div class="d1"><img src="../../assets/location.svg" alt="">
+                        Montreal, Vieux-Port</div>
+                        <div class="d2"><img src="../../assets/clock.svg" alt="">
+                        Octobre 11 - 16:00pm
+                    </div>
+                    </div>
 
+                </div>
             </div>
+
+           
+
+            
+            
+
         </div>
-      </div>
+    </div>
 
 </div>
 
@@ -163,20 +171,21 @@
 import { onMounted, ref, watch, onUnmounted } from 'vue'; // Add ref here
  import LocalStorageManager from "@/JS/LocalStaorageManager";
 
-onMounted(() => {
-    const productContainers = [...document.querySelectorAll('.product-container')];
+ onMounted(() => {
+    const productContainers = [...document.querySelectorAll('.event-container')];
     const nxtBtn = [...document.querySelectorAll('.nxt-btn')];
     const preBtn = [...document.querySelectorAll('.pre-btn')];
 
     productContainers.forEach((item, i) => {
-        let containerDimensions = item.getBoundingClientRect();
-        let containerWidth = containerDimensions.width;
-
+        let containerWidth = item.offsetWidth; // Use offsetWidth for more accurate width
+        
         nxtBtn[i].addEventListener('click', () => {
+            console.log("Next button clicked"); // For debugging
             item.scrollLeft += containerWidth;
         });
 
         preBtn[i].addEventListener('click', () => {
+            console.log("Previous button clicked"); // For debugging
             item.scrollLeft -= containerWidth;
         });
     });
