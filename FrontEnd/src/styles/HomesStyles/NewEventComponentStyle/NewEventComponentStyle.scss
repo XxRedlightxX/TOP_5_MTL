@@ -32,9 +32,14 @@
         flex: 1;
         padding: 2% 2%;
         height: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
         .top {
             display: flex;
+            width: 100%;
             h2 {
                 width: 90%;
                 font-size: 2rem;
@@ -43,6 +48,8 @@
                 width: 10%;
                 padding: 5px;
                 font-size: 3.1rem;
+                background: transparent;
+                border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
             }
         }
 
@@ -52,7 +59,7 @@
     }
 }
 
-.light {
+.light, .dark {
     #newEventComponent {
         .swiper {
             .swiper-slide {
@@ -65,8 +72,6 @@
                     color: var(--graphite); 
                 }
                 .icon {
-                    background: transparent;
-                    border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
                     color: var(--graphite); 
                     box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
                                 15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
@@ -96,18 +101,17 @@
                     color: var(--light); 
                 }
                 .icon {
-                    border-radius: 50%;
-                    color: var(--graphite06);
-                    background-color: var(--light-trans-text);       
-                    animation: neonGlowBoxless 0.5s ease-in-out infinite alternate;
+                    color: var(--light-trans-text); 
+                    box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(255, 255, 255, 0.1),
+                                15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.4);
                 }
                 .icon:hover {
-                    color: var(--graphite);
+                    color: var(--light); 
                 }
             }
     
             p {
-                color: var(--light-text); 
+                color: var(--light-text);
             }
         }
     }

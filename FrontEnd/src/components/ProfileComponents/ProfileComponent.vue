@@ -1,8 +1,8 @@
 <template>
     <div id="profileComponent" class="glass">
         <div class="top">
-            <ProfileHead :class="!actualMode ? 'glass' : ''" :himself="props.himself" :user="theOrganisator"></ProfileHead>
-            <ProfileOther :class="!actualMode ? 'glass' : ''" v-show="props.himself" :user="theOrganisator"></ProfileOther>
+            <ProfileHead :himself="props.himself" :user="theOrganisator"></ProfileHead>
+            <ProfileOther v-show="props.himself" :user="theOrganisator"></ProfileOther>
         </div>
         <ProfileList :himself="props.himself" :user="theOrganisator"></ProfileList>
     </div>

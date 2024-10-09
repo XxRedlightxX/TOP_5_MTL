@@ -98,30 +98,19 @@
                     margin-top: 20px;
 
                     .btn{
-                        //border: none;
                         z-index: 100;
-                        border: 2px solid var(--light05);
-                        //background-color: var(--light-trans);
                         padding: 2% 2%;
                         letter-spacing: 3px;
                         font-family: Poppins;
                         font-weight: 500;
-                        color: var(--light);
                         text-decoration: none;
-                        background: transparent;
                         border-radius: 47% 53% 70% 30% / 40% 37% 63% 60% ;
-                        box-shadow: 5px 5px 10px #0008,
-                            10px 6px 15px #0008 inset,
-                            -5px -5px 8px #f5f5ff inset,
-                            10px 6px 15px #0004 inset;
                     }
                     .btn:nth-child(1){
                         border-radius: 47% 53% 44% 56% / 55% 32% 68% 45% ;
                 
                     }
                     .btn:hover{
-                        box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
-                            15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
                         cursor: pointer;
                     }
                 }
@@ -366,19 +355,42 @@
                 color: var(--dark);
             }
         }
+        .list {
+            .item {
+                .content {
+                    .buttons{
+
+                        .btn{
+                            border: 2px solid var(--light05);
+                            color: var(--light);
+                            background: transparent;
+                            box-shadow: 5px 5px 10px #0008,
+                                10px 6px 15px #0008 inset,
+                                -5px -5px 8px #f5f5ff inset,
+                                10px 6px 15px #0004 inset;
+                        }
+                        .btn:hover{
+                            box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                                15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 .dark {
     #carouselComponent {
         .list > .item > .content > .desc p, .thumbnail .title {
-            color: var(--light-text);
+            color: var(--graphite);
         }
         .content .title {
-            color: var(--light-text);
+            color: var(--graphite);
+            z-index: 100;
             animation: neonGlow 0.5s ease-in-out infinite alternate;
         }
         .overlayGrad {
-            background: linear-gradient(180deg, rgba(212, 212, 212, 0.3) 0%, rgba(58,59,50, 0.3) 60%,  rgba(58,59,50, 1) 95%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(153,153,152, 0.3) 60%,  rgba(153,153,152,1) 95%);
         }
             /* arrows */
         .arrows{
@@ -388,6 +400,29 @@
             }
             button:hover{
                 color: var(--light);
+            }
+        }
+        .list {
+            .item {
+                .content {
+                    .buttons{
+
+                        .btn{
+                            border: 2px solid var(--light05);
+                            color: var(--graphite);
+                            background: transparent;
+                            box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                                15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+                        }
+                        .btn:hover{
+                            color: var(--graphite06);
+                            box-shadow: 5px 5px 10px #0008,
+                                10px 6px 15px #0008 inset,
+                                -5px -5px 8px #f5f5ff inset,
+                                10px 6px 15px #0004 inset;
+                        }
+                    }
+                }
             }
         }
     }

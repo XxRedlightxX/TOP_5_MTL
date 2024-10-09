@@ -45,6 +45,8 @@
     let actualMode = ref(storageManager.getMode());
     let actualLang = ref(storageManager.getLang());
     let seeBurgermenu = ref(true);
+    var lastScrollTop = 0;
+
 
     function getDeviceDimensions() {
         // Obtenir la largeur et la hauteur de la fenêtre
@@ -91,15 +93,31 @@
         const handleLangChange = (event) => {
         actualLang.value = JSON.parse(event.detail.storage);
     };
+
+
+    const handleScroll = () => {
+        var scrollTop = window.scrollY || document.documentElement.scrollTop;
+        console.log("scroll : ", scrollTop)
+        if (scrollTop > lastScrollTop) {
+            document.querySelector('#menuComponent').style.top = "-80px"; // Hide the navbar on scroll down
+        } else {
+            document.querySelector('#menuComponent').style.top = "0px"; // Show the navbar on scroll up
+        }
+        lastScrollTop = scrollTop;
+    };
+
     // Add event listener for mode changes
     onMounted(() => {
         window.addEventListener('lang-changed', handleLangChange);
+        window.addEventListener("scroll", handleScroll);
     });
 
     // Remove event listener when component is unmounted
     onUnmounted(() => {
         window.removeEventListener('lang-changed', handleLangChange);
+        window.removeEventListener("scroll", handleScroll);
     });
+
 </script>
 
 <style src="../styles/MenuComponentStyle.scss"></style>

@@ -5,7 +5,7 @@
         <h4 v-else>{{  actualLang ? 'List of event the organisator publish' : 'Les evenements que l\'organisateur a publier' }}</h4>
         
         <router-link to="/Add Event" class="router"  v-show="props.himself">
-            <v-icon icon="mdi-plus-box-multiple" :class="['icon', {'justGlowless' : !actualMode}]" :title="actualLang ? 'Add an Event' : 'Ajouter un evenement'"/>
+            <v-icon icon="mdi-plus-box-multiple" class="icon" :title="actualLang ? 'Add an Event' : 'Ajouter un evenement'"/>
         </router-link>
 
       </div>

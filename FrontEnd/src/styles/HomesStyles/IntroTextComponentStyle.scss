@@ -1,6 +1,8 @@
 #introTextComponent {
     width: 75%;
     margin: auto;
+    background: transparent;
+    border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
 
     p {
         font-size: 1.6rem;
@@ -9,10 +11,8 @@
     }
 }
 
-.light {
+.light, .dark {
     #introTextComponent {
-        background: transparent;
-        border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
         box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
             15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
         p {
@@ -23,15 +23,10 @@
 
 .dark {
     #introTextComponent {
-        margin: 5% auto 2% auto;
-        /* From https://css.glass */
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 16px;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(1.1px);
-        -webkit-backdrop-filter: blur(1.1px);
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        animation: formBoxGlow 0.8s ease-in-out infinite alternate;
+        box-shadow: 5px 5px 10px rgba(241, 241, 241, 0.533),
+            10px 6px 15px #0008 inset,
+            -5px -5px 8px #f5f5ff inset,
+            10px 6px 15px #0004 inset;
         p {
             color: var(--light-text);
         }

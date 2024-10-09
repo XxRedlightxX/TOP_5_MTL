@@ -2,6 +2,9 @@
     display: block;
     backdrop-filter: blur(4.7px);
     -webkit-backdrop-filter: blur(15px);
+    position: fixed;
+    top: 0;
+    transition: 0.5s;
 
     .allMenu {
 
@@ -14,11 +17,23 @@
             a:after {
                 text-decoration: none;
             }
+            a:hover, .router-link-exact-active {
+                border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+            }
         }
         .icons {
-
+            color: var(--light-trans-text);
             .profile {
                 text-decoration: none;
+                color: var(--light-trans-text);
+            }
+            .iconn:hover, .profile:hover, .router-link-exact-active {
+                color: var(--light);       
+                animation: neonGlow 0.5s ease-in-out infinite alternate;
+                border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+                background: transparent;                
+                box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                            15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
             }
         }
     }
@@ -141,11 +156,10 @@
                 .links {
             
                     a {
-                        color: var(--graphite);
+                        color: var(--light-trans-text);
                     }
                     a:hover, .router-link-exact-active {
                         color: var(--light);
-                        border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
                         background: transparent;                
                         box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
                                     15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
@@ -153,14 +167,13 @@
                 }
 
                 .icons {
-                    color: var(--graphite);
+                    color: var(--light-trans-text);
                     .profile {
-                        color: var(--graphite);
+                        color: var(--light-trans-text);
 
                     }
                     .iconn:hover, .profile:hover, .router-link-exact-active {
                         color: var(--light);
-                        border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
                         background: transparent;                
                         box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
                                     15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
@@ -170,7 +183,6 @@
         }
     }
     .dark {
-        //color: var(--light-trans-text);
         #menuComponent{
             background: rgba(29, 30, 24, 0.23);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -184,6 +196,11 @@
                     a:hover, .router-link-exact-active {
                         color: var(--light);       
                         animation: neonGlow 0.5s ease-in-out infinite alternate;
+                        background: transparent;
+                        box-shadow: 5px 5px 10px #0008,
+                            10px 6px 15px #0008 inset,
+                            -5px -5px 8px #f5f5ff inset,
+                            10px 6px 15px #0004 inset;
                     }
                 }
 
@@ -195,6 +212,11 @@
                     .iconn:hover, .profile:hover, .router-link-exact-active {
                         color: var(--light);       
                         animation: neonGlow 0.5s ease-in-out infinite alternate;
+                        background: transparent;
+                        box-shadow: 5px 5px 10px #0008,
+                            10px 6px 15px #0008 inset,
+                            -5px -5px 8px #f5f5ff inset,
+                            10px 6px 15px #0004 inset;
                     }
                 }
             }

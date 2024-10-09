@@ -33,7 +33,7 @@
             align-items: center;
 
             color: var(--graphite);
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             font-weight: bold;
             text-transform: uppercase;
             transition: all 0.3s;
@@ -69,7 +69,7 @@
         .water-drop:hover {
             width: 100%;
             height: 90%;
-            font-size: 1.6rem;
+            font-size: 1.2rem;
             cursor: pointer;
         }
         .type1:hover {

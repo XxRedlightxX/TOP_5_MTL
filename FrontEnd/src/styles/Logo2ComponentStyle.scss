@@ -57,7 +57,10 @@
 .dark {
     #logo2Component {
         .drop {
-            box-shadow: inset 10px 10px 10px rgba(255, 255, 255, 0.05), inset -10px -10px 15px rgba(38, 38, 38, 0.9);
+            box-shadow: 5px 5px 10px #0008,
+                10px 6px 15px #0008 inset,
+                -5px -5px 8px #f5f5ff inset,
+                10px 6px 15px #0004 inset;
     
             p {
                 color: var(--light);       
