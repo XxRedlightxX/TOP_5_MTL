@@ -161,10 +161,10 @@
     #contactComponent {
         .header {
             h3{
-                color: var(--graphite);
+                color: var(--light-text);
             }
             p {
-                color: var(--graphite06);
+                color: var(--light-trans-text);
             }
         }
     
@@ -195,11 +195,12 @@
             .right {
                 form {
                     /* From https://css.glass */
-                    background: rgba(255, 255, 255, 0.13);
+                    background: rgba(255, 255, 255, 0.05);
                     border-radius: 16px;
-                    backdrop-filter: blur(6.6px);
-                    -webkit-backdrop-filter: blur(6.6px);
-                    border: 1px solid rgba(255, 255, 255, 0.17);
+                    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                    backdrop-filter: blur(1.1px);
+                    -webkit-backdrop-filter: blur(1.1px);
+                    border: 1px solid rgba(255, 255, 255, 0.04);
                     animation: formBoxGlow 0.8s ease-in-out infinite alternate;
 
                     h3 {

@@ -68,27 +68,27 @@
   });
 
   const newEventJours = [
-    { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text, rating: 3 },
-    { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 5 },
-    { image: "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text, rating: 1 },
-    { image: "/src/assets/HomeCarousel/Jardin-botanique.jpg", title: "Jardin Botanique", desc: text, rating: 2.5 },
-    { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 },
-    { image: "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text, rating: 4 },
-    { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text, rating: 3.5 },
-    { image: "/src/assets/HomeCarousel/Jardin-botanique.jpg", title: "Jardin Botanique", desc: text, rating: 1.5 },
-    { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 4.5 }
+    { image: "https://picsum.photos/286/425", title: "Mont-Royal", desc: text, rating: 3 },
+    { image: "https://picsum.photos/287/426", title: "Vieux-Port", desc: text, rating: 5 },
+    { image: "https://picsum.photos/288/427", title: "Laronde", desc: text, rating: 1 },
+    { image: "https://picsum.photos/288/427", title: "Jardin Botanique", desc: text, rating: 2.5 },
+    { image: "https://picsum.photos/287/426", title: "Vieux-Port", desc: text, rating: 3 },
+    { image: "https://picsum.photos/288/427", title: "Laronde", desc: text, rating: 4 },
+    { image: "https://picsum.photos/286/425", title: "Mont-Royal", desc: text, rating: 3.5 },
+    { image: "https://picsum.photos/289/428", title: "Jardin Botanique", desc: text, rating: 1.5 },
+    { image: "https://picsum.photos/287/426", title: "Vieux-Port", desc: text, rating: 4.5 }
   ];
 
   const newEventNuit = [
-    {image : "/src/assets/HomeCarousel/Bateau-mouche-nuit.jpg", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
-    {image : "/src/assets/HomeCarousel/Pont-Jaque-Cartier-Nuit.jpg", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {image : "/src/assets/HomeCarousel/La-voute-nuit.jpg", title: "La Voute", desc: text, rating: 3.5 },
-    {image : "/src/assets/HomeCarousel/Casino-nuit.jpg", title: "Casino", desc: text, rating: 2 },
-    {image : "/src/assets/HomeCarousel/Pont-Jaque-Cartier-Nuit.jpg", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {image : "/src/assets/HomeCarousel/La-voute-nuit.jpg", title: "La Voute", desc: text, rating: 3.5 },
-    {image : "/src/assets/HomeCarousel/Pont-Jaque-Cartier-Nuit.jpg", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {image : "/src/assets/HomeCarousel/Casino-nuit.jpg", title: "Casino", desc: text, rating: 2 },
-    {image : "/src/assets/HomeCarousel/La-voute-nuit.jpg", title: "La Voute", desc: text, rating: 3.5 }
+    {image : "https://picsum.photos/286/424", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
+    {image : "https://picsum.photos/287/426", title: "Pont Jacque Cartier", desc: text, rating: 1 },
+    {image : "https://picsum.photos/288/427", title: "La Voute", desc: text, rating: 3.5 },
+    {image : "https://picsum.photos/289/428", title: "Casino", desc: text, rating: 2 },
+    {image : "https://picsum.photos/287/426", title: "Pont Jacque Cartier", desc: text, rating: 1 },
+    {image : "https://picsum.photos/288/427", title: "La Voute", desc: text, rating: 3.5 },
+    {image : "https://picsum.photos/287/426", title: "Pont Jacque Cartier", desc: text, rating: 1 },
+    {image : "https://picsum.photos/289/428", title: "Casino", desc: text, rating: 2 },
+    {image : "https://picsum.photos/288/425", title: "La Voute", desc: text, rating: 3.5 }
   ];
 
   let newEvent = ref(null);

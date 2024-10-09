@@ -23,7 +23,7 @@
         <!-- list thumbnail -->
         <div class="thumbnail">
             <div v-for="(item, index) in carouselItems" :key="index" class="item">
-            <img :src="item.image" class=" roundBorderSmall">
+            <img :src="item.image2" class=" roundBorderSmall">
             <div class="content">
                 <div class="title">{{ item.title }}</div>
             </div>
