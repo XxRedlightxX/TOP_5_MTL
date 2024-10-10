@@ -177,6 +177,9 @@ opacity: 0;
                         background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
                         color: #fff;
 
+                        p, h2 {
+                            color: var(--light-text);
+                        }
                         .invert {
                             background-color: transparent;
                             border-color: #fff;
@@ -194,7 +197,7 @@ opacity: 0;
 }
 .dark {
     #Log-Sign-Bett {
-        color: var(--light-text);
+        
     
         article {
     
@@ -207,7 +210,9 @@ opacity: 0;
                     .overlay {
                         background: linear-gradient(to bottom, var(--light), var(--light-trans015));
                         color: #fff;
-
+                        p, h2 {
+                            color: var(--graphite);
+                        }
                         .invert {
                             background-color: transparent;
                             border-color: #fff;

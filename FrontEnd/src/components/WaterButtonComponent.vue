@@ -88,10 +88,16 @@
                 -5px -5px 8px #f5f5ff inset,
                 10px 6px 15px #0004 inset;
 
-                color: var(--graphite);
+                color: var(--light-text);
                 text-shadow: 2px 2px 5px #0008;
             }
 
+            .type1 {
+                color: var(--graphite);
+            }
+            .type2 {
+                color: var(--light-text);
+            }
             .water-drop::before {
                 background: #fff8;
             }
@@ -99,8 +105,6 @@
                 background: #fff8;
             }
 
-            .water-drop:hover {
-            }
         }
     }
 
@@ -111,19 +115,20 @@
                 10px 6px 15px #0008 inset,
                 -5px -5px 8px #f5f5ff inset,
                 10px 6px 15px #0004 inset;
-
-                color: var(--graphite);
                 text-shadow: 2px 2px 5px #0008;
             }
 
+            .type2 {
+                color: var(--graphite);
+            }
+            .type1 {
+                color: var(--light-text);
+            }
             .water-drop::before {
                 background: #fff8;
             }
             .water-drop::before:hover {
                 background: #fff8;
-            }
-
-            .water-drop:hover {
             }
         }
     }

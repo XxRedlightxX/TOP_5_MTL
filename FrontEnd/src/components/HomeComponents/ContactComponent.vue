@@ -45,7 +45,7 @@
             </div>
             <div class="right">
                 
-                <form action="#" method="post">
+                <form action="#" method="post" class="glass">
                     <h3>{{ actualLang ? 'Send Message' : 'Votre message' }}</h3>
 
                     <v-text-field
