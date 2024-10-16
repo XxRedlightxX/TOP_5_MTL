@@ -112,4 +112,4 @@
 
 
 
-<style src="../../styles/HomesStyles/NewEventComponentStyle/NewEventComponentStyle.scss"></style>
+<style src="../../styles/HomesStyles/NewEventComponentStyle.scss"></style>

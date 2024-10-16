@@ -266,4 +266,4 @@ let newEvent = ref(null);
 
     
 
-<style src="../../styles/EventsStyles/EventListComponentStyle.scss"></style>
+<style src="../../../styles/EventsStyles/EventListComponentStyle.scss"></style>

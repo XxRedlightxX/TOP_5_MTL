@@ -7,8 +7,8 @@
 </template>
 
 <script setup>
-     import ListcategorieEvent from "../../components/EventComponents/EventFilterComponent.vue"
-     import ListEvent from "../../components/EventComponents/EventListComponent.vue"
+     import ListcategorieEvent from "../../components/EventComponents/ListOfEventsComponents/EventFilterComponent.vue"
+     import ListEvent from "../../components/EventComponents/ListOfEventsComponents/EventListComponent.vue"
 </script>
 
 <style src="../../styles/MenusViewStyles/AllEventViewStyle.scss"></style>

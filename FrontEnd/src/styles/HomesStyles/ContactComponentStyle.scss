@@ -70,10 +70,7 @@
             form {
                 width: 100%;
                 padding: 1% 5%;
-                transition: all 0.3s;
-                //overflow: hidden;
-                //border-radius: 49% 51% 53% 47% / 43% 33% 67% 57% ;
-                //background: transparent;
+                background: transparent;
                 
 
                 h3 {
@@ -89,14 +86,11 @@
                 }
                 
             }
-            /*form:hover {
-                border-radius: 49% 51% 49% 51% / 31% 26% 74% 69% ;
-            }*/
         }
     }
 }
 
-.light, .dark {
+.light {
     #contactComponent {
         .header {
             h3{
@@ -132,8 +126,6 @@
 
             .right {
                 form {
-                    /*box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.1), 15px 25px 10px rgba(0, 0, 0, 0.1),
-                            15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);*/     
 
                     h3 {
                         color: var(--graphite);
@@ -193,9 +185,6 @@
 
             .right {
                 form {
-
-                    /*box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.1), 15px 25px 10px rgba(255, 255, 255, 0.1),
-                            15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.4);  */
                     h3 {
                         color: var(--light-text);
                     }

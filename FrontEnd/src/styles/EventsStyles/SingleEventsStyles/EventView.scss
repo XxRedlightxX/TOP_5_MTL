@@ -1,0 +1,25 @@
+#eventView {
+    display: flex;
+    flex-direction: column;
+    
+    #singleEventComponent{
+        margin-bottom: 5%;
+    }
+    .sub {
+        width: 75%;
+        margin: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 5%;
+        #EventOverview {
+            align-self: flex-start;
+        }
+    }
+    #EventMap {
+        width: 75%;
+        margin: 2% auto;
+        padding: 0px;
+    }
+}

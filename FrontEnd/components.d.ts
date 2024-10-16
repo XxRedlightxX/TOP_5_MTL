@@ -9,7 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     CarouselComponent: typeof import('./src/components/HomeComponents/CarouselComponent.vue')['default']
     EventFilterComponent: typeof import('./src/components/EventComponents/EventFilterComponent.vue')['default']
-    EventListComponent: typeof import('./src/components/EventComponents/EventListComponent.vue')['default']
+    EventListComponent: typeof import('./src/components/EventComponents/ListOfEventsComponents/EventListComponent.vue')['default']
     FooterComponent: typeof import('./src/components/FooterComponent.vue')['default']
     IntroTextComponent: typeof import('./src/components/HomeComponents/IntroTextComponent.vue')['default']
     LoginComponent: typeof import('./src/components/Login-SignUpComponents/LoginComponent.vue')['default']
@@ -19,7 +19,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SignUpComponent: typeof import('./src/components/Login-SignUpComponents/SignUpComponent.vue')['default']
-    SingleEventComponent: typeof import('./src/components/EventComponents/SingleEventComponent.vue')['default']
+    SingleEventComponent: typeof import('./src/components/EventComponents/SingleEventComponents/SingleEventComponent.vue')['default']
     SingleNewEventComponent: typeof import('./src/components/HomeComponents/NewEventComponents/SingleNewEventComponent.vue')['default']
   }
 }

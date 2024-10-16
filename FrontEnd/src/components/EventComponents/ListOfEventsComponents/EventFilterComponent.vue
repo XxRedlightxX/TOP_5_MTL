@@ -67,4 +67,4 @@
 
 <script setup></script>
 
-<style src="../../styles/EventsStyles/EventFilterComponentStyle.scss"></style>
+<style src="../../../styles/EventsStyles/EventFilterComponentStyle.scss"></style>

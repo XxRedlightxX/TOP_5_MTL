@@ -1,0 +1,46 @@
+#eventCommentSelfComponent{
+    width: 100%;
+    //height: 150px;
+    display: flex;
+    flex-direction: column;
+
+    .content {
+        form {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0% 2% 2% 0%;
+
+            .v-textarea {
+                width: 100%;
+            }
+            .ratings {
+                margin: 0px auto;
+            }
+            #waterButtonComponent {
+                width: 30%;
+            }
+        }
+    }
+}
+.light {
+    #eventCommentSelfComponent{
+        .content {
+            form {
+                color: var(--graphite);
+            }
+        }
+    }
+}
+
+.dark {
+    #eventCommentSelfComponent{
+        .content {
+            form {
+                color: var(--light-trans-text);
+            }
+        }
+    }
+}

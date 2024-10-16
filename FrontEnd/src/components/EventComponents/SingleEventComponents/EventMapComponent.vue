@@ -7,4 +7,4 @@
 </template>
 
 
-<style src="../../styles/EventsStyles/EventMapComponent.scss"> </style>
+<style src="../../../styles/EventsStyles/SingleEventsStyles/EventMapComponent.scss"> </style>

@@ -2,7 +2,7 @@
     <div id="singleEventComponent">
         <div class="place-overview">
             <header class="header">
-            <h1 class="header__title">Aperçu du Lieu : {{event.title}}</h1>
+                <h1 class="header__title">Aperçu du Lieu : {{event.title}}</h1>
             </header>
 
             <section class="overview">
@@ -10,22 +10,7 @@
                     <img :src="event.image" alt="Mont Saint-Michel" />
                 </div>
                 <div class="overview__details">
-                    <h2 class="overview__title">{{event.title}}</h2>
                     <h3 class="overview__description">{{event.desc}}</h3>
-                    
-                    <div class="ratings">
-                        <v-rating
-                        readonly
-                        half-increments
-                        :length="5"
-                        :size="32"
-                        :model-value="event.rating"
-                        active-color="primary"
-                        class="rat"
-                        />
-                    </div>
-                    <p class="overview__location"><h3><strong>Lieu :</strong> Normandie, France</h3></p>
-                    <p class="overview__hours"><h3><strong>Heures d'ouverture :</strong> 9h - 19h, tous les jours</h3></p>
                 </div>
             </section>
         </div>
@@ -52,4 +37,4 @@
     console.log("event get : ", event.value);
 </script>
 
-<style src="../../styles/EventsStyles/SingleEventComponentStyle.scss"></style>
+<style src="../../../styles/EventsStyles/SingleEventsStyles/SingleEventComponentStyle.scss"></style>
