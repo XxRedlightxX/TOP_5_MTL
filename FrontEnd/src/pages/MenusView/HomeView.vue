@@ -1,9 +1,11 @@
 <template>
     <div id="homeView">
         <Carousel/>
-        <IntroText/>
-        <NewEvent/><!---->
-        <Contact/>
+        <div class="homeContent">
+            <IntroText/>
+            <NewEvent/><!---->
+            <Contact/>
+        </div>
     </div>
 </template>
 

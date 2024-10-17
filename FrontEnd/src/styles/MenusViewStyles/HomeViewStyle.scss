@@ -4,4 +4,21 @@
         padding: 0px;
         padding-bottom: -50%;
     }
+    .homeContent {
+        width: 100%;
+    }
+}
+.light{
+    //background: #ccc;
+    background: linear-gradient(to bottom, #efefef 70%, #ccc 85%);
+    .homeContent {
+        background: linear-gradient(to bottom, #efefef, #ccc);
+    }
+}
+
+.dark {
+    background: linear-gradient(to bottom, #ccc 70%, rgb(29, 30, 24) 85%);
+    .homeContent {
+        background: linear-gradient(to bottom, #ccc, rgb(29, 30, 24));
+    }
 }
