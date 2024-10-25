@@ -139,16 +139,16 @@
         <div class="event-container">
             <div class="event_card"   v-for="(item, index) in newEvent" :key="index">
                 <div class="event_card_photo">
-                    <span class="overlay"> <img src="../../assets/heart.svg" alt=""></span>
+                    <span class="overlay"> <img src="../../../assets/heart.svg" alt=""></span>
                     <img :src="item.image" class="product-thumb" alt="">
 
                 </div>
                 <div class="event_description">
                     <h2>Acoustic Serenade Showcase</h2>
                     <div class="event_description_infos">
-                        <div class="d1"><img src="../../assets/location.svg" alt="">
+                        <div class="d1"><img src="../../../assets/location.svg" alt="">
                         Montreal, Vieux-Port</div>
-                        <div class="d2"><img src="../../assets/clock.svg" alt="">
+                        <div class="d2"><img src="../../../assets/clock.svg" alt="">
                         Octobre 11 - 16:00pm
                     </div>
                     </div>
