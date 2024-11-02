@@ -72,7 +72,8 @@
 
                     <v-textarea :label="actualLang ? 'Type your Message' : 'Entrez votre message'"></v-textarea>
 
-                    <input type="button" :value="actualLang ? 'Send' : 'Envoyer'">
+                    <!-- <input type="button" :value="actualLang ? 'Send' : 'Envoyer'"> -->
+                    <waterButton :text="actualLang ? 'Send' : 'Envoyer'" :type="true" class="btn"/>
                 </form>
             </div>
         </div>
@@ -83,6 +84,7 @@
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager"
     import { ref, onMounted, onUnmounted} from "vue";
+    import waterButton from "../WaterButtonComponent.vue"
 
     let actualLang = ref(storageManager.getLang());
 

@@ -51,7 +51,7 @@
             height: 5px;
             width: 13px;
             border-radius: 50%;
-            left: 10%;
+            left: 20%;
             top: 25%;
             transform: rotate(-40deg);
         }

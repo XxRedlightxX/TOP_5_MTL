@@ -80,7 +80,9 @@
                     margin-bottom: 2%;
                 }
 
-                input[type="button"] {
+                .btn {
+                    width: 50%;
+                    margin: auto;
                     padding: 2% 5%;
                     border-radius: 5px;
                 }
@@ -135,12 +137,12 @@
                         margin-bottom: 2%;
                     }
     
-                    input[type="button"] {
-                        background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
-                        color: #fff;
+                    .btn {
+                        //background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
+                        //color: #fff;
                     }
-                    input[type="button"]:hover {
-                        background: linear-gradient(to bottom, var(--graphite015), var(--graphite06));
+                    .btn:hover {
+                        //background: linear-gradient(to bottom, var(--graphite015), var(--graphite06));
                     }
                     
                 }
@@ -193,12 +195,12 @@
                         color: var(--light-trans-text);
                     }
     
-                    input[type="button"] {
-                        background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
-                        color: #fff;
+                    .btn {
+                        //background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
+                        //color: #fff;
                     }
-                    input[type="button"]:hover {
-                        background: linear-gradient(to bottom, var(--graphite015), var(--graphite06));
+                    .btn:hover {
+                        //background: linear-gradient(to bottom, var(--graphite015), var(--graphite06));
                     }
                     
                 }
