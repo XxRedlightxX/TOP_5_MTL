@@ -134,8 +134,8 @@
     
       <div class="event">
         <h2 class="product-category">Upcoming Events</h2>
-        <button class="pre-btn"><img src="../../assets/arrow.png" alt=""></button>
-        <button class="nxt-btn"><img src="../../assets/arrow.png" alt=""></button>
+        <button class="pre-btn"><img src="../../../assets/arrow.png" alt=""></button>
+        <button class="nxt-btn"><img src="../../../assets/arrow.png" alt=""></button>
         <div class="event-container">
             <div class="event_card"   v-for="(item, index) in newEvent" :key="index">
                 <div class="event_card_photo">
