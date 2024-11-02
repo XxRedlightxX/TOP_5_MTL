@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <div id="eventFilterComponent">
         <div class="categories">
-            <div class="categories_horizontal"  style="border-bottom: 2px solid black;; padding: 20px; ">
+            <div class="categories_horizontal"  style=" padding: 20px; ">
                 <div style="width: 50%; ">
                     <h1>Categories</h1>
                 </div>
