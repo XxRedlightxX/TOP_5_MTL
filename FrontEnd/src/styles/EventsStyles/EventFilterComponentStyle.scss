@@ -11,7 +11,7 @@
         border-radius: 33px;
         padding: 5px 10px;
         max-width: 800px;
-
+        
         .search-icon {
             color: #1a1919;
             font-size: 20px;
@@ -33,15 +33,15 @@
 
     img {
         width: 90px;
-        border-style: solid;
+        //border-style: solid;
         border-radius: 55px;
         padding: 10px;
     }
 
     .categories {
         border-style:none;
-        background-color: #fff;
-        border-radius: 40px;
+        
+        
         text-align: left;
         
         margin: 1em 0; // Changed margin to prevent the element from being pushed too far down
@@ -71,7 +71,8 @@
             height: 300px;
             padding: 20px;
             display: flex;
-            align-items: center; 
+            align-items: center;
+            transition: transform 0.3s ease-in-out; 
           
             .btn {
                 position: absolute;
@@ -123,23 +124,40 @@
                     justify-content: center;
                     align-items: center;
                     
-                    min-width: 200px; // Set fixed width
+                    transition: transform 0.2s ease-in;
+                    min-width: 200px; 
                     margin: 0 10px;
+
+                    
+
 
                     img {
                         max-width: 100%;
                         height: auto;
-                        
+                        transition: transform 0.3s ease;
                         border-style: none;
-                    outline: none;
+                        outline: none;
                     
                         filter: invert(35%) sepia(36%) saturate(7009%) hue-rotate(2deg) brightness(104%) contrast(88%);
+
+                        &:hover {
+                            transform: scale(1.1);
+                            img {
+                                transform: scale(1.2);
+                            }
+                        }
                     }
+
+                  
 
                     &.filter-green img {
                         filter: invert(35%) sepia(36%) saturate(7009%) hue-rotate(2deg) brightness(104%) contrast(88%);
                     }
+
+                   
                 }
+
+                
             }
         }
 
