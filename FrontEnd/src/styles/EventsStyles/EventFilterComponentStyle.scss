@@ -115,7 +115,7 @@
                 
                 .listeCategories_objet {
                     background-color: transparent;
-                    border-radius: 5px;
+                    //border-radius: 5px;
                     
                     
                     text-align: center;
@@ -127,18 +127,25 @@
                     transition: transform 0.2s ease-in;
                     min-width: 200px; 
                     margin: 0 10px;
-
+                    //border: 2px solid rgb(14, 14, 14);
+                    user-select: none;
+                    -moz-user-select: none;
+                    -khtml-user-select: none;
+                    -webkit-user-select: none;
+                    -o-user-select: none;
                     
 
 
                     img {
                         max-width: 100%;
-                        height: auto;
+                        padding: 0px;
+                        height: 100%;
+                        overflow: visible;
                         transition: transform 0.3s ease;
                         border-style: none;
                         outline: none;
-                    
-                        filter: invert(35%) sepia(36%) saturate(7009%) hue-rotate(2deg) brightness(104%) contrast(88%);
+                        //border: 2px solid red;
+                        //filter: invert(35%) sepia(36%) saturate(7009%) hue-rotate(2deg) brightness(104%) contrast(88%);
 
                         &:hover {
                             transform: scale(1.1);
@@ -147,14 +154,6 @@
                             }
                         }
                     }
-
-                  
-
-                    &.filter-green img {
-                        filter: invert(35%) sepia(36%) saturate(7009%) hue-rotate(2deg) brightness(104%) contrast(88%);
-                    }
-
-                   
                 }
 
                 
@@ -184,4 +183,50 @@
             }
         }
     }
-}    
+}
+
+.light {
+    #eventFilterComponent {
+        .categories {
+    
+            #slider-container {
+    
+                .listeCategories {
+                    .listeCategories_objet {
+                        img {
+                            filter: brightness(0) saturate(100%) invert(14%) sepia(0%) saturate(0%) hue-rotate(25deg) brightness(75%) contrast(85%);
+                            opacity: 0.6;
+                            //filter: invert(35%) sepia(36%) saturate(7009%) hue-rotate(2deg) brightness(104%) contrast(88%);
+                        }
+                        &.filter-green img {
+                            filter: brightness(0) saturate(100%) invert(14%) sepia(0%) saturate(0%) hue-rotate(25deg) brightness(75%) contrast(85%);
+                            opacity: 0.6;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.dark {    #eventFilterComponent {
+    .categories {
+
+        #slider-container {
+
+            .listeCategories {
+                .listeCategories_objet {
+                    img {
+                        filter: brightness(0) saturate(100%) invert(100%);
+                        opacity: 0.75;
+                        //filter: invert(35%) sepia(36%) saturate(7009%) hue-rotate(2deg) brightness(104%) contrast(88%);
+                    }
+                    &.filter-green img {
+                        filter: brightness(0) saturate(100%) invert(100%);
+                        opacity: 0.75;
+                    }
+                }
+            }
+        }
+    }
+}
+}
