@@ -5,7 +5,7 @@
         <div v-if="seeBurgermenu" :class="['allMenu', {'burgerLinks' : seeBurgermenu}]" @click.self="changeSeeBurgermenu()">
             <div class="smallMenu">
                 <v-icon icon="mdi-window-close" :class="['icon', 'iconClose', {'justGlow' : !actualMode}]" @click="changeSeeBurgermenu()"/>
-                <Logo2 :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'" /> 
+                <Logo :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'" /> 
                 
                 <div class="links">
                     <router-link to="/" :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'">{{actualLang ? 'Home' : 'Accueil'}}</router-link>
@@ -38,8 +38,7 @@
 
 <script setup>
     import storageManager from "../JS/LocalStaorageManager.js"
-    import Logo from "../components/LogoComponent.vue"
-    import Logo2 from "../components/Logo2Component.vue"
+    import Logo from "../components/Logos/Logo3Component.vue"
     import { ref, onMounted, onUnmounted } from 'vue'
 
     let actualMode = ref(storageManager.getMode());

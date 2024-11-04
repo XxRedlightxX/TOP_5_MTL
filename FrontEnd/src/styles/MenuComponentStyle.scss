@@ -7,7 +7,6 @@
     transition: 0.5s;
 
     .allMenu {
-
         .links {
     
             a {
@@ -83,12 +82,20 @@
             height: 100%;
             width: 100%;
         }
+        #logo3Component{
+            width: 55px;
+            height: 55px;
 
-        #logo2Component {
-            width: 10%;
-            height: 65px;
+            #text3dComponent {
+                width: 100%;
+                padding: 5% 10%;
+                //height: 60%;
+                .text{
+                    font-size: 14px;
+                    font-weight: 100;
+                }
+            }
         }
-
         .links {
             width: 80%;
             display: flex;
@@ -284,7 +291,7 @@
             color: var(--light);       
             animation: neonGlowLess 0.5s ease-in-out infinite alternate;  
         }
-        #logo2Component {
+        #logo3Component {
             width: 60%;
             height: 45%;
             margin: auto;
@@ -349,7 +356,7 @@
             .iconClose:hover {
                 color: var(--light);       
             }
-            #logo2Component {
+            #logo3Component {
                 .drop, .drop:hover {
                         color: var(--light-trans-text);        
                     }
@@ -389,7 +396,7 @@
             .iconClose:hover {
                 color: var(--light);       
             }
-            #logo2Component {
+            #logo3Component {
                 .drop, .drop:hover {
                         color: var(--light-trans-text);        
                     }
@@ -434,7 +441,7 @@
                 font-size: 5rem;
             }
         }
-        #logo2Component {
+        #logo3Component {
             width: 90%;
             height: 50%;
         }

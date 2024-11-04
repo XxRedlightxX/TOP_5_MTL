@@ -1,0 +1,56 @@
+<template>
+    <div id="text3dComponent"  >
+        <span :class="['text', props.shadow ? 'shadow' : '']">{{ props.text }}</span>
+    </div>
+</template>
+
+<script setup>
+    import { defineProps} from "vue";
+
+    const props = defineProps({
+        text: String,
+        shadow: Boolean
+    });
+</script>
+
+<style lang="scss">
+    #text3dComponent{
+        z-index: 1000;
+
+        .text{
+            text-transform: uppercase;
+            // font-size: 3rem;
+            // font-weight: 700;
+        }
+    }
+
+    .light {
+        #text3dComponent{
+            .text{
+                color: rgba(189,189,188,1);
+                text-shadow: 1px 1px 1px #919191,
+                        1px 2px 1px #919191,
+                        1px 3px 1px #919191;
+            }
+            .shadow {
+                text-shadow: 1px 6px 6px rgba(16, 16, 16, 0.4),
+                1px 8px 6px rgba(16, 16, 16, 0.2);;
+            }
+        }
+    }
+    .dark {
+        #text3dComponent{
+            .text{
+                color: var(--light-trans-2Shine);
+                // text-shadow: 1px 1px 1px #919191,
+                //         1px 2px 1px #919191,
+                //         1px 3px 1px #919191;
+                animation: neonGlow 0.5s ease-in-out infinite alternate;
+            }
+            .shadow {
+                text-shadow: 1px 6px 6px rgba(222, 222, 222, 0.4),
+                1px 8px 6px rgba(222, 222, 222, 0.2);;
+            }
+        }
+    }
+</style>
