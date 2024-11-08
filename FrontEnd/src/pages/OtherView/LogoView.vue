@@ -1,6 +1,6 @@
 <template>
     <div id="Logo">
-        <Logo/>
+        <Logo  :size="3"/>
         <!-- <Text :text="'Ryan'" :shadow="false"/> -->
     </div>
 </template>

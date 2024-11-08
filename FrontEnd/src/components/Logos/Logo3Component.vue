@@ -1,14 +1,29 @@
 <template>
-    <router-link to="/Logo"  id="logo3Component"  >
+    <router-link 
+        to="/Logo" 
+        id="logo3Component" 
+        :class="{
+            'mini': size === 0,
+            'small': size === 1,
+            'medium': size === 2,
+            'large': size === 3
+        }"
+    >
         <Text :text="text" :shadow="false"/>
         <div class="wave"></div>
     </router-link>
 </template>
 
 <script setup>
-    import Text from "./3dTextComponent.vue"
-    const text = "Drop";
+import Text from "./3dTextComponent.vue"
+import { defineProps } from "vue";
+
+const props = defineProps({
+    size: Number
+});
+const text = "Drop";
 </script>
+
 
 <style lang="scss">
     #logo3Component{
@@ -51,6 +66,51 @@
             }
             100%{
                 transform: translate(-50%, -75%) rotate(360deg);
+            }
+        }
+    }
+    .mini {
+        width: 55px;
+        height: 55px;
+
+        #text3dComponent {
+            width: 100%;
+            padding: 5% 10%;
+            //height: 60%;
+            .text{
+                font-size: 14px;
+                font-weight: 100;
+            }
+        }
+    }
+    .small {
+        
+    }
+    .medium {
+        width: 200px;
+        height: 200px;
+        border: 2px solid red;
+        #text3dComponent {
+            width: 100%;
+            padding: 15% 10%;
+            //height: 60%;
+            .text{
+                font-size: 3rem;
+                font-weight: 400;
+            }
+        }
+    }
+    .large {
+        width: 400px;
+        height: 400px;
+
+        #text3dComponent {
+            width: 100%;
+            padding: 3% 10%;
+            //height: 60%;
+            .text{
+                font-size: 7rem;
+                font-weight: 500;
             }
         }
     }

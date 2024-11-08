@@ -1,12 +1,13 @@
 <template>
     <div id="profileOtherComponent">
-        <h1>Profile other</h1>
+        <Logo :size="2"/>
     </div>
   </template>
   
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted, defineProps} from "vue";
+    import Logo from "../Logos/Logo3Component.vue"
 
     const props = defineProps({
         himself: Boolean, // Boolean type prop
@@ -56,28 +57,30 @@
     #profileOtherComponent {
         width: 100%;
         height: 100%;
-        padding: 8% 0%;
+        padding: 9% 0%;
+        position: relative;
         
-        h1 {
-            color: var(--graphite08);
+        .medium {
+            top: 0;
+            left: 27%;
         }
     }
 
     .light {
         #profileOtherComponent {
             
-            h1 {
-                color: var(--graphite08);
-            }
+            // h1 {
+            //     color: var(--graphite08);
+            // }
         }
     }
 
     .dark {
         #profileOtherComponent {
             
-            h1 {
-                color: var(--light-trans-text);
-            }
+            // h1 {
+            //     color: var(--light-trans-text);
+            // }
         }
     }
 </style>

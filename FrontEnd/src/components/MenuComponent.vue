@@ -5,7 +5,7 @@
         <div v-if="seeBurgermenu" :class="['allMenu', {'burgerLinks' : seeBurgermenu}]" @click.self="changeSeeBurgermenu()">
             <div class="smallMenu">
                 <v-icon icon="mdi-window-close" :class="['icon', 'iconClose', {'justGlow' : !actualMode}]" @click="changeSeeBurgermenu()"/>
-                <Logo :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'" /> 
+                <Logo :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'" :size="0"/> 
                 
                 <div class="links">
                     <router-link to="/" :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'">{{actualLang ? 'Home' : 'Accueil'}}</router-link>
