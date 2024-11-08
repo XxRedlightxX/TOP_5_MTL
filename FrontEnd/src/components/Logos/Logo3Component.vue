@@ -9,7 +9,7 @@
             'large': size === 3
         }"
     >
-        <Text :text="text" :shadow="false"/>
+        <Text :text="text" :shadow="false" :size="props.size"/>
         <div class="wave"></div>
     </router-link>
 </template>
@@ -79,12 +79,23 @@ const text = "Drop";
             //height: 60%;
             .text{
                 font-size: 14px;
-                font-weight: 100;
+                font-weight: 300;
             }
         }
     }
     .small {
-        
+        width: 100px;
+        height: 100px;
+
+        #text3dComponent {
+            width: 100%;
+            padding: 5% 10%;
+            //height: 60%;
+            .text{
+                font-size: 20px;
+                font-weight: 200;
+            }
+        }
     }
     .medium {
         width: 200px;
@@ -129,14 +140,6 @@ const text = "Drop";
             .wave:after{
                 background: var(--light-trans-2Shine);
             }
-        }
-        .mini {
-            #text3dComponent{
-            .shadow {
-                text-shadow: 0.5px 4px 3px rgba(16, 16, 16, 0.4),
-                0.5px 4px 3px rgba(16, 16, 16, 0.2);;
-            }
-        }
         }
     }
     .dark {

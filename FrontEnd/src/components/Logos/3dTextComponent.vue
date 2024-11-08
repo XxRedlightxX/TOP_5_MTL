@@ -1,5 +1,11 @@
 <template>
-    <div id="text3dComponent"  >
+    <div id="text3dComponent" 
+        :class="{
+            'miniText': size === 0,
+            'smallText': size === 1,
+            'mediumText': size === 2,
+            'largeText': size === 3
+        }">
         <span :class="['text', props.shadow ? 'shadow' : '']">{{ props.text }}</span>
     </div>
 </template>
@@ -9,7 +15,8 @@
 
     const props = defineProps({
         text: String,
-        shadow: Boolean
+        shadow: Boolean,
+        size: Number
     });
 </script>
 
@@ -25,7 +32,22 @@
     }
 
     .light {
-        #text3dComponent{
+
+        .miniText {
+            .text{
+                color: rgba(189,189,188,1);
+                text-shadow: 1px 1px 1px #919191,
+                        1px 2px 1px #919191,
+                        1px 3px 1px #919191;
+            }
+            .shadow {
+                text-shadow: 0.25px 1.5px 1.5px rgba(16, 16, 16, 0.4),
+                            0.25px 2px 1.5px rgba(16, 16, 16, 0.2);
+            }
+
+
+        }
+        .smallText, .mediumText, .largeText {
             .text{
                 color: rgba(189,189,188,1);
                 text-shadow: 1px 1px 1px #919191,
