@@ -7,8 +7,8 @@
             />
         </v-avatar>
         <input type="file" name="file" id="avatarFile" @change="onFileChange" />
-        <label for="avatarFile" class="avatarLabel">
-            <v-icon icon="mdi-camera-party-mode" :class="['icon', {'justGlow' : !actualMode}]"/>
+        <label for="avatarFile" class="avatarLabel" :title="actualLang ? 'Change Avatar' : 'Changer l\'avatar'">
+            <v-icon icon="mdi-camera-party-mode" :class="['icon', {'justGlowless' : !actualMode}]"/>
         </label>
     </div>
 </template>
@@ -73,7 +73,6 @@ img.value = defaultImg;
         //border: 2px solid red;
         position: relative;
         .v-avatar {
-            border: 2px solid var(--graphite015);
             img {
                 width: 100%;
             }
@@ -85,22 +84,83 @@ img.value = defaultImg;
             position: absolute;
             padding: 5px;
             //border: 2px solid red;
-            background-color: var(--light-text);
-            border-radius: 50%;
-            bottom: -3%;
-            right: 25%;
+            //background-color: var(--light-text);
+            border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+            animation: animmm 1s infinite alternate;
+            //border-radius: 50%;
+            bottom: -2%;
+            right: 13%;
             cursor: pointer;
-
-            .icon {
-                color: var(--graphite06);
-
-            }
-            .icon:hover {
-                color: var(--graphite);
-            }
-        }
-        .avatarLabel:hover {
-            color: var(--light-trans-2Shine);
         }
     }
+
+    .light {
+        #avatarUploader {
+            .v-avatar {
+                border: 2px solid var(--graphite015);
+            }
+            .avatarLabel {
+                background: transparent;
+                box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                            15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+
+                .icon {
+                    color: var(--graphite06);
+
+                }
+                .icon:hover {
+                    color: var(--graphite);
+                }
+            }
+            .avatarLabel:hover {
+                box-shadow: 
+                    5px 5px 10px #0008,
+                    10px 6px 15px #0008 inset,
+                    -5px -5px 8px #f5f5ff inset,
+                    10px 6px 15px #0004 inset;
+            }
+        }
+    }
+    .dark {
+        #avatarUploader {
+            .v-avatar {
+                border: 2px solid var(--light-trans015);
+            }
+            .avatarLabel {
+                background: transparent;
+                box-shadow: 
+                    5px 5px 10px #0008,
+                    10px 6px 15px #0008 inset,
+                    -5px -5px 8px #f5f5ff inset,
+                    10px 6px 15px #0004 inset;
+
+                .icon {
+                    color: var(--light-trans-text);
+
+                }
+                .icon:hover {
+                    color: var(--light);
+                }
+            }
+            .avatarLabel:hover {
+                box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                            15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+            }
+        }
+    }
+    @keyframes animmm {
+    0% {
+        transform: translateY(0);
+        // width: 65px;
+        // height: 65px;
+            padding: 5px;
+    }
+
+    100% {
+        transform: translateY(5px);
+        // width: 59px;
+        // height: 69px;
+            padding: 7px;
+    }
+}
 </style>
