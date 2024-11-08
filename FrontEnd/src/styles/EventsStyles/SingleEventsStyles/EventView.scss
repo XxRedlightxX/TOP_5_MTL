@@ -1,22 +1,33 @@
 #eventView {
-    display: flex;
-    flex-direction: column;
-    
-    #singleEventComponent{
-        margin-bottom: 5%;
-    }
-    .sub {
+    .viewContent {
         width: 75%;
-        margin: auto;
+        margin: 8% auto 0% auto;
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        gap: 5%;
-        #EventOverview {
-            align-self: flex-start;
+        padding: 0% 1%;
+        flex-direction: column;
+        border-radius: 16px;
+
+        #singleEventComponent{
+            margin-bottom: 5%;
+        }
+        .sub {
+            width: 100%;
+            margin: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 5%;
+            #EventOverview {
+                align-self: center;
+            }
+        }
+        #eventCommentSelfComponent {
+            width: 100%;
+            margin: 2% auto 0% auto;
         }
     }
+
     #EventMap {
         width: 75%;
         margin: 2% auto;

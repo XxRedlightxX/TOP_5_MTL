@@ -1,10 +1,12 @@
 <template>
     <div id="eventView">
-
-        <PageDetail></PageDetail>
-        <div class="sub">    
-            <PageDescription></PageDescription>
-            <PageCommentaire></PageCommentaire>
+        <div class="viewContent glass">
+            <PageDetail></PageDetail>
+            <div class="sub">
+                <PageDescription></PageDescription>
+                <PageCommentaire></PageCommentaire>
+            </div>
+            <CommentSelf/>
         </div>
         <PageMap></PageMap>
     </div>
@@ -15,6 +17,7 @@
      import PageDescription from "../../components/EventComponents/SingleEventComponents/EventOverview.vue"
      import PageCommentaire from "../../components/EventComponents/SingleEventComponents/EventCommentComponent.vue"
       import PageMap from "../../components/EventComponents/SingleEventComponents/EventMapComponent.vue"
+    import CommentSelf from "../../components/EventComponents/SingleEventComponents/EventCommentSelfComponent.vue"
 </script>
 
 
