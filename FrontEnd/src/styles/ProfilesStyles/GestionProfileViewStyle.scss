@@ -1,4 +1,92 @@
 #gestionProfileView {
-    border: 2px solid black;
-    padding-top: 8%;
+    width: 75%;
+    margin: 4% auto 4% auto;
+    padding: 3% 1% 0% 1%;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .titles{
+        font-size: 2rem;
+        margin-bottom: 3%;
+    }
+
+    #avatarUploader {
+        width: 15%;
+    }
+    .forms {
+        width: 100%;
+        //border: 2px solid red;
+        display: flex;
+        flex-direction: row;
+        gap: 5%;
+        margin-top: 3%;
+
+        .leftForm {
+            //border: 2px solid red;
+            padding: 5% 0%;
+
+            width: 50%;
+
+            .sub {
+                width: 100%;
+                display: flex;
+                flex-direction: row;   
+                justify-content: space-between;
+                gap: 5%;
+                .v-text-field {
+                    width: 50%;
+                }
+            }
+            
+            .v-text-field {
+                margin-bottom: 3%;
+            }
+        }
+        .rightForm {
+            //border: 2px solid red;
+            padding: 5% 0%;
+
+            width: 50%;
+
+            .v-text-field {
+                margin-bottom: 3%;
+            }
+        }
+    }
+    #waterButtonComponent {
+        width: 17%;
+    }
+}
+
+.light {
+    #gestionProfileView {
+        .titles{
+            color: var(--graphite);
+        }
+        .forms {
+            .leftForm {
+                color: var(--graphite08);
+            }
+            .rightForm {
+                color: var(--graphite08);
+            }
+        }
+    }
+}
+.dark {
+    #gestionProfileView {
+        .titles{
+            color: var(--light);
+        }
+        .forms {
+            .leftForm {
+                color: var(--light-trans-text);
+            }
+            .rightForm {
+                color: var(--light-trans-text);
+            }
+        }
+    }
 }

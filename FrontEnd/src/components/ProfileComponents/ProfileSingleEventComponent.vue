@@ -36,7 +36,7 @@
         himself: Boolean, // Boolean type prop
     });
 
-    console.log('props : ', props.event)
+    //console.log('props : ', props.event)
     const Logout = () => {
         storageManager.setLogin(false);
         isLogged.value = storageManager.getLogin();

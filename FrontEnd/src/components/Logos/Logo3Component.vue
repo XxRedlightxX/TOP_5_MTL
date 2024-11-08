@@ -130,6 +130,14 @@ const text = "Drop";
                 background: var(--light-trans-2Shine);
             }
         }
+        .mini {
+            #text3dComponent{
+            .shadow {
+                text-shadow: 0.5px 4px 3px rgba(16, 16, 16, 0.4),
+                0.5px 4px 3px rgba(16, 16, 16, 0.2);;
+            }
+        }
+        }
     }
     .dark {
         #logo3Component{
@@ -138,7 +146,7 @@ const text = "Drop";
 
             .wave {
                 background: var(--light-text);
-                box-shadow: inset 0 0 2nepx rgba(0, 0, 0, 0.5);
+                box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
             }
             .wave:before {
                 background: rgba(189,189,188,1);

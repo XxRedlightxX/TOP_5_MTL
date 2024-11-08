@@ -103,4 +103,4 @@
     });
 </script>
 
-<style src="../../styles/Login-SignUpStyles//SignUpComponentStyle.scss"></style>
+<style src="../../styles/Login-SignUpStyles/SignUpComponentStyle.scss"></style>

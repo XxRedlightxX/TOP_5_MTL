@@ -96,7 +96,7 @@
         window.removeEventListener('mode-changed', handleModeChange);
     });
 
-    console.log('mode : ', actualMode.value);
+    //console.log('mode : ', actualMode.value);
 </script>
 
 <style src="../../styles/ProfilesStyles/ProfileComponentStyle.scss"></style>
