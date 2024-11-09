@@ -34,15 +34,19 @@
         user: Object
     });
 
-
+    storageManager.setLogUser(props.user);
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
 
+
     const Logout = () => {
         storageManager.setLogin(false);
+        //localStorage.removeItem('logUser');
         isLogged.value = storageManager.getLogin();
     }
-
+    if(props.user === null){
+        //Logout()
+    }
     if (actualLang.value === null) {
         storageManager.setLang(true);
         actualLang.value = storageManager.getLang();

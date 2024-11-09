@@ -23,6 +23,10 @@
     const organisator = {
         avatar: "/src/assets/p1.jpg",
         username: "Debrazer",
+        name: "Wakanda",
+        fisrtName: "Dede",
+        email: "dedeTheBest@gmail.com",
+        num: 1122222222,
         desc: text,
         listEvent: [
             { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text, rating: 1 },
@@ -39,10 +43,10 @@
     let theOrganisator = ref(null);
 
     if (props.himself){
-        theOrganisator = ref(storageManager.getLogUser());
+        theOrganisator.value = storageManager.getLogUser();
     }
     else {
-        theOrganisator = ref(storageManager.getOrganisator());
+        theOrganisator= ref(storageManager.getOrganisator());
     }
     
     const Logout = () => {
@@ -60,6 +64,7 @@
     }
 
     if (theOrganisator.value === null) {
+        console.log("yesss  ")
         theOrganisator.value = organisator;
     }
     if (actualMode.value === null) {
@@ -96,7 +101,7 @@
         window.removeEventListener('mode-changed', handleModeChange);
     });
 
-    //console.log('mode : ', actualMode.value);
+    console.log('mode : ', theOrganisator.value);
 </script>
 
 <style src="../../styles/ProfilesStyles/ProfileComponentStyle.scss"></style>

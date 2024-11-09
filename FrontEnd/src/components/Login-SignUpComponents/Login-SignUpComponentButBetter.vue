@@ -37,13 +37,34 @@
     import SignUp from "./SignUpComponent.vue";
     import SignIn from "./SignInComponent.vue";
     import waterButton from "../WaterButtonComponent.vue"
-  
+
+    const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
+    const user = {
+        avatar: "/src/assets/p1.jpg",
+        username: "Debrazer",
+        name: "Wakanda",
+        fisrtName: "Dede",
+        email: "dedeTheBest@gmail.com",
+        num: 1122222222,
+        desc: text,
+        listEvent: [
+            { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text, rating: 1 },
+            { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 },
+            { image: "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text, rating: 5 },
+            { image: "/src/assets/HomeCarousel/Jardin-botanique.jpg", title: "Jardin Botanique", desc: text, rating: 4 },
+            { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 }
+        ]
+    };
     // State management
     const signUp = ref(false);
     
     // Toggle between Sign Up and Sign In
     const toggleSignUp = () => {
         signUp.value = !signUp.value;
+        //storageManager.setLogin(true);
+        storageManager.setLogUser(user);
+        // let theOrganisator = storageManager.getLogUser();
+        // console.log('user page view is : ' + storageManager.getLogUser() );
     };
 
     let actualLang = ref(storageManager.getLang());
