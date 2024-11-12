@@ -264,7 +264,10 @@
         width: 500px;
         position: relative;
         min-width: 500px; /* Ensure the overlay is positioned relative to the event card */
+        transition: 0.2s;
+        cursor: pointer;
 
+       
         &_photo {
           border-style: none;
           
@@ -278,6 +281,8 @@
             background-color: #fff;
             border-radius: 60px;
             border-color: #fff;
+            transition: 0.2s;
+            cursor: pointer;
             
             margin: 10px 10px;
             
@@ -290,11 +295,25 @@
             opacity: 1; /* Initially hidden */
             font-size: 10px;
             text-align: center;
+            transition: 0.2s;
+
+            &:hover {
+              transition: 0.4s;
+              transform: scale(1.1);
+              opacity: 1;
+            }
 
             img {
               height: 30px;
               filter: invert(35%) sepia(36%) saturate(7009%) hue-rotate(2deg) brightness(104%) contrast(88%);
+              
+              &:hover {
+                transform: scale(1.1);
+                          opacity: 1;
+              }
+            
             }
+
           
           }
 
