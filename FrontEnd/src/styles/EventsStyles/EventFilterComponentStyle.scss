@@ -1,8 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 #eventFilterComponent {
     
-    margin: 0vh 15vh 0vh 15vh;
-    
     .search-container {
         display: flex;
         align-items: center;
@@ -68,8 +66,6 @@
             overflow: hidden;
             width: 185vh;
             max-width: 1600px;
-            height: 300px;
-            padding: 20px;
             display: flex;
             align-items: center;
             transition: transform 0.3s ease-in-out; 
@@ -110,6 +106,7 @@
 
             .listeCategories {
                 display: flex;
+                padding: 0px 5%;
                 transition: margin-left 0.5s ease;
                 
                 
@@ -125,7 +122,7 @@
                     align-items: center;
                     
                     transition: transform 0.2s ease-in;
-                    min-width: 200px; 
+                    width: 100px;
                     margin: 0 10px;
                     //border: 2px solid rgb(14, 14, 14);
                     user-select: none;
@@ -137,7 +134,7 @@
 
 
                     img {
-                        max-width: 100%;
+                        width: 100%;
                         padding: 0px;
                         height: 100%;
                         overflow: visible;
@@ -162,19 +159,19 @@
 
         @media only screen and (min-width: 1100px) {
             #slider-container .listeCategories .listeCategories_objet {
-                width: calc(2.5% - 20px);
+                //width: calc(2.5% - 20px);
             }
         }
 
         @media only screen and (max-width: 1100px) {
             #slider-container .listeCategories .listeCategories_objet {
-                width: calc(3.3333333% - 20px);
+                //width: calc(3.3333333% - 20px);
             }
         }
 
         @media only screen and (max-width: 900px) {
             #slider-container .listeCategories .listeCategories_objet {
-                width: calc(5% - 20px);
+                //width: calc(5% - 20px);
             }
         }
 

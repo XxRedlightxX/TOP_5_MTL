@@ -100,7 +100,6 @@
 
 import { onMounted, ref, watch, onUnmounted } from 'vue'; 
 import LocalStorageManager from "@/JS/LocalStaorageManager"
-import { CalendarComponent } from '@syncfusion/ej2-vue-calendars';
 
 // Register the component globally
   const isMultiSelection = ref(true);
@@ -194,17 +193,6 @@ let newEvent = ref(null);
     LocalStorageManager.setEvent(value);
     console.log("event value : ", value);
   };
-
-  
-  
-
-
-
-  
-
-
-
-
 
 </script>
 

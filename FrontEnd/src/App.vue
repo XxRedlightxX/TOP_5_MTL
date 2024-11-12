@@ -16,7 +16,6 @@
   import Language from "./components/LanguageSetterComponent.vue";
   import storageManager from "@/JS/LocalStaorageManager"
   import { ref, onMounted, onUnmounted} from "vue";
-  import { CalendarComponent } from '@syncfusion/ej2-vue-calendars';
 
 // Register the component globally
   const isMultiSelection = ref(true);
