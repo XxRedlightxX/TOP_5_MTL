@@ -4,7 +4,7 @@
         <div class="categories">
             <div class="categories_horizontal"  style=" padding: 20px; ">
                 <div style="width: 50%; ">
-                    <h1>Categories</h1>
+                    
                 </div>
                 <div style="width: 50%;  ;  ">
                     <div class="search-container"  >
