@@ -1,222 +1,122 @@
 <template>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <div id="eventFilterComponent">
-        <div class="categories">
-            <div class="categories_horizontal"  style=" padding: 20px; ">
-                <div style="width: 50%; ">
-                    
-                </div>
-                <div style="width: 50%;  ;  ">
-                    <div class="search-container"  >
-                        <button type="submit" class="search-icon">
-                            <i class="fa fa-search"></i>
-                        </button>
-                        <input type="text" placeholder="Search..." class="search-bar">
-                    </div>
-                </div>
-            </div>
-            <div id="container">
-                <div id="slider-container">
-                    <!-- Change onclick to @click -->
-                    <span @click="slideRight" class="btn inactive"></span>
-                    <div id="slider" class="listeCategories">
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/gaming-gamepad-icon.svg" class="filter-green"> Gaming
-                        </div>
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/music-icon.svg"> Music
-                        </div>
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/art.svg"> Arts
-                        </div>
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/biking-svgrepo-com.svg"> Biking
-                        </div>
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/concert.svg"> Hiking
-                        </div>
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/business.svg"> Internship
-                        </div>
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/shirts.svg"> Fashion
-                        </div>
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/gaming-gamepad-icon.svg"> Internship
-                        </div>
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/party-horn-svgrepo-com.svg"> Internship
-                        </div>
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/Logo-Gem.svg"> Internship
-                        </div>
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/Logo-Gem.svg"> Internship
-                        </div>
-                        <div class="slide listeCategories_objet">
-                            <img src="/src/assets/Logo-Gem.svg"> Internships
-                        </div>
-                        
-                    </div>
-                    <!-- Change onclick to @click -->
-                    <span @click="slideLeft" class="btn"></span>
-                </div>
-            </div>
-        </div>
+    <div class="eventFilter" ref="wrapper">
+      <span id="left" @click="scroll('left')"><</span>
+      <ul class="carousel" ref="carousel">
+        <li v-for="(event, index) in eventFilters" :key="index" class="card">
+          <v-icon :icon="event.icon" :class="['icon', {'justGlow' : !actualMode}]"/>
+          <h4>{{ event.Title }}</h4>
+        </li>
+      </ul>
+      <span id="right" @click="scroll('right')">></span>
     </div>
-</template>
-
-<script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-
-let currentPosition = ref(0);
-let currentMargin = ref();
-let slidesPerPage = ref(4); // Start with default value
-let slidesCount = ref(2);
-
-let container, slider, buttons;
-let startX = ref(0);  // Used for both touch and mouse events
-let endX = ref(0);    // Used for both touch and mouse events
-
-onMounted(() => {
-    container = document.getElementById('container');
-    slider = document.getElementById('slider');
-    buttons = document.getElementsByClassName('btn');
-    slidesCount.value = document.getElementsByClassName('slide').length - slidesPerPage.value;
-
-    checkWidth();
-    window.addEventListener('resize', checkWidth);
-
+  </template>
   
-    slider.addEventListener('touchstart', handleTouchStart, false);
-    slider.addEventListener('touchmove', handleTouchMove, false);
-    slider.addEventListener('touchend', handleTouchEnd, false);
-
+  <script setup>
+    import { ref, onMounted, onBeforeUnmount } from 'vue';
   
-    slider.addEventListener('mousedown', handleMouseDown, false);
-    slider.addEventListener('mousemove', handleMouseMove, false);
-    slider.addEventListener('mouseup', handleMouseUp, false);
-    slider.addEventListener('mouseleave', handleMouseUp, false);  // Handles when mouse leaves the slider while dragging
-});
-
-onUnmounted(() => {
+    const eventFilters = ref([
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-menu"},
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-menu"},
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-menu"},
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-nature"},
+      { Title: 'Nature', icon: "mdi-nature"}
+    ]);
   
-    window.removeEventListener('resize', checkWidth);
-    slider.removeEventListener('touchstart', handleTouchStart);
-    slider.removeEventListener('touchmove', handleTouchMove);
-    slider.removeEventListener('touchend', handleTouchEnd);
-
-    slider.removeEventListener('mousedown', handleMouseDown);
-    slider.removeEventListener('mousemove', handleMouseMove);
-    slider.removeEventListener('mouseup', handleMouseUp);
-    slider.removeEventListener('mouseleave', handleMouseUp);
-});
-
-
-function handleTouchStart(e) {
-    startX.value = e.touches[0].clientX;
-}
-
-function handleTouchMove(e) {
-    endX.value = e.touches[0].clientX;
-}
-
-function handleTouchEnd() {
-    handleSwipe();
-}
-
-
-function handleMouseDown(e) {
-    startX.value = e.clientX; 
-    slider.style.cursor = 'pointer'; 
-}
-
-function handleMouseMove(e) {
-    if (startX.value !== 0) {
-        endX.value = e.clientX; 
-    }
-}
-
-function handleMouseUp() {
-    if (startX.value !== 0) {
-        slider.style.cursor = 'pointer'; 
-        handleSwipe(); 
-        startX.value = 0; 
-        endX.value = 0;
-    }
-}
-
-function handleSwipe() {
-    if (endX.value < startX.value) {
-       
-        slideLeft();
-    } else if (endX.value > startX.value) {
-        
-        slideRight();
-    }
-}
-
-function checkWidth() {
-    let containerWidth = container.offsetWidth;
-    setParams(containerWidth);
-}
-
-function setParams(w) {
-    if (w < 551) {
-        slidesPerPage.value = 1;
-    } else if (w < 901) {
-        slidesPerPage.value = 2;
-    } else if (w < 1101) {
-        slidesPerPage.value = 3;
-    } else {
-        slidesPerPage.value = 7;
-    }
-
-    slidesCount.value = document.getElementsByClassName('slide').length - slidesPerPage.value;
-
-    if (currentPosition.value > slidesCount.value) {
-        currentPosition.value = slidesCount.value;
-    }
-
-    currentMargin.value = -currentPosition.value * (100 / slidesPerPage.value);
-    slider.style.marginLeft = currentMargin.value + '%';
-
-    updateButtons();
-}
-
-function updateButtons() {
-    if (currentPosition.value === 0) {
-        buttons[0].classList.add('inactive');
-    } else {
-        buttons[0].classList.remove('inactive');
-    }
-
-    if (currentPosition.value >= slidesCount.value) {
-        buttons[1].classList.add('inactive');
-    } else {
-        buttons[1].classList.remove('inactive');
-    }
-}
-
-function slideRight() {
-    if (!buttons[0].classList.contains('inactive')) {
-        currentPosition.value--;
-        currentMargin.value += 100 / slidesPerPage.value;
-        slider.style.marginLeft = currentMargin.value + '%';
-        updateButtons();
-    }
-}
-
-function slideLeft() {
-    if (!buttons[1].classList.contains('inactive')) {
-        currentPosition.value++;
-        currentMargin.value -= 100 / slidesPerPage.value;
-        slider.style.marginLeft = currentMargin.value + '%';
-        updateButtons();
-    }
-}
-
-</script>
-
+    const wrapper = ref(null);
+    const carousel = ref(null);
+    const isDragging = ref(false);
+    const startX = ref(0);
+    const startScrollLeft = ref(0);
+    const timeoutId = ref(null);
+    const isAutoPlay = ref(true);
+  
+    const initializeCarousel = () => {
+      const firstCardWidth = carousel.value.querySelector('.card').offsetWidth;
+      const cardPerView = Math.round(carousel.value.offsetWidth / firstCardWidth);
+      
+      const children = Array.from(carousel.value.children);
+      children.slice(-cardPerView).reverse().forEach(card => {
+        carousel.value.insertAdjacentHTML('afterbegin', card.outerHTML);
+      });
+      children.slice(0, cardPerView).forEach(card => {
+        carousel.value.insertAdjacentHTML('beforeend', card.outerHTML);
+      });
+      
+      carousel.value.scrollLeft = carousel.value.offsetWidth;
+      
+      carousel.value.addEventListener('mousedown', dragStart);
+      carousel.value.addEventListener('mousemove', dragging);
+      document.addEventListener('mouseup', dragStop);
+      carousel.value.addEventListener('scroll', infiniteScroll);
+      wrapper.value.addEventListener('mouseenter', () => clearTimeout(timeoutId.value));
+      wrapper.value.addEventListener('mouseleave', autoPlay);
+  
+      autoPlay();
+    };
+  
+    const scroll = (direction) => {
+      const firstCardWidth = carousel.value.querySelector('.card').offsetWidth;
+      carousel.value.scrollLeft += direction === 'left' ? -firstCardWidth : firstCardWidth;
+    };
+  
+    const dragStart = (e) => {
+      isDragging.value = true;
+      carousel.value.classList.add('dragging');
+      startX.value = e.pageX;
+      startScrollLeft.value = carousel.value.scrollLeft;
+    };
+  
+    const dragging = (e) => {
+      if (!isDragging.value) return;
+      carousel.value.scrollLeft = startScrollLeft.value - (e.pageX - startX.value);
+    };
+  
+    const dragStop = () => {
+      isDragging.value = false;
+      carousel.value.classList.remove('dragging');
+    };
+  
+    const infiniteScroll = () => {
+      if (carousel.value.scrollLeft === 0) {
+        carousel.value.classList.add('no-transition');
+        carousel.value.scrollLeft = carousel.value.scrollWidth - 2 * carousel.value.offsetWidth;
+        carousel.value.classList.remove('no-transition');
+      } else if (Math.ceil(carousel.value.scrollLeft) === carousel.value.scrollWidth - carousel.value.offsetWidth) {
+        carousel.value.classList.add('no-transition');
+        carousel.value.scrollLeft = carousel.value.offsetWidth;
+        carousel.value.classList.remove('no-transition');
+      }
+      clearTimeout(timeoutId.value);
+      if (!wrapper.value.matches(':hover')) autoPlay();
+    };
+  
+    const autoPlay = () => {
+      const firstCardWidth = carousel.value.querySelector('.card').offsetWidth;
+      if (window.innerWidth < 800 || !isAutoPlay.value) return;
+      timeoutId.value = setTimeout(() => {
+        carousel.value.scrollLeft += firstCardWidth;
+      }, 2500);
+    };
+  
+    onMounted(initializeCarousel);
+  
+    onBeforeUnmount(() => {
+      carousel.value.removeEventListener('mousedown', dragStart);
+      carousel.value.removeEventListener('mousemove', dragging);
+      document.removeEventListener('mouseup', dragStop);
+      carousel.value.removeEventListener('scroll', infiniteScroll);
+    });
+  </script>
 
 <style src="../../../styles/EventsStyles/EventFilterComponentStyle.scss"></style>

@@ -20,11 +20,12 @@
       </div>
     </div>
     <div class="events">
-    <div class="events_card" v-for="(item, index) in newEvent" :key="index">
+    <div class="events_card glass" v-for="(item, index) in newEvent" :key="index">
         <div class="event_card_photo">
             <!-- Overlay heart icon -->
             <span class="overlay">
-                <img src="../../../assets/heart.svg" alt="Heart Icon" class="heart-icon">
+                <heartIcon :size="0" class="heart-icon"/>
+                <!-- <img src="../../../assets/heart.svg" alt="Heart Icon" class="heart-icon"> -->
             </span>
             <!-- Main image -->
             <img :src="item.image" class="product-thumb" alt="Event Image">
@@ -66,30 +67,30 @@
     </div>
 
     <div class="container">
-  <ul class="pagination">
-    <li>
-      <a href="#">Prev</a>
-    </li>
-    <li>
-      <a href="#">1</a>
-    </li>
-    <li class="active">
-      <a href="#">2</a>
-    </li>
-    <li>
-      <a href="#">3</a>
-    </li>
-    <li>
-      <a href="#">4</a>
-    </li>
-    <li>
-      <a href="#">5</a>
-    </li>
-    <li>
-      <a href="#">Next</a>
-    </li>
-  </ul>
-</div>
+      <ul class="pagination">
+        <li>
+          <a href="#">Prev</a>
+        </li>
+        <li>
+          <a href="#">1</a>
+        </li>
+        <li class="active">
+          <a href="#">2</a>
+        </li>
+        <li>
+          <a href="#">3</a>
+        </li>
+        <li>
+          <a href="#">4</a>
+        </li>
+        <li>
+          <a href="#">5</a>
+        </li>
+        <li>
+          <a href="#">Next</a>
+        </li>
+      </ul>
+    </div>
 
 
    </div>
@@ -100,6 +101,7 @@
 
 import { onMounted, ref, watch, onUnmounted } from 'vue'; 
 import LocalStorageManager from "@/JS/LocalStaorageManager"
+import heartIcon from './heartIcon.vue';
 
 // Register the component globally
   const isMultiSelection = ref(true);

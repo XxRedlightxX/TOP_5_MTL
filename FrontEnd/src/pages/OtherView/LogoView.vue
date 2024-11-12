@@ -1,18 +1,26 @@
 <template>
     <div id="Logo">
-        <Logo  :size="3"/>
-        <!-- <Text :text="'Ryan'" :shadow="false"/> -->
+        <!-- <Logo  :size="3"/> -->
+        <Heart  :size="3"/>
     </div>
 </template>
 
 <script setup>
     import Logo from "../../components/Logos/Logo3Component.vue"
-    //import Text from "../../components/Logos/3dTextComponent.vue"
+    import Heart from "../../components/EventComponents/ListOfEventsComponents/heartIcon.vue"
 </script>
 
 
 <style lang="scss">
-    #Logo {
+    #heartIcon {
+        //padding: 5% 0% 8% 0%;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    #Logo, #heartIcon {
         padding: 5% 0% 8% 0%;
 
         display: flex;

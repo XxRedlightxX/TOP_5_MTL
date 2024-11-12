@@ -3,10 +3,10 @@
         to="/Logo" 
         id="logo3Component" 
         :class="{
-            'mini': size === 0,
-            'small': size === 1,
-            'medium': size === 2,
-            'large': size === 3
+            'mini': props.size === 0,
+            'small': props.size === 1,
+            'medium': props.size === 2,
+            'large': props.size === 3
         }"
     >
         <Text :text="text" :shadow="false" :size="props.size"/>

@@ -39,14 +39,18 @@ $z-index-overlay: 1000;
           font-family:'Times New Roman', Times, serif;
           font-size: 1.4em;
           transition: 0.3s;
+          padding: 10px;
         }
 
         a:hover {
-          background-color: #ff9900;
+          //background-color: var(--graphite015);
+          border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+          background: transparent;                
+          box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                      15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
           transition: 0.4s;
-          border-radius: 20px;
-          font-size: 1.6em;
-          padding: 10px;
+          //border-radius: 20px;
+          //font-size: 1.6em;
           color : #fff;
           cursor: pointer;
         }
@@ -54,9 +58,12 @@ $z-index-overlay: 1000;
        
 
         &:nth-child(1) a  {
-          background-color: #ff9900;
-   
-          border-radius: 20px;
+          //background-color: var(--graphite015);
+          border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+          background: transparent;                
+          box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                      15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+          //border-radius: 20px;
           font-size: 1.6em;
           padding: 10px;
           color : #fff;
@@ -94,21 +101,28 @@ $z-index-overlay: 1000;
     }
     .beautiful-button {
       
-      background-color: #ff9900;
+      //background-color: var(--graphite015);
       color: #fff;
       float: right;
       font-size: 1.2rem;
       padding: 15px 30px;
       border: none;
-      border-radius: 8px;
+      //border-radius: 8px;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0px 8px 15px $shadow-color;
       filter: brightness(1);
       overflow: hidden;
+      border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+      background: transparent;                
+      box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                  15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
     
     }
-  
+    .beautiful-button:hover {
+      border-radius: 45% 55% 49% 51% / 61% 19% 81% 39%;
+    
+    }
 
       img {
         width: 20px;
@@ -122,6 +136,10 @@ $z-index-overlay: 1000;
     .events {
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 2%;
+      padding: 0;
   
       .events_card {
           margin: 0.75em;
@@ -155,35 +173,8 @@ $z-index-overlay: 1000;
   
               .overlay {
                   position: absolute;
-                  top: 10px;
-                  right: 10px;
-                  width: 40px;
-                  height: 40px;
-                  background-color: #fff;
-                  padding: 10px;
-                  border-radius: 30px;
-                  cursor: pointer;
-                  z-index: 1;
-                  transition: 0.2s;
-
-                  &:hover {
-                    transition: 0.4s;
-                    transform: scale(1.1);
-                    opacity: 1;
-                  }
-  
-                  .heart-icon {
-                      width: 100%;
-                      height: 100%;
-                      opacity: 0.8;
-                      filter: invert(35%) sepia(36%) saturate(7009%) hue-rotate(2deg) brightness(104%) contrast(88%);
-                      transition: transform 0.2s, opacity 0.2s;
-  
-                      &:hover {
-                          transform: scale(1.1);
-                          opacity: 1;
-                      }
-                  }
+                  top: 1%;
+                  right: 1%;
               }
           }
       }
@@ -322,13 +313,11 @@ $z-index-overlay: 1000;
 
     .container .pagination {
       position: relative;
+      margin-top: 2%;
       height: 60px;
-      background: rgba(255, 255, 255, 0.05);
-      box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(3px);
       border-radius: 2px;
     }
     .container .pagination li {
@@ -337,14 +326,25 @@ $z-index-overlay: 1000;
     }
     .container .pagination li a {
       position: relative;
-      padding: 20px 25px;
+      padding: 15px 20px;
+      margin: 0px 5px;
       text-decoration: none;
       color: #fff;
       font-weight: 500;
     }
-    .container .pagination li a:hover,
+    .container .pagination li a:hover {
+      border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+      background: transparent;                
+      box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                  15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+    }
     .container .pagination li.active a {
-      background: rgba(255, 255, 255, 0.2);
+      border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+      background: transparent;                
+      box-shadow: 5px 5px 10px #0008,
+          10px 6px 15px #0008 inset,
+          -5px -5px 8px #f5f5ff inset,
+          10px 6px 15px #0004 inset;
     }
     
 
