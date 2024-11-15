@@ -7,16 +7,39 @@
             'medium': props. size === 2,
             'large': props.size === 3
         }"
+        :title="actualLang ? 'Like' : 'Aimer'"
     >
         <div class="heart"></div>
     </div>
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+    import { defineProps, ref, onMounted, onUnmounted } from "vue";
+    import storageManager from "@/JS/LocalStaorageManager"
 
     const props = defineProps({
         size: Number
+    });
+
+    let actualLang = ref(storageManager.getLang());
+
+    if (actualLang.value === null) {
+        storageManager.setLang(true);
+        actualLang.value = storageManager.getLang();
+    }
+
+    // Function to handle mode change event
+    const handleLangChange = (event) => {
+        actualLang.value = JSON.parse(event.detail.storage);
+    };
+    // Add event listener for mode changes
+    onMounted(() => {
+        window.addEventListener('lang-changed', handleLangChange);
+    });
+
+    // Remove event listener when component is unmounted
+    onUnmounted(() => {
+        window.removeEventListener('lang-changed', handleLangChange);
     });
 </script>
 

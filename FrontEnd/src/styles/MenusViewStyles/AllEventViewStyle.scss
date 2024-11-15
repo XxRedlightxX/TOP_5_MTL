@@ -1,9 +1,10 @@
 #allEventView {
-    padding-top: 8%;
+    padding-top: 6%;
+    
     
     .eventFilter {
         margin: 0% auto 2% auto;
-        width: 78%;
+        width: 75%;
     }
     .upComingEvent{
         margin: auto;
@@ -16,5 +17,6 @@
     #AllEventComponent {
         margin: auto;
         width: 72%;
+        padding-bottom: 2%;
     }
 }

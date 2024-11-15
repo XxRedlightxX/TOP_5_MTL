@@ -9,8 +9,14 @@
         </div>
         <h2>{{ event.Title }}</h2>
         <div class="eventDescriptionInfos">
-          <div class="d">{{ event.location }}</div>
-          <div class="d">{{ event.time }}</div>
+          <div class="d">
+            <v-icon icon="mdi-map-marker " :class="['icon', {'justGlow' : !actualMode}]"/>
+            {{ event.location }}
+          </div>
+          <div class="d">
+            <v-icon icon="mdi-clock-outline " :class="['icon', {'justGlow' : !actualMode}]"/>
+            {{ event.time }}
+          </div>
         </div>
       </li>
     </ul>

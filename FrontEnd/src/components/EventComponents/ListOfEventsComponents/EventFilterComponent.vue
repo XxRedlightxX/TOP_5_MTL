@@ -1,13 +1,13 @@
 <template>
     <div class="eventFilter" ref="wrapper">
-      <span id="left" @click="scroll('left')"><</span>
+      <span id="left" @click="scroll('left')" :class="[{'glow' : !actualMode}]"><</span>
       <ul class="carousel" ref="carousel">
         <li v-for="(event, index) in eventFilters" :key="index" class="card">
-          <v-icon :icon="event.icon" :class="['icon', {'justGlow' : !actualMode}]"/>
+          <v-icon :icon="event.icon" :class="['icon', {'glow' : !actualMode}]"/>
           <h4>{{ event.Title }}</h4>
         </li>
       </ul>
-      <span id="right" @click="scroll('right')">></span>
+      <span id="right" @click="scroll('right')" :class="[{'glow' : !actualMode}]">></span>
     </div>
   </template>
   

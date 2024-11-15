@@ -1,0 +1,177 @@
+<template>
+     <div class="paginationComponent">
+       <ul class="pagination">
+         <li @click="prevPage" :class="['pageText', currentPage > 0 ? 'glowPJ' : '']">
+           <a href="#">{{ actualLang ? "Prev" : "Precedent"}}</a>
+         </li>
+ 
+         <li 
+           v-for="(page, index) in pages" 
+           :key="index" 
+           @click="changePage(index)" 
+           :class="{ active: currentPage === index }"
+         >
+           <a href="#">{{ page }}</a>
+         </li>
+ 
+         <li @click="nextPage" :class="['pageText', currentPage < pages.length -1 ? 'glowPJ' : '']">
+           <a href="#">{{ actualLang ? "Next" : "Suivant"}}</a>
+         </li>
+       </ul>
+     </div>
+ </template>
+ 
+ <script setup >
+ import { onMounted, ref, onUnmounted } from 'vue'; 
+ import LocalStorageManager from "@/JS/LocalStaorageManager"
+
+    const pages = [1, 2, 3, 4, 5];
+    const currentPage = ref(0);
+
+
+    const changePage = (index) => {
+        currentPage.value = index;
+    };
+
+    const prevPage = () => {
+        if (currentPage.value > 0) {
+        currentPage.value--;
+        }
+    };
+
+    const nextPage = () => {
+        if (currentPage.value < pages.length - 1) {
+        currentPage.value++;
+        }
+    };
+    
+   let actualLang = ref(LocalStorageManager.getLang());
+
+   if (actualLang.value === null) {
+        LocalStorageManager.setLang(true);
+        actualLang.value = LocalStorageManager.getLang();
+    }
+
+   
+    // Function to handle mode change event
+    const handleLangChange = (event) => {
+        actualLang.value = JSON.parse(event.detail.storage);
+    };
+
+     // Add event listener for mode changes
+   onMounted(() => {
+       window.addEventListener('lang-changed', handleLangChange);
+   });
+ 
+   // Remove event listener when component is unmounted
+   onUnmounted(() => {
+       window.removeEventListener('lang-changed', handleLangChange);
+   });
+ </script>
+ 
+ <style lang="scss">
+.paginationComponent {
+    width: 100%;
+    .pagination {
+      position: relative;
+      margin-top: 2%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+
+
+      li {
+        list-style-type: none;
+        display: inline-block;
+
+        a {
+          position: relative;
+          padding: 15px 20px;
+          margin: 0px 5px;
+          text-decoration: none;
+          font-weight: 500;
+        }
+        a:hover {
+          border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+        }
+      }
+      .active a {
+        border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+      }
+    }
+}    
+
+
+.light {
+    .paginationComponent {
+      .pagination {
+  
+        .pageText{
+          a { 
+            color: var(--light);  
+          }
+        }
+  
+        li {
+  
+          a {
+            color: var(--graphite);
+          }
+          a:hover {
+            background: transparent;   
+            color: var(--light);         
+            box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                        15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+          }
+        }
+        .active a {
+          background: transparent;    
+          color: var(--light);                
+          box-shadow: 5px 5px 10px #0008,
+              10px 6px 15px #0008 inset,
+              -5px -5px 8px #f5f5ff inset,
+              10px 6px 15px #0004 inset;
+        }
+      }
+    }    
+}
+
+.dark {
+    .paginationComponent {
+      .pagination {
+  
+        .pageText{
+          a { 
+            color: var(--light);  
+          }
+        }
+        .glowPJ {
+          animation: neonGlow 0.5s ease-in-out infinite alternate;
+        }
+        li {
+  
+          a {
+            color: var(--light-trans-2Shine);
+          }
+          a:hover {
+            background: transparent;   
+            color: var(--light);
+            animation: neonGlow 0.5s ease-in-out infinite alternate;
+            box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                        15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+          }
+        }
+        .active a {
+          background: transparent;    
+          color: var(--light);
+          animation: neonGlow 0.5s ease-in-out infinite alternate;
+          box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                      15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+                      
+        }
+      }
+    }    
+  }
+</style>

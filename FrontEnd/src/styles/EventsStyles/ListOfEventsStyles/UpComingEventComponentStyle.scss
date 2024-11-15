@@ -77,8 +77,9 @@
             .d {
                 padding: 0%;
                 width: 100%;
-                img {
-                    width: 10%;
+                .icon {
+                  color: var(--graphite06);
+                  font-size: 1.5rem;
                 }
             }
           }
