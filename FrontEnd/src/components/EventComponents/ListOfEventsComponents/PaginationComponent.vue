@@ -2,7 +2,7 @@
      <div class="paginationComponent">
        <ul class="pagination">
          <li @click="prevPage" :class="['pageText', currentPage > 0 ? 'glowPJ' : '']">
-           <a href="#">{{ actualLang ? "Prev" : "Precedent"}}</a>
+           {{ actualLang ? "Prev" : "Precedent"}}
          </li>
  
          <li 
@@ -11,11 +11,11 @@
            @click="changePage(index)" 
            :class="{ active: currentPage === index }"
          >
-           <a href="#">{{ page }}</a>
+           {{ page }}
          </li>
  
          <li @click="nextPage" :class="['pageText', currentPage < pages.length -1 ? 'glowPJ' : '']">
-           <a href="#">{{ actualLang ? "Next" : "Suivant"}}</a>
+           {{ actualLang ? "Next" : "Suivant"}}
          </li>
        </ul>
      </div>
@@ -85,19 +85,17 @@
       li {
         list-style-type: none;
         display: inline-block;
-
-        a {
           position: relative;
           padding: 15px 20px;
           margin: 0px 5px;
           text-decoration: none;
           font-weight: 500;
-        }
-        a:hover {
-          border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
-        }
+          cursor: pointer;
       }
-      .active a {
+      li:hover {
+        border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+      }
+      .active {
         border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
       }
     }
@@ -115,18 +113,15 @@
         }
   
         li {
-  
-          a {
             color: var(--graphite);
-          }
-          a:hover {
-            background: transparent;   
+        }
+        li:hover {
+          background: transparent;   
             color: var(--light);         
             box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
                         15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
-          }
         }
-        .active a {
+        .active {
           background: transparent;    
           color: var(--light);                
           box-shadow: 5px 5px 10px #0008,
@@ -151,17 +146,14 @@
           animation: neonGlow 0.5s ease-in-out infinite alternate;
         }
         li {
-  
-          a {
             color: var(--light-trans-2Shine);
-          }
-          a:hover {
+        }
+        li:hover {
             background: transparent;   
             color: var(--light);
             animation: neonGlow 0.5s ease-in-out infinite alternate;
             box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
                         15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
-          }
         }
         .active a {
           background: transparent;    
