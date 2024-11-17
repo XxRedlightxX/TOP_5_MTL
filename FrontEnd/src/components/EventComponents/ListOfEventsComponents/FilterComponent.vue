@@ -102,7 +102,7 @@
 <style lang="scss">
 #AllEventComponent {
   .button-container {
-    margin: 2% 0%;
+    margin: 1% 0%;
 
     ul {
       display: flex;

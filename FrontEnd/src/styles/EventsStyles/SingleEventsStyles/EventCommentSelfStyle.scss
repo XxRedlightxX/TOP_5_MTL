@@ -8,7 +8,7 @@
             width: 100%;
             height: 100%;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             align-items: center;
 
             .rest {
@@ -17,7 +17,12 @@
                 width: 25%;
             }
             .v-textarea {
-                width: 75%;
+                width: 90%;
+                margin: auto;
+                height: 100px;
+            }
+            .v-input__control, .v-field__input {
+                height: 90px;
             }
         }
     }

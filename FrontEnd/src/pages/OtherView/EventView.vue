@@ -1,12 +1,15 @@
 <template>
     <div id="eventView">
-        <div class="viewContent glass">
+        <div class="viewContent">
             <PageDetail></PageDetail>
-            <div class="sub">
-                <PageDescription></PageDescription>
-                <PageCommentaire></PageCommentaire>
+            
+            <div class="suite">
+                <div class="sub">
+                    <PageDescription/>
+                    <CommentSelf/>
+                </div>
+                <PageCommentaire/>
             </div>
-            <CommentSelf/>
         </div>
         <PageMap></PageMap>
     </div>
