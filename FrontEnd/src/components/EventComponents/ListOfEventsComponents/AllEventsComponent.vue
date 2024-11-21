@@ -100,28 +100,12 @@
 
 import { onMounted, ref, watch, onUnmounted } from 'vue'; 
 import LocalStorageManager from "@/JS/LocalStaorageManager"
-import { CalendarComponent } from '@syncfusion/ej2-vue-calendars';
-
-// Register the component globally
-  const isMultiSelection = ref(true);
-  const dateValue = ref(new Date("08/18/2022"));
-  const minDate = ref(new Date("08/08/2022"));
-  const maxDate = ref(new Date("08/26/2022"));
 
 
 
 
-const showCalendarPopup = ref(false);
-const calendarInput = ref(null);
 
-const toggleCalendarPopup = () => {
-  showCalendarPopup.value = !showCalendarPopup.value;
-  console.log(showCalendarPopup)
-};
 
-const closePopup = () => {
-  showCalendarPopup.value = false
-}
 
 
 

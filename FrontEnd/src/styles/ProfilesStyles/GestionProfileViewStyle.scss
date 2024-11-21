@@ -1,4 +1,151 @@
 #gestionProfileView {
-    border: 2px solid black;
-    padding-top: 8%;
+
+    padding-top: 5%;
+    box-sizing: border-box;
+   
+
+    .photo-profile {
+        border-style: dashed;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .test {
+            border-radius: 50%;
+            height: 200px;
+            width: 200px;
+            border: 2px solid black;
+            position: relative; 
+            & img {
+                border-radius: 50%;
+                width: 100%;
+                height: 100%;
+            }
+
+            .overlay {
+                position: absolute;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5); 
+                color: #f1f1f1;
+                width: 100%; 
+                height: 40%; 
+                opacity: 0; 
+                color: white;
+                font-size: 16px;
+                line-height: 50px; 
+                text-align: center;
+                border-radius: 0 0 100% 100%; 
+                transition: opacity 0.5s ease;
+            }
+
+            &:hover .overlay {
+                opacity: 1;
+            }
+        }
+    }
+
+    form {
+        border-style: double;
+        max-width: 1480px;
+        margin: auto;
+    
+        display: flex;
+        flex-direction: column; 
+        gap: 16px; 
+        justify-content: center;
+        align-items: center;
+    
+        div {
+            display: flex;
+            flex-direction: column; 
+            align-items: flex-start; 
+            gap: 8px; 
+            width: 60%;
+        }
+    
+        label {
+            font-size: 16px;
+            text-align: left; 
+        }
+        .v-input {
+            margin-bottom: 2%;
+        }
+    
+        input[type="text"] {
+            width: 100%; 
+            padding: 12px 20px;
+            box-sizing: border-box;
+            color: #0000;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        .row_input {
+            display: wrap;
+            border-style: dashed;
+            display:inline-block;
+            
+            div {
+                padding: 7px;
+            }
+          
+            & div {
+                 float:left;
+                width: 40%;
+                
+                
+            }
+
+            & div:last-child{
+                width: 60%;
+            }
+
+           
+           
+            
+        }
+        .button_confirmer {
+            display: block;
+            border-style: dotted;
+            width: 60%;
+            text-align: right;
+           
+            
+          
+           
+        
+    
+        input[type="submit"] {
+            background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
+            color: #fff;
+            text-align: center;
+          font-size:x-large;
+          padding: 10px;
+          border-radius: 10px;
+
+         
+          
+        }
+
+        & input[type="submit"]:first-of-type {
+            background: transparent;
+            border-style: solid;
+            }
+
+        & input[type="submit"]:last-of-type {
+          margin: 0 0 13px 10px;
+         
+          }
+
+       
+
+
+        input[type="submit"]:hover {
+            background: linear-gradient(to bottom, var(--graphite015), var(--graphite06));
+        }
+    }
+}
+    
+    
 }
