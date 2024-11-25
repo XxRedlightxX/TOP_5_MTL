@@ -1,5 +1,5 @@
 <template>
-    <div id="profileComponent" class="glass">
+    <div id="profileComponent">
         <div class="top">
             <ProfileHead :himself="props.himself" :user="theOrganisator"></ProfileHead>
             <ProfileOther v-show="props.himself" :user="theOrganisator"></ProfileOther>
