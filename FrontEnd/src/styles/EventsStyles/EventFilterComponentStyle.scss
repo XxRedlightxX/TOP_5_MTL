@@ -104,6 +104,12 @@
               color: var(--light-text);
             }
           }
+          
+        .card:hover {
+          h4 {
+            color: var(--light);
+          }
+        }
       }
     }
   }

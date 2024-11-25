@@ -91,12 +91,7 @@
           text-decoration: none;
           font-weight: 500;
           cursor: pointer;
-      }
-      li:hover {
-        border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
-      }
-      .active {
-        border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+          transition: all 0.2s;
       }
     }
 }    
@@ -116,12 +111,14 @@
             color: var(--graphite);
         }
         li:hover {
+          border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
           background: transparent;   
             color: var(--light);         
             box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
                         15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
         }
         .active {
+          border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
           background: transparent;    
           color: var(--light);                
           box-shadow: 5px 5px 10px #0008,
@@ -152,15 +149,11 @@
             background: transparent;   
             color: var(--light);
             animation: neonGlow 0.5s ease-in-out infinite alternate;
-            box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
-                        15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
         }
-        .active a {
+        .active {
           background: transparent;    
-          color: var(--light);
+          color: var(--light-trans-2Shine);
           animation: neonGlow 0.5s ease-in-out infinite alternate;
-          box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
-                      15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
                       
         }
       }
