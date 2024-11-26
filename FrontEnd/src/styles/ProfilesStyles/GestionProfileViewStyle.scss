@@ -5,48 +5,49 @@
    
 
     .photo-profile {
-        border-style: dashed;
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
-
+    
         .test {
             border-radius: 50%;
             height: 200px;
             width: 200px;
             border: 2px solid black;
-            position: relative; 
+            position: relative;
+            overflow: hidden; /* Ensure the overlay fits inside the circular image */
+            
             & img {
                 border-radius: 50%;
                 width: 100%;
                 height: 100%;
+                object-fit: cover; /* Ensures the image covers the area of the circle */
             }
-
+    
             .overlay {
                 position: absolute;
                 bottom: 0;
                 background: rgba(0, 0, 0, 0.5); 
                 color: #f1f1f1;
                 width: 100%; 
-                height: 40%; 
-                opacity: 0; 
+                height: 20%; /* Make the overlay fill the entire area */
+                opacity: 0; /* Start hidden */
                 color: white;
                 font-size: 16px;
-                line-height: 50px; 
+                line-height: 30px; 
                 text-align: center;
-                border-radius: 0 0 100% 100%; 
                 transition: opacity 0.5s ease;
             }
-
+    
             &:hover .overlay {
-                opacity: 1;
+                opacity: 1; /* Show the overlay on hover */
             }
         }
     }
-
+    
     form {
-        border-style: double;
+     
         max-width: 1480px;
         margin: auto;
     
@@ -83,7 +84,7 @@
 
         .row_input {
             display: wrap;
-            border-style: dashed;
+            
             display:inline-block;
             
             div {
@@ -107,7 +108,7 @@
         }
         .button_confirmer {
             display: block;
-            border-style: dotted;
+           
             width: 60%;
             text-align: right;
            
