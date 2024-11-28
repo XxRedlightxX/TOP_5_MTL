@@ -1,51 +1,100 @@
 <template>
     <div id="gestionProfileView">
-        <h3> Gestion profile View</h3>
-        <div class="photo-profile">
-            <div class="test">
-            <img src="../../assets/bob.jpg">
-            <div class="overlay">My Name is John</div>
-        </div>
-        </div>
+        <AvatarUploader/>
+
+        <form action="#" class="forms">
+            <div class="leftForm">
+                <h2 class="titles">{{ actualLang ? "Account informations" : "Informations sur le compte" }}</h2>
+                <div class="sub">
+                    <v-text-field
+                        :rules="Name"
+                        :label="`${actualLang ? 'Name' : 'Nom'} : ${theUser?.name || ''}`"
+                        type="input"
+                        clearable
+                        persistent-clear 
+                        hide-details="auto"
+                    />
 
 
-        <form action="">
-    <div>
-        <label for="fname">Full name:</label>
-        <input type="text" id="fname" name="fname" value="John">
-    </div>
-    <div>
-        <label for="email">Email:</label>
-        <input type="text" id="email" name="email" value="Doe">
-    </div>
-    <div>
-        <label for="number">Number:</label>
-        <input type="text" id="number" name="number" value="Doe">
-    </div>
-    <div>
-        <label for="city">City:</label>
-        <input type="text" id="city" name="city" value="Doe">
-    </div>
-    <div class="row_input">
-        <div >
-            <label for="region">Region:</label>
-            <input type="text" id="region" name="region" value="Doe">
-        </div>
-        <div>
-            <label for="postal-code">Postal Code:</label>
-            <input type="text" id="postal-code" name="postal-code" value="Doe">
-        </div>
-    </div>
+                    <v-text-field
+                        :rules="Name"
+                        :label="`${actualLang ? 'First name' : 'Prenom'} : ${theUser?.fistname || ''}`"
+                        
+                        type="input"
+                        clearable
+                        persistent-clear 
+                        hide-details="auto"
+                    ></v-text-field>
+                </div>
 
-   <div class="button_confirmer">
-    
-        <input type="submit" value="Cancel">
+                <v-text-field
+                    :rules="Name"
+                        :label="`${actualLang ? 'Username' : 'Nom d\'utilisateur'} : ${theUser?.username || ''}`"
+                    
+                    type="input"
+                    clearable
+                    persistent-clear 
+                    hide-details="auto"
+                ></v-text-field>
 
-        <input type="submit" value="Submit">
-    </div>
-</form>
+                <div class="sub">
+                    <v-text-field
+                        :rules="Email"
+                        hint="this field is mendatory"
+                        :label="`${actualLang ? 'Email*' : 'Email*'} : ${theUser?.email || ''}`"
+                        
+                        type="input"
+                        clearable
+                        persistent-clear 
+                        hide-details="auto"
+                    ></v-text-field>
 
+                    <v-text-field
+                        :rules="Number"
+                        hint="this field is not mendatory"
+                        :label="`${actualLang ? 'Phone' : 'Telephone'} : ${theUser?.num || ''}`"
+                        
+                        type="input"
+                        clearable
+                        persistent-clear 
+                        hide-details="auto"
+                    ></v-text-field>
+                </div>
 
+                <v-textarea :label="actualLang ? 'Type your Message' : 'Entrez votre message'" >{{ theUser.desc }}</v-textarea>
+            </div>
+
+            <div class="rightForm">
+                <h2 class="titles">{{ actualLang ? "Login informations" : "Informations de connection" }}</h2>
+                <v-text-field
+                    :rules="Email"
+                    :value="actualLang ? 'Email/Username ' : 'Email/Nom d\'utilisateur'"
+                    type="input"
+                    readonly="true"
+                    hide-details="auto"
+                ></v-text-field>
+
+                <v-text-field
+                    :rules="Password"
+                    :label="actualLang ? 'Password' : 'Mot de passe'"
+                    type="input"
+                    clearable
+                    persistent-clear 
+                    hide-details="auto"
+                ></v-text-field>
+
+                <v-text-field
+                    :rules="Password"
+                    :label="actualLang ? 'Confirm password' : 'Confirmer le mot de passe'"
+                    type="input"
+                    clearable
+                    persistent-clear 
+                    hide-details="auto"
+                ></v-text-field>
+
+            </div>
+        </form>
+        <waterButton :text="actualLang ? 'Send' : 'Envoyer'" :type="true" class="btn" @click="updateUser()"/>
     </div>
 </template>
 
@@ -124,6 +173,5 @@
 
     }
 </script>
-
 
 <style src="../../styles/ProfilesStyles/GestionProfileViewStyle.scss"></style>
