@@ -1,7 +1,7 @@
 <template>
     <div id="myModal" class="modal" style="display:none" @click.self="pop">
         <!-- Modal content -->
-        <div class="modal-content">
+        <div class="modal-content" @click.self="pop">
             <div class="event-create-form">
                 <span class="close" @click="pop" >&times;</span>
                 <h2>Create Event</h2>
@@ -48,7 +48,7 @@
                 
                     <div class="form-actions">
                         <button type="submit" class="btn-submit">Create Event</button>
-                        <button type="reset" class="btn-cancel">Cancel</button>
+                        <button type="reset" class="btn-cancel" @click="pop" >Cancel</button>
                     </div>
                 </form>
             </div>
@@ -57,72 +57,65 @@
 
 </template>
 <script setup>
-  import storageManager from "@/JS/LocalStaorageManager";
-  import { ref, onMounted, onUnmounted, defineProps } from "vue";
-  import ProfileSingleEvent from "./ProfileSingleEventComponent.vue";
+    import storageManager from "@/JS/LocalStaorageManager";
+    import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
 
-  const props = defineProps({
-        himself: Boolean, // Boolean type prop
+    const props = defineProps({
         user: Object
     });
 
-  
-  let actualLang = ref(storageManager.getLang());
-  let isLogged = ref(storageManager.getLogin());
-  
-  const Logout = () => {
+
+    let actualLang = ref(storageManager.getLang());
+    let isLogged = ref(storageManager.getLogin());
+
+    const Logout = () => {
     storageManager.setLogin(false);
     isLogged.value = storageManager.getLogin();
-  };
-  
-  if (actualLang.value === null) {
+    };
+
+    if (actualLang.value === null) {
     storageManager.setLang(true);
     actualLang.value = storageManager.getLang();
-  }
-  
-  if (isLogged.value === null) {
-    Logout();
-  }
-  
-  // Function to handle mode change event
-  const handleLangChange = (event) => {
-    actualLang.value = JSON.parse(event.detail.storage);
-  };
-  
-  // Function to handle mode change event
-  const handleLoginChange = (event) => {
-    isLogged.value = JSON.parse(event.detail.storage);
-  };
-  
+    }
 
-  
-  // Add event listener for mode changes
-  onMounted(() => {
+    if (isLogged.value === null) {
+    Logout();
+    }
+
+    // Function to handle mode change event
+    const handleLangChange = (event) => {
+    actualLang.value = JSON.parse(event.detail.storage);
+    };
+
+    // Function to handle mode change event
+    const handleLoginChange = (event) => {
+    isLogged.value = JSON.parse(event.detail.storage);
+    };
+
+
+
+    // Add event listener for mode changes
+    onMounted(() => {
     window.addEventListener('lang-changed', handleLangChange);
     window.addEventListener('login-changed', handleLoginChange);
-  });
-  
-  // Remove event listener when component is unmounted
-  onUnmounted(() => {
+    });
+
+    // Remove event listener when component is unmounted
+    onUnmounted(() => {
     window.removeEventListener('lang-changed', handleLangChange);
     window.removeEventListener('login-changed', handleLoginChange);
-  });
+    });
 
+    // Définir les événements émis par ce composant
+    const emit = defineEmits(['pop']);
 
-  var ouvert = true
-  function pop() {
-    const overlay = document.getElementById('myModal');
-    if(ouvert) {
-      overlay.style.display = 'block';
-      ouvert= false;
-      console.log(ouvert);
-    } else if(ouvert=== false) {
-      overlay.style.display = 'none';
-      ouvert = true;
-      console.log(ouvert);
-    }
-  }
+    // Fonction pour émettre l'événement "pop"
+    const pop = () => {
+        emit('pop');
+    };
+
 </script>
+
 <style lang="scss">
     .modal {
         position: fixed; 

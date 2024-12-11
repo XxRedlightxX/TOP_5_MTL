@@ -1,6 +1,6 @@
 <template>
     <router-link 
-        to="/Logo" 
+        to="/" 
         id="logo3Component" 
         :class="{
             'mini': props.size === 0,

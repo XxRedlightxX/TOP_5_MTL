@@ -13,10 +13,8 @@
         </div>
 
         <div class="last"  v-show="props.himself">
-            <router-link to="/Gestion Event" class="router">
-                <v-icon icon="mdi-folder-edit" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Edit this Event' : 'Modifier cet evenement'"/>
-            </router-link>
-            <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Delette this Event' : 'Supprimer cet evenement'"/>
+            <v-icon icon="mdi-folder-edit" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Edit this Event' : 'Modifier cet evenement'" @click="showUp()"/>
+            <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Delette this Event' : 'Supprimer cet evenement'" @click="showDel()"/>
         </div>
 
     </div>
@@ -24,18 +22,28 @@
   
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, defineProps} from "vue";
+    import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
 
 
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
     let actualMode = ref(storageManager.getMode());
-
+    //var isShowUp = ref(false);
     const props = defineProps({
         event: Object, // Boolean type prop
         himself: Boolean, // Boolean type prop
     });
 
+    // Définir les événements émis par ce composant
+    const emit = defineEmits(['popUpdate']);
+
+    const showUp = () => {
+        emit('popUpdate');
+    }
+
+    const showDel = () => {
+        emit('popDelete');
+    }
     //console.log('props : ', props.event)
     const Logout = () => {
         storageManager.setLogin(false);
