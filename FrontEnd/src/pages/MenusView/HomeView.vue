@@ -4,7 +4,7 @@
         <div class="homeContent">
             <IntroText/>
             <NewEvent/><!---->
-            <Contact/>
+            <Contact/>ggg
         </div>
     </div>
 </template>
