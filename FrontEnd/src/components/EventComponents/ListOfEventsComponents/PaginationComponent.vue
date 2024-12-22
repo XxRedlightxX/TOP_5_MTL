@@ -120,11 +120,10 @@
         .active {
           border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
           background: transparent;    
-          color: var(--light);                
-          box-shadow: 5px 5px 10px #0008,
-              10px 6px 15px #0008 inset,
-              -5px -5px 8px #f5f5ff inset,
-              10px 6px 15px #0004 inset;
+          color: var(--light);    
+          
+          box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                        15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);      
         }
       }
     }    

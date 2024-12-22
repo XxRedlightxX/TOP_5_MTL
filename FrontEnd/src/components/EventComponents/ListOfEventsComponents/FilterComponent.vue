@@ -9,10 +9,10 @@
                 
                 
                 <li class="button-wrapper">
-                <button @click="toggleCalendarPopup">
-                    <v-icon icon="mdi-filter-variant " :class="['icon', {'justGlow' : !actualMode}]"/>
-                    {{ actualLang ? "Filter" : "Filtrer"}}
-                </button>
+                  <button @click="toggleCalendarPopup">
+                      <v-icon icon="mdi-filter-variant " :class="['icon', {'justGlow' : !actualMode}]"/>
+                      {{ actualLang ? "Filter" : "Filtrer"}}
+                  </button>
                 </li>
             </ul>
         </div>
@@ -176,7 +176,7 @@
             background: transparent;                
             box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
                         15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
-            color: var(--light);
+            color: var(--graphite06);
           }
   
           &.button-wrapper {
@@ -202,14 +202,9 @@
         }
         .active a {
           background: transparent;                
-          // box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
-          //             15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
-  
-          box-shadow: 5px 5px 10px #0008,
-          10px 6px 15px #0008 inset,
-          -5px -5px 8px #f5f5ff inset,
-          10px 6px 15px #0004 inset;
-          color : var(--light);
+          box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                      15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+          color: var(--graphite06);
         }
       }
     }
@@ -230,9 +225,11 @@
   
           a:hover {
             border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
-            background: transparent;                
-            box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
-                        15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+            background: transparent;
+            box-shadow: 5px 5px 10px #0008,
+              10px 6px 15px #0008 inset,
+              -5px -5px 8px #f5f5ff inset,
+              10px 6px 15px #0004 inset;
             color: var(--light);
             animation: neonGlow 0.5s ease-in-out infinite alternate;
           }
@@ -242,9 +239,11 @@
             button {
               color: var(--light-trans-text);
               filter: brightness(1);
-              background: transparent;                
-              box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
-                          15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+              background: transparent;   
+              box-shadow: 15px 25px 10px #f5f5ff1a,
+                            10px 6px 15px #0008 inset,
+                            -5px -5px 8px #f5f5ff67 inset,
+                            10px 6px 15px #0004 inset;
             
               .icon {
                 color: var(--light-trans-text);
@@ -259,9 +258,7 @@
           }
         }
         .active a {
-          background: transparent;                
-          // box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
-          //             15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+          background: transparent;
   
           box-shadow: 5px 5px 10px #0008,
           10px 6px 15px #0008 inset,

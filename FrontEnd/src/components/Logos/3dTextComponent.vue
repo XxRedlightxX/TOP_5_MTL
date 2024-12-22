@@ -63,10 +63,7 @@
     .dark {
         #text3dComponent{
             .text{
-                color: var(--light-trans-2Shine);
-                // text-shadow: 1px 1px 1px #919191,
-                //         1px 2px 1px #919191,
-                //         1px 3px 1px #919191;
+                color: var(--light);
                 animation: neonGlow 0.5s ease-in-out infinite alternate;
             }
             .shadow {

@@ -127,7 +127,7 @@ const text = "Drop";
     }
     .light {
         #logo3Component{
-            border: 2px solid var(--light-text);
+            border: 2px solid rgba(189,189,188,1); // var(--light-text);
             //box-shadow: 0 0 0 5px rgba(189,189,188,1) ;
 
             .wave {
@@ -144,7 +144,7 @@ const text = "Drop";
     }
     .dark {
         #logo3Component{
-            border: 2px solid rgba(189,189,188,1);
+            border: 2px solid rgba(255, 255, 255, 0.7);
             //box-shadow: 0 0 0 5px var(--light-text);
 
             .wave {
@@ -152,10 +152,10 @@ const text = "Drop";
                 box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
             }
             .wave:before {
-                background: rgba(189,189,188,1);
+                background: rgb(29, 30, 24, 0.6);
             }
             .wave:after{
-                background: rgba(189,189,188,0.5);
+                background: rgb(29, 30, 24, 0.15);
             }
         }
     }
