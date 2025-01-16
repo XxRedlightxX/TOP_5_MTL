@@ -1,208 +1,170 @@
 <template>
-    <div v-if="showCalendarPopup" class="popup-overlay" @click="closePopup">
-        <div class="popup-content" @click.stop>
-        <h3>Select a Date</h3>
-
-        <h3>Search by Season</h3>
-
-        <!-- Season Tags -->
-        <div class="season-tags">
-            <span class="tag spring">Spring</span>
-            <span class="tag summer">Summer</span>
-            <span class="tag fall">Fall</span>
-            <span class="tag winter">Winter</span>
-        </div>
-
-            <!-- Close Button -->
-        <button @click="closePopup">Close</button>
+    <div id="filterPopUp" @click.self="popClosee()">
+        <div class="event-update-form">
+            <form>
+                <h2>{{ actualLang ? "Filter" : "Filtre" }}</h2>
+            </form>
         </div>
     </div>
- </template>
- 
-<script setup >
-    import { defineProps, ref } from "vue";
 
+</template>
+<script setup>
+    import storageManager from "@/JS/LocalStaorageManager";
+    import { ref, onMounted, onUnmounted, defineProps, defineEmits, watch } from "vue";
+
+    let trans = ref(null);
     const props = defineProps({
-        show: Boolean
+        user: Object,
+        toShow: Boolean
     });
-    const showCalendarPopup = ref(props.show)
-const closePopup = () => {
-     showCalendarPopup.value = false
-   } 
+    if(props.toShow == null){
+        trans.value = false
+    }
+    else {
+        trans.value = props.toShow
+    }
+    watch(props.toShow, (newVal, oldVal) => {
+        trans.value = newVal;
+    });
+    let actualLang = ref(storageManager.getLang());
+    let isLogged = ref(storageManager.getLogin());
+
+    const Logout = () => {
+    storageManager.setLogin(false);
+    isLogged.value = storageManager.getLogin();
+    };
+
+    if (actualLang.value === null) {
+    storageManager.setLang(true);
+    actualLang.value = storageManager.getLang();
+    }
+
+    if (isLogged.value === null) {
+    Logout();
+    }
+
+    // Function to handle mode change event
+    const handleLangChange = (event) => {
+    actualLang.value = JSON.parse(event.detail.storage);
+    };
+
+    // Function to handle mode change event
+    const handleLoginChange = (event) => {
+    isLogged.value = JSON.parse(event.detail.storage);
+    };
+
+
+
+    // Add event listener for mode changes
+    onMounted(() => {
+    window.addEventListener('lang-changed', handleLangChange);
+    window.addEventListener('login-changed', handleLoginChange);
+    });
+
+    // Remove event listener when component is unmounted
+    onUnmounted(() => {
+    window.removeEventListener('lang-changed', handleLangChange);
+    window.removeEventListener('login-changed', handleLoginChange);
+    });
+
+    // Définir les événements émis par ce composant
+    const emit = defineEmits(['popClosee']);
+
+    // Fonction pour émettre l'événement "popClosee"
+    const popClosee = () => {
+        trans.value = false
+        emit('popClosee');
+    };
+
 </script>
- 
+
 <style lang="scss">
+    #filterPopUp {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%; 
+        height: 100%; 
+        overflow: hidden; 
+        z-index: 100000; 
+        background-color: rgba(0,0,0,0.4);
+        //background-color: #8989893e;
 
-$button-color: #c5a743;
-$hover-color: #725e34;
-$shadow-color: rgba(24, 26, 20, 0.6);
-
-$overlay-bg-color: rgba(0, 0, 0, 0.5);
-$content-bg-color: #fff;
-$padding: 20px;
-$border-radius: 8px;
-$shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-$popup-width: 300px;
-$max-width: 90%;
-$z-index-overlay: 1000;
-    /* SCSS Variables */
-$overlay-bg-color: rgba(0, 0, 0, 0.5);
-$content-bg-color: #fff;
-$button-bg-color: #2e3031;
-$padding: 20px;
-$border-radius: 8px;
-$shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-$tag-padding: 5px 10px;
-$tag-radius: 12px;
-$popup-width: 300px;
-$max-width: 90%;
-$z-index-overlay: 1000;
-
-  /* Popup Overlay */
-.popup-overlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-display: flex;
-align-items: center;
-justify-content: center;
-z-index: $z-index-overlay;
-
-/* Popup Content */
-.popup-content {
-    padding: $padding;
-    border-radius: $border-radius;
-    box-shadow: $shadow;
-    width: $popup-width;
-    max-width: $max-width;
-    text-align: center;
-
-    h3 {
-        margin-top: 0;
-    }
-
-    /* Season Tags */
-    .season-tags {
         display: flex;
-        gap: 10px;
+        flex-direction: row;
         justify-content: center;
-        margin: 10px 0;
-        
-        .tag {
-            padding: $tag-padding;
-            border-radius: $tag-radius;
-            color: black;
-            border-color: #2e3031;
-            background-color:#ff9900;
-            font-size: 0.85rem;
-            font-weight: bold;
-            text-transform: uppercase;
+        align-content: center;
+
+        .nop {
+            display: none;
         }
-    }
-
-    button {
-    margin-top: $padding;
-    padding: 10px;
-    border: none;
-    border-radius: $border-radius;
-    cursor: pointer;
-    }
-}
-} 
-
-.light {
-    /* Popup Overlay */
-    .popup-overlay {
-      background: $overlay-bg-color;
-  
-      /* Popup Content */
-      .popup-content {
-        background: $content-bg-color;
-  
-  
-        /* Season Tags */
-        .season-tags {
+        .event-update-form {
+            display: block;
+            width: 50%;
+            height: 60%;
+            align-self: center;
+            //padding: 1.5rem;
+            background-color: var(--light05);
+            border-radius: 42% 58% 37% 63% / 40% 43% 57% 60%;
         
-          .tag {
-            color: black;
-            border-color: #2e3031;
-            background-color:#ff9900;
-        
-            &.spring { 
+            h2 {
+                text-align: center;
+                margin-bottom: 1rem;
+                color: #333;
+                font-size: 1.8rem;
             }
-        
-            &.summer {
-              background-color: transparent;
-            }
-        
-            &.fall {
-              background-color: transparent;
-            }
-        
-            &.winter {
-              background-color: transparent;
-            }
-          }
-        }
-  
-        button {
-          background-color: $button-bg-color;
-          color: #fff;
-          transition: background-color 0.3s ease;
-      
-          &:hover {
-            background-color: darken($button-bg-color, 10%);
-          }
-        }
-      }
-    }
-}
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
 
-.dark {
-    /* Popup Overlay */
-    .popup-overlay {
-        background: $overlay-bg-color;
-
-        /* Popup Content */
-        .popup-content {
-            background: $content-bg-color;
-
-            /* Season Tags */
-            .season-tags {
-                .tag {
+                &:hover,
+                &:focus {
                     color: black;
-                    border-color: #2e3031;
-                    background-color:#ff9900;
-                
-                    &.spring { 
-                    }
-                
-                    &.summer {
-                        background-color: transparent;
-                    }
-                
-                    &.fall {
-                        background-color: transparent;
-                    }
-                
-                    &.winter {
-                        background-color: transparent;
-                    }
+                    text-decoration: none;
+                    cursor: pointer;
                 }
             }
-
-            button {
-                background-color: $button-bg-color;
-                color: #fff;
-                transition: background-color 0.3s ease;
+            form {
+                margin-top: 7%;
+        
+                .form-actions {
+                    display: flex;
+                    justify-content: center;
+                    gap: 25%;
+                    margin-top: 1.5rem;
+                    //border: 2px solid red;
             
-                &:hover {
-                    background-color: darken($button-bg-color, 10%);
+                    button {
+                        padding: 0.8rem 1.5rem;
+                        font-size: 1rem;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        transition: all 0.3s;
+            
+                        &.btn-submit {
+                            background-color: #5a9;
+                            color: #fff;
+                
+                            &:hover {
+                                background-color: #4a8;
+                            }
+                        }
+            
+                        &.btn-cancel {
+                            background-color: #f44336;
+                            color: #fff;
+                
+                            &:hover {
+                                background-color: #d32f2f;
+                            }
+                        }
+                    }
                 }
             }
         }
-    }  
-}
+    }
+    
 </style>

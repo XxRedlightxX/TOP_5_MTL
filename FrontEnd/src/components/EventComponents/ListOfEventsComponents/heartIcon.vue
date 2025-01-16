@@ -9,7 +9,9 @@
         }"
         :title="actualLang ? 'Like' : 'Aimer'"
     >
-        <div class="heart"></div>
+        <input type="checkbox" name="liked" id="liked">
+        <label class="heart" for="liked"></label>
+        <!-- <div class="heart" for="liked"></div> -->
     </div>
 </template>
 
@@ -41,20 +43,33 @@
     onUnmounted(() => {
         window.removeEventListener('lang-changed', handleLangChange);
     });
+    
 </script>
 
 
 <style lang="scss">
+.dark {
+    #heartIcon{
+
+        .heart:hover {
+            animation: neonGlow 0.5s ease-in-out infinite alternate;
+        }
+    }
+}
     #heartIcon{
         //overflow: hidden;
         position: relative;
         border-radius: 50%;
-        border: 2px solid white;
+        //border: 2px solid white;
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
         padding-top: 2%;
+
+        #liked {
+            display: none;
+        }
         .heart {
             position: absolute;
             aspect-ratio: 1;
@@ -65,8 +80,8 @@
             background: rgba(189,189,188,1);
             z-index: 10;
         }
-        .heart:hover {
-            background: rgba(189,189,188,0.7);
+        .heart:hover, #liked:checked ~ .heart {
+            background: var(--light-text);
         }
         /* fallback until better support for mask-border */
         @supports not (-webkit-mask-box-image: var(--_m)) { 
@@ -95,7 +110,7 @@
         }
         
         .heart:before:hover {
-            background: var(--light)
+            background: var(--light-text)
         }
         .heart:after{
             border-radius: 40%;

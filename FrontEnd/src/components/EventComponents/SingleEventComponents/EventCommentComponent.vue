@@ -14,7 +14,7 @@
           </div>
           <div class="commen" v-for="comment in getCommentsForPerson(personne.id)" :key="comment.id">
             <p>{{ comment.text }}</p>
-            <Ratings :rating="comment.rating"/>
+            <Ratings :rating="comment.rating" :Rate="false"/>
           </div>
         </div>
       </div>

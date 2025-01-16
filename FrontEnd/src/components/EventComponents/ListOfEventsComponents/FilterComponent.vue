@@ -17,7 +17,7 @@
             </ul>
         </div>
 
-        <FilterPopUpComponent :show="showCalendarPopup"/>
+        <FilterPopUpComponent v-show="showCalendarPopup" @popClosee="toggleCalendarPopup()" :toShow="showCalendarPopup"/>
 
    </div>
  </template>
@@ -50,7 +50,7 @@
        LocalStorageManager.setMode(false);
        actualMode.value = false;
      }
-     else if (index ==2 || index == 0){
+     else if (index ==2){
        LocalStorageManager.setMode(true);
        actualMode.value = true;
      }
@@ -68,13 +68,17 @@
         eventType.value = 1;
        }
    }
+
+   watch(showCalendarPopup, (newVal, oldVal) => {
+    showCalendarPopup.value = newVal;
+    });
    // Correction du watcher
    watch(actualMode, (newVal, oldVal) => {
      if(newVal == false){
         eventType.value = 1;
      }
     else{
-        eventType.value = 0;
+        eventType.value = 2;
     }
    });
    
