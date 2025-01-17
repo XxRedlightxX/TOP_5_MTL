@@ -4,6 +4,7 @@
              voluptatibus nostrum aliquid soluta deleniti distinctio aspernatur numquam laborum
               necessitatibus laboriosam temporibus ratione commodi optio atque inventore. Neque, quo.
         </p>
+        <hr>
     </div>
 </template>
 
