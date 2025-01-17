@@ -100,7 +100,6 @@ const text = "Drop";
     .medium {
         width: 200px;
         height: 200px;
-        border: 2px solid red;
         #text3dComponent {
             width: 100%;
             padding: 15% 10%;
@@ -122,6 +121,23 @@ const text = "Drop";
             .text{
                 font-size: 7rem;
                 font-weight: 500;
+            }
+        }
+    }
+    @media screen and (max-width: 1025px) {
+        .mini {
+            width: 70%;
+            height: auto;
+            aspect-ratio: 1/1;
+
+            #text3dComponent {
+                width: 100%;
+                padding: 15% 10% 0% 10%;
+                //border: 2px solid red;
+                .text{
+                    font-size: 18vw;
+                    font-weight: 300;
+                }
             }
         }
     }

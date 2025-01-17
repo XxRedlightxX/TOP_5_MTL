@@ -26,8 +26,6 @@
 
         .text{
             text-transform: uppercase;
-            // font-size: 3rem;
-            // font-weight: 700;
         }
     }
 
