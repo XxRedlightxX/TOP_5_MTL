@@ -39,7 +39,7 @@
     </div>
 </template>
 
-<script src="../../JS/HomeCarousellScript"></script>
+<script src="../../JS/HomeCarousellScript.js" ></script>
 
 
 
