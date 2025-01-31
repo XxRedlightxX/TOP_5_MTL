@@ -1,10 +1,11 @@
 <template>
     <swiper
-        :spaceBetween="30"
+        :spaceBetween="0"
         :pagination="{
         clickable: true,
         }"
         :modules="modules"
+        :autoplay="{ delay: 5000, disableOnInteraction: false }"
         class="mySwiper"
         id="carousellPhoneSwiper"
     >
@@ -28,13 +29,13 @@
     import { Swiper, SwiperSlide } from 'swiper/vue';
     import 'swiper/css'; // Import Swiper styles
     import 'swiper/css/pagination';
-    import { Pagination } from 'swiper/modules'; // Import required modules
+    import { Pagination, Autoplay } from 'swiper/modules'; // Import required modules
 
     const imgUrl1 = "https://picsum.photos/1894/800";
     const imgUrl2 = "https://picsum.photos/1894/796";
     const imgUrl3 = "https://picsum.photos/1894/805";
     const imgUrl4 = "https://picsum.photos/1894/790";
-    const modules = [Pagination];
+    const modules = [Pagination, Autoplay];
 </script>
 
 <style lang="scss">
@@ -48,4 +49,18 @@
         }
     }
   }
+.light {
+    #carousellPhoneSwiper {
+        .swiper-pagination-bullet-active {
+            background-color: var(--graphite)
+        }
+    }
+}
+.dark {
+    #carousellPhoneSwiper {
+        .swiper-pagination-bullet-active {
+            background-color: var(--light);
+        }
+    }
+}
 </style>

@@ -23,12 +23,9 @@
 <style lang="scss">
   #carousellPhoneComponent {
     //border: 2px solid rgb(251, 255, 0);
-    height: 80svh;
+    height: 90svh;
     width: 100%;
     padding-top: 65px;
-    margin-bottom: 65px;
-    background: linear-gradient(to bottom, rgba(32,31,31,255) 9%, rgba(29, 30, 24, 0.23) 10%);
-    //background-color: rgba(29, 30, 24, 0.23);
     #carousellPhoneSwiper {
         height: 40%;
     }
@@ -45,7 +42,7 @@
             flex-direction: column;
             justify-content: space-around;
             width: 96%;
-            margin: auto;
+            margin: 3% auto 0% auto;
             h3 {
                 font-size: 3rem;
             }
@@ -59,18 +56,84 @@
             display: flex;
             flex-direction: column;
             width: 96%;
-            margin: auto;
+            margin: 2% auto 3% auto;
 
             button {
                 //border: 2px solid red;
                 width: 100%;
                 margin: 2% auto;
                 font-size: 1.5rem;
-                background-color: #ccc;
+                padding: 10px 0%;
             }
         }
     }
 
+  }
+  .light {
+    #carousellPhoneComponent {
+        //background-color: rgba(29, 30, 24, 0.118);
+        background: linear-gradient(to bottom, #efefef, #ccc);
+        .reste {
+            .carousellPhoneSwipperInfos{
+                h3 {
+                    color: var(--graphite);
+                }
+                p {
+                    color: var(--graphite06);
+                }
+
+            }
+            .carousellPhoneSwipperBtn {
+
+                button {
+                    color: var(--graphite);
+
+                    background-color: rgba(114, 114, 114, 0);
+                    border: 2px solid rgb(255, 255, 255);
+                }
+                button:hover, button:active {
+                    color: var(--graphite06);
+                    background-color: rgba(114, 114, 114, 0);
+                    border: 2px solid rgb(255, 255, 255);
+                }
+            }
+        }
+
+    }
+  }
+  .dark {
+    #carousellPhoneComponent {
+        //background-color: rgb(29, 30, 24);
+        background: linear-gradient(to bottom, #ccc, rgb(29, 30, 24));
+
+        .reste {
+            .carousellPhoneSwipperInfos{
+                h3 {
+                    color: var(--light-text);
+                }
+                p {
+                    color: var(--light-trans-2Shine);
+                }
+
+            }
+            .carousellPhoneSwipperBtn {
+
+                button {
+                    color: var(--light-text);
+
+                    background-color: rgba(114, 114, 114, 0);
+                    border: 2px solid rgb(255, 255, 255);
+                }
+                button:hover, button:active {
+                    color: var(--light-trans-text);
+
+                    background-color: rgba(114, 114, 114, 0);
+                    border: 2px solid rgb(255, 255, 255);
+                }
+            }
+        }
+
+    }
   }
   @media screen and (max-width: 1025px){
         #carousellPhoneComponent {

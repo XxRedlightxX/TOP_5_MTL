@@ -1,14 +1,6 @@
 #introTextComponent {
-    width: 75%;
-    margin: auto;
     background: transparent;
     border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
-
-    p {
-        font-size: 1.6rem;
-        margin: 3% 3%;
-        padding: 8% 2%;
-    }
 }
 
 .light {
@@ -43,6 +35,30 @@
             border-color: var(--light);
             background-color: var(--light);
             animation: neonGlowBox 0.5s ease-in-out infinite alternate;
+        }
+    }
+}
+@media screen and (min-width: 1026px){
+    #introTextComponent {
+        width: 75%;
+        margin: auto;
+    
+        p {
+            font-size: 1.6rem;
+            margin: 3% 3%;
+            padding: 8% 2%;
+        }
+    }
+}
+@media screen and (max-width: 1025px){
+    #introTextComponent {
+        width: 90%;
+        margin: 0% auto 10% auto;
+    
+        p {
+            font-size: 1rem;
+            margin: 3% 3%;
+            padding: 18% 12%;
         }
     }
 }

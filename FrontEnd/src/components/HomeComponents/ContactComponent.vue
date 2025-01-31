@@ -12,6 +12,7 @@
             <div class="left">
 
                 <div>
+                    <h4>{{ actualLang ? 'Address' : 'Adresse' }}</h4>
                     <div class="iconContainer">
                         <v-icon icon="mdi-map-marker" class="icon"/>
                     </div>
@@ -23,6 +24,7 @@
                 </div>
 
                 <div>
+                    <h4>{{ actualLang ? 'Phone' : 'Telephone' }}</h4>
                     <div class="iconContainer">
                         <v-icon icon="mdi-phone" class="icon"/>
                     </div>
@@ -33,6 +35,7 @@
                 </div>
 
                 <div>
+                    <h4>Email</h4>
                     <div class="iconContainer">
                         <v-icon icon="mdi-email" class="icon"/>
                     </div>

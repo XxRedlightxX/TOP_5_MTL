@@ -1,7 +1,4 @@
 #contactComponent {
-    padding: 2% 0%;
-    width: 75%;
-    margin: 0% auto 3% auto;
 
     .header {
         text-align: center;
@@ -11,7 +8,6 @@
             margin-bottom: 1%;
         }
         p {
-            width: 80%;
             margin: auto;
             color: black;
         }
@@ -22,16 +18,8 @@
 
         .left {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            padding-left: 10%;
 
             div {
-                width: 100%;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
 
                 .iconContainer {
                     flex: 1;
@@ -48,10 +36,6 @@
 
                 div {
                     flex: 9;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-start;
-                    padding-left: 5%;
                     p {
                         color: black;
                     }
@@ -61,10 +45,6 @@
 
         .right {
             flex: 1;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            padding-right: 10%;
             position: relative;
 
             form {
@@ -107,6 +87,9 @@
             .left {
     
                 div {
+                    h4 {
+                         color: var(--graphite);
+                     }
                     .iconContainer {             
                         box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
                                     15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
@@ -166,6 +149,9 @@
             .left {
     
                 div {
+                    h4 {
+                         color: var(--light-text);
+                     }
                     .iconContainer {
                         box-shadow: 15px 25px 10px #f5f5ff1a,
                             10px 6px 15px #0008 inset,
@@ -211,4 +197,144 @@
             }
         }
     }
+}
+@media screen and (min-width: 1026px){
+    #contactComponent {
+        padding: 2% 0%;
+        width: 75%;
+        margin: 0% auto 3% auto;
+        .header {
+            margin-bottom: 3%;
+            p {
+                width: 80%;;
+            }
+        }
+        .content {
+            .left {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                padding-left: 10%;
+    
+                div {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+    
+                    h4 {
+                        display: none;
+                    }
+                    .iconContainer {
+                        padding-left: 0%;
+                           
+                    }
+    
+                    div {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        padding-left: 5%;
+                        h4 {
+                            display: block;
+                        }
+                    }
+                }
+            }
+            .right {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                padding-right: 10%;
+    
+                form {
+                    width: 100%;
+                    padding: 1% 5%;
+                    background: transparent;
+                    
+    
+                    h3 {
+                        margin-bottom: 2%;
+                    }
+                    .v-input {
+                        margin-bottom: 2%;
+                    }
+    
+                    .btn {
+                        width: 50%;
+                        margin: auto;
+                        padding: 2% 5%;
+                        border-radius: 5px;
+                    }
+                    
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 1025px){
+    #contactComponent {
+        padding: 2% 0%;
+        width: 100%;
+        margin: 3% auto 3% auto;
+        
+        .header {
+            margin-bottom: 5%;
+            h3 {
+                font-size: 1.7rem;
+            }
+            p {
+                width: 90%;
+                padding: 0px;
+            }
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+    
+            .left {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                padding-left: 10%;
+    
+                h4 {
+                    display: block;
+                    margin-bottom: 2%;
+                }
+                div {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+    
+                    .iconContainer {
+                        padding-left: 0%;
+
+                           
+                    }
+    
+                    div {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding-left: 0%;
+
+                        h4 {
+                            display: none;
+                        }
+                    }
+                }
+            }
+            .right {
+                margin-top: 2%;
+                padding-right: 0px;
+                form {
+                    
+                    padding: 1% 0%;
+                }
+            }
+        }
+    }
+
 }

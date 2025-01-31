@@ -100,18 +100,18 @@
         var scrollTop = window.scrollY || document.documentElement.scrollTop;
         console.log("scroll : ", scrollTop)
         if (scrollTop > lastScrollTop) {
-            document.querySelector('#menuComponent').style.top = "-80px"; // Hide the navbar on scroll down
-            if(width.value <=1025){
-                let newHeight = height.value + 80;
-                document.querySelector('.smallMenu').style.height = newHeight+"px";
-                document.querySelector('.icons').style.marginBottom = "0px"; 
+            if(width.value >=1025){
+                document.querySelector('#menuComponent').style.top = "-80px"; // Hide the navbar on scroll down
+                // let newHeight = height.value + 80;
+                // document.querySelector('.smallMenu').style.height = newHeight+"px";
+                // document.querySelector('.icons').style.marginBottom = "0px"; 
             }
 
         } else {
-            document.querySelector('#menuComponent').style.top = "0px"; // Show the navbar on scroll up
-            if(width.value <=1025){
-                document.querySelector('.smallMenu').style.height = "107%"; 
-                document.querySelector('.icons').style.marginBottom = "65px"; 
+            if(width.value >=1025){
+                document.querySelector('#menuComponent').style.top = "0px"; // Show the navbar on scroll up
+                // document.querySelector('.smallMenu').style.height = "107%"; 
+                // document.querySelector('.icons').style.marginBottom = "65px"; 
             }
         }
         lastScrollTop = scrollTop;
