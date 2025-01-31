@@ -6,10 +6,11 @@
         }"
         :modules="modules"
         :autoplay="{ delay: 5000, disableOnInteraction: false }"
+        @slideChange="phoneEventSwiped"
         class="mySwiper"
         id="carousellPhoneSwiper"
     >
-        <swiper-slide>
+        <!-- <swiper-slide>
             <img :src="imgUrl1" alt="#">
         </swiper-slide>
         <swiper-slide>
@@ -20,6 +21,10 @@
         </swiper-slide>
         <swiper-slide>
             <img :src="imgUrl4" alt="#">
+        </swiper-slide> -->
+
+        <swiper-slide v-for="(item, index) in props.events" :key="index">
+            <img :src="item.image" alt="#">
         </swiper-slide>
     </swiper>
 </template>
@@ -30,12 +35,22 @@
     import 'swiper/css'; // Import Swiper styles
     import 'swiper/css/pagination';
     import { Pagination, Autoplay } from 'swiper/modules'; // Import required modules
+    import { defineProps, defineEmits} from "vue";
 
     const imgUrl1 = "https://picsum.photos/1894/800";
     const imgUrl2 = "https://picsum.photos/1894/796";
     const imgUrl3 = "https://picsum.photos/1894/805";
     const imgUrl4 = "https://picsum.photos/1894/790";
     const modules = [Pagination, Autoplay];
+
+    const props = defineProps({
+        events: Object
+    })
+
+    const emit = defineEmits(['phoneEventSwiped']);
+    const phoneEventSwiped = () => {
+        emit('phoneEventSwiped');
+    };
 </script>
 
 <style lang="scss">
