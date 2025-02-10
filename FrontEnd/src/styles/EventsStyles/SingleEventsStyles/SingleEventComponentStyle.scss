@@ -92,3 +92,34 @@
     }
   } 
 }
+
+@media screen and (max-width: 1025px) {
+
+  #singleEventComponent{
+    
+    .place-overview {
+      width: 100%;
+      border-radius: 16px;
+  
+      .overview {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      
+        &__image img {
+          width: 100%;
+          border-radius: 8px;
+        }
+      
+        &__details {
+          padding-top: 20px;
+      
+          &__description {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+          }
+        }
+      }
+    }
+  }
+}

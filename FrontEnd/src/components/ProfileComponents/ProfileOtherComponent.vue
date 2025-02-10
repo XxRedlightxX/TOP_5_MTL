@@ -65,7 +65,16 @@
             left: 27%;
         }
     }
-
+    @media screen and (min-width: 1025.1px) {
+        #profileOtherComponent {
+            display: none;
+        }
+    }
+    @media screen and (max-width: 1025px) {
+        #profileOtherComponent {
+            display: none;
+        }
+    }
     .light {
         #profileOtherComponent {
             

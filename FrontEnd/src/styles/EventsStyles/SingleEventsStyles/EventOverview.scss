@@ -8,9 +8,7 @@
     align-items: center;
     //overflow-x: hidden;
     //border-radius: 49% 51% 53% 47% / 43% 33% 67% 57% ;
-    h1 {
-       margin-bottom: 8%; 
-    }
+
 
     .info {
         display: flex;
@@ -25,7 +23,16 @@
         }
     }
 }
-
+@media screen and (min-width: 1025.1px) {
+    h1 {
+        margin-bottom: 8%; 
+     }
+}
+@media screen and (max-width: 1025px) {
+    h1 {
+        margin-bottom: 2%; 
+     }
+}
 .light {
     #EventOverview{
         background: transparent;

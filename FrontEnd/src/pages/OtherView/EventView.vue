@@ -9,6 +9,7 @@
                     <CommentSelf/>
                 </div>
                 <PageCommentaire/>
+                <CommentSelf/>
             </div>
         </div>
         <PageMap></PageMap>
