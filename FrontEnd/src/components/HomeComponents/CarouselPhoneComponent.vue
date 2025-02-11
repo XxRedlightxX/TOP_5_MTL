@@ -146,8 +146,8 @@
   .light {
     #carousellPhoneComponent {
         //background-color: rgba(29, 30, 24, 0.118);
-        background: linear-gradient(to bottom, #efefef, #ccc);
-        //background: linear-gradient(to bottom, #ccc, #efefef);
+        //background: linear-gradient(to bottom, #efefef, #ccc);
+        background: linear-gradient(to bottom, #ccc, #efefef);
         .reste {
             .carousellPhoneSwipperInfos{
                 h3 {
@@ -179,8 +179,8 @@
   .dark {
     #carousellPhoneComponent {
         //background-color: rgb(29, 30, 24);
-        background: linear-gradient(to bottom, #ccc, rgb(29, 30, 24));
-        //background: linear-gradient(to bottom, rgb(29, 30, 24), #cbcbcb);
+        //background: linear-gradient(to bottom, #ccc, rgb(29, 30, 24));
+        background: linear-gradient(to bottom, rgb(29, 30, 24), #cbcbcb);
         
 
         .reste {
