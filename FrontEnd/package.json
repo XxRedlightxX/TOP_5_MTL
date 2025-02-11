@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
+    "bootstrap": "^5.3.3",
+    "bootstrap-vue": "^2.23.1",
     "core-js": "^3.37.1",
     "roboto-fontface": "*",
     "swiper": "^11.1.14",

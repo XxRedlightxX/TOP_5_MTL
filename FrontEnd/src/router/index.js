@@ -2,6 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import 'vuetify/dist/vuetify.css';
 
+
 const routes = [
   {
     path: '/',
