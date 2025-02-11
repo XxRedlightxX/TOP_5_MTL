@@ -10,7 +10,7 @@
           class="rat"
         />
 
-        <v-rating v-elses
+        <v-rating v-else
           half-increments
           :length="5"
           :size="32"
@@ -33,9 +33,10 @@
         GiveRate.value = false;
     }
     else {
-        GiveRate.value = true;
+        GiveRate.value = props.Rate;
     }
 
+    console.log("valllll : " , GiveRate.value)
     let actualMode = ref(storageManager.getMode());
 
     if (actualMode.value === null) {

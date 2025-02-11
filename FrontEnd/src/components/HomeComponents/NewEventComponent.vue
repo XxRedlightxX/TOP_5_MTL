@@ -26,7 +26,7 @@
 
       </div>
       <p>{{ newEvent[indexSlide].desc }}</p>
-      <Ratings :rating="newEvent[indexSlide].rating"/>
+      <Ratings :rating="newEvent[indexSlide].rating" :Rate="false"/>
     </div>
   </div>
 </template>

@@ -14,21 +14,16 @@
           </div>
           <div class="commen" v-for="comment in getCommentsForPerson(personne.id)" :key="comment.id">
             <p>{{ comment.text }}</p>
-            <Ratings :rating="comment.rating"/>
+            <Ratings :rating="comment.rating" :Rate="false"/>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="myComment">
-      <CommentSelf/>
     </div>
   </div>
 </template>
 
 <script>
 import Ratings from "../../RatingComponent.vue";
-import CommentSelf from "./EventCommentSelfComponent.vue"
 import storageManager from "@/JS/LocalStaorageManager"
 import { ref } from 'vue';
 
@@ -59,7 +54,6 @@ export default {
   },    
   components: {
     Ratings,
-    CommentSelf,
   },
   methods: {
     getCommentsForPerson(personId) {

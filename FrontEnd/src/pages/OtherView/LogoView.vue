@@ -1,22 +1,19 @@
 <template>
-    <div id="Logo">
-        <Logo/>
+    <div id="test">
+        <CarousellPhone/>
     </div>
 </template>
 
 <script setup>
-    import Logo from "../../components/JustLogo.vue"
+    import CarousellPhone from "@/components/HomeComponents/CarouselPhoneComponent.vue"
 </script>
 
 
 <style lang="scss">
-    #Logo {
-        padding: 5% 0% 8% 0%;
+    #test {
         border: 2px solid red;
-
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
+        margin-top: 3%;
+        width: 450px;
+        margin: auto;
     }
 </style>

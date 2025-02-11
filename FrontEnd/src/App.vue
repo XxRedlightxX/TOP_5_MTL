@@ -17,7 +17,6 @@
   import storageManager from "@/JS/LocalStaorageManager"
   import { ref, onMounted, onUnmounted} from "vue";
 
-
 // Register the component globally
   const isMultiSelection = ref(true);
   const dateValue = ref(new Date("08/18/2022"));

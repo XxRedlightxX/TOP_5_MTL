@@ -1,152 +1,92 @@
 #gestionProfileView {
+    width: 75%;
+    margin: 4% auto 4% auto;
+    padding: 3% 1% 0% 1%;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    padding-top: 5%;
-    box-sizing: border-box;
-   
+    .titles{
+        font-size: 2rem;
+        margin-bottom: 3%;
+    }
 
-    .photo-profile {
-        position: relative;
+    #avatarUploader {
+        width: 15%;
+    }
+    .forms {
+        width: 100%;
+        //border: 2px solid red;
         display: flex;
-        justify-content: center;
-        align-items: center;
-    
-        .test {
-            border-radius: 50%;
-            height: 200px;
-            width: 200px;
-            border: 2px solid black;
-            position: relative;
-            overflow: hidden; /* Ensure the overlay fits inside the circular image */
-            
-            & img {
-                border-radius: 50%;
+        flex-direction: row;
+        gap: 5%;
+        margin-top: 3%;
+
+        .leftForm {
+            //border: 2px solid red;
+            padding: 5% 0%;
+
+            width: 50%;
+
+            .sub {
                 width: 100%;
-                height: 100%;
-                object-fit: cover; /* Ensures the image covers the area of the circle */
+                display: flex;
+                flex-direction: row;   
+                justify-content: space-between;
+                gap: 5%;
+                .v-text-field {
+                    width: 50%;
+                }
             }
-    
-            .overlay {
-                position: absolute;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.5); 
-                color: #f1f1f1;
-                width: 100%; 
-                height: 20%; /* Make the overlay fill the entire area */
-                opacity: 0; /* Start hidden */
-                color: white;
-                font-size: 16px;
-                line-height: 30px; 
-                text-align: center;
-                transition: opacity 0.5s ease;
+            
+            .v-text-field {
+                margin-bottom: 3%;
             }
-    
-            &:hover .overlay {
-                opacity: 1; /* Show the overlay on hover */
+        }
+        .rightForm {
+            //border: 2px solid red;
+            padding: 5% 0%;
+
+            width: 50%;
+
+            .v-text-field {
+                margin-bottom: 3%;
             }
         }
     }
-    
-    form {
-     
-        max-width: 1480px;
-        margin: auto;
-    
-        display: flex;
-        flex-direction: column; 
-        gap: 16px; 
-        justify-content: center;
-        align-items: center;
-    
-        div {
-            display: flex;
-            flex-direction: column; 
-            align-items: flex-start; 
-            gap: 8px; 
-            width: 60%;
-        }
-    
-        label {
-            font-size: 16px;
-            text-align: left; 
-        }
-        .v-input {
-            margin-bottom: 2%;
-        }
-    
-        input[type="text"] {
-            width: 100%; 
-            padding: 12px 20px;
-            box-sizing: border-box;
-            color: #0000;
-            border-radius: 4px;
-            background-color: #fff;
-        }
+    #waterButtonComponent {
+        width: 17%;
+    }
+}
 
-        .row_input {
-            display: wrap;
-            
-            display:inline-block;
-            
-            div {
-                padding: 7px;
+.light {
+    #gestionProfileView {
+        .titles{
+            color: var(--graphite);
+        }
+        .forms {
+            .leftForm {
+                color: var(--graphite08);
             }
-          
-            & div {
-                 float:left;
-                width: 40%;
-                
-                
+            .rightForm {
+                color: var(--graphite08);
             }
-
-            & div:last-child{
-                width: 60%;
-            }
-
-           
-           
-            
-        }
-        .button_confirmer {
-            display: block;
-           
-            width: 60%;
-            text-align: right;
-           
-            
-          
-           
-        
-    
-        input[type="submit"] {
-            background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
-            color: #fff;
-            text-align: center;
-          font-size:x-large;
-          padding: 10px;
-          border-radius: 10px;
-
-         
-          
-        }
-
-        & input[type="submit"]:first-of-type {
-            background: transparent;
-            border-style: solid;
-            }
-
-        & input[type="submit"]:last-of-type {
-          margin: 0 0 13px 10px;
-         
-          }
-
-       
-
-
-        input[type="submit"]:hover {
-            background: linear-gradient(to bottom, var(--graphite015), var(--graphite06));
         }
     }
 }
-    
-    
+.dark {
+    #gestionProfileView {
+        .titles{
+            color: var(--light);
+        }
+        .forms {
+            .leftForm {
+                color: var(--light-trans-text);
+            }
+            .rightForm {
+                color: var(--light-trans-text);
+            }
+        }
+    }
 }

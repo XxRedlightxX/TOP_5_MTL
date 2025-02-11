@@ -1,8 +1,8 @@
 <template>
     <div id="allEventView">
-        <h1> All Event View</h1>
         <ListcategorieEvent></ListcategorieEvent>
-        <ListEvent></ListEvent>
+        <!-- <ListEvent></ListEvent> -->
+        <UpComingEvent/>
         <AlListEvent></AlListEvent>
     </div>
 </template>
@@ -10,6 +10,7 @@
 <script setup>
      import ListcategorieEvent from "../../components/EventComponents/ListOfEventsComponents/EventFilterComponent.vue"
      import ListEvent from "../../components/EventComponents/ListOfEventsComponents/EventListComponent.vue"
+     import UpComingEvent from '../../components/EventComponents/ListOfEventsComponents/UpComingEventComponent.vue'
      import AlListEvent from "../../components/EventComponents/ListOfEventsComponents/AllEventsComponent.vue"
 </script>
 

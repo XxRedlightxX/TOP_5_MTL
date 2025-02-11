@@ -12,6 +12,7 @@
             <div class="left">
 
                 <div>
+                    <h4>{{ actualLang ? 'Address' : 'Adresse' }}</h4>
                     <div class="iconContainer">
                         <v-icon icon="mdi-map-marker" class="icon"/>
                     </div>
@@ -23,6 +24,7 @@
                 </div>
 
                 <div>
+                    <h4>{{ actualLang ? 'Phone' : 'Telephone' }}</h4>
                     <div class="iconContainer">
                         <v-icon icon="mdi-phone" class="icon"/>
                     </div>
@@ -33,6 +35,7 @@
                 </div>
 
                 <div>
+                    <h4>Email</h4>
                     <div class="iconContainer">
                         <v-icon icon="mdi-email" class="icon"/>
                     </div>
@@ -72,7 +75,8 @@
 
                     <v-textarea :label="actualLang ? 'Type your Message' : 'Entrez votre message'"></v-textarea>
 
-                    <input type="button" :value="actualLang ? 'Send' : 'Envoyer'">
+                    <!-- <input type="button" :value="actualLang ? 'Send' : 'Envoyer'"> -->
+                    <waterButton :text="actualLang ? 'Send' : 'Envoyer'" :type="true" class="btn"/>
                 </form>
             </div>
         </div>
@@ -83,6 +87,7 @@
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager"
     import { ref, onMounted, onUnmounted} from "vue";
+    import waterButton from "../WaterButtonComponent.vue"
 
     let actualLang = ref(storageManager.getLang());
 

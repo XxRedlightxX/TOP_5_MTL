@@ -3,7 +3,7 @@
     width: 65px;
     height: 65px;
     text-align: center;
-    border-radius: 50%;
+    //border-radius: 50%;
     position: fixed;
     bottom: 5%;
     right: 2%;
@@ -72,12 +72,17 @@
 
 .dark {
     #languageSetter {
-        box-shadow: 
-            5px 5px 10px #0008,
-            10px 6px 15px #0008 inset,
-            -5px -5px 8px #f5f5ff inset,
-            10px 6px 15px #0004 inset;
+        // box-shadow: 
+        //     5px 5px 10px #0008,
+        //     10px 6px 15px #0008 inset,
+        //     -5px -5px 8px #f5f5ff inset,
+        //     10px 6px 15px #0004 inset;
 
+        box-shadow: 5px 5px 10px #f5f5ff32,
+                10px 6px 15px #0008 inset,
+                -5px -5px 8px #f5f5ff67 inset,
+                10px 6px 15px #0004 inset;
+        border: none;
         p {
             color: var(--light);       
             animation: neonGlow 0.5s ease-in-out infinite alternate;

@@ -3,9 +3,10 @@
         <div class="content">
             <form action="#" method="post">
                 <v-textarea :label="actualLang ? 'Type your Message' : 'Entrez votre message'"></v-textarea>
-                <Ratings :rating="0" :Rate="true"/>
-
-                <waterButton :text="actualLang ? 'Send' : 'Envoyer'" :type="true"/>
+                <div class="reste">
+                    <Ratings :rating="0" :Rate="true"/>
+                    <waterButton :text="actualLang ? 'Send' : 'Envoyer'" :type="true"/>
+                </div>
             </form>
         </div>
     </div>

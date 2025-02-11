@@ -8,7 +8,7 @@
                 <img :src="item.image">
             </div>
             <div class="content">
-                <div :class="index == 0 ? 'title' : 'lostTitle'">{{ item.title }}</div>
+                <div :class="index == 0 ? 'titlee' : 'lostTitle'">{{ item.title }}</div>
 
                     <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
                         <router-link to="/Event" class="btn roundBorderSmall" @click="setEvent(item)">Voir l'evenement</router-link>
@@ -39,7 +39,7 @@
     </div>
 </template>
 
-<script src="../../JS/HomeCarousellScript"></script>
+<script src="../../JS/HomeCarousellScript.js" ></script>
 
 
 

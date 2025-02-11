@@ -13,6 +13,7 @@
     import { ref, onMounted, onUnmounted, watch} from "vue";
   
     let isLogged = ref(storageManager.getLogin());
+    //let theOrganisator = ref(storageManager.getLogUser());
 
     if (isLogged.value === null) {
         storageManager.setLogin(false);
@@ -21,6 +22,7 @@
 
     const handleLoginChange = (event) => {
         isLogged.value = JSON.parse(event.detail.storage);
+        console.log('login page view is : ' + isLogged.value );
     };
 
     onMounted(() => {
@@ -31,6 +33,8 @@
     onUnmounted(() => {
         window.removeEventListener('login-changed', handleLoginChange);
     });
+    console.log('login page view is : ' + isLogged.value );
+    //console.log('user page view is : ' + theOrganisator.value );
 </script>
 
 <style src="../../styles/MenusViewStyles/Login-ProfileView.scss"></style>

@@ -2,7 +2,6 @@
     font-family: Tahoma;
     font-size: 1rem;
     width: 75%;
-    margin: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -164,7 +163,7 @@ opacity: 0;
 .light {
     #Log-Sign-Bett {
         color: #222;
-    
+        margin: 0% auto 1% auto;
         article {
     
             .container {
@@ -197,13 +196,12 @@ opacity: 0;
 }
 .dark {
     #Log-Sign-Bett {
-        
-    
+        margin: 0% auto 3% auto;
         article {
     
             .container {
                 box-shadow: 0 15px 30px rgba(0, 0, 0, .2),
-                    0 10px 10px rgba(0, 0, 0, .2);
+                    0 10px 10px rgba(255, 255, 255, 0.2);
     
                 .overlay-container {
     

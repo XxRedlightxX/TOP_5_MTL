@@ -8,7 +8,7 @@
             </div>
             
             <div class="ratings">
-                <Ratings :rating="event.rating"/>
+                <Ratings :rating="event.rating" :Rate="false"/>
             </div>
             <h3><strong>{{ actualLang ? 'Location : ': 'Emplacement : ' }}</strong> Normandie, France</h3>
             <h3><strong>{{ actualLang ? 'Open from : ': 'Ouvert de : ' }}</strong> 9h - 19h, {{ actualLang ? 'everydays': 'tous les jours' }}</h3>
