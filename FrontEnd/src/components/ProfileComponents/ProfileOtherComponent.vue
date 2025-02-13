@@ -67,7 +67,7 @@
     }
     @media screen and (min-width: 1025.1px) {
         #profileOtherComponent {
-            display: none;
+            display: block;
         }
     }
     @media screen and (max-width: 1025px) {

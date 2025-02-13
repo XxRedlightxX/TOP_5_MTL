@@ -14,6 +14,7 @@
         padding: 2% 1% 2% 2%;
     
         .first {
+            //border: 2px solid red;
             width: 30%;
             display: flex;
             flex-direction: column;
@@ -26,6 +27,7 @@
         }
     
         .middle {
+            //border: 2px solid red;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -34,12 +36,13 @@
         }
     
         .last {
+            //border: 2px solid red;
             width: 15%;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
             align-items: center;
-            margin-top: 50%;
+            margin-top: 0%;
 
             .router {
                 width: 100%;

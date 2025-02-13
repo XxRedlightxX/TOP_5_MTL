@@ -24,10 +24,11 @@
             gap: 2%;
     
             #profileHeaderComponent {
-                flex: 3;
+                flex: 4;
             }
             #profileOtherComponent {
                 flex: 2;
+                //border: 2px solid red;
             }
         }
         #profileListEventComponent {
