@@ -27,6 +27,9 @@
           <SignIn/>
 
         </div>
+        
+        <LoginSignUpPhone class="containerPhone"/>
+
       </article>
     </div>
   </template>
@@ -37,6 +40,7 @@
     import SignUp from "./SignUpComponent.vue";
     import SignIn from "./SignInComponent.vue";
     import waterButton from "../WaterButtonComponent.vue"
+    import LoginSignUpPhone from "./Login-SignUpComponentPhone.vue";
 
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
     const user = {

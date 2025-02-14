@@ -1,11 +1,5 @@
 .sign-in {
     display: flex;
-    align-items: center;
-    justify-content: space-around;
-    flex-direction: column;
-    padding: 5% 3%;
-    border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;
     
     text-align: center;
 
@@ -37,9 +31,7 @@
     .forgot:hover {
       cursor: pointer;
     }
-    #waterButtonComponent {
-      width: 40%;
-    }
+
     button {
       border-radius: 5px;
       //border: 1px solid #009345;
@@ -66,6 +58,40 @@
     }
   }
 
+@media screen and (min-width: 1025.1px) {
+  .sign-in {
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    padding: 5% 3%;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    #waterButtonComponent {
+      width: 40%;
+      margin: auto;
+    }
+  }
+}
+
+@media screen and (max-width: 1025px) {
+  .sign-in {
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    padding: 5% 0%;
+    gap: 20%;
+    #waterButtonComponent {
+      width: 70%;
+      margin: 5% auto 0% auto;
+    }
+    h2 {
+      margin-bottom: 5%;
+    }
+    .v-text-field {
+      margin-bottom: 8%;
+    }
+  }
+}
   .light {
     .sign-in {
       .v-field__overlay {

@@ -3,9 +3,6 @@
     align-items: center;
     justify-content: space-around;
     flex-direction: column;
-    padding: 5% 3%;
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
     
     text-align: center;
 
@@ -29,10 +26,6 @@
         .v-text-field {
             width: 50%;
         }
-    }    
-    #waterButtonComponent {
-      margin-top: 2%;
-      width: 40%;
     }
     button {
       border-radius: 5px;
@@ -53,7 +46,39 @@
       }
     }
   }
+  @media screen and (min-width: 1025.1px) {
+    .sign-up {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-direction: column;
+      padding: 5% 3%;
+      border-top-right-radius: 16px;
+      border-bottom-right-radius: 16px;
 
+      #waterButtonComponent {
+        width: 40%;
+        margin: 2% auto 0% auto;
+      }
+    }
+  }
+  
+  @media screen and (max-width: 1025px) {
+    .sign-up {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-direction: column;
+      padding: 5% 0%;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+      
+      #waterButtonComponent {
+        width: 70%;
+        margin: 5% auto 0% auto;
+      }
+    }
+  }
   .light {
     .sign-up {
       .v-field__overlay {
