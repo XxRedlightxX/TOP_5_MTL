@@ -2,7 +2,8 @@
     <div id="singleEventComponent">
         <div class="place-overview">
             <header class="header">
-                <h1 class="header__title">Aperçu du Lieu : {{event.title}}</h1>
+                <h1 class="header__title">{{event.title}}</h1>
+                <br>
             </header>
 
             <section class="overview">
