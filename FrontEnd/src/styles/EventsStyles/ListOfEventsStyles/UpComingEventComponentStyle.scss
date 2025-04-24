@@ -9,7 +9,6 @@
   align-items: center;
 
     #left, #right {
-      font-size: 50px;
       font-weight: bolder;
       cursor: pointer;
       font-family: monospace;
@@ -23,7 +22,6 @@
   .carousel {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: calc((100% / 3) - 12px);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     gap: 16px;
@@ -160,14 +158,40 @@
   align-items: center;
 }
 
-@media screen and (max-width: 900px) {
-  .upComingEvent .carousel {
-    grid-auto-columns: calc((100% / 2) - 9px);
+@media screen and (min-width: 1025.1px){
+  .upComingEvent {
+    #left, #right {
+      font-size: 100px;
+      font-weight: lighter;
+    }
+    .carousel {
+      grid-auto-columns: calc((100% / 3) - 9px);
+    }
   }
 }
+@media screen and (max-width: 1025px){
+  .upComingEvent {
+    #left, #right {
+      font-size: 70px;
+    }
+    .carousel {
+      grid-auto-columns: calc((100% / 2) - 9px);
+    }
+  } 
+}
+// @media screen and (max-width: 900px) {
+//   .upComingEvent .carousel {
+//     grid-auto-columns: calc((100% / 2) - 9px);
+//   }
+// }
 
 @media screen and (max-width: 600px) {
-  .upComingEvent .carousel {
-    grid-auto-columns: 100%;
+  .upComingEvent {
+    #left, #right {
+      font-size: 70px;
+    }
+    .carousel {
+      grid-auto-columns: calc((100% / 1) - 9px);
+    }
   }
 }

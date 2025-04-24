@@ -5,7 +5,6 @@
       <router-link to="/Event" v-for="(event, index) in UpComingEvents" :key="index" class="card"  @click="setEvent(event)">
         <div class="img">
           <img :src="event.image" alt="img" draggable="false" />
-          <heart :size="0"/>
         </div>
         <h2>{{ event.Title }}</h2>
         <div class="eventDescriptionInfos">
@@ -27,7 +26,6 @@
 <script setup>
   import { ref, onMounted, onBeforeUnmount } from 'vue';
   import storageManager from "../../../JS/LocalStaorageManager";
-  import Heart from "./heartIcon.vue";
 
   const UpComingEvents = ref([
     { Title: 'Blanche Pearson', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1895/795" },

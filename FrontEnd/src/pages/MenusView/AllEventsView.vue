@@ -1,8 +1,10 @@
 <template>
     <div id="allEventView">
         <ListcategorieEvent></ListcategorieEvent>
-        <!-- <ListEvent></ListEvent> -->
-        <UpComingEvent/>
+        <div>
+            <h3>Up coming events</h3>
+            <UpComingEvent/>
+        </div>
         <AlListEvent></AlListEvent>
     </div>
 </template>

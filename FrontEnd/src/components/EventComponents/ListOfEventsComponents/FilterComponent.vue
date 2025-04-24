@@ -275,4 +275,46 @@
     }
   }
 }
+@media screen and (min-width: 1025.1px){
+  #AllEventComponent {
+    .button-container {
+
+      ul {
+    
+        li {
+          display: block;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1025px){
+  #AllEventComponent {
+    .button-container {
+
+      ul {
+    
+        li {
+          display: block;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 600px){
+  #AllEventComponent {
+    .button-container {
+
+      ul {
+    
+        li {
+          display: none;
+        }
+        li:last-child {
+          display: block;
+        }
+      }
+    }
+  }
+}
 </style>

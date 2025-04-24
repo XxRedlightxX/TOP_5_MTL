@@ -4,11 +4,6 @@
     <div class="events">
       <router-link to="/Event" class="events_card glass" v-for="(item, index) in newEvent" :key="index" @click="setEvent(item)">
         <div class="event_card_photo">
-            <!-- Overlay heart icon -->
-            <span class="overlay">
-                <heartIcon :size="0" class="heart-icon"/>
-            </span>
-
             <!-- Main image -->
             <img :src="item.image" class="product-thumb" alt="Event Image">
         </div>
@@ -34,7 +29,6 @@
 
 import { onMounted, ref, watch, onUnmounted } from 'vue'; 
 import LocalStorageManager from "@/JS/LocalStaorageManager"
-import heartIcon from './heartIcon.vue';
 import PaginationComponent from './PaginationComponent.vue';
 import FilterComponent from './FilterComponent.vue';
 
@@ -107,5 +101,4 @@ import FilterComponent from './FilterComponent.vue';
 
 </script>
 
-<style src="../../../styles/EventsStyles/EventAllComponentStyle.scss">
-  </style>
+<style src="../../../styles/EventsStyles/EventAllComponentStyle.scss"></style>

@@ -133,15 +133,25 @@
     align-items: center;
   }
   
+  @media screen and (min-width: 1025.1px){
+    .eventFilter .carousel {
+      grid-auto-columns: calc((100% / 6) - 12px);
+    }
+  }
+  @media screen and (max-width: 1025px){
+    .eventFilter .carousel {
+      grid-auto-columns: calc((100% / 4) - 9px);
+    }
+  }
   @media screen and (max-width: 900px) {
     .eventFilter .carousel {
-      grid-auto-columns: calc((100% / 2) - 9px);
+      grid-auto-columns: calc((100% / 3) - 9px);
     }
   }
   
   @media screen and (max-width: 600px) {
     .eventFilter .carousel {
-      grid-auto-columns: 100%;
+      grid-auto-columns: calc((100% / 2) - 9px);
     }
   }
   
