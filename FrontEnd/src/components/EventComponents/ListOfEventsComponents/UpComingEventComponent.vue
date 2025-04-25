@@ -6,15 +6,15 @@
         <div class="img">
           <img :src="event.image" alt="img" draggable="false" />
         </div>
-        <h2>{{ event.Title }}</h2>
+        <h2>{{ event.title }}</h2>
         <div class="eventDescriptionInfos">
           <div class="d">
             <v-icon icon="mdi-map-marker " :class="['icon', {'justGlow' : !actualMode}]"/>
-            {{ event.location }}
+            montreal, {{ event.title }}
           </div>
           <div class="d">
             <v-icon icon="mdi-clock-outline " :class="['icon', {'justGlow' : !actualMode}]"/>
-            {{ event.time }}
+            12 h
           </div>
         </div>
       </router-link>
@@ -27,14 +27,31 @@
   import { ref, onMounted, onBeforeUnmount } from 'vue';
   import storageManager from "../../../JS/LocalStaorageManager";
 
-  const UpComingEvents = ref([
-    { Title: 'Blanche Pearson', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1895/795" },
-    { Title: 'Joenas Brauers', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1891/791" },
-    { Title: 'Lariach French', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1892/792" },
-    { Title: 'James Khosravi', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1894/794" },
-    { Title: 'Kristina Zasiadko', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1896/796" },
-    { Title: 'Donald Horton', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1899/799" }
-  ]);
+  //const UpComingEvents = ref([
+  const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
+  const UpComingEvents = [
+    { image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3 },
+    { image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 5 },
+    { image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 1 },
+    { image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 2.5 },
+    { image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 3 },
+    { image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 4 },
+    { image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3.5 },
+    { image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 1.5 },
+    { image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 4.5 }
+  ];
+
+  const UpComingEventsNuit = [
+    {image : "https://picsum.photos/1895/795", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
+    {image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
+    {image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
+    {image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
+    {image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
+    {image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
+    {image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
+    {image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
+    {image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 }
+  ];
 
   const wrapper = ref(null);
   const carousel = ref(null);
