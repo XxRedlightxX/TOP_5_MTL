@@ -131,6 +131,7 @@ const text = "Drop";
             width: 70%;
             height: auto;
             aspect-ratio: 1/1;
+            //padding: 100% auto;
 
             #text3dComponent {
                 width: 100%;
