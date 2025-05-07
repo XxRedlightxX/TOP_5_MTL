@@ -2,7 +2,7 @@
   <div class="upComingEvent" ref="wrapper">
     <span id="left" @click="scroll('left')"><</span>
     <ul class="carousel" ref="carousel">
-      <router-link to="/Event" v-for="(event, index) in UpComingEvents" :key="index" class="card"  @click="setEvent(event)">
+      <router-link to="/Event" v-for="(event, index) in  eventsss" :key="index" class="card"  @click="setEvent(event)">
         <div class="img">
           <img :src="event.image" alt="img" draggable="false" />
         </div>
@@ -24,12 +24,12 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, onBeforeUnmount } from 'vue';
-  import storageManager from "../../../JS/LocalStaorageManager";
+  import { ref, onMounted, onBeforeUnmount, onUnmounted, watch } from 'vue';
+  import LocalStorageManager from "../../../JS/LocalStaorageManager";
 
-  //const UpComingEvents = ref([
+  
   const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
-  const UpComingEvents = [
+  const UpComingEvents = ref([
     { image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3 },
     { image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 5 },
     { image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 1 },
@@ -39,9 +39,9 @@
     { image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3.5 },
     { image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 1.5 },
     { image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 4.5 }
-  ];
+  ]);
 
-  const UpComingEventsNuit = [
+  const UpComingEventsNuit = ref([
     {image : "https://picsum.photos/1895/795", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
     {image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
     {image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
@@ -51,7 +51,11 @@
     {image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
     {image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
     {image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 }
-  ];
+  ]);
+
+  const actualMode = ref(LocalStorageManager.getMode());
+  const eventsss = ref([]);
+
 
   const wrapper = ref(null);
   const carousel = ref(null);
@@ -60,6 +64,27 @@
   const startScrollLeft = ref(0);
   const timeoutId = ref(null);
   const isAutoPlay = ref(true);
+
+  if (actualMode.value == null){
+       LocalStorageManager.setMode(true);
+       actualMode.value = LocalStorageManager.getMode();
+       setEvents();
+   }
+   // Correction du watcher
+   watch(actualMode, () => {
+    setEvents();
+  });
+
+   
+   const handleModeChange = (event) => {
+       actualMode.value = JSON.parse(event.detail.storage);
+       //setEvents();
+   };
+
+   const setEvents = () => {
+      eventsss.value = actualMode.value ? UpComingEvents.value : UpComingEventsNuit.value;
+    };
+
 
   const initializeCarousel = () => {
     const firstCardWidth = carousel.value.querySelector('.card').offsetWidth;
@@ -129,11 +154,10 @@
     }, 2500);
   };
   const setEvent = (value) => {
-    storageManager.setEvent(value);
+    LocalStorageManager.setEvent(value);
     console.log("Event value: ", value);
   }
 
-  onMounted(initializeCarousel);
 
   onBeforeUnmount(() => {
     carousel.value.removeEventListener('mousedown', dragStart);
@@ -141,6 +165,17 @@
     document.removeEventListener('mouseup', dragStop);
     carousel.value.removeEventListener('scroll', infiniteScroll);
   });
+    // Add event listener for mode changes
+  onMounted(async () => {
+      await setEvents(); // Assure que les events sont chargés
+      initializeCarousel();
+      window.addEventListener('mode-changed', handleModeChange);
+  });
+ 
+   // Remove event listener when component is unmounted
+   onUnmounted(() => {
+       window.removeEventListener('mode-changed', handleModeChange);
+   });
 </script>
 
 <style src="../../../styles/EventsStyles//ListOfEventsStyles/UpComingEventComponentStyle.scss"></style>

@@ -9,15 +9,14 @@
 <script setup>
     import SignIn_SignUp from "../../components/Login-SignUpComponents/Login-SignUpComponentButBetter.vue"
     import Profile from "../../components/ProfileComponents/ProfileComponent.vue"
-    import storageManager from "@/JS/LocalStaorageManager";
+    import LocalStorageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted, watch} from "vue";
   
-    let isLogged = ref(storageManager.getLogin());
-    //let theOrganisator = ref(storageManager.getLogUser());
+    let isLogged = ref(LocalStorageManager.getLogin());
 
     if (isLogged.value === null) {
-        storageManager.setLogin(false);
-        isLogged.value = storageManager.getLogin();
+        LocalStorageManager.setLogin(false);
+        isLogged.value = LocalStorageManager.getLogin();
     }
 
     const handleLoginChange = (event) => {

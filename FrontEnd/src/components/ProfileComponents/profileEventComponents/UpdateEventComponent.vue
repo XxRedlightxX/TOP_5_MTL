@@ -40,7 +40,7 @@
                     <label for="event-hosts">Co-hosts</label>
                     <input type="text" id="event-hosts" placeholder="Add other hosts (comma-separated)">
                     <div class="form-group_images">
-                        <img src="../../../assets/bob.jpg"> <img src="../../../assets/bob.jpg" alt=""> <img src="../../../assets/bob.jpg"> <img src="../../../assets/bob.jpg" alt="">
+                        <!-- <img :src="imgUrl"> <img :src="imgUrl" alt=""> <img :src="imgUrl"> -->
                     </div>
                 </div>
             
@@ -57,6 +57,7 @@
     import storageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
     import waterButton from "@/components/WaterButtonComponent.vue";
+    //import imgUrl from "../../../assets/bob.jpg";
 
     const props = defineProps({
         user: Object

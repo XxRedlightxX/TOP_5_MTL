@@ -14,21 +14,20 @@
   import Menu from "./components/MenuComponent.vue";
   import Footer from "./components/FooterComponent.vue";
   import Language from "./components/LanguageSetterComponent.vue";
-  import storageManager from "@/JS/LocalStaorageManager"
+  import LocalStorageManager from "@/JS/LocalStaorageManager"
   import { ref, onMounted, onUnmounted} from "vue";
 
-// Register the component globally
+  // Register the component globally
   const isMultiSelection = ref(true);
   const dateValue = ref(new Date("08/18/2022"));
   const minDate = ref(new Date("08/08/2022"));
   const maxDate = ref(new Date("08/26/2022"));
 
- 
-  let actualMode = ref(storageManager.getMode());
+  let actualMode = ref(LocalStorageManager.getMode());
 
   if (actualMode.value === null) {
-    storageManager.setMode(true);
-    actualMode.value = storageManager.getMode();
+    LocalStorageManager.setMode(true);
+    actualMode.value = LocalStorageManager.getMode();
   }
 
   // Function to handle mode change event
@@ -47,6 +46,4 @@
   });
 </script>
 
-<style src="./styles/settings.scss">
-
-</style>
+<style src="./styles/settings.scss"></style>
