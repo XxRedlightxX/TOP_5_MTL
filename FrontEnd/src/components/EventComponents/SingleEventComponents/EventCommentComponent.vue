@@ -39,10 +39,10 @@ export default {
     return {
       actualLang,
       persons: [
-        { id: 1, name: 'Alice', image: "/src/assets/HomeCarousel/profil.jpeg" },
-        { id: 2, name: 'Bob', image: "/src/assets/bob.jpg" },
-        { id: 3, name: 'Michelle', image: "/src/assets/HomeCarousel/profil.jpeg" },
-        { id: 4, name: 'Nick', image: "/src/assets/bob.jpg" },
+        { id: 1, name: 'Alice', image: "https://picsum.photos/id/64/200/300" },
+        { id: 2, name: 'Bob', image: "https://picsum.photos/id/375/200/300" },
+        { id: 3, name: 'Michelle', image: "https://picsum.photos/id/65/200/300" },
+        { id: 4, name: 'Nick', image: "https://picsum.photos/id/237/200/300" },
       ],
       comments: [
         { id: 1, personId: 1, text: 'Très bel endroit pour se retrouver dans les journées chaudes de l’été.', rating: 3 },

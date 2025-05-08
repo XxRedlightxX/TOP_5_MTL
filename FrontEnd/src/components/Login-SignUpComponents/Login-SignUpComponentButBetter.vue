@@ -93,6 +93,4 @@
     });
 </script>
   
-  
-
 <style src="../../styles/Login-SignUpStyles/Login-SignUpComponentStyle.scss"></style>

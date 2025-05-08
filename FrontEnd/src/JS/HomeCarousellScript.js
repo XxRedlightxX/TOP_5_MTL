@@ -32,7 +32,7 @@ const currentSlider = [
     rating: 5,
   },
   {
-    image: "https://picsum.photos/1894/794",
+    image: "https://picsum.photos/1892/792",
     image2: "https://picsum.photos/289/428",
     title: "Jardin Botanique",
     desc: text,

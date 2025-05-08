@@ -1,1 +1,0 @@
-import{_ as e}from"./ProfileComponent-DTKrx-on.js";import{c as t,e as o,o as r}from"./index-B-rwo15h.js";import"./VAvatar-DQlWvgMo.js";import"./WaterButtonComponent-mWTAVRZ5.js";const a={id:"eventOrganisatorView"},f={__name:"EventOrganisatorView",setup(s){return(i,n)=>(r(),t("div",a,[o(e,{himself:!1})]))}};export{f as default};

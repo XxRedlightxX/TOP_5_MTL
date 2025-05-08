@@ -40,7 +40,7 @@
                     <label for="event-hosts">Co-hosts</label>
                     <input type="text" id="event-hosts" placeholder="Add other hosts (comma-separated)">
                     <div class="form-group_images">
-                        <!-- <img :src="imgUrl"> <img :src="imgUrl" alt=""> <img :src="imgUrl"> -->
+                        <img src="https://picsum.photos/id/375/200/300"> <img src="https://picsum.photos/id/375/200/300" alt=""> <img src="https://picsum.photos/id/375/200/300">
                     </div>
                 </div>
             
