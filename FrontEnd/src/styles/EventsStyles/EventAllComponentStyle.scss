@@ -5,7 +5,6 @@
   .events {
     display: grid;
     align-items: center;
-    gap: 5%;
   
     .events_card {
       border-radius: 20px;
@@ -92,6 +91,9 @@
       grid-template-columns: auto auto auto;
       width: 96%;
       margin: 5% auto 3% auto;
+      padding: 0% 3%;
+      gap: 2%;
+      //border: 2px solid blue;
     }
   }
 }
@@ -103,6 +105,8 @@
     .events {
       grid-template-columns: auto auto;
       width: 96%;
+      padding: 0% 3%;
+      gap: 2%;
       //border: 2px solid red;
       margin: 10% auto 10% auto;
     }
@@ -116,6 +120,8 @@
     .events {
       grid-template-columns: auto;
       width: 96%;
+      padding: 0% 9%;
+      gap: 5%;
       //border: 2px solid red;
       margin: 30% auto 30% auto;
     }

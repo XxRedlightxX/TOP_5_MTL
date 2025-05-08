@@ -4,15 +4,18 @@
     .eventFilter {
         margin: 0% auto 2% auto;
         width: 75%;
+        //border: 2px solid red;
     }
     .upComingEvent{
         margin: auto;
         width: 75%;
+        //border: 2px solid red;
     }
     #AllEventComponent {
         margin: auto;
         width: 75%;
         padding-bottom: 2%;
+        //border: 2px solid red;
     }
 }
 .light {
@@ -38,7 +41,11 @@
             width: 75%;
         }
         h3 {
-            font-size: 3rem;
+            font-size: 2rem;
+            text-align: left;
+            margin: auto;
+            width: 75%;
+            padding-left: 3.5%;
             margin-top: 3%;
         }
         .upComingEvent{

@@ -1,0 +1,1 @@
+import{_ as e}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{c as o,b as t,o as s}from"./index-B-rwo15h.js";const n={},c={id:"errorView"};function i(a,r){return s(),o("div",c,r[0]||(r[0]=[t("h1",null," Error View",-1)]))}const f=e(n,[["render",i]]);export{f as default};
