@@ -3,7 +3,7 @@
         <v-avatar size="180">
             <img
                 alt="John"
-                :src="img"
+                src="https://picsum.photos/id/375/200/300"
             />
         </v-avatar>
         <input type="file" name="file" id="avatarFile" @change="onFileChange" />

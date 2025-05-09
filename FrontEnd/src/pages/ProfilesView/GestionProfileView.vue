@@ -106,7 +106,7 @@
 
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
     const user = {
-        avatar: "/src/assets/p1.jpg",
+        avatar: "https://picsum.photos/id/375/200/300",
         username: "Debrazer",
         name: "Wakanda",
         fisrtName: "Dede",
