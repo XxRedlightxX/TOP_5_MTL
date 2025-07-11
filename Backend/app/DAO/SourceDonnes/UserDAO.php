@@ -10,6 +10,7 @@ interface UserDAO extends InterfaceDAO {
     public function save(array $userData);
     public function update(int $userid, array $data): ?User;
     public function getByEmail(string $email);
+    public function addActivity(int $userId, array $activityData);
 
 
 }

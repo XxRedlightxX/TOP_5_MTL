@@ -3,6 +3,7 @@
 namespace App\Service;
 use App\Models\User;
 use App\DAO\SourceDonnes\UserDAO;
+use App\Models\Activite;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
@@ -22,17 +23,21 @@ class UserService {
         return $this->daoUser->save($user);
     }
 
-  public function deleteUser(int $userId)
-{
-    /*$user = $this->daoUser->getById($userId);
+    public function deleteUser(int $userId){
+        $this->daoUser->delete($userId);
+    }
+
+     public function searchUserbyEmail(string $userEmail){
+       return  $this->daoUser->getByEmail($userEmail);
+    }
+
+    public function updateUser(int $userId, $user): ?User{
+        return $this->daoUser->update($userId, $user);
+    }
     
-    if (!$user) {
-        throw new ModelNotFoundException("User not found {$userId}");
-    }*/
-
-    $this->daoUser->delete($userId);
-
-}
+    public function createActivityUser(int $userId, $activity): Activite {
+        return $this->daoUser->addActivity($userId, $activity);
+    }
     
     
     

@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var list<string>
      */
 
-    protected $table = 'User';
+    protected $table = 'Utilisateur';
     protected $fillable = [
         'name',
         'email',
@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function activites()
     {
-        return $this->hasMany(Activite::class);
+        return $this->hasMany(Activite::class, 'utilisateur_id');
     }
 
     public function avis()

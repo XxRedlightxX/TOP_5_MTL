@@ -27,6 +27,17 @@ class UserController extends Controller
         }
     }
 
+    public function getUserByEmail(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        $user = $this->userService->searchUserbyEmail($validated['email']);
+
+        return response()->json(['data' => $user], 200);
+    }
+
     public function addUser(Request $request)
     {
         try {
@@ -43,6 +54,24 @@ class UserController extends Controller
         }
     }
 
+    public function modifyUser(int $userId, Request $request) {
+        try {
+            $validatedInputUser = $request->validate([
+                'name' =>  'required|string|max:255',
+                'email' => 'required|string|max:255',
+                'password' => 'required|string|max:255'
+            ]);
+
+            $userValidated = $this->userService->updateUser($userId, $validatedInputUser);
+            return response()->json($userValidated, 202);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(),500);
+        }
+
+
+    }
+    
+
    public function deleteUser(int $userId)
     {
         try {
@@ -54,5 +83,38 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+
+    public function addActivityUser(Request $request, int $userId)
+    {
+        $validated = $request->validate([
+            'titre' => 'required|string|max:255',
+            'description' => 'required|string',
+            'date' => 'required|date',
+            'lieu' => 'required|string|max:255',
+            'statut_journee' => 'required|in:JOUR,NUIT', 
+            'saison_id' => 'required|exists:saison,id',
+            'image_data' => 'nullable'
+        ]);
+
+        
+        $activity = $this->userService->createActivityUser($userId, $validated);
+
+        return response()->json([
+            'message' => 'Activity created successfully',
+            'data' => $activity
+        ], 201);
+    }
+
+
+    public function index(User $user) {
+        try {
+            $workoutSessions = $user->activites()->with('avis')->get();
+            return response()->json( $workoutSessions, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 
 }

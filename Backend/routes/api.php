@@ -5,7 +5,16 @@ use App\Http\Controllers\UserController;
 
 Route::get("/user",[UserController::class, 'getUserList']);
 
+Route::get('/user/search', [UserController::class, 'getUserByEmail']);
+
+
+// routes/api.php
+Route::get('/utilisateur/{user}/activites', [UserController::class, 'index']);
 
 Route::post("/user",[UserController::class, 'addUser']);
+
+Route::put('/user/{userId}', [UserController::class, 'modifyUser']);
+
+Route::post("/user/{userId}/activite",[UserController::class, 'addActivityUser']);
 
 Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);

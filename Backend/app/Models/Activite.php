@@ -11,7 +11,7 @@ class Activite extends Model
      protected $fillable = [
         'titre', 'description', 'date', 'lieu',
         'nombre_likes', 'statut_journee', 'image_data',
-        'User_id', 'saison_id'
+        'utilisateur_id', 'saison_id'
     ];
 
     public function User()
