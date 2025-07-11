@@ -38,7 +38,8 @@ class ConversationDAOImpl implements ConversationDAO {
     /**
      * @inheritDoc
      */
-    public function save(array $entity) {
+    public function save(array $conversationData) {
+        return Conversation::create( $conversationData);
     }
 
     /**

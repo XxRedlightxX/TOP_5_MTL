@@ -24,4 +24,24 @@ class ConversationController extends Controller
             return response()->json($e->getMessage(),500);
         }
     }
+
+    public function sendMessage(Request $request)
+    {
+        $validated = $request->validate([
+            'expediteur_id' => 'required|exists:utilisateur,id',
+            'destinataire_id' => 'required|exists:utilisateur,id|different:expediteur_id',
+            'contenu' => 'required|string|max:1000',
+        ]);
+
+        $message = $this->ConversationService->sendMessage(
+            $validated['expediteur_id'],
+            $validated['destinataire_id'],
+            $validated['contenu']
+        );
+
+        return response()->json([
+            'message' => 'Message envoyé avec succès',
+            'data' => $message
+        ], 201);
+    }
 }

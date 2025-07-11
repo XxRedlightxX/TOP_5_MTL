@@ -26,3 +26,7 @@ Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);
 
 
 Route::get('/messagerie/conversation/{userA}/{userB}', [ConversationController::class, 'conversation']);
+
+
+Route::post('/messagerie/conversation', [ConversationController::class, 'sendMessage']);
+
