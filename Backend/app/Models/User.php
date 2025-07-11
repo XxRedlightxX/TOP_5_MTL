@@ -17,11 +17,16 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
+    protected $table = 'User';
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
+
+     
+     
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,4 +50,47 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    public function activites()
+    {
+        return $this->hasMany(Activite::class);
+    }
+
+    public function avis()
+    {
+        return $this->hasMany(Avis::class);
+    }
+
+    public function favoris()
+    {
+        return $this->belongsToMany(Activite::class, 'favori', 'User_id', 'activite_id');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function messagesEnvoyes()
+    {
+        return $this->hasMany(Conversation::class, 'expediteur_id');
+    }
+
+    public function messagesRecus()
+    {
+        return $this->hasMany(Conversation::class, 'destinataire_id');
+    }
+
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'followed_id')->withTimestamps();
+    }
+
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'followed_id', 'follower_id')->withTimestamps();
+    }
+
 }
