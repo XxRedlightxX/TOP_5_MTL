@@ -72,7 +72,6 @@ class UserDAOImpl implements UserDAO {
         $activity = Activite::create($activityData);
 
         return $activity;
-        
-
+    
      }
 }

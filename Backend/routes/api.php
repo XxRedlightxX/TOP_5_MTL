@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActiviteController;
 use App\Http\Controllers\ConversationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -22,7 +23,7 @@ Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);
 
 
 
-
+Route::get('/activite/search', [ActiviteController::class, 'getActivityByDayTime']);
 
 
 Route::get('/messagerie/conversation/{userA}/{userB}', [ConversationController::class, 'conversation']);
