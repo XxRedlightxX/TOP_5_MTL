@@ -25,6 +25,10 @@ Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);
 
 Route::get('/activite/search', [ActiviteController::class, 'getActivityByDayTime']);
 
+Route::get('/activite/search', [ActiviteController::class, 'getActivityBySeason']);
+
+Route::get('/activite/search', [ActiviteController::class, 'getActivitybyType']);
+
 
 Route::get('/messagerie/conversation/{userA}/{userB}', [ConversationController::class, 'conversation']);
 

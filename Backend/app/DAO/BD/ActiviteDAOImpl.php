@@ -57,7 +57,7 @@ class ActiviteDAOImpl implements ActiviteDAO {
      */
     public function getActivityBySeason(string $nomSaison) {
 
-        return  Activite::whereHas('season', function ($query) 
+        return  Activite::whereHas('saison', function ($query) 
         use ($nomSaison) {
             $query->where('statut', $nomSaison);
         })->get();
@@ -68,7 +68,7 @@ class ActiviteDAOImpl implements ActiviteDAO {
     public function getActivityByType(string $activiteType) {
         return Activite::whereHas('types', function ($query) 
         use ($activiteType) {
-            $query->where('nom', $activiteType);
+            $query->where('nom', 'LIKE', "%{$activiteType}%");
         })->get();
     }
 

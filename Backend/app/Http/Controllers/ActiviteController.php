@@ -16,29 +16,34 @@ class ActiviteController extends Controller
     }
 
    public function getActivityByDayTime(Request $request)
-{
-    try {
+    {
         $validated = $request->validate([
-            'daytime' => 'required|string', // correction : 'saison' doit être une string ici, pas une règle 'saison' à moins qu’elle n’existe en tant que règle personnalisée
+            'daytime' => 'required|string', 
+        ]);
+        $activiteSaison = $this->userService->getActivitiesByDaytime($validated['daytime']);
+        return response()->json($activiteSaison);
+    }
+
+    public function getActivitybyType(Request $request) {
+        $validated =$request->validate([
+            'type' => 'required|string', 
         ]);
 
-        $activiteSaison = $this->userService->getActivitiesByDaytime($validated['daytime']);
+        $activiteType = $this->userService->getActivitiesByType($validated['type']);
+        return response()->json(  $activiteType);
 
-        return response()->json($activiteSaison);
-
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return response()->json([
-            'message' => 'Erreur de validation',
-            'errors' => $e->errors(),
-        ], 422);
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'message' => 'Une erreur est survenue lors de la récupération des activités.',
-            'error' => $e->getMessage(),
-        ], 500);
     }
-}
+    
+    public function getActivityBySeason(Request $request) {
+        $validated =$request->validate([
+            'season' => 'required|string', 
+        ]);
+
+        $activiteSaison = $this->userService->getActivitiesBySeason($validated['season']);
+        return response()->json($activiteSaison);
+    }
+
+
 
 
 
