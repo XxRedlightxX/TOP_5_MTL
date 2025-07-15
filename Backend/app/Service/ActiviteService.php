@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\DAO\SourceDonnes\ActiviteDAO;
 use App\Models\Activite;
+use Exception;
 use Illuminate\Validation\ValidationException;
 
 class ActiviteService {
@@ -13,6 +14,21 @@ class ActiviteService {
     public function __construct(ActiviteDAO $activiteDAO) {
         $this->activiteDAO = $activiteDAO;
     }
+
+    public function getActivitiesList() {
+        return $this->activiteDAO->getAll();
+    }
+
+    public function updateActiviy(int $activityId, $activity) {
+        return $this->activiteDAO->update($activityId, $activity);
+    }
+
+    public function deleteActivity(int $activityId) {
+      
+        
+        $this->activiteDAO->delete($activityId);
+    }
+
 
     public function createActivite($titre, array $activiteData) {
         $activiteTitre =Activite::where('titre',$titre )->exists();
@@ -25,16 +41,13 @@ class ActiviteService {
         return $this->activiteDAO->save($activiteData);
     }
 
-    public function deleteActivite(int $activiteId){
-        $this->activiteDAO->delete( $activiteId);
-    }
-
-    public function updateActivite(int $activiteId):?Activite{
-        return $this->activiteDAO->delete( $activiteId);
-    }
-
     public function findActivityById(int $activityId):?Activite {
         return $this->activiteDAO->getById($activityId);
+    }
+
+     public function getActivitiesByName(string $seasonName)
+    {
+        return $this->activiteDAO->getActivityByName($seasonName);
     }
 
     public function getActivitiesBySeason(string $seasonName)
@@ -49,7 +62,7 @@ class ActiviteService {
 
     public function getActivitiesByDaytime(string $activiteTypeName)
     {
-        return $this->activiteDAO->getActivityByDayOrNight($activiteTypeName);
+        return $this->activiteDAO->getActivityByName($activiteTypeName);
     }
 
 

@@ -21,7 +21,11 @@ Route::post("/user/{userId}/activite",[UserController::class, 'addActivityUser']
 
 Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);
 
+Route::get('/activite', [ActiviteController::class, 'getAllActivities']);
 
+Route::put('/activite/{activiteId}', [ActiviteController::class, 'modifyActivity']);
+
+Route::delete('/activite/{activiteId}', [ActiviteController::class, 'deleteActivityById']);
 
 Route::get('/activite/search', [ActiviteController::class, 'getActivityByDayTime']);
 
@@ -29,6 +33,7 @@ Route::get('/activite/search', [ActiviteController::class, 'getActivityBySeason'
 
 Route::get('/activite/search', [ActiviteController::class, 'getActivitybyType']);
 
+Route::get('/activite/search', [ActiviteController::class, 'getActivityByName']);
 
 Route::get('/messagerie/conversation/{userA}/{userB}', [ConversationController::class, 'conversation']);
 

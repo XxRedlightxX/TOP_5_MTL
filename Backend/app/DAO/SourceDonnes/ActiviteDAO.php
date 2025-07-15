@@ -8,6 +8,8 @@ interface ActiviteDAO extends InterfaceDAO {
 
     public function getActivityBySeason(string $seasonName);
 
+    public function getActivityByName(string $actvityName);
+
     public function getActivityByType(string $activityType);
 
     public function getActivityByDayOrNight(string $activiteyDaytime);

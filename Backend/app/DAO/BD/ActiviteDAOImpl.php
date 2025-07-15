@@ -8,14 +8,11 @@ use App\Models\User;
 
 class ActiviteDAOImpl implements ActiviteDAO {
 
-
-
-
     /**
      * @inheritDoc
      */
     public function delete(int $id) {
-        return User::findOrFail($id)->Delete();
+        return Activite::findOrFail($id)->Delete();
     }
 
     /**
@@ -29,7 +26,7 @@ class ActiviteDAOImpl implements ActiviteDAO {
      * @inheritDoc
      */
     public function getById(int $id) {
-        return User::findOrFail($id);
+        return Activite::findOrFail($id);
     }
 
     /**
@@ -75,4 +72,11 @@ class ActiviteDAOImpl implements ActiviteDAO {
      public function getActivityByDayOrNight(string $activiteyDaytime) {
         return Activite::where('statut_journee', $activiteyDaytime)->get();
      }
+
+    /**
+     * @inheritDoc
+     */
+    public function getActivityByName(string $activityName) {
+         return Activite::where('titre','LIKE' ,"%{$activityName}%")->get();
+    }
 }
