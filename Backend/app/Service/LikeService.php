@@ -41,8 +41,25 @@ class LikeService {
         return 'liked';
     }
 
+    public function unlikeActivityByUser(int $userId, int $activityId): string
+    {
+        $user = User::find($userId);
+        if (!$user) {
+            return 'user_not_found';
+        }
+
+        if (!$this->daoLike->userHasLikedActivity($userId, $activityId)) {
+            return 'not_liked';
+        }
+
+        $this->daoLike->deleteLikeToActivity($userId, $activityId);
+        $this->daoLike->decrementLikes($activityId);
+
+        return 'unliked';
+    }
+
 
     public function getAllFromUser(int $userId) {
-        return $this->daoLike->GetLikesByUserId($userId);
+        return $this->daoLike->getLikesByUserId($userId);
     }
 }

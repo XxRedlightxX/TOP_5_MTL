@@ -44,6 +44,8 @@ Route::post('/messagerie/conversation', [ConversationController::class, 'sendMes
 
 Route::post('/user/{userId}/activite/{activiteId}/likes', [LikeController::class, 'AddtoActivitybyUserId']);
 
+Route::delete('/user/{userId}/activite/{activiteId}/likes', [LikeController::class, 'DeletelikeActivityByUser']);
+
 Route::get('/user/{userId}/activite/likes', [LikeController::class, 'getAllFromUserById']);
 
 

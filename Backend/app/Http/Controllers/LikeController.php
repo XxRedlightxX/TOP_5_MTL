@@ -21,12 +21,25 @@ class LikeController extends Controller
         return match ($result) {
             'liked' => response()->json(['message' => 'Like ajouté avec succès'], 200),
             'already_liked' => response()->json(['message' => 'Déjà liké'], 409),
-            'user_not_found' => response()->json(['message' => 'Utilisateur non trouvé'], 404),
-            default => response()->json(['message' => 'Erreur inconnue'], 500)};
+            'user_not_found' => response()->json(['message' => 'Utilisateur non trouvé'], 404)};
+           
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(),500);
+        }
+        
+    }
+
+    public function DeletelikeActivityByUser(int $userId, int $activityId)
+    {
+        $result = $this->likeService->unlikeActivityByUser($userId, $activityId);
+        try {
+            return match ($result) {
+                'unliked' => response()->json(['message' => 'Like retiré avec succès'], 200),
+                'not_liked' => response()->json(['message' => 'Like non trouvé'], 404),
+                'user_not_found' => response()->json(['message' => 'Utilisateur non trouvé'], 404)};
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }
-        
     }
 
 

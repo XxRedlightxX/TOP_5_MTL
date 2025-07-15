@@ -24,7 +24,13 @@ class LikeDAOImpl implements LikeDAO {
 
     }
 
-    public function GetLikesByUserId(int $userId) {
+    public function deleteLikeToActivity(int $userId, int $activityId) {
+        Like::where('utilisateur_id', $userId)
+        ->where('activite_id', $activityId)
+        ->delete();
+    }
+
+    public function getLikesByUserId(int $userId) {
         $user=User::findOrFail($userId);
 
         return $user->activites()->with('likes')->get();
@@ -45,5 +51,13 @@ class LikeDAOImpl implements LikeDAO {
     public function incrementLikes(int $activityId): void
     {
         Activite::where('id', $activityId)->increment('nombre_likes');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function decrementLikes(int $activityId) {
+
+         Activite::where('id', $activityId)->decrement('nombre_likes');
     }
 }
