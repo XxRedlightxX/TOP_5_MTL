@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActiviteController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\LikeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -35,8 +36,14 @@ Route::get('/activite/search', [ActiviteController::class, 'getActivitybyType'])
 
 Route::get('/activite/search', [ActiviteController::class, 'getActivityByName']);
 
+
 Route::get('/messagerie/conversation/{userA}/{userB}', [ConversationController::class, 'conversation']);
 
-
 Route::post('/messagerie/conversation', [ConversationController::class, 'sendMessage']);
+
+
+Route::post('/user/{userId}/activite/{activiteId}/likes', [LikeController::class, 'AddtoActivitybyUserId']);
+
+Route::get('/user/{userId}/activite/likes', [LikeController::class, 'getAllFromUserById']);
+
 

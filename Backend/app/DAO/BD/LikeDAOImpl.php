@@ -14,9 +14,36 @@ class LikeDAOImpl implements LikeDAO {
      * @inheritDoc
      */
     public function AddLikeToActivity(int $userId, int $activityId) {
-       Like::create([
+        $activity = Activite::findOrFail($activityId);
+
+        Like::create([
         'utilisateur_id' => $userId,
         'activite_id' => $activityId,
     ]);
+
+
+    }
+
+    public function GetLikesByUserId(int $userId) {
+        $user=User::findOrFail($userId);
+
+        return $user->activites()->with('likes')->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function userHasLikedActivity(int $userId, int $activityId): bool
+    {
+        $user = User::findOrFail($userId);
+
+        return $user->likes()
+            ->where('activite_id', $activityId)
+            ->exists();
+    }
+
+    public function incrementLikes(int $activityId): void
+    {
+        Activite::where('id', $activityId)->increment('nombre_likes');
     }
 }
