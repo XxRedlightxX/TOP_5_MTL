@@ -2,7 +2,7 @@
   <div class="upComingEvent" ref="wrapper">
     <span id="left" @click="scroll('left')"><</span>
     <ul class="carousel" ref="carousel">
-      <router-link to="/Event" v-for="(event, index) in UpComingEvents" :key="index" class="card"  @click="setEvent(event)">
+      <li v-for="(event, index) in UpComingEvents" :key="index" class="card">
         <div class="img">
           <img :src="event.image" alt="img" draggable="false" />
           <heart :size="0"/>
@@ -18,7 +18,7 @@
             {{ event.time }}
           </div>
         </div>
-      </router-link>
+      </li>
     </ul>
     <span id="right" @click="scroll('right')">></span>
   </div>
@@ -26,16 +26,15 @@
 
 <script setup>
   import { ref, onMounted, onBeforeUnmount } from 'vue';
-  import storageManager from "../../../JS/LocalStaorageManager";
-  import Heart from "./heartIcon.vue";
+  import Heart from "./heartIcon.vue"
 
   const UpComingEvents = ref([
-    { Title: 'Blanche Pearson', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1895/795" },
-    { Title: 'Joenas Brauers', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1891/791" },
-    { Title: 'Lariach French', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1892/792" },
-    { Title: 'James Khosravi', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1894/794" },
-    { Title: 'Kristina Zasiadko', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1896/796" },
-    { Title: 'Donald Horton', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: "https://picsum.photos/1899/799" }
+    { Title: 'Blanche Pearson', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/1c/26/4f/photo1jpg.jpg?w=1200&h=1200&s=1' },
+    { Title: 'Joenas Brauers', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/1c/26/4f/photo1jpg.jpg?w=1200&h=1200&s=1' },
+    { Title: 'Lariach French', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/1c/26/4f/photo1jpg.jpg?w=1200&h=1200&s=1' },
+    { Title: 'James Khosravi', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/1c/26/4f/photo1jpg.jpg?w=1200&h=1200&s=1' },
+    { Title: 'Kristina Zasiadko', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/1c/26/4f/photo1jpg.jpg?w=1200&h=1200&s=1' },
+    { Title: 'Donald Horton', location: 'Montreal, Vieux-Port', time: 'Octobre 11 - 16:00pm', image: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/1c/26/4f/photo1jpg.jpg?w=1200&h=1200&s=1' }
   ]);
 
   const wrapper = ref(null);
@@ -113,10 +112,6 @@
       carousel.value.scrollLeft += firstCardWidth;
     }, 2500);
   };
-  const setEvent = (value) => {
-    storageManager.setEvent(value);
-    console.log("Event value: ", value);
-  }
 
   onMounted(initializeCarousel);
 

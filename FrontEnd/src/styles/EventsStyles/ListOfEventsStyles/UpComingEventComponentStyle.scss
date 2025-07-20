@@ -37,7 +37,6 @@
         scroll-snap-align: start;
         list-style: none;
         cursor: pointer;
-        text-decoration: none;
         //padding-bottom: 15px;
         flex-direction: column;
         //border-radius: 8px;
@@ -96,7 +95,6 @@
       background-color: transparent;
       .card {
         background-color: var(--light-trans-2Shine);
-        color: var(--graphite); 
           h2 {
             color: var(--graphite); 
           }
@@ -123,7 +121,6 @@
   .carousel {
     .card {
       background-color: var(--graphite015);
-      color: var(--light-trans-text); 
         h2 {
           color: var(--light-trans-text); 
         }

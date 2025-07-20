@@ -2,7 +2,7 @@
    <div id="AllEventComponent">
     <FilterComponent/>
     <div class="events">
-      <router-link to="/Event" class="events_card glass" v-for="(item, index) in newEvent" :key="index" @click="setEvent(item)">
+      <div class="events_card glass" v-for="(item, index) in newEvent" :key="index">
         <div class="event_card_photo">
             <!-- Overlay heart icon -->
             <span class="overlay">
@@ -24,7 +24,7 @@
                 Octobre 11 - 16:00pm
             </div>
         </div>
-      </router-link>
+      </div>
     </div>
     <PaginationComponent/>
   </div>
@@ -38,6 +38,11 @@ import heartIcon from './heartIcon.vue';
 import PaginationComponent from './PaginationComponent.vue';
 import FilterComponent from './FilterComponent.vue';
 
+// Register the component globally
+  const isMultiSelection = ref(true);
+  const dateValue = ref(new Date("08/18/2022"));
+  const minDate = ref(new Date("08/08/2022"));
+  const maxDate = ref(new Date("08/26/2022"));
 
 
   const actualMode = ref(LocalStorageManager.getMode());
@@ -73,9 +78,9 @@ import FilterComponent from './FilterComponent.vue';
   newEvent.value = actualMode.value ? newEventJours : newEventNuit;
 
   // Fonction pour mettre à jour l'index du slide actif
-  // const onSlideChange = (swiper) => {
-  //   indexSlide.value = swiper.activeIndex;
-  // };
+  const onSlideChange = (swiper) => {
+    indexSlide.value = swiper.activeIndex;
+  };
 
   const setEvent = (value) => {
     LocalStorageManager.setEvent(value);
@@ -94,6 +99,7 @@ import FilterComponent from './FilterComponent.vue';
    const handleModeChange = (event) => {
        actualMode.value = JSON.parse(event.detail.storage);
    };
+
      // Add event listener for mode changes
    onMounted(() => {
        window.addEventListener('mode-changed', handleModeChange);
