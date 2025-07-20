@@ -1,1 +1,0 @@
-import{_ as e}from"./ProfileComponent-QWeJkLMU.js";import{c as t,e as o,o as r}from"./index-CwJnyfLV.js";import"./VAvatar-DbAzBx9n.js";import"./WaterButtonComponent-Dz5CNw18.js";const a={id:"eventOrganisatorView"},f={__name:"EventOrganisatorView",setup(s){return(i,n)=>(r(),t("div",a,[o(e,{himself:!1})]))}};export{f as default};

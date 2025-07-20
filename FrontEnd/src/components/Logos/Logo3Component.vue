@@ -3,6 +3,7 @@
         to="/" 
         id="logo3Component" 
         :class="{
+            'mmm': props.size === -1,
             'mini': props.size === 0,
             'small': props.size === 1,
             'medium': props.size === 2,
@@ -127,8 +128,24 @@ const text = "Drop";
         }
     }
     @media screen and (max-width: 1025px) {
-        .mini {
+        .mmm {
             width: 70%;
+            height: auto;
+            aspect-ratio: 1/1;
+            //padding: 100% auto;
+
+            #text3dComponent {
+                width: 100%;
+                padding: 4% 10% 0% 10%;
+                //border: 2px solid red;
+                .text{
+                    font-size: 3vw;
+                    font-weight: 50;
+                }
+            }
+        }
+        .mini {
+            width: 65%;
             height: auto;
             aspect-ratio: 1/1;
             //padding: 100% auto;
