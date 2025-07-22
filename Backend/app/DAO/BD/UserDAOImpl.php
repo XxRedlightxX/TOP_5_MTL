@@ -4,7 +4,7 @@ namespace App\DAO\BD;
 use App\DAO\SourceDonnes\UserDAO;
 use App\Models\Activite;
 use App\Models\User;
-
+use App\Services\DTO\AuthResult;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 
@@ -25,7 +25,7 @@ class UserDAOImpl implements UserDAO {
      */
     public function save(array $userData): User
     {
-        return User::firstOrCreate($userData);
+        return User::create($userData);
     }
     /**
      * @inheritDoc
@@ -74,4 +74,65 @@ class UserDAOImpl implements UserDAO {
         return $activity;
     
      }
+
+    /**
+     * @inheritDoc
+     */
+    public function isFollowing(User $follower, User $followed): bool {
+
+        return $follower->followings()->where('followed_id', $followed->id)->exists();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function follow(User $follower, User $followed):void {
+         
+        $follower->followings()->syncWithoutDetaching([$followed->id]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFollowers(User $user) {
+          return $user->followings;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFollowings(User $user) {
+         return $user->followings;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function unfollow(User $follower, User $followed): void {
+
+         $follower->followings()->detach($followed->id);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findById(int $userid) {
+        return User::findOrFail($userid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function checkEmailAndPasswordExist(string $userEmail, $userPassword) {
+         $user = User::where('email', $userEmail)->first();
+
+        if ($user && Hash::check($userPassword, $user->password)) {
+            return $user;
+        }
+
+        return null;
+
+       
+
+    }
 }

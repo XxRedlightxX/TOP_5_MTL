@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activite;
+use App\Models\Avis;
+use App\Models\User;
 use App\Service\ActiviteService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -38,15 +41,39 @@ class ActiviteController extends Controller
     }
 
    public function deleteActivityById(int $activiteId)
-{
-    try {
-        $this->userService->deleteActivity($activiteId);
-    } catch (ModelNotFoundException $e) {
-    return response()->json(['error' => "Activity $activiteId not found"], 404);
-    } catch (\Exception $e) {
-       return response()->json($e->getMessage(),500);
+    {
+        try {
+            $this->userService->deleteActivity($activiteId);
+        } catch (ModelNotFoundException $e) {
+        return response()->json(['error' => "Activity $activiteId not found"], 404);
+        } catch (\Exception $e) {
+        return response()->json($e->getMessage(),500);
+        }
     }
-}
+
+    public function addCommentToActivity(int $userId, int $activityId, Request $contenu) {
+        try {
+        $validated = $contenu->validate([
+            'contenu'=> 'required|min:3|max:1000',
+      
+        ]);
+
+        $userComment =$this->userService->addCommentToActivityFromUser($userId, $activityId, $validated['contenu']);
+        return response()->json($userComment);
+    } catch (\Exception $e) {
+        return response()->json($e->getMessage());
+    }
+    }
+
+    public function test(int $userId) {
+       $avis = User::with('activites')->with('')
+        
+        ->get();
+
+    return response()->json($avis);
+    }
+
+
     
    public function getActivityByDayTime(Request $request)
     {

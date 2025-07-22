@@ -10,7 +10,7 @@ class Avis extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['date', 'contenu', 'User_id', 'activite_id'];
+    protected $fillable = ['date', 'contenu', 'utilisateur_id', 'activite_id'];
 
     public function User()
     {

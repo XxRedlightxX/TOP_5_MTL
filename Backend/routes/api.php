@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\ActiviteController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Service\FollowService;
 
 Route::get("/user",[UserController::class, 'getUserList']);
 
@@ -23,6 +26,8 @@ Route::post("/user/{userId}/activite",[UserController::class, 'addActivityUser']
 Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);
 
 Route::get('/activite', [ActiviteController::class, 'getAllActivities']);
+//
+Route::post('/utilisateur/{userId}/activity/{activityId}/comments', [ActiviteController::class, 'addCommentToActivity']);
 
 Route::put('/activite/{activiteId}', [ActiviteController::class, 'modifyActivity']);
 
@@ -47,5 +52,20 @@ Route::post('/user/{userId}/activite/{activiteId}/likes', [LikeController::class
 Route::delete('/user/{userId}/activite/{activiteId}/likes', [LikeController::class, 'DeletelikeActivityByUser']);
 
 Route::get('/user/{userId}/activite/likes', [LikeController::class, 'getAllFromUserById']);
+
+Route::post('/user/{userId}/follow/', [FollowController::class, 'follow']);
+
+Route::get('/user/{userId}/follow/', [FollowController::class, 'followers']);
+
+Route::get('/user/{userId}/followers', [FollowController::class, 'followers']);
+
+Route::get('/user/{userId}/activites/comments', [ActiviteController::class, 'test']);
+
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::post('/logout', [AuthController::class, 'logout']);
+
 
 

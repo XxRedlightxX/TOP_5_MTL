@@ -4,6 +4,7 @@ namespace App\DAO\BD;
 
 use App\DAO\SourceDonnes\ActiviteDAO;
 use App\Models\Activite;
+use App\Models\Avis;
 use App\Models\User;
 
 class ActiviteDAOImpl implements ActiviteDAO {
@@ -79,4 +80,20 @@ class ActiviteDAOImpl implements ActiviteDAO {
     public function getActivityByName(string $activityName) {
          return Activite::where('titre','LIKE' ,"%{$activityName}%")->get();
     }
+
+    public function addCommentToActivity(int $userId, int $activityId, string $contenu) {
+        $userExist = User::findOrFail($userId);
+        $actvityExist = Activite::findOrFail($activityId);
+
+        return Avis::create([
+            "utilisateur_id" => $userExist->id,
+            "activite_id" => $actvityExist->id,
+            "contenu" => $contenu,
+            "date" => now()
+        ]);
+
+
+    }
+
+
 }

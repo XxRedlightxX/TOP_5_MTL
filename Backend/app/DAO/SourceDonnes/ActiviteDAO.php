@@ -14,4 +14,6 @@ interface ActiviteDAO extends InterfaceDAO {
 
     public function getActivityByDayOrNight(string $activiteyDaytime);
 
+    public function addCommentToActivity(int $userId, int $activityId, string $contenu);
+
 }
