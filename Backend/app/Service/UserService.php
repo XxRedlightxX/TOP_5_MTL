@@ -4,8 +4,9 @@ namespace App\Service;
 use App\Models\User;
 use App\DAO\SourceDonnes\UserDAO;
 use App\Models\Activite;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use App\Service\DTO\AuthResult;
 
 class UserService {
 
@@ -26,6 +27,23 @@ class UserService {
     public function deleteUser(int $userId){
         $this->daoUser->delete($userId);
     }
+
+    public function getUserById(string $userEmail){
+       return  $this->daoUser->findById($userEmail);
+    }
+
+    public function getUserEmailandPassword(string $userEmail, $userPassword) {
+       $user = $this->daoUser->checkEmailAndPasswordExist($userEmail, $userPassword);
+
+        if ($user) {
+            $token = $user->createToken($user->name)->plainTextToken;
+            return new AuthResult(true, $user, $token, 'Login successful.');
+        }
+
+         return new AuthResult(false, null, 'Invalid credentials.', null);
+    }
+
+
 
      public function searchUserbyEmail(string $userEmail){
        return  $this->daoUser->getByEmail($userEmail);

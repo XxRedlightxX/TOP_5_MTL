@@ -41,6 +41,10 @@ class ActiviteService {
         return $this->activiteDAO->save($activiteData);
     }
 
+    public function addCommentToActivityFromUser(int $userId, int $activityId, string $contenu ) {
+        return  $this->activiteDAO->addCommentToActivity( $userId, $activityId,$contenu );
+    }
+
     public function findActivityById(int $activityId):?Activite {
         return $this->activiteDAO->getById($activityId);
     }
