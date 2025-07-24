@@ -32,9 +32,8 @@ class FollowController extends Controller implements HasMiddleware
         ]);
         $user =  $request->user();
         $result = $this->followService->follow($user->id,$request->follower_id);
-        if (!$user) {
-        return response()->json(['message' => 'Utilisateur non authentifié'], 401);
-    }
+        
+    
         try {
             return match ($result) {
             'followed' => response()->json(['message' => 'Vous avez follow', 'followed_username' =>  $user = User::findOrFail($request->follower_id)], 200),
@@ -45,13 +44,10 @@ class FollowController extends Controller implements HasMiddleware
         }
     }
 
-     public function unfollow(Request $request, $followedId)
+     public function deleteFollow(Request $request, $followedId)
     {
-        $request->validate([
-            'follower_id' => 'required|exists:Utilisateur,id',
-        ]);
-
-        $this->followService->unfollow($request->follower_id, $followedId);
+         $user =  $request->user();
+        $this->followService->unfollow($user->id, $followedId);
         return response()->json(['message' => 'Unfollowed successfully.']);
     }
 
