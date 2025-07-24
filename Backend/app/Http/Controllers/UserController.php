@@ -5,17 +5,30 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Service\UserService;
 
+
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
+
+     public static function middleware()
+    {
+        return [
+            new Middleware('auth:sanctum')
+        ];
+    }
 
     protected $userService;
 
       public function __construct(UserService $userService)
     {
         $this->userService = $userService;
+
+      
     }
     public function getUserList()
     {
@@ -83,8 +96,10 @@ class UserController extends Controller
     }
 
 
-    public function addActivityUser(Request $request, int $userId)
+    public function addActivityUser(Request $request)
     {
+
+        
         $validated = $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
@@ -94,9 +109,9 @@ class UserController extends Controller
             'saison_id' => 'required|exists:saison,id',
             'image_data' => 'nullable'
         ]);
-
+         $user =  $request->user();
         
-        $activity = $this->userService->createActivityUser($userId, $validated);
+        $activity = $this->userService->createActivityUser($user->id, $validated);
 
         return response()->json([
             'message' => 'Activity created successfully',

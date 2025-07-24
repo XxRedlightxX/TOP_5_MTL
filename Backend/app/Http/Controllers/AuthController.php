@@ -17,7 +17,7 @@ class AuthController extends Controller
     public function register(Request $request) {
         
          $validated =$request->validate([
-             'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|string|max:255',
             'password' => 'required|confirmed|max:255',
         ]);
@@ -61,8 +61,11 @@ class AuthController extends Controller
     public function logout(Request $request) {
         $request->user()->tokens()->delete();
 
+        $user = $request->user();
+        $email = $user->email;
+
         return [
-            'message' => 'You are logged out'
+            'message' => 'You are logged out '.$email
         ];
     }
 

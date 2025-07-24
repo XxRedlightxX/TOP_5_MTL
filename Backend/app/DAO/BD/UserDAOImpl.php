@@ -95,7 +95,7 @@ class UserDAOImpl implements UserDAO {
      * @inheritDoc
      */
     public function getFollowers(User $user) {
-          return $user->followings;
+          return $user->followers;
     }
 
     /**

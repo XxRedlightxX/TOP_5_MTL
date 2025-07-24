@@ -6,12 +6,23 @@ use App\Models\Activite;
 use App\Models\Avis;
 use App\Models\User;
 use App\Service\ActiviteService;
+
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
-class ActiviteController extends Controller
+class ActiviteController extends Controller implements HasMiddleware
 {
+    public static function middleware()
+    {
+        return [
+            new Middleware('auth:sanctum', except : ['getAllActivities', 'getActivityByDayTime', 
+            'getActivitybyType', 'getActivityBySeason',
+            'getActivityByName'])
+        ];
+    }
     protected $userService;
 
     public function __construct(ActiviteService $userService)
@@ -51,14 +62,17 @@ class ActiviteController extends Controller
         }
     }
 
-    public function addCommentToActivity(int $userId, int $activityId, Request $contenu) {
+    public function addCommentToActivity( int $activityId, Request $contenu) {
         try {
         $validated = $contenu->validate([
             'contenu'=> 'required|min:3|max:1000',
+            
       
         ]);
 
-        $userComment =$this->userService->addCommentToActivityFromUser($userId, $activityId, $validated['contenu']);
+        $user =  $contenu->user();
+        $userComment =$this->userService->addCommentToActivityFromUser( $user->id , $activityId, $validated['contenu']);
+        
         return response()->json($userComment);
     } catch (\Exception $e) {
         return response()->json($e->getMessage());

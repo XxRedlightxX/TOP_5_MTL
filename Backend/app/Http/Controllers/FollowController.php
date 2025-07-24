@@ -5,10 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Service\FollowService;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Validation\ValidationException;
 
-class FollowController extends Controller
+class FollowController extends Controller implements HasMiddleware
 {
+
+    public static function middleware() {
+
+       return [
+            new Middleware('auth:sanctum')
+        ];
+    }
 
     protected $followService;
 
@@ -16,13 +25,16 @@ class FollowController extends Controller
     {
         $this->followService = $followService;
     }
-    public function follow(Request $request, $followedId)
+    public function addFollowAUser(Request $request)
     {
         $request->validate([
             'follower_id' => 'required|exists:Utilisateur,id',
         ]);
-      $result = $this->followService->follow($request->follower_id, $followedId);
-       
+        $user =  $request->user();
+        $result = $this->followService->follow($user->id,$request->follower_id);
+        if (!$user) {
+        return response()->json(['message' => 'Utilisateur non authentifié'], 401);
+    }
         try {
             return match ($result) {
             'followed' => response()->json(['message' => 'Vous avez follow', 'followed_username' =>  $user = User::findOrFail($request->follower_id)], 200),
@@ -43,13 +55,17 @@ class FollowController extends Controller
         return response()->json(['message' => 'Unfollowed successfully.']);
     }
 
-    public function followers($userId)
+    public function getfollowers(Request $request)
     {
-        return response()->json($this->followService->getFollowers($userId));
+        $user = $request->user();
+        return response()->json($this->followService->getFollowers($user->id));
     }
 
-    public function followings($userId)
-    {
-        return response()->json($this->followService->getFollowings($userId));
+    public function getfollowings(Request $request)
+    {   
+        $user = $request->user();
+        return response()->json($this->followService->getFollowings( $user->id));
     }
+
+    
 }

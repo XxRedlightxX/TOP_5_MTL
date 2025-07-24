@@ -23,6 +23,7 @@ return new class extends Migration
                 ->onDelete('cascade')
                 ->nullable(); 
             $table->text('contenu');
+            $table->unsignedBigInteger('etoiles')->nullable();
             
         });
     }
