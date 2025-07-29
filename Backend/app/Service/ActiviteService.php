@@ -31,15 +31,15 @@ class ActiviteService {
     }
 
 
-    public function createActivite($titre, array $activiteData) {
+    public function createActivite($titre, int $userId, array $activiteData) {
         $activiteTitre =Activite::where('titre',$titre )->exists();
         
-        if ($activiteData['titre'] === $activiteTitre) {
+        if ($activiteData['titre'] == $activiteTitre) {
             throw ValidationException::withMessages([
-            'name' => ['An activity with this name already exists.'],
+            'titre' => ['An activity with this name already exists.'],
         ]);
         }
-        return $this->activiteDAO->save($activiteData);
+        return $this->activiteDAO->addActivity($userId,$activiteData);
     }
 
       public function updateUserActivity( int $activityId, array $data): ?Activite
@@ -50,8 +50,8 @@ class ActiviteService {
 
         return $this->activiteDAO->updateActivitybyUser( $activityId, $data);
     }
-    public function addCommentToActivityFromUser(int $userId, int $activityId, string $contenu ) {
-        return  $this->activiteDAO->addCommentToActivity( $userId, $activityId,$contenu );
+    public function addCommentToActivityFromUser(int $userId, int $activityId, string $contenu, int $nbEtoiles ) {
+        return  $this->activiteDAO->addCommentToActivity( $userId, $activityId,$contenu , $nbEtoiles);
     }
 
     public function findActivityById(int $activityId):?Activite {

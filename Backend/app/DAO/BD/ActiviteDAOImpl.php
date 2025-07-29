@@ -93,7 +93,7 @@ class ActiviteDAOImpl implements ActiviteDAO {
          return Activite::where('titre','LIKE' ,"%{$activityName}%")->get();
     }
 
-    public function addCommentToActivity(int $userId, int $activityId, string $contenu) {
+    public function addCommentToActivity(int $userId, int $activityId, string $contenu, int $nbEtoiles) {
         $userExist = User::findOrFail($userId);
         $actvityExist = Activite::findOrFail($activityId);
 
@@ -101,6 +101,7 @@ class ActiviteDAOImpl implements ActiviteDAO {
             "utilisateur_id" => $userExist->id,
             "activite_id" => $actvityExist->id,
             "contenu" => $contenu,
+            "etoiles" => $nbEtoiles,
             "date" => now()
         ]);
 

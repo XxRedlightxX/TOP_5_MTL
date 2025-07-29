@@ -10,6 +10,10 @@ class ActivityPolicy
 {
 
     const NOT_ALLOWED = "You dont own this activity";
+
+    const NOT_ALLOWED_USER_TYPE_MESSAGE = "You're not organizor";
+    const NOT_ALLOWED_CODE = 403;
+    const USER_TYPE= "organisateur";
     /**
      * Determine whether the user can view any models.
      */
@@ -29,9 +33,9 @@ class ActivityPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user):void
     {
-        return false;
+       
     }
 
     /**
@@ -42,7 +46,7 @@ class ActivityPolicy
     {
         return $user->id == $activite->utilisateur_id
             ? Response::allow()
-            : Response::deny(self::NOT_ALLOWED);
+            : Response::deny(self::NOT_ALLOWED,self::NOT_ALLOWED_CODE);
     }
 
     /**
@@ -52,8 +56,11 @@ class ActivityPolicy
     {
          return $user->id == $activite->utilisateur_id
             ? Response::allow()
-            : Response::deny(self::NOT_ALLOWED);
+            : Response::deny(self::NOT_ALLOWED, 403);
     }
+
+
+    
 
     /**
      * Determine whether the user can restore the model.

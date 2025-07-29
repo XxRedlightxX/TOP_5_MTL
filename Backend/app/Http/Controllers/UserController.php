@@ -67,10 +67,15 @@ class UserController extends Controller
             $validatedInputUser = $request->validate([
                 'name' =>  'required|string|max:255',
                 'email' => 'required|string|max:255',
+                'type_utilisateur' => 'required|in:organisateur,particulier', 
                 'password' => 'required|string|max:255'
             ]);
+            $user2 = User::findOrFail($userId);
+            $currentUser = $request->user();
 
-            $userValidated = $this->userService->updateUser($userId, $validatedInputUser);
+            $this->authorize('update', $user2,  $currentUser);
+
+            $userValidated = $this->userService->updateUser( $user2->id, $validatedInputUser);
             return response()->json($userValidated, 202);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(),500);
@@ -78,9 +83,13 @@ class UserController extends Controller
     }
     
 
-   public function deleteUser(int $userId)
+   public function deleteUser(int $userId, Request $request)
     {
         try {
+            $user2 = User::findOrFail($userId);
+            $currentUser = $request->user();
+
+            $this->authorize('delete', $user2,  $currentUser);
             $this->userService->deleteUser($userId);
             return response()->noContent(); 
         } catch (ModelNotFoundException $e) {

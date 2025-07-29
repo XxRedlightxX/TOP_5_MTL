@@ -100,12 +100,13 @@ class ActiviteController extends Controller
         try {
         $validated = $contenu->validate([
             'contenu'=> 'required|min:3|max:1000',
-            
-      
+            'etoiles'=> 'integer|between:0,5',
         ]);
 
         $user =  $contenu->user();
-        $userComment =$this->userService->addCommentToActivityFromUser( $user->id , $activityId, $validated['contenu']);
+        $userComment =$this->userService->addCommentToActivityFromUser( 
+            $user->id , $activityId, 
+    $validated['contenu'], $validated['etoiles']);
 
         return response()->json($userComment);
     } catch (\Exception $e) {
@@ -114,11 +115,9 @@ class ActiviteController extends Controller
     }
 
     public function test(int $userId) {
-       $avis = User::with('activites')->with('')
-        
-        ->get();
-
-    return response()->json($avis);
+      $user = User::findOrFail($userId);
+      return $user->load('avis');
+   
     }
 
 
@@ -158,6 +157,13 @@ class ActiviteController extends Controller
 
         $activiteTitle = $this->userService->getActivitiesByName($validated['title']);
         return response()->json($activiteTitle);
+    }
+
+    public function getActivityWithComments(int $activityId) {
+
+        $activity = Activite::findOrFail($activityId);
+
+        return $activity->load('avis');
     }
 
 

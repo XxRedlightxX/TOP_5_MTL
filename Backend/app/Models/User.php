@@ -61,7 +61,7 @@ class User extends Authenticatable
 
     public function avis()
     {
-        return $this->hasMany(Avis::class);
+        return $this->hasMany(Avis::class, 'utilisateur_id');
     }
 
     public function favoris()
