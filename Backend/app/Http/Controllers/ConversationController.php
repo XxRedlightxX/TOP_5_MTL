@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ConversationResource;
 use App\Service\ConversationService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -23,14 +24,22 @@ class ConversationController extends Controller
 
     public function getConversationBySender(Request $request, int $user2)
     {
-        try {
-            $user = $request->user();
-            $messages = $this->ConversationService->getConversationBetweenUsers($user->id, $user2);
+         $currentUser = $request->user();
 
-            return response()->json(['data' => $messages], 200);
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage(),500);
-        }
+        $data = $this->ConversationService->getConversationBetweenUsers($currentUser->id, $user2);
+
+        return response()->json([
+            'meta' => [
+                
+                'last_message_at' => optional($data['messages']->last())->date,
+            ],
+            'participants' => [
+                'current_user' => $request->user()->only(['id', 'name']),
+                'other_user' => $data['other_user']->only(['id', 'name']),
+            ],
+            'messages' => ConversationResource::collection($data['messages'])
+        ]);
+ 
     }
 
     public function sendMessage(Request $request)

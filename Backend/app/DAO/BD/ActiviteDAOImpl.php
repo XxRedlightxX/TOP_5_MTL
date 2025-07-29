@@ -50,6 +50,18 @@ class ActiviteDAOImpl implements ActiviteDAO {
 
     }
 
+    public function addActivity(int $userId, array $activityData) {
+        
+        $user = User::findOrFail($userId);
+
+        $activityData['utilisateur_id'] = $user->id;
+
+        $activity =$this->save($activityData);
+
+        return $activity;
+    
+     }
+
     /**
      * @inheritDoc
      */

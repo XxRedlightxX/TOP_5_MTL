@@ -23,6 +23,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'type_utilisateur',
         'password',
     ];
 
@@ -65,7 +66,7 @@ class User extends Authenticatable
 
     public function favoris()
     {
-        return $this->belongsToMany(Activite::class, 'favori', 'User_id', 'activite_id');
+        return $this->belongsToMany(Activite::class, 'favori', 'utilisateur_id', 'activite_id');
     }
 
     public function likes()

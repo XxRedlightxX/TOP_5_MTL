@@ -33,6 +33,7 @@ class ConversationDAOImpl implements ConversationDAO {
      * @inheritDoc
      */
     public function getById(int $id) {
+        return User::findOrFail($id);
     }
 
     /**
@@ -53,11 +54,17 @@ class ConversationDAOImpl implements ConversationDAO {
      */
     public function getConversation(int $userA, int $userB) {
         
-        return Conversation::where(function ($query) use ($userA, $userB) {
-            $query->where('expediteur_id', $userA)->where('destinataire_id', $userB);
-        })->orWhere(function ($query) use ($userA, $userB) {
-            $query->where('expediteur_id', $userB)->where('destinataire_id', $userA);
-        })->orderBy('date', 'asc')->get();
+        return Conversation::with(['expediteur', 'destinataire'])
+            ->where(function($q) use ($userA, $userB) {
+                $q->where('expediteur_id', $userA)
+                  ->where('destinataire_id', $userB);
+            })
+            ->orWhere(function($q) use ($userA, $userB) {
+                $q->where('expediteur_id', $userB)
+                  ->where('destinataire_id', $userA);
+            })
+            ->orderBy('date', 'asc')
+            ->get();
 
     }
 }

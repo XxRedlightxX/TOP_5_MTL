@@ -34,13 +34,38 @@ class ActiviteController extends Controller
         return $this->userService->getActivitiesList();
     }
 
+        public function addActivityUser(Request $request)
+    {
+          
+        
+        $validated = $request->validate([
+            'titre' => 'required|string|max:255',
+            'description' => 'required|string',
+            'date' => 'required|date',
+            'lieu' => 'required|string|max:255',
+            'statut_journee' => 'required|in:JOUR,NUIT', 
+            'saison_id' => 'required|exists:saison,id',
+            'image_data' => 'nullable'
+        ]);
+         $user =  $request->user();
+
+         $this->authorize('create',$user );
+        
+        $activity = $this->userService->createActivite($validated['titre'],$user->id, $validated);
+
+        return response()->json([
+           
+            $activity
+        ], 201);
+    }
+
     public function modifyActivity(int $activiteId, Request $request) {
-         
+         try {
           
              $activite = Activite::findOrFail($activiteId);
              $this->authorize('update', $activite);
 
-        
+         
             $validatedInputActivity = $request->validate([
                 'titre' => 'required|string|max:255',
                 'description' => 'required|string',
@@ -51,9 +76,9 @@ class ActiviteController extends Controller
 
             $userValidated = $this->userService->updateActiviy($activiteId, $validatedInputActivity);
             return response()->json($userValidated, 202);
-    
+        } catch (\Exception $e) {
             return response()->json($e->getMessage(),500);
-        
+        }
     }
 
    public function deleteActivityById(int $activiteId)

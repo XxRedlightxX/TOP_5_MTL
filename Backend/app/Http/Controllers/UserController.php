@@ -91,28 +91,7 @@ class UserController extends Controller
     }
 
 
-    public function addActivityUser(Request $request)
-    {
 
-        
-        $validated = $request->validate([
-            'titre' => 'required|string|max:255',
-            'description' => 'required|string',
-            'date' => 'required|date',
-            'lieu' => 'required|string|max:255',
-            'statut_journee' => 'required|in:JOUR,NUIT', 
-            'saison_id' => 'required|exists:saison,id',
-            'image_data' => 'nullable'
-        ]);
-         $user =  $request->user();
-        
-        $activity = $this->userService->createActivityUser($user->id, $validated);
-
-        return response()->json([
-            'message' => 'Activity created successfully',
-            'data' => $activity
-        ], 201);
-    }
 
 
     public function index(User $user) {
