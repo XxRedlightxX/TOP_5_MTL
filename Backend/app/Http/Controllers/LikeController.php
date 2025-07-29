@@ -7,20 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
-class LikeController extends Controller implements  HasMiddleware
+class LikeController extends Controller
 {
 
-    public static function middleware() {
 
-       return [
-            new Middleware('auth:sanctum')
-        ];
-    }
      protected $likeService;
 
     public function __construct(LikeService $likeService)
     {
         $this->likeService = $likeService;
+         $this->middleware('auth:sanctum');
     }
 
 
@@ -29,10 +25,10 @@ class LikeController extends Controller implements  HasMiddleware
         $user =  $request->user();
         $result = $this->likeService->addLikeToActivityByUser($user->id, $activityId);
         try {
-        return match ($result) {
-            'liked' => response()->json(['message' => 'Like ajouté avec succès'], 200),
-            'already_liked' => response()->json(['message' => 'Déjà liké'], 409),
-            'user_not_found' => response()->json(['message' => 'Utilisateur non trouvé'], 404)};
+            return match ($result) {
+                'liked' => response()->json(['message' => 'Like ajouté avec succès'], 200),
+                'already_liked' => response()->json(['message' => 'Déjà liké'], 409),
+                'user_not_found' => response()->json(['message' => 'Utilisateur non trouvé'], 404)};
            
         } catch (\Exception $e) {
             return response()->json($e->getMessage(),500);

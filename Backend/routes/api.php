@@ -21,13 +21,13 @@ Route::post("/user",[UserController::class, 'addUser']);
 
 Route::put('/user/{userId}', [UserController::class, 'modifyUser']);
 
-Route::post("/user/{userId}/activite",[UserController::class, 'addActivityUser']);
+Route::post("/user/activite",[UserController::class, 'addActivityUser']);
 
 Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);
 
 Route::get('/activite', [ActiviteController::class, 'getAllActivities']);
 //
-Route::post('/utilisateur/{userId}/activity/{activityId}/comments', [ActiviteController::class, 'addCommentToActivity']);
+
 
 Route::put('/activite/{activiteId}', [ActiviteController::class, 'modifyActivity']);
 
@@ -42,25 +42,42 @@ Route::get('/activite/search', [ActiviteController::class, 'getActivitybyType'])
 Route::get('/activite/search', [ActiviteController::class, 'getActivityByName']);
 
 
-Route::get('/messagerie/conversation/{userA}/{userB}', [ConversationController::class, 'conversation']);
+// Conversation
+
+Route::get('/messagerie/conversation/{userB}', [ConversationController::class, 'getConversationBySender']);
 
 Route::post('/messagerie/conversation', [ConversationController::class, 'sendMessage']);
 
 
-Route::post('/user/{userId}/activite/{activiteId}/likes', [LikeController::class, 'AddtoActivitybyUserId']);
+// Likes 
 
-Route::delete('/user/{userId}/activite/{activiteId}/likes', [LikeController::class, 'DeletelikeActivityByUser']);
+Route::post('/activite/{activiteId}/likes', [LikeController::class, 'addtoActivitybyUserId']);
 
-Route::get('/user/{userId}/activite/likes', [LikeController::class, 'getAllFromUserById']);
+Route::delete('activite/{activiteId}/likes', [LikeController::class, 'deletelikeActivityByUser']);
 
-Route::post('/user/{userId}/follow/', [FollowController::class, 'follow']);
+Route::get('/activite/likes', [LikeController::class, 'getAllFromUserById']);
 
-Route::get('/user/{userId}/follow/', [FollowController::class, 'followers']);
 
-Route::get('/user/{userId}/followers', [FollowController::class, 'followers']);
+// Follows
+
+Route::post('/follow', [FollowController::class, 'addFollowAUser']);
+
+Route::delete('/follow/{followedId}', [FollowController::class, 'deleteFollow']);
+
+Route::get('/followers', [FollowController::class, 'getfollowers']);
+
+Route::get('/followings', [FollowController::class, 'getfollowings']);
+
+
+
+
+// Comments
+Route::post('/activity/{activityId}/comments', [ActiviteController::class, 'addCommentToActivity']);
 
 Route::get('/user/{userId}/activites/comments', [ActiviteController::class, 'test']);
 
+
+// Login 
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::post('/login', [AuthController::class, 'login']);

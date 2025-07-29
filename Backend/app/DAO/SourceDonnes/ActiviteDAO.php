@@ -16,4 +16,6 @@ interface ActiviteDAO extends InterfaceDAO {
 
     public function addCommentToActivity(int $userId, int $activityId, string $contenu);
 
+    public function updateActivitybyUser(int $activityId, array $activityData);
+
 }

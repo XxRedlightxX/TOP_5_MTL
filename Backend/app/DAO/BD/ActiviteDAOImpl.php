@@ -95,5 +95,14 @@ class ActiviteDAOImpl implements ActiviteDAO {
 
     }
 
+   public function updateActivityByUser(int $activityId, array $activityData) {
+        $activite = Activite::findOrFail($activityId);
+
+        $activite->update($activityData); 
+
+        return $activite;
+   }
+
+
 
 }

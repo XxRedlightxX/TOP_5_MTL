@@ -12,21 +12,16 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller implements HasMiddleware
+class UserController extends Controller 
 {
 
-     public static function middleware()
-    {
-        return [
-            new Middleware('auth:sanctum')
-        ];
-    }
 
     protected $userService;
 
       public function __construct(UserService $userService)
     {
         $this->userService = $userService;
+         $this->middleware('auth:sanctum');
 
       
     }

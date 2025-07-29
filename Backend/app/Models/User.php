@@ -94,4 +94,9 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'followers', 'followed_id', 'follower_id')->withTimestamps();
     }
 
+    public function likedActivities()
+{
+    return $this->belongsToMany(Activite::class, 'likes', 'utilisateur_id', 'activite_id')->withTimestamps();
+}
+
 }

@@ -5,25 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Service\FollowService;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+
 use Illuminate\Validation\ValidationException;
 
-class FollowController extends Controller implements HasMiddleware
+class FollowController extends Controller 
 {
-
-    public static function middleware() {
-
-       return [
-            new Middleware('auth:sanctum')
-        ];
-    }
 
     protected $followService;
 
     public function __construct(FollowService $followService)
     {
         $this->followService = $followService;
+        $this->middleware('auth:sanctum');
     }
     public function addFollowAUser(Request $request)
     {

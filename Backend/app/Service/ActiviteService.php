@@ -5,6 +5,7 @@ namespace App\Service;
 use App\DAO\SourceDonnes\ActiviteDAO;
 use App\Models\Activite;
 use Exception;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 
 class ActiviteService {
@@ -41,6 +42,14 @@ class ActiviteService {
         return $this->activiteDAO->save($activiteData);
     }
 
+      public function updateUserActivity( int $activityId, array $data): ?Activite
+    {
+        // Option 1: Check policy in Service (alternative to Controller check)
+        $activity = Activite::findOrFail($activityId);
+        
+
+        return $this->activiteDAO->updateActivitybyUser( $activityId, $data);
+    }
     public function addCommentToActivityFromUser(int $userId, int $activityId, string $contenu ) {
         return  $this->activiteDAO->addCommentToActivity( $userId, $activityId,$contenu );
     }

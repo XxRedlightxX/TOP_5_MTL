@@ -7,15 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
-class ConversationController extends Controller implements HasMiddleware
+class ConversationController extends Controller
 {
 
-     public static function middleware() {
 
-        return [
-            new Middleware('auth:sanctum')
-        ];
-    }
       protected $ConversationService;
 
       
@@ -23,6 +18,7 @@ class ConversationController extends Controller implements HasMiddleware
       public function __construct(ConversationService $userService)
     {
         $this->ConversationService = $userService;
+        $this->middleware('auth:sanctum');
     }
 
     public function getConversationBySender(Request $request, int $user2)
