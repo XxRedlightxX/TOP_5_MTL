@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActiviteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +22,7 @@ Route::post("/user",[UserController::class, 'addUser']);
 
 Route::put('/user/{userId}', [UserController::class, 'modifyUser']);
 
-Route::post("/user/activite",[UserController::class, 'addActivityUser']);
+Route::post("/user/activite",[ActiviteController::class, 'addActivityUser']);
 
 Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);
 
@@ -68,13 +69,21 @@ Route::get('/followers', [FollowController::class, 'getfollowers']);
 
 Route::get('/followings', [FollowController::class, 'getfollowings']);
 
+//Favorites
 
+Route::post('/favorite', [FavoriteController::class, 'addActivityToFavorite']);
+
+Route::get('/favorite/{user}', [FavoriteController::class, 'getAllFavoriteActivites']);
+
+Route::delete('/favorite/{activityId}', [FavoriteController::class, 'deleteFavoriteActivity']);
 
 
 // Comments
 Route::post('/activity/{activityId}/comments', [ActiviteController::class, 'addCommentToActivity']);
 
 Route::get('/user/{userId}/activites/comments', [ActiviteController::class, 'test']);
+
+Route::get('/activity/{activityId}/comments', [ActiviteController::class, 'getActivityWithComments']);
 
 
 // Login 
