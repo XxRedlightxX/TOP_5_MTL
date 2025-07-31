@@ -77,6 +77,7 @@
       margin-top: 2%;
       height: 60px;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: center;
       border-radius: 2px;
@@ -157,5 +158,10 @@
         }
       }
     }    
+  }
+  @media screen and (max-width: 600px){
+      .paginationComponent {
+        margin-bottom: 12%;
+      }
   }
 </style>

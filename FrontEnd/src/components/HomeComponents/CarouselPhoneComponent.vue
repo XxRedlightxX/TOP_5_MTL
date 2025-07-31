@@ -8,8 +8,8 @@
                 <p>{{ eventInfo.desc }}</p>
             </div>
             <div class="carousellPhoneSwipperBtn">
-                <button>learn more</button>
-                <button>Organisator</button>
+                <router-link to="/Event" class="button" @click="setEvent()"> {{ actualLang ? "See the event" : "Voir l'evenement" }}</router-link>
+                <router-link to="/Event Organisator" class="button" @click="setEvent()">{{ actualLang ? "Organisator" : "Découvrir les Organisateurs" }}</router-link>
             </div>
         </div>
     </div>
@@ -20,23 +20,34 @@
     import { ref, onMounted, onUnmounted, watch } from 'vue';
 
     const actualMode = ref(LocalStorageManager.getMode());
+    let actualLang = ref(LocalStorageManager.getLang());
 
     if (actualMode.value == null){
         LocalStorageManager.setMode(true);
         actualMode.value = LocalStorageManager.getMode();
     }
+    if (actualLang.value === null) {
+        LocalStorageManager.setLang(true);
+        actualLang.value = LocalStorageManager.getLang();
+    }
 
+        // Function to handle mode change event
+    const handleLangChange = (event) => {
+        actualLang.value = JSON.parse(event.detail.storage);
+    };
     const handleModeChange = (event) => {
         actualMode.value = JSON.parse(event.detail.storage);
     };
       // Add event listener for mode changes
     onMounted(() => {
         window.addEventListener('mode-changed', handleModeChange);
+        window.addEventListener('lang-changed', handleLangChange);
     });
 
     // Remove event listener when component is unmounted
     onUnmounted(() => {
         window.removeEventListener('mode-changed', handleModeChange);
+        window.removeEventListener('lang-changed', handleLangChange);
     });
     
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
@@ -73,18 +84,26 @@
     eventInfo.value = newEvent.value[i.value];
     };
 
+    const setEvent = () => {
+        LocalStorageManager.setEvent(eventInfo.value);
+    }
+
 </script>
 <style lang="scss">
   #carousellPhoneComponent {
     //border: 2px solid rgb(251, 255, 0);
-    height: 93svh;
+    //height: 93svh;
+    height: 855px;
     width: 100%;
     padding-top: 65px;
+    //border: 3px solid rgb(11, 66, 232);
     #carousellPhoneSwiper {
         height: 40%;
+        z-index: 1000;
     }
     .reste {
         //border: 2px solid rgb(0, 0, 0);
+        //border: 3px solid red;
         height: 60%;
         display: flex;
         flex-direction: column;
@@ -112,12 +131,13 @@
             width: 96%;
             margin: 2% auto 3% auto;
 
-            button {
+            .button {
                 //border: 2px solid red;
                 width: 100%;
                 margin: 2% auto;
                 font-size: 1.5rem;
                 padding: 10px 0%;
+                text-decoration: none;
             }
         }
     }
@@ -126,7 +146,8 @@
   .light {
     #carousellPhoneComponent {
         //background-color: rgba(29, 30, 24, 0.118);
-        background: linear-gradient(to bottom, #efefef, #ccc);
+        //background: linear-gradient(to bottom, #efefef, #ccc);
+        background: linear-gradient(to bottom, #ccc, #efefef);
         .reste {
             .carousellPhoneSwipperInfos{
                 h3 {
@@ -139,13 +160,13 @@
             }
             .carousellPhoneSwipperBtn {
 
-                button {
+               .button {
                     color: var(--graphite);
 
                     background-color: rgba(114, 114, 114, 0);
                     border: 2px solid rgb(255, 255, 255);
                 }
-                button:hover, button:active {
+                .button:hover, .button:active {
                     color: var(--graphite06);
                     background-color: rgba(114, 114, 114, 0);
                     border: 2px solid rgb(255, 255, 255);
@@ -158,7 +179,9 @@
   .dark {
     #carousellPhoneComponent {
         //background-color: rgb(29, 30, 24);
-        background: linear-gradient(to bottom, #ccc, rgb(29, 30, 24));
+        //background: linear-gradient(to bottom, #ccc, rgb(29, 30, 24));
+        background: linear-gradient(to bottom, rgb(29, 30, 24), #cbcbcb);
+        
 
         .reste {
             .carousellPhoneSwipperInfos{
@@ -172,13 +195,13 @@
             }
             .carousellPhoneSwipperBtn {
 
-                button {
+                .button {
                     color: var(--light-text);
 
                     background-color: rgba(114, 114, 114, 0);
                     border: 2px solid rgb(255, 255, 255);
                 }
-                button:hover, button:active {
+                .button:hover, .button:active {
                     color: var(--light-trans-text);
 
                     background-color: rgba(114, 114, 114, 0);
@@ -194,7 +217,7 @@
             display: block;
         }
     }
-    @media screen and (min-width: 1026px){
+    @media screen and (min-width: 1025.1px){
         #carousellPhoneComponent {
             display: none;
         }

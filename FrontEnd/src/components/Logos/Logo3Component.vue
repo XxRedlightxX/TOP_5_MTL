@@ -54,10 +54,12 @@ const text = "Drop";
         }
         .wave:before {
             border-radius: 45%;
+            //transform: translate(-40%, -70%);
             animation: animate 5s linear infinite;
         }
         .wave:after{
             border-radius: 40%;
+            //transform: translate(-50%, -70%);
             animation: animate 10s linear infinite;
         }
         @keyframes animate {
@@ -129,6 +131,7 @@ const text = "Drop";
             width: 70%;
             height: auto;
             aspect-ratio: 1/1;
+            //padding: 100% auto;
 
             #text3dComponent {
                 width: 100%;

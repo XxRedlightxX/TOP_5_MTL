@@ -4,6 +4,11 @@ import { ref } from "vue";
 const text =
   "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
 
+const text1a = "See the event";
+const text1b = "Voir l'evenement";
+const text2a = "Organisator";
+const text2b = "Découvrir les Organisateurs";
+
 const currentSlider = [
   {
     image: "https://picsum.photos/1895/795",
@@ -69,16 +74,23 @@ const currentSliderNuit = [
 export default {
   data() {
     let actualMode = ref(LocalStorageManager.getMode());
+    let actualLang = ref(LocalStorageManager.getLang());
 
     // Définit un mode par défaut si `actualMode` n'existe pas
     if (actualMode.value == null) {
       LocalStorageManager.setMode(true);
       actualMode.value = LocalStorageManager.getMode();
     }
-
+    if (actualLang.value === null) {
+      LocalStorageManager.setLang(true);
+      actualLang.value = LocalStorageManager.getLang();
+    }
     return {
       actualMode, // Intégration d'actualMode dans le data
+      actualLang,
       carouselItems: actualMode.value ? currentSlider : currentSliderNuit,
+      textEvent: ref(actualLang.value ? text1a : text1b),
+      textOrganisator: ref(actualLang.value ? text2a : text2b),
       timeRunning: 3000,
       timeAutoNext: 5000,
       runTimeOut: null,
@@ -119,18 +131,27 @@ export default {
     handleModeChange(event) {
       this.actualMode = JSON.parse(event.detail.storage); // Assigne la nouvelle valeur du mode
     },
+    handleLangChange(event) {
+      this.actualLang.value = JSON.parse(event.detail.storage);
+    },
   },
   mounted() {
     window.addEventListener("mode-changed", this.handleModeChange);
+    window.addEventListener("lang-changed", this.handleLangChange);
     this.setNextAuto();
   },
   beforeUnmount() {
     window.removeEventListener("mode-changed", this.handleModeChange);
+    window.removeEventListener("lang-changed", this.handleLangChange);
   },
   watch: {
     actualMode(newVal) {
       console.log("Mode changed: ", newVal);
       this.carouselItems = newVal ? currentSlider : currentSliderNuit;
+    },
+    actualLang(newVal) {
+      this.textEvent = newVal ? text1a : text1b;
+      this.textOrganisator = newVal ? text2a : text2b;
     },
   },
 };

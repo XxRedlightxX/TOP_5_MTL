@@ -88,12 +88,34 @@ img.value = defaultImg;
             border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
             animation: animmm 1s infinite alternate;
             //border-radius: 50%;
-            bottom: -2%;
-            right: 13%;
             cursor: pointer;
         }
     }
-
+    @media screen and (min-width: 1025.1px) {
+        #avatarUploader {
+            .avatarLabel {
+                bottom: -2%;
+                right: 13%;
+            }
+        }
+    }
+    
+    @media screen and (max-width: 1025px) and (min-width: 500.1px) {
+        #avatarUploader {
+            .avatarLabel {
+                bottom: -2%;
+                right: 43%;
+            }
+        }
+    }
+    @media screen and (max-width: 500px) {
+        #avatarUploader {
+            .avatarLabel {
+                bottom: -2%;
+                right: 35%;
+            }
+        }
+    }
     .light {
         #avatarUploader {
             .v-avatar {

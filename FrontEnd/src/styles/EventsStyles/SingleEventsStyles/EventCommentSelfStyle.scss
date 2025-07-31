@@ -27,6 +27,28 @@
         }
     }
 }
+@media screen and (min-width: 1025.1px) {
+    #eventCommentSelfComponent{
+        .content {
+            form {
+                .v-textarea {
+                    width: 90%;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 1025px) {
+    #eventCommentSelfComponent{
+        .content {
+            form {
+                .v-textarea {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
 .light {
     #eventCommentSelfComponent{
         .content {

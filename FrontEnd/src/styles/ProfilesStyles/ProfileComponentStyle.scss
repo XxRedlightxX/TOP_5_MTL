@@ -1,33 +1,63 @@
 #profileComponent {
-    //border: 2px solid red;
     text-align: center;
-    width: 75%;
     border-radius: 16px;
     margin: auto;
     display: flex;
-    padding: 2% 1%;
     flex-direction: column;
     justify-content: space-between;
 
-    .top {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        gap: 2%;
-
-        #profileHeaderComponent {
-            flex: 3;
-        }
-        #profileOtherComponent {
-            flex: 2;
-        }
-    }
     #profileListEventComponent {
         flex: 1;
-        margin-top: 5%;
-    }
-
+    } 
+}
+@media screen and (min-width: 1025.1px) {
+    #profileComponent {
+        width: 75%;
+        padding: 2% 1%;
     
+        .top {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2%;
+    
+            #profileHeaderComponent {
+                flex: 4;
+            }
+            #profileOtherComponent {
+                flex: 2;
+                //border: 2px solid red;
+            }
+        }
+        #profileListEventComponent {
+            margin-top: 5%;
+        } 
+    } 
+}
+@media screen and (max-width: 1025px) {
+    #profileComponent {
+        width: 100%;
+        padding: 2% 1%;
+    
+        .top {
+            width: 100%;
+            display: flex;
+            flex-direction:column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5%;
+    
+            #profileHeaderComponent {
+                flex: 3;
+            }
+            #profileOtherComponent {
+                flex: 2;
+            }
+        }
+        #profileListEventComponent {
+            margin-top: 5%;
+        } 
+    } 
 }

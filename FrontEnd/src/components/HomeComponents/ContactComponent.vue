@@ -41,7 +41,7 @@
                     </div>
                     <div>
                         <h4>Email</h4>
-                        <p>Email@Email.Email</p>
+                        <p class="em">Email@Email. Email</p>
                     </div>
                 </div>
 

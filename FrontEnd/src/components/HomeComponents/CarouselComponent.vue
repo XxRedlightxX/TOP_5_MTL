@@ -11,7 +11,7 @@
                 <div :class="index == 0 ? 'titlee' : 'lostTitle'">{{ item.title }}</div>
 
                     <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
-                        <router-link to="/Event" class="btn roundBorderSmall" @click="setEvent(item)">Voir l'evenement</router-link>
+                        <router-link to="/Event" class="btn roundBorderSmall" @click="setEvent(item)">{{ textEvent }}</router-link>
                         <router-link to="/Event Organisator" class="btn roundBorderSmall" @click="setEvent(item)">Découvrir les Organisateurs</router-link>
                     </div>
                     <div :class="index == 0 ? 'desc' : 'lostdesc'">

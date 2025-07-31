@@ -23,7 +23,6 @@
 
     <a href="#" class="forgot">{{actualLang ? 'Forgot your password ?' : 'Vous avez oublié votre mot de passe ?'}}</a>
 
-    <!--<button type="submit">{{actualLang ? 'Sign In' : 'Se connecter'}}</button>-->
     <waterButton :text="actualLang ? 'Sign In' : 'Se connecter'" :type="true" @click="Login()"/>
 
   </form>

@@ -15,7 +15,6 @@
     import CarousellPhone from "../../components/HomeComponents/CarouselPhoneComponent.vue"
     import IntroText from "../../components/HomeComponents/IntroTextComponent.vue"
     import NewEvent from "../../components/HomeComponents/NewEventComponent.vue"
-    //import NewEventTest from "../../components/HomeComponents/NewEventComponents/testSlider.vue"
     import Contact from "../../components/HomeComponents/ContactComponent.vue"
 </script>
 
