@@ -3,7 +3,7 @@
 <template>
 
 
-    
+     <p v-if="authStore.user">{{ authStore.user.name }}</p>
     <form class="sign-up glass" @submit.prevent="authenticate('register', formData)">
 
         <h2>{{actualLang ? 'sign-up' : 'Inscrivez-Vous'}}</h2>
@@ -66,20 +66,23 @@
              v-model="formData.password_confirmation"
         ></v-text-field>
 
-          <v-radio-group v-model="formData.user_type">
+        <v-radio-group 
+            v-model="formData.type_utilisateur" 
+         
+            :rules="[v => !!v || 'User type is required']"
+            required
+            >
             <v-radio
-                label="Particulier"
-                value="particulier"
+                v-for="(item, index) in items"
+                :key="index"
+                :label="item"
+                :value="item"
             ></v-radio>
-            <v-radio
-            label="Organisateur"
-            value="organisateur"
-            ></v-radio>
-  </v-radio-group>
+    </v-radio-group>
 
         
     
-        <button type="submit">{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
+        <button   type="submit">{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
         <!--<waterButton :text="actualLang ? 'Sign Up' : 'S\'inscrire'" :type="true" @click=" Login()"/>>-->
     </form>
 </template>
@@ -106,12 +109,17 @@
     const formData  = reactive({
         name: '',
         email : '',
-        type_utilisateur : 'particulier',
+        type_utilisateur : null ,
         password : '',
         password_confirmation : '',
     })
 
-    const selectedItem = ref(null);
+  
+        const items = [
+        'particulier',
+        'organisateur',
+  
+        ];
    
 
   

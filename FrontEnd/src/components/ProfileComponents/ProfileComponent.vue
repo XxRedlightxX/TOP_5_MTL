@@ -1,5 +1,6 @@
 <template>
     <div id="profileComponent">
+        <p v-if="authStore.user">{{ authStore.user }}</p>
         <div class="top">
             <ProfileHead :himself="props.himself" :user="theOrganisator"></ProfileHead>
             <ProfileOther v-show="props.himself" :user="theOrganisator"></ProfileOther>
@@ -14,10 +15,14 @@
     import ProfileHead from "./ProfileHeaderComponent.vue";
     import ProfileOther from "./ProfileOtherComponent.vue"
     import ProfileList from "./ProfileListEventComponent.vue"
+    import { useAuthStore } from "@/stores/auth";
 
     const props = defineProps({
         himself: Boolean, // Boolean type prop
     });
+
+    const { authenticate} = useAuthStore();
+    const authStore = useAuthStore()
 
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
     const organisator = {
