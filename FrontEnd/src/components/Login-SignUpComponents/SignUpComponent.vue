@@ -1,5 +1,10 @@
+
+
 <template>
-    <form class="sign-up glass">
+
+
+    
+    <form class="sign-up glass" @submit.prevent="authenticate('register', formData)">
 
         <h2>{{actualLang ? 'sign-up' : 'Inscrivez-Vous'}}</h2>
 
@@ -11,6 +16,9 @@
             clearable
             persistent-clear 
             hide-details="auto"
+            v-model="formData.name"
+           required
+          
         ></v-text-field>
 
         <div class="sub">
@@ -22,6 +30,7 @@
                 clearable
                 persistent-clear 
                 hide-details="auto"
+                v-model = "formData.email"
             ></v-text-field>
 
             <v-text-field
@@ -43,6 +52,7 @@
             clearable
             persistent-clear 
             hide-details="auto"
+            v-model="formData.password"
         ></v-text-field>
 
         <v-text-field
@@ -53,17 +63,57 @@
             clearable
             persistent-clear 
             hide-details="auto"
+             v-model="formData.password_confirmation"
         ></v-text-field>
 
-        <!--<button type="submit">{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>-->
-        <waterButton :text="actualLang ? 'Sign Up' : 'S\'inscrire'" :type="true" @click=" Login()"/>
+          <v-radio-group v-model="formData.user_type">
+            <v-radio
+                label="Particulier"
+                value="particulier"
+            ></v-radio>
+            <v-radio
+            label="Organisateur"
+            value="organisateur"
+            ></v-radio>
+  </v-radio-group>
+
+        
+    
+        <button type="submit">{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
+        <!--<waterButton :text="actualLang ? 'Sign Up' : 'S\'inscrire'" :type="true" @click=" Login()"/>>-->
     </form>
 </template>
 
 <script setup>
+    import { useAuthStore } from "@/stores/auth";
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted} from "vue";
-    import waterButton from "../WaterButtonComponent.vue"
+    import { ref, onMounted, onUnmounted, reactive} from "vue";
+    import waterButton from "../WaterButtonComponent.vue";
+    import axios from 'axios';
+
+    const {authenticate} = useAuthStore();
+    const authStore = useAuthStore();
+    
+
+
+
+// Set defaults before request
+//axios.defaults.baseURL = 'http://localhost:8000';
+//axios.defaults.withCredentials = true;
+
+    
+
+    const formData  = reactive({
+        name: '',
+        email : '',
+        type_utilisateur : 'particulier',
+        password : '',
+        password_confirmation : '',
+    })
+
+    const selectedItem = ref(null);
+   
+
   
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
