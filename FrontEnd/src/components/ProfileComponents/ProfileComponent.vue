@@ -1,8 +1,9 @@
 <template>
     <div id="profileComponent">
-        <p v-if="authStore.user">{{ authStore.user }}</p>
+
         <div class="top">
-            <ProfileHead :himself="props.himself" :user="theOrganisator"></ProfileHead>
+            
+            <ProfileHead :himself="props.himself" :user="organisator"></ProfileHead>
             <ProfileOther v-show="props.himself" :user="theOrganisator"></ProfileOther>
         </div>
         <ProfileList :himself="props.himself" :user="theOrganisator"></ProfileList>
@@ -11,7 +12,7 @@
   
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, defineProps} from "vue";
+    import { ref,computed, onMounted, onUnmounted, defineProps} from "vue";
     import ProfileHead from "./ProfileHeaderComponent.vue";
     import ProfileOther from "./ProfileOtherComponent.vue"
     import ProfileList from "./ProfileListEventComponent.vue"
@@ -20,27 +21,33 @@
     const props = defineProps({
         himself: Boolean, // Boolean type prop
     });
-
-    const { authenticate} = useAuthStore();
+    
+   
     const authStore = useAuthStore()
 
+    onMounted(() => {
+        authStore.getUser()
+    })
+
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
-    const organisator = {
-        avatar: "/src/assets/p1.jpg",
-        username: "Debrazer",
-        name: "Wakanda",
-        fisrtName: "Dede",
-        email: "dedeTheBest@gmail.com",
-        num: 1122222222,
-        desc: text,
-        listEvent: [
-            { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text, rating: 1 },
-            { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 },
-            { image: "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text, rating: 5 },
-            { image: "/src/assets/HomeCarousel/Jardin-botanique.jpg", title: "Jardin Botanique", desc: text, rating: 4 },
-            { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 }
-        ]
-    };
+   const organisator = computed(() => {
+  return {
+    avatar: "/src/assets/p1.jpg",
+    username: authStore.user?.name || "ff",
+    name: "Wakanda",
+    fisrtName: "Dede",
+    email: "dedeTheBest@gmail.com",
+    num: 1122222222,
+    desc: "No description yet",
+    listEvent: [
+      { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royals", desc: text, rating: 1 },
+      { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 },
+      { image: "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text, rating: 5 },
+      { image: "/src/assets/HomeCarousel/Jardin-botanique.jpg", title: "Jardin Botanique", desc: text, rating: 4 },
+      { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 }
+    ]
+  };
+});
 
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
@@ -92,6 +99,7 @@
     };
     // Add event listener for mode changes
     onMounted(() => {
+      
         window.addEventListener('lang-changed', handleLangChange);
         window.addEventListener('login-changed', handleLoginChange);
         window.addEventListener('organisator-changed', handleOrganisatorChange);

@@ -4,7 +4,7 @@
 
 
      <p v-if="authStore.user">{{ authStore.user.name }}</p>
-    <form class="sign-up glass" @submit.prevent="authenticate('register', formData)">
+    <form class="sign-up glass">
 
         <h2>{{actualLang ? 'sign-up' : 'Inscrivez-Vous'}}</h2>
 
@@ -82,7 +82,7 @@
 
         
     
-        <button   type="submit">{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
+        <button  type="submit" @click="Login()" >{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
         <!--<waterButton :text="actualLang ? 'Sign Up' : 'S\'inscrire'" :type="true" @click=" Login()"/>>-->
     </form>
 </template>
@@ -92,20 +92,13 @@
     import storageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted, reactive} from "vue";
     import waterButton from "../WaterButtonComponent.vue";
-    import axios from 'axios';
+
+    let actualLang = ref(storageManager.getLang());
+    let isLogged = ref(storageManager.getLogin());
+
 
     const {authenticate} = useAuthStore();
     const authStore = useAuthStore();
-    
-
-
-
-// Set defaults before request
-//axios.defaults.baseURL = 'http://localhost:8000';
-//axios.defaults.withCredentials = true;
-
-    
-
     const formData  = reactive({
         name: '',
         email : '',
@@ -115,18 +108,14 @@
     })
 
   
-        const items = [
+    const items = [
         'particulier',
         'organisateur',
-  
-        ];
+
+    ];
    
-
-  
-    let actualLang = ref(storageManager.getLang());
-    let isLogged = ref(storageManager.getLogin());
-
     const Login = () => {
+        authenticate('register', formData);
         storageManager.setLogin(true);
         isLogged.value = storageManager.getLogin();
     }

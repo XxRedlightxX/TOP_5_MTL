@@ -9,8 +9,14 @@ use App\Http\Controllers\LikeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Service\FollowService;
+use Illuminate\Http\Request;
 
-Route::get("/user",[UserController::class, 'getUserList']);
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
+Route::get("/users",[UserController::class, 'getUserList']);
 
 Route::get('/user/search', [UserController::class, 'getUserByEmail']);
 
