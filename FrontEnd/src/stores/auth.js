@@ -7,7 +7,8 @@ export const useAuthStore = defineStore('authStore', {
     state: () => {
         return {
             user: null,
-            errors: {},
+  
+            error: {},
            
         }
     },
@@ -18,45 +19,17 @@ export const useAuthStore = defineStore('authStore', {
     actions : {
 
         async getUser() {
-           try {
-  
-            const token = localStorage.getItem('token');
-    
-            
-            if (!token) {
-            throw new Error('No authentication token found');
-            }
-
-           // Fetch de l objet provenant du Backend
-                const response = await fetch("/api/user", {
+            if (localStorage.getItem("token")) {
+                const res = await fetch("/api/user", {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-                });
-
-                
-                if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to fetch user data');
-                }
-
-                // On recupere l objet user et le retourn
-                const userData = await response.json();
-                this.user = userData;
-                
-                return userData;
-                
-            } catch (error) {
-                console.error('Failed to get user:', error);
-                
-                // Ca Clean la le cache lorsque la requete a failed
-                if (error.message.includes('401') || error.message.includes('Unauthorized')) {
-                localStorage.removeItem('token');
-                }
-                
-                throw error; // Re-throw to let calling code handle it
+                    authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            const data = await res.json();
+            if (res.ok) {
+                this.user = data;
             }
+        }
         },
 
         
@@ -64,21 +37,55 @@ export const useAuthStore = defineStore('authStore', {
 
 
         //Register
-           async authenticate(apiRoute, formData) {
-                const res = await fetch(`/api/${apiRoute}`, {
-                    method: "post",
-                    body: JSON.stringify(formData),
-                });
+    async authenticate(apiRoute, formData) {
 
-                const data = await res.json();
-                if (data.errors) {
-                    this.errors = data.errors;
-                } else {
-                    this.errors = {};
-                    localStorage.setItem("token", data.token);
-                    this.user = data.user;
-                    this.router.push({ name: "home" });
-                }
+        const res = await fetch(`/api/${apiRoute}`, {
+            method: "post",
+            body: JSON.stringify(formData),
+        });
+
+        const data = await res.json();
+        if (data.error) {
+            this.error = data.error;
+            console.log(this.error);
+            return false
+        } else {
+            this.errors = {};
+            localStorage.setItem("token", data.token);
+            this.user = data.user;
+            return true;
+            
+        }
+
+             /* try {
+        const res = await fetch(`/api/${apiRoute}`, {
+            method: "post",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData),
+        });
+
+   
+
+        const data = await res.json();
+        
+        if (data.errors) {
+            this.errors = data.errors;
+           this.isLogged = false; // Explicitly return false on failure
+        } else {
+            this.errors = {};
+            localStorage.setItem("token", data.token);
+            this.user = data.user;
+            this.isLogged = true; // Explicitly return true on success
+        }
+    } catch (error) {
+        console.error('Authentication error:', error);
+        this.errors = { network: 'Failed to connect to server' };
+       this.isLogged = false;
+    }
+
+    return this.isLogged;*/
     },
 
      async logout() {

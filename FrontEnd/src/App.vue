@@ -16,6 +16,9 @@
   import Language from "./components/LanguageSetterComponent.vue";
   import LocalStorageManager from "@/JS/LocalStaorageManager"
   import { ref, onMounted, onUnmounted} from "vue";
+  import { useAuthStore } from "./stores/auth";
+
+
 
   // Register the component globally
   const isMultiSelection = ref(true);
@@ -44,6 +47,9 @@
   onUnmounted(() => {
     window.removeEventListener('mode-changed', handleModeChange);
   });
+
+  //const pinia = createPinia()
+  //app.use(pinia)
 </script>
 
 <style src="./styles/settings.scss"></style>

@@ -13,7 +13,7 @@
         required
         v-model="formData.email"
     ></v-text-field>
-
+    <p v-if="error.email" class="error">{{ error.email[0] }} brrr</p>
     <v-text-field
         :rules="Password"
         :label="actualLang ? 'Password' : 'Mot de passe'"
@@ -24,6 +24,7 @@
         required
         v-model="formData.password"
     ></v-text-field>
+     <p v-if="error.password" >{{ error.password[0] }} brrr</p>
     
 
     <a href="#" class="forgot">{{actualLang ? 'Forgot your password ?' : 'Vous avez oublié votre mot de passe ?'}}</a>
@@ -42,11 +43,13 @@
     import { storeToRefs } from "pinia";
 
 
-  
+    
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
 
-    const {errors} = storeToRefs(useAuthStore());
+    const {error} = storeToRefs(useAuthStore());
+
+    onMounted(() => (error.value = {}));
 
     const formData =reactive({
         email : "",
@@ -57,12 +60,20 @@
 
 
 
-    const Login = ()=> {
-        authenticate('login', formData)
-        storageManager.setLogin(true);
-        isLogged.value = storageManager.getLogin();
+   const Login = async () => {
+    try {
+        const success = await authenticate('login', formData);
+        if (success) {
+            storageManager.setLogin(true);
+            isLogged.value = storageManager.getLogin();
+        } else {
+            console.log("Not Connect")
+        }
+    } catch (error) {
+        // Handle any errors
+        console.error('Login error:', error);
     }
-        
+}  
     
     if (actualLang.value === null) {
         storageManager.setLang(true);

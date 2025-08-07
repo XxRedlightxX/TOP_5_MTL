@@ -25,9 +25,7 @@
    
     const authStore = useAuthStore()
 
-    onMounted(async () => {
-         await authStore.getUser()
-    })
+ 
 
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
    const organisator = computed(() => {
@@ -62,6 +60,7 @@
     }
     
     const Logout = () => {
+        
         storageManager.setLogin(false);
         isLogged.value = storageManager.getLogin();
     }
