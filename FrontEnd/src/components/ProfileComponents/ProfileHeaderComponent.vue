@@ -28,11 +28,14 @@
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted, defineProps} from "vue";
+    import { useAuthStore } from "@/stores/auth";
 
     const props = defineProps({
         himself: Boolean, // Boolean type prop
         user: Object
     });
+
+    const {logout} = useAuthStore();
 
     storageManager.setLogUser(props.user);
     let actualLang = ref(storageManager.getLang());
@@ -40,6 +43,7 @@
 
 
     const Logout = () => {
+        logout();
         storageManager.setLogin(false);
         //localStorage.removeItem('logUser');
         isLogged.value = storageManager.getLogin();

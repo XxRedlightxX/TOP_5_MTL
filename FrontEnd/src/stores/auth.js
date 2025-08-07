@@ -59,27 +59,46 @@ export const useAuthStore = defineStore('authStore', {
             }
         },
 
-
-        //Login
-         async authenticate(apiRoute,formData) {
-            const res = await fetch (`/api/${apiRoute}` , {
-                method : "post",
-                body : JSON.stringify(formData),
-            });
-
-            const data = await res.json();
-            if(data.erros){
-                this.errors = data.errors
-            } else {
-                console.log(data);
-                localStorage.setItem('token', data.token)
-                this.user = data.user;
-
-                //this.router.push({name :"UserProfile"})
         
-            }
-            
-            console.log(data);
+        
+
+
+        //Register
+           async authenticate(apiRoute, formData) {
+                const res = await fetch(`/api/${apiRoute}`, {
+                    method: "post",
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await res.json();
+                if (data.errors) {
+                    this.errors = data.errors;
+                } else {
+                    this.errors = {};
+                    localStorage.setItem("token", data.token);
+                    this.user = data.user;
+                    this.router.push({ name: "home" });
+                }
+    },
+
+     async logout() {
+      const res = await fetch("/api/logout", {
+        method: "post",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+      });
+
+      const data = await res.json();
+      console.log(data);
+
+      if (res.ok) {
+        this.user = null;
+        this.errors = {};
+        localStorage.removeItem("token");
+        
+      }
+    },
+
     },
 });

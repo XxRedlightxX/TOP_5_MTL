@@ -1,5 +1,5 @@
 <template>
-  <form class="sign-in glass">
+  <form class="sign-in glass" @submit.prevent="Login()">
 
     <h2>{{actualLang ? 'Sign In' : 'Connectez-Vous'}}</h2>
 
@@ -10,6 +10,8 @@
         clearable
         persistent-clear 
         hide-details="auto"
+        required
+        v-model="formData.email"
     ></v-text-field>
 
     <v-text-field
@@ -19,29 +21,49 @@
         clearable
         persistent-clear 
         hide-details="auto"
+        required
+        v-model="formData.password"
     ></v-text-field>
+    
 
     <a href="#" class="forgot">{{actualLang ? 'Forgot your password ?' : 'Vous avez oublié votre mot de passe ?'}}</a>
 
-    <waterButton :text="actualLang ? 'Sign In' : 'Se connecter'" :type="true" @click="Login()"/>
-
+    <waterButton :text="actualLang ? 'Sign In' : 'Se connecter'" :type="true" />
+    <button  type="submit"  >{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
   </form>
 
 </template>
 
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted} from "vue";
+    import { ref, onMounted, onUnmounted,reactive } from "vue";
     import waterButton from "../WaterButtonComponent.vue"
+    import { useAuthStore } from "@/stores/auth";
+    import { storeToRefs } from "pinia";
+
+
   
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
 
-    const Login = () => {
+    const {errors} = storeToRefs(useAuthStore());
+
+    const formData =reactive({
+        email : "",
+        password : ""
+    })
+
+    const {authenticate}= useAuthStore();
+
+
+
+    const Login = ()=> {
+        authenticate('login', formData)
         storageManager.setLogin(true);
         isLogged.value = storageManager.getLogin();
     }
-
+        
+    
     if (actualLang.value === null) {
         storageManager.setLang(true);
         actualLang.value = storageManager.getLang();
