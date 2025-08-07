@@ -37,7 +37,7 @@ class UserService {
 
         if ($user) {
             $token = $user->createToken($user->name)->plainTextToken;
-            return new AuthResult(true, $user, $token, 'Login successful.');
+            return new AuthResult(true, $user, 'Login succ.', $token);
         }
 
          return new AuthResult(false, null, 'Invalid credentials.', null);
