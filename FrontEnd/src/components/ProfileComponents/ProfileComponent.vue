@@ -17,36 +17,44 @@
     import ProfileOther from "./ProfileOtherComponent.vue"
     import ProfileList from "./ProfileListEventComponent.vue"
     import { useAuthStore } from "@/stores/auth";
+    import { useActivityStore } from "@/stores/activity";
 
     const props = defineProps({
         himself: Boolean, // Boolean type prop
     });
     
    
-    const authStore = useAuthStore()
-
+    const authStore = useAuthStore();
+    const ActivityStore = useActivityStore();
+    onMounted(async () => {
+        await authStore.getUserActivities();
+    });
  
 
-    const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
-   const organisator = computed(() => {
+ 
+    const organisator = computed(() => {
+    const user = authStore.user;
+         
+
+  const listEvent = user?.activites?.map((act) => ({
+    image: "/src/assets/HomeCarousel/Mont-royal.jpg", 
+    title: act.titre,
+    desc: act.description || "Aucune description",
+    lieu: act.lieu,
+    rating: 3 // ou autre champ si dispo
+  })) || [];
+
   return {
     avatar: "/src/assets/p1.jpg",
-    username: authStore.user?.name || "ff",
+    username: user?.name || "Utilisateur inconnu",
     name: "Wakanda",
     fisrtName: "Dede",
-    email: "dedeTheBest@gmail.com",
+    email: user?.email || "email inconnu",
     num: 1122222222,
     desc: "No description yet",
-    listEvent: [
-      { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royals", desc: text, rating: 1 },
-      { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 },
-      { image: "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text, rating: 5 },
-      { image: "/src/assets/HomeCarousel/Jardin-botanique.jpg", title: "Jardin Botanique", desc: text, rating: 4 },
-      { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 }
-    ]
+    listEvent
   };
-});
-
+})
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
     let actualMode = ref(storageManager.getMode());

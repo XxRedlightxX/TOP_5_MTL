@@ -6,14 +6,14 @@
     <v-text-field
         :rules="Email"
         :label="actualLang ? 'Email' : 'Email'"
-        type="input"
+        type="email"
         clearable
         persistent-clear 
         hide-details="auto"
         required
         v-model="formData.email"
     ></v-text-field>
-    <p v-if="error.email" class="error">{{ error.email[0] }} brrr</p>
+   
     <v-text-field
         :rules="Password"
         :label="actualLang ? 'Password' : 'Mot de passe'"
@@ -24,7 +24,7 @@
         required
         v-model="formData.password"
     ></v-text-field>
-     <p v-if="error.password" >{{ error.password[0] }} brrr</p>
+     <p v-if="errors.password" >{{ errors.password }} brrr</p>
     
 
     <a href="#" class="forgot">{{actualLang ? 'Forgot your password ?' : 'Vous avez oublié votre mot de passe ?'}}</a>
@@ -47,9 +47,9 @@
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
 
-    const {error} = storeToRefs(useAuthStore());
+    const {errors} = storeToRefs(useAuthStore());
 
-    onMounted(() => (error.value = {}));
+    onMounted(() => (errors.value = {}));
 
     const formData =reactive({
         email : "",
@@ -59,9 +59,14 @@
     const {authenticate}= useAuthStore();
 
 
+   
+
+
 
    const Login = async () => {
     try {
+
+   
         const success = await authenticate('login', formData);
         if (success) {
             storageManager.setLogin(true);
@@ -69,9 +74,9 @@
         } else {
             console.log("Not Connect")
         }
-    } catch (error) {
+    } catch (errors) {
         // Handle any errors
-        console.error('Login error:', error);
+        console.error('Login error:', errors);
     }
 }  
     
