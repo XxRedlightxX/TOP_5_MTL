@@ -19,9 +19,7 @@ export default defineConfig({
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({
       autoImport: true,
-      styles: {
-        configFile: 'src/styles/settings.scss',
-      },
+      styles: true, 
     }),
     Components(),
     ViteFonts({
@@ -49,6 +47,16 @@ export default defineConfig({
     ],
   },
   server: {
-    port: 3000,
+    proxy:{
+      '/api' : {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin : true,
+        headers: {
+          Accept : "application/json",
+          "Content-Type" : "application/json"
+        },
+      },
+    },
+    port: 3000
   },
 })
