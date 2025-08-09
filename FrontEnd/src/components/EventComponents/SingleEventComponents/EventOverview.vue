@@ -4,13 +4,13 @@
         
         <div class="info">
             <div class="lol">
-                <p>{{ actualLang ? 'Hosted by ': 'Mise en Ligne par ' }}Jean-Pierre Du Lac  </p>
+                <p>{{ actualLang ? 'Hosted by ': 'Mise en Ligne par ' }}{{hostName}} </p>
             </div>
             
             <div class="ratings">
                 <Ratings :rating="event.rating" :Rate="false"/>
             </div>
-            <h3><strong>{{ actualLang ? 'Location : ': 'Emplacement : ' }}</strong> Normandie, France</h3>
+            <h3><strong>{{ actualLang ? 'Location : ': 'Emplacement : ' }}</strong> {{ place }}</h3>
             <h3><strong>{{ actualLang ? 'Open from : ': 'Ouvert de : ' }}</strong> 9h - 19h, {{ actualLang ? 'everydays': 'tous les jours' }}</h3>
         </div>
     </div>
@@ -34,6 +34,13 @@
     if( event.value == null){
         event.value = defaultEvent
     }
+
+    defineProps ({
+        hostName: String,
+        place : String,
+        Rating: Number,
+
+    });
 
 
     let actualLang = ref(LocalStorageManager.getLang());

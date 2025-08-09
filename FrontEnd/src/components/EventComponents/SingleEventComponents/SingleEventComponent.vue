@@ -1,8 +1,8 @@
 <template>
     <div id="singleEventComponent">
-        <div class="place-overview"  v-if="activity">
+        <div class="place-overview" >
             <header class="header">
-                <h1 class="header__title">{{activity.titre}}</h1>
+                <h1 class="header__title">{{activityTitle}}</h1>
                 <br>
             </header>
 
@@ -11,7 +11,7 @@
                     <img :src="event.image" alt="Mont Saint-Michel" />
                 </div>
                 <div class="overview__details">
-                    <h3 class="overview__description">{{activity.description}}</h3>
+                    <h3 class="overview__description">{{activityDesc}}</h3>
                 </div>
             </section>
         </div>
@@ -19,20 +19,25 @@
 </template>
 
 <script setup>
-    import { onMounted, ref } from 'vue';
+    import { onMounted, ref, defineProps } from 'vue';
     import LocalStorageManager from "@/JS/LocalStaorageManager";
     import { useActivityStore } from '@/stores/activity';
     import { useRoute } from 'vue-router';
 
-    const activity = ref(null);
+    //const activity = ref(null);
+
+    defineProps({
+        activityTitle: String,
+        activityDesc: String
+    });
   
 
     const route = useRoute()
     const {getActivityById} = useActivityStore();
 
-    onMounted (async ()  =>
+    /*onMounted (async ()  =>
         activity.value = await getActivityById(route.params.id) 
-    );
+    );*/
     
 
     const event = ref(LocalStorageManager.getEvent())
