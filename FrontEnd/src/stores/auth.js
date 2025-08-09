@@ -8,7 +8,7 @@ export const useAuthStore = defineStore('authStore', {
         return {
             user: null,
   
-            error: {},
+            errors: {},
            
         }
     },
@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('authStore', {
 
         async getUser() {
             if (localStorage.getItem("token")) {
-                const res = await fetch("/api/user", {
+                const res = await fetch("/api/user/activite", {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -42,6 +42,9 @@ export const useAuthStore = defineStore('authStore', {
         const res = await fetch(`/api/${apiRoute}`, {
             method: "post",
             body: JSON.stringify(formData),
+            headers: {
+                    'Content-Type': 'application/json',
+  }         ,
         });
 
         const data = await res.json();
@@ -57,35 +60,30 @@ export const useAuthStore = defineStore('authStore', {
             
         }
 
-             /* try {
-        const res = await fetch(`/api/${apiRoute}`, {
-            method: "post",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData),
-        });
+    },
 
-   
+     async getUserActivities() {
+            const token = localStorage.getItem("token")
+            if (token) {
+                const res = await fetch("/api/user/activite", {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await res.json();
+       
+            if (res.ok) {
+                this.user = data;
+                console.log(this.user);
+                return this.user;
+                
+            }else if(data.errors) {
+                this.errors= data.errors;
+                console.log(data.errors);
+            }       
 
-        const data = await res.json();
-        
-        if (data.errors) {
-            this.errors = data.errors;
-           this.isLogged = false; // Explicitly return false on failure
-        } else {
-            this.errors = {};
-            localStorage.setItem("token", data.token);
-            this.user = data.user;
-            this.isLogged = true; // Explicitly return true on success
         }
-    } catch (error) {
-        console.error('Authentication error:', error);
-        this.errors = { network: 'Failed to connect to server' };
-       this.isLogged = false;
-    }
-
-    return this.isLogged;*/
     },
 
      async logout() {

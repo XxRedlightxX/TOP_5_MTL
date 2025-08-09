@@ -11,12 +11,14 @@ import { registerPlugins } from '@/plugins'
 import App from './App.vue'
 import routeur from "./router"
 import { createPinia } from 'pinia'
+import 'vuetify/styles' // Add this line
 
 // Composables
 import { createApp, markRaw } from 'vue'
 
 const app = createApp(App)
 const pinia = createPinia() 
+
 
 registerPlugins(app)
 
