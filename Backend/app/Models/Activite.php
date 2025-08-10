@@ -9,6 +9,7 @@ class Activite extends Model
     protected $table = 'activite';
 
      protected $fillable = [
+        
         'titre', 'description', 'date', 'lieu',
         'nombre_likes', 'statut_journee', 'image_data',
         'utilisateur_id', 'saison_id'
@@ -16,7 +17,7 @@ class Activite extends Model
 
     public function User()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class , "utilisateur_id");
     }
 
     public function saison()

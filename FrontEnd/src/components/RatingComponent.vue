@@ -17,6 +17,8 @@
           :model-value="props.rating"
           :active-color="actualMode ? 'rgba(173, 173, 173, 0.7)' : 'rgba(255, 255, 255, 0.7)'"
           class="rat"
+        @update:modelValue="updateRating"
+       
         />
     </div>
 </template>
@@ -26,9 +28,17 @@
 
     const GiveRate = ref(null);
     const props = defineProps({
+        modelValue: Number,
         rating: Number,
         Rate: Boolean,
     });
+
+    const emit = defineEmits(['update:modelValue']);
+
+    const updateRating = (value) => {
+    emit('update:modelValue', value);
+};
+    
     if (props.Rate == null){
         GiveRate.value = false;
     }
@@ -36,7 +46,7 @@
         GiveRate.value = props.Rate;
     }
 
-    console.log("valllll : " , GiveRate.value)
+    console.log("Rate value : " , GiveRate.value)
     let actualMode = ref(storageManager.getMode());
 
     if (actualMode.value === null) {

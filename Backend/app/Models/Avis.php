@@ -14,7 +14,7 @@ class Avis extends Model
 
     public function User()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "utilisateur_id");
     }
 
     public function activite()

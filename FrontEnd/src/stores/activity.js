@@ -5,6 +5,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
         return {
              activities: [],
              user : null,
+            activity: null,
   
             errors: {},
            
@@ -36,7 +37,6 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 console.log(data.errors);
             }        
 
-               
             else {
                 console.log("NOPE")
             }
@@ -68,6 +68,29 @@ export const  useActivityStore = defineStore('activitiesStore', {
 
         }
     },
+
+        async getActivityById(activityId) {
+            const token = localStorage.getItem("token")
+            const res = await fetch(`/api/activity/${activityId}/comments`,{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                this.activity = data;
+                console.log(this.activity)
+                
+                return data;
+                
+            }else if(data.errors) {
+                    this.errors= data.errors;
+                    console.log(data.errors);
+            } 
+        },
 
         
         
