@@ -6,14 +6,18 @@
             
             <div class="suite">
                 <div class="sub">
-                    <PageDescription :host-name="activity.user.name"
+                    <PageDescription :host-name="activity.creator.name"
                      :place="activity.lieu" />
                     <CommentSelf :activity-id="activity.id"/>
                 </div>
-                <PageCommentaire/>
-                <CommentSelf />
+                <PageCommentaire :comments="activity?.avis"  />
+                
+               
             </div>
         </div>
+        <div v-for="comment in activity?.avis" :key="comment.id">
+  <strong>{{ comment.user.name }}</strong> — {{ comment.contenu }} ({{ comment.etoiles }}★)
+</div>
         <PageMap></PageMap>
     </div> 
 </template>
@@ -27,6 +31,7 @@
     import CommentSelf from "../../components/EventComponents/SingleEventComponents/EventCommentSelfComponent.vue"
     import { useActivityStore } from '@/stores/activity';
     import { useRoute } from 'vue-router';
+
 
     const activity = ref(null);
      const route = useRoute();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ActivityResource;
 use App\Models\Activite;
 use App\Models\Avis;
 use App\Models\User;
@@ -34,10 +35,9 @@ class ActiviteController extends Controller
         return $this->userService->getActivitiesList();
     }
 
-        public function addActivityUser(Request $request)
+    public function addActivityUser(Request $request)
     {
           
-        
         $validated = $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
@@ -100,7 +100,7 @@ class ActiviteController extends Controller
         try {
         $validated = $contenu->validate([
             'contenu'=> 'required|min:3|max:1000',
-            'etoiles'=> 'integer|between:0,5',
+            'etoiles'=> 'nullable|integer|between:0,5',
         ]);
 
         $user =  $contenu->user();
@@ -118,6 +118,18 @@ class ActiviteController extends Controller
       $user = User::findOrFail($userId);
       return $user->load('avis');
    
+    }
+
+    public function getUserActivities(Request $request) {
+        $authUser = $request->user();
+
+        return $authUser->load('activites');
+    }
+
+     public function getActivityById(Request $request, int $activityId) {
+        $authUser = $request->user();
+
+        return $this->userService->findActivityById($activityId);
     }
 
 
@@ -161,9 +173,20 @@ class ActiviteController extends Controller
 
     public function getActivityWithComments(int $activityId) {
 
-        $activity = Activite::findOrFail($activityId);
+        //$activity = Activite::findOrFail($activityId);
+   $activity = Activite::with([
+        'User',
+        'avis.User'
+    ])->findOrFail($activityId);
 
-        return $activity->load('avis');
+    // This will remove "data" and still use your resource
+    return response()->json(
+        (new ActivityResource($activity))
+    );
+
+        //return $activity->load('User.activites.avis.User');
+
+        //return $activity->load('User.activities');
     }
 
 
