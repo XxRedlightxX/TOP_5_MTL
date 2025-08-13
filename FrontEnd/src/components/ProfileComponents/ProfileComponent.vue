@@ -45,7 +45,9 @@
   })) || [];
 
   return {
-    avatar: "/src/assets/p1.jpg",
+    avatar: user?.image_data
+      ? `${import.meta.env.VITE_API_BASE_URL}${user.image_data}`  
+      : "/src/assets/p1.jpg",
     username: user?.name || "Utilisateur inconnu",
     name: "Wakanda",
     fisrtName: "Dede",

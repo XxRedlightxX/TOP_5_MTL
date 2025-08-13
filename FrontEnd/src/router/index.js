@@ -68,7 +68,7 @@ const routes = [
 
       // Vue : ProfilesView
       {
-        path: "/Gestion Profile",
+        path: "/GestionProfile",
         name: "Gestion Profile",
         // route level code-splitting
         // this generates a separate chunk (Home-[hash].js) for this route

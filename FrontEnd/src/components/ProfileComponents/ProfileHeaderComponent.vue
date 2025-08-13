@@ -15,7 +15,7 @@
         </div>
 
         <div class="last"  v-show="props.himself">
-            <router-link to="/Gestion Profile" class="router">
+            <router-link to="/GestionProfile" class="router">
                 <v-icon icon="mdi-account-edit" class="iconHead" :title="actualLang ? 'Manage your account' : 'Gerer votre compte'"/>
             </router-link>
             <v-icon icon="mdi-logout" class="iconHead" @click="Logout()" :title="actualLang ? 'Logout' : 'Se deconnecter'"/>

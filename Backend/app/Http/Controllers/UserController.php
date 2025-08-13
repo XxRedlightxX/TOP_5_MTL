@@ -113,4 +113,22 @@ class UserController extends Controller
     }
 
 
+    public function updateProfilePicture(Request $request)
+    {
+        $request->validate([
+            'image_data' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $path = $request->file('image_data')->store('avatars', 'public');
+
+        $user = $request->user();
+        $user->image_data = $path; 
+        $user->save();
+
+        return response()->json([
+            'message' => 'Profile picture updated successfully',
+            'avatar_url' => url('storage/'.$path)
+        ]);
+    }
+
 }
