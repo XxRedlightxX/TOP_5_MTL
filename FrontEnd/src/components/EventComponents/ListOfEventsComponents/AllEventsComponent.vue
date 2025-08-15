@@ -14,11 +14,11 @@
             <strong>{{ item.title }}</strong>
             <div class="d1">
                 <v-icon icon="mdi-map-marker " :class="['icon', {'justGlow' : !actualMode}]"/>
-                Montreal, Vieux-Port
+               {{ item.lieu }}
             </div>
             <div class="d2">
                 <v-icon icon="mdi-clock-outline " :class="['icon', {'justGlow' : !actualMode}]"/>
-                Octobre 11 - 16:00pm
+                {{ formatDateSpecial(item.date) }}
             </div>
         </div>
       </router-link>
@@ -36,11 +36,18 @@ import LocalStorageManager from "@/JS/LocalStaorageManager"
 import PaginationComponent from './PaginationComponent.vue';
 import FilterComponent from './FilterComponent.vue';
 import { useActivityStore } from '@/stores/activity';
+import { formatDateSpecial } from "@/JS/GlobalFunctions";
 
-const {getActivities} =useActivityStore();
+
+
 
 const listActivities = ref([]);
 const activitiesStore = useActivityStore();
+
+const getAvatarUrl = (imagePath) => {
+    if (!imagePath) return img;
+    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
+};
 
 
 
@@ -53,7 +60,9 @@ onMounted(async () => {
     image: activity.image || "https://picsum.photos/1895/795",
     title: activity.titre,
     desc: activity.description || descText,
-    rating: activity.rating || 0
+    rating: activity.rating || 0,
+    lieu: activity.lieu,
+    date: activity.date,
   }));
 });
   const actualMode = ref(LocalStorageManager.getMode());
@@ -62,23 +71,23 @@ onMounted(async () => {
   const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
   const newEventJours = [
     { id: null,
-image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3 },
+image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date:null },
     { id: null,
-image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 5 },
+image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 5,lieu: null, date:null },
     {id: null,
-image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 1 },
+image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 1 ,lieu: null, date:null},
     { id: null,
-image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 2.5 },
+image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 2.5,lieu: null, date:null },
     { id: null,
-image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 3 },
+image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 3 ,lieu: null, date:null},
     { id: null,
-image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 4 },
+image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 4 ,lieu: null, date:null},
     {id: null,
-image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3.5 },
+image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3.5 ,lieu: null, date:null},
     { id: null,
-image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 1.5 },
+image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 1.5,lieu: null, date:null },
     { id: null,
-image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 4.5 }
+image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 4.5 ,lieu: null, date:null}
   ];
 
   const newEventNuit = [

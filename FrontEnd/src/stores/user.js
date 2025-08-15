@@ -1,12 +1,14 @@
 import {defineStore} from "pinia";
+import { useAuthStore } from "./auth";
 
-export const  useActivityStore = defineStore('activitiesStore', {
+
+
+export const useUserStore = defineStore('userStore', {
     state: () => {
         return {
-             activities: [],
-             user : null,
-            activity: null,
+            user : null,
             errors: {},
+            validationErrors : {}
            
         }
     },
@@ -16,7 +18,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
     },
     actions : {
 
-        async getActivities() {
+        async getListUser() {
             const token = localStorage.getItem("token")
             if (token) {
                 const res = await fetch("/api/activite", {
@@ -26,7 +28,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 },
             });
             const data = await res.json();
-            console.log()
+           
             if (res.ok) {
                 this.activities = data;
                 return this.activities;
@@ -44,32 +46,40 @@ export const  useActivityStore = defineStore('activitiesStore', {
             }
         },
 
-        async getUserActivities() {
+        async addImageProfile(formData) {
             const token = localStorage.getItem("token")
+            const authStore = useAuthStore();
             if (token) {
-                const res = await fetch("/api/user/activite", {
+                const res = await fetch(`http://127.0.0.1:8000/api/user/profile-picture`, {
+                method: "POST",
+                body: formData,
                 headers: {
-                    'Content-Type': 'application/json',
+                    
                     'Authorization': `Bearer ${token}`
                 },
             });
             const data = await res.json();
-       
-            if (res.ok) {
-                this.user = data;
-                console.log(this.user);
-                return this.user;
-                
-            }else if(data.errors) {
+             console.log("Full response:", data);
+            if (!res.ok) {
+                if (data.errors) {
+                    this.validationErrors.value = data.errors;
+                    console.error("Validation errors:", data.errors);
+                }
+                throw new Error(data.message || 'Upload failed');
+                }
+
+            if (data.avatar_url) {
+                return data.avatar_url;
+              
+            }
+
+            else if(data.errors) {
                 this.errors= data.errors;
                 console.log(data.errors);
             }       
 
         }
     },
-
-
-
 
         async getActivityById(activityId) {
             const token = localStorage.getItem("token")
@@ -114,31 +124,17 @@ export const  useActivityStore = defineStore('activitiesStore', {
             this.errors = {};
             console.log(data)
             return data;
+            
+        
+            
         }
 
-        },
 
-        async addEvent(formData) {
-            const token = localStorage.getItem("token");
-            const res = await fetch("/api/user/activite", {
-                method : "post",
-                headers: {
-                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(formData)
-            });
 
-            const data = await res.json();
 
-            if(data.errors) {
-                this.errors = data.errors;
-                return data.errors
-            } else {
-                this.errors = {};
-                console.log(data)
-                return data;
-            }
+
+            
+
         }
 
         
