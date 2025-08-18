@@ -1,0 +1,60 @@
+.light {
+    #footerComponent {
+        #footerWave {
+            display: block
+        }
+        .links {
+            background: var(--graphite015);
+            a {
+                color: var(--graphite);
+            }
+            a:after {
+                color: var(--graphite);
+            }
+            .router-link-exact-active, a:hover{
+                color: var(--light);
+            }
+        }
+    
+        p {
+            color: var(--graphite);
+        }
+    }
+}
+.dark {
+    #footerComponent {
+        background: var(--graphite02);
+        animation: footerNeonGlowBox 0.5s ease-in-out infinite alternate;
+        #footerWave {
+            display: none;
+        }
+        .links {
+            background: var(--graphite04);
+            a {
+                color: var(--light075);
+            }
+            a:after {
+                color: var(--light075);
+            }
+            .router-link-exact-active, a:hover{
+                color: var(--light);       
+                animation: neonGlow 0.5s ease-in-out infinite alternate;
+            }
+        }
+    
+        p {
+            color: var(--light075);
+        }
+    }
+    @keyframes footerNeonGlowBox {
+        from {
+            box-shadow:
+            0px -7px 14px -3px var(--light04)
+        }
+    
+        to {
+            box-shadow:
+            7px -9px 17px -3px var(--light04)
+        }
+    }
+}

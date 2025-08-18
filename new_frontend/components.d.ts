@@ -8,9 +8,17 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    3dTextComponent: typeof import('./src/components/LogoComponent/3dTextComponent.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
+    FooterComponent: typeof import('./src/components/StaticComponents/FooterComponent.vue')['default']
+    FooterWaveComponent: typeof import('./src/components/StaticComponents/FooterWaveComponent.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    LanguageComponent: typeof import('./src/components/StaticComponents/LanguageComponent.vue')['default']
+    LogoComponent: typeof import('./src/components/LogoComponent/LogoComponent.vue')['default']
+    MenuComponent: typeof import('./src/components/StaticComponents/MenuComponent.vue')['default']
+    RatingComponent: typeof import('./src/components/StaticComponents/RatingComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    WaterButtonComponent: typeof import('./src/components/StaticComponents/WaterButtonComponent.vue')['default']
   }
 }
