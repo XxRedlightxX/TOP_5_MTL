@@ -1,0 +1,112 @@
+.light {
+    #contactComponent {
+        .header {
+            h3{
+                color: var(--graphite);
+            }
+            p {
+                color: var(--graphite06);
+            }
+        }
+    
+        .content {
+            .left {
+    
+                div {
+                    h4 {
+                         color: var(--graphite);
+                     }
+                    .iconContainer {             
+                        box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                                    15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+                        .icon {
+                            color: var(--graphite06);
+                        }
+                    }
+    
+                    div {
+                       h4 {
+                            color: var(--graphite);
+                        }
+                        p {
+                            color: var(--graphite06);
+                        }
+                    }
+                }
+            }
+
+            .right {
+                form {
+
+                    h3 {
+                        color: var(--graphite);
+                    }
+    
+                    .v-input {
+                        margin-bottom: 2%;
+                        color: var(--graphite);
+                        border-bottom: var(--graphite06);
+                    }
+                    
+                }
+            }
+        }
+    }
+}
+
+.dark {
+    #contactComponent {
+        .header {
+            h3{
+                color: var(--light07);
+            }
+            p {
+                color: var(--light075);
+            }
+        }
+    
+        .content {
+            .left {
+    
+                div {
+                    h4 {
+                         color: var(--light07);
+                     }
+                    .iconContainer {
+                        box-shadow: 15px 25px 10px #f5f5ff1a,
+                            10px 6px 15px #0008 inset,
+                            -5px -5px 8px #f5f5ff67 inset,
+                            10px 6px 15px #0004 inset;
+                        .icon {
+                            color: var(--light075);
+                        }
+                    }
+    
+                    div {
+                       h4 {
+                            color: var(--light07);
+                        }
+                        p {
+                            color: var(--light075);
+                        }
+                    }
+                }
+            }
+
+            .right {
+                form {
+                    h3 {
+                        color: var(--light07);
+                    }
+    
+                    .v-input {
+                        margin-bottom: 2%;
+                        color: var(--light07);
+                        border-bottom: var(--light02);
+                    }
+                    
+                }
+            }
+        }
+    }
+}

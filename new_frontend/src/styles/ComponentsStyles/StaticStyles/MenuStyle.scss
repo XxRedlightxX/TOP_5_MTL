@@ -6,7 +6,7 @@
 
     .allMenu {
         .links {
-    
+            text-align: center;
             a {
                 text-decoration: none;
                 font-weight: bold;
@@ -147,6 +147,9 @@
    
 }
 @media screen and (max-width: 1025px){
+    #menuComponent {
+        position: relative;
+    }
     .BurgerMenu {
         display: block;
         width: 100%;
@@ -176,13 +179,13 @@
         flex-direction: row;
         justify-content: left;
         width: 100%;
-        position: fixed;
+        position: absolute;
         top: 0%;
         height: 100svh;
         padding: 0% 0% 0% 0%;
         margin: 0px;
         
-        overflow: auto;
+        overflow: hidden;
         //background-color: rgba(255, 0, 0, 0);
 
 

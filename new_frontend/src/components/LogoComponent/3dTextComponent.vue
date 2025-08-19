@@ -6,7 +6,7 @@
          'mediumText': size === 2,
          'largeText': size === 3
        }">
-    <span :class="['text', props.shadow ? 'shadow' : '']">{{ props.text }}</span>
+    <span :class="['text', props.shadow ? 'shadow' : '']" translate="no">{{ props.text }}</span>
   </div>
 </template>
 

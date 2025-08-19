@@ -33,7 +33,10 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
+    #menuComponent, .v-toolbar__content {
+        //position: relative;
+        overflow: visible;
+    }
     .view {
         flex-grow: 1;
     }
@@ -201,9 +204,24 @@
 }
 .light{
     background: linear-gradient(to bottom, #efefef, #ccc);
+    // .v-field__overlay {
+    //     color: var(--graphite08);
+    //     background-color: var(--graphite);
+  
+    //     &:focus {
+    //       outline: none;
+    //     }
+    // }
 }
 
 .dark {
-    //background: linear-gradient(to bottom, rgb(69, 70, 60), rgb(29, 30, 24));
     background: linear-gradient(to bottom, #ccc, rgb(29, 30, 24));
+    // .v-field__overlay {
+    //     color: var(--light07);
+    //     background-color: var(--light);
+
+    //     &:focus {
+    //       outline: none;
+    //     }
+    // }
 }

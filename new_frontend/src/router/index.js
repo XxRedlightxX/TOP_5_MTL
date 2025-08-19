@@ -18,15 +18,15 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () => import("@/pages/MenuView/HomeView.vue"),
       },
-      // {
-      //   path: "/Events",
-      //   name: "Events",
-      //    meta: { guest: true },
-      //   // route level code-splitting
-      //   // this generates a separate chunk (Home-[hash].js) for this route
-      //   // which is lazy-loaded when the route is visited.
-      //   component: () => import("@/pages/MenusView/AllEventsView.vue"),
-      // },
+      {
+        path: "/Events",
+        name: "Events",
+        //meta: { guest: true },
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import("@/pages/MenuView/AllEventsView.vue"),
+      },
 
       // {
       //   path: "/UserProfile",
@@ -37,33 +37,33 @@ const routes = [
       //   component: () => import("@/components/ProfileComponents/ProfileComponent.vue"),
       // },
 
-      // {
-      //   path: "/Profile",
-      //   name: "Profile",
-      //   meta: { guest: true },
-      //   // route level code-splitting
-      //   // this generates a separate chunk (Home-[hash].js) for this route
-      //   // which is lazy-loaded when the route is visited.
-      //   component: () => import("@/pages/MenusView/Login-ProfileView.vue"),
-      // },
+      {
+        path: "/Profile",
+        name: "Profile",
+        //meta: { guest: true },
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import("@/pages/MenuView/Login-ProfileView.vue"),
+      },
 
       // // Vue : OtherView
-      // {
-      //   path: "/Event",
-      //   name: "Event",
-      //   // route level code-splitting
-      //   // this generates a separate chunk (Home-[hash].js) for this route
-      //   // which is lazy-loaded when the route is visited.
-      //   component: () => import("@/pages/OtherView/EventView.vue"),
-      // },
-      // {
-      //   path: "/Event Organisator",
-      //   name: "Event Organisator",
-      //   // route level code-splitting
-      //   // this generates a separate chunk (Home-[hash].js) for this route
-      //   // which is lazy-loaded when the route is visited.
-      //   component: () => import("@/pages/OtherView/EventOrganisatorView.vue"),
-      // },
+      {
+        path: "/Event",
+        name: "Event",
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import("@/pages/OtherView/EventView.vue"),
+      },
+      {
+        path: "/Event Organisator",
+        name: "Event Organisator",
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import("@/pages/OtherView/EventOrganisatorView.vue"),
+      },
 
       // // Vue : ProfilesView
       // {
