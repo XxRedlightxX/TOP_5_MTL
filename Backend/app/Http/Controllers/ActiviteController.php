@@ -45,16 +45,19 @@ class ActiviteController extends Controller
             'lieu' => 'required|string|max:255',
             'statut_journee' => 'required|in:JOUR,NUIT', 
             'saison_id' => 'required|exists:saison,id',
-            'image_data' => 'nullable'
+            'image_data' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+
+         $path = $request->file('image_data')->store('events', 'public');
          $user =  $request->user();
 
          $this->authorize('create',$user );
         
         $activity = $this->userService->createActivite($validated['titre'],$user->id, $validated);
-
+        $activity->image_data=$path;
+        $activity->update();
         return response()->json([
-           
+           $path,
             $activity
         ], 201);
     }

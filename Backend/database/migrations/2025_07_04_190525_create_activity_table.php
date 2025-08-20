@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('nombre_likes')->default(0);;
             $table->enum('statut_journee', array_column(EnumMode::cases(), 'value'))
                     ->default(EnumMode::JOUR->value);
-            $table->binary('image_data')->nullable();
+            $table->string('image_data')->nullable();
             $table->foreignId("utilisateur_id")->constrained('utilisateur')->onDelete('cascade');
             $table->foreignId("saison_id")->constrained('saison')->onDelete('cascade');
             $table->timestamps();

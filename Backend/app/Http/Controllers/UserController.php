@@ -114,21 +114,46 @@ class UserController extends Controller
 
 
     public function updateProfilePicture(Request $request)
-    {
-        $request->validate([
+{
+    try {
+        // Validate the incoming request
+        $validated = $request->validate([
             'image_data' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
+        // Store the uploaded file
         $path = $request->file('image_data')->store('avatars', 'public');
-
+        
+        // Update user profile picture
         $user = $request->user();
-        $user->image_data = $path; 
-        $user->save();
+        $user->image_data = $path;
+        $user->update();
 
         return response()->json([
+            'success' => true,
             'message' => 'Profile picture updated successfully',
-            'avatar_url' => url('storage/'.$path)
-        ]);
+            'avatar_url' => url('storage/'.$path),
+            'path' => $path // Optional: for debugging
+        ], 200);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Handle validation errors
+        return response()->json([
+            'success' => false,
+            'message' => 'Validation failed',
+            'errors' => $e->errors()
+        ], 422);
+        
+    } catch (\Exception $e) {
+        // Handle all other exceptions
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to update profile picture',
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ], 500);
     }
+}
 
 }
