@@ -51,7 +51,7 @@
 
                     <div class="form-group">
                         <label for="event-picture">Upload Picture</label>
-                        <input type="file"  id="event-picture" accept="image/*">
+                        <input type="file" name="file"  @change="handleFileUpload" id="event-picture"  accept="image/*">
                     </div>
 
                     <div class="form-group">
@@ -85,31 +85,62 @@
     const inputRefDate = ref(null);
     const inputRefTime = ref(null);
     const result = ref(null);
+    const selectedFile = ref(null)
+    const errorMessage = ref(null);
+    const  validationErrors  = ref(null);
+
+    const formDataEvent= reactive({
+            titre: "",
+            date: "",
+            description: "",
+            statut_journee : "",
+            lieu : "",
+            image_data : "",
+            saison_id
+            : null
+    });
 
 
-
-
-  const formDataEvent= reactive({
-        titre: "",
-        date: "",
-        description: "",
-        statut_journee : "",
-        lieu : "",
-        image_data : "",
+    const handleFileUpload = (event) => {
+        errorMessage.value = null;
+        validationErrors.value = {};
         
-saison_id
- : null
-    })
+        const file = event.target.files[0];
+        if (!file) {
+            errorMessage.value = 'Please select a file first';
+            return;
+        }
+        selectedFile.value = file;
+    };
 
-const testInput  =  async() => {
-  const dateValue = inputRefDate.value.value;
-  const timeValue = inputRefTime.value.value;
-  
-  const formattedDateTime = formatDateApi(dateValue, timeValue);
-  formDataEvent.date = formattedDateTime;
-  console.log(formDataEvent);
-  const test = await addEvent(formDataEvent);
-  console.log(test);
+
+
+
+    const testInput  =  async() => {
+        const dateValue = inputRefDate.value.value;
+        const timeValue = inputRefTime.value.value;
+        
+        const formattedDateTime = formatDateApi(dateValue, timeValue);
+        formDataEvent.date = formattedDateTime;
+
+        const formData = new FormData();
+
+        formData.append('titre', formDataEvent.titre);
+        formData.append('date', formDataEvent.date);
+        formData.append('description', formDataEvent.description);
+        formData.append('statut_journee', formDataEvent.statut_journee);
+        formData.append('lieu', formDataEvent.lieu);
+        formData.append('saison_id', formDataEvent.saison_id);
+
+            if (selectedFile.value) {
+                    formData.append('image_data', selectedFile.value);
+                }
+        const test = await addEvent(formData);
+
+
+
+        console.log(test);
+        pop();
 
 
 };

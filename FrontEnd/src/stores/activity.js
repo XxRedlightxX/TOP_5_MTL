@@ -120,13 +120,14 @@ export const  useActivityStore = defineStore('activitiesStore', {
 
         async addEvent(formData) {
             const token = localStorage.getItem("token");
-            const res = await fetch("/api/user/activite", {
-                method : "post",
+            const res = await fetch("http://127.0.0.1:8000/api/user/activite", {
+                method: "POST",
+                body: formData,
                 headers: {
-                     'Content-Type': 'application/json',
+                    
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(formData)
+              
             });
 
             const data = await res.json();

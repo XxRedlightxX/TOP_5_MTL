@@ -7,7 +7,7 @@
       <router-link :to="{ name: 'show', params: {id: item.id}} " class="events_card glass" v-for="(item, index) in newEvent">
         <div class="event_card_photo" >
             <!-- Main image -->
-            <img :src="item.image" class="product-thumb" alt="Event Image">
+            <img :src="getAvatarUrl(item?.image)" class="product-thumb" alt="Event Image">
         </div>
         
         <div class="desc">
@@ -46,6 +46,8 @@ const activitiesStore = useActivityStore();
 
 const getAvatarUrl = (imagePath) => {
     if (!imagePath) return img;
+    console.log(imagePath);
+    console.log(`${import.meta.env.VITE_API_BASE_URL}${imagePath}`);
     return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
 };
 
@@ -57,7 +59,7 @@ onMounted(async () => {
  
   newEvent.value = activitiesStore.activities.map(activity => ({
     id : activity.id,
-    image: activity.image || "https://picsum.photos/1895/795",
+    image: activity.image_data || "https://picsum.photos/1895/795",
     title: activity.titre,
     desc: activity.description || descText,
     rating: activity.rating || 0,
@@ -104,7 +106,7 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
 
 
   let newEvent = ref(null);
-  newEvent.value = actualMode.value ? newEventJours : newEventNuit;
+  //newEvent.value = actualMode.value ? newEventJours : newEventNuit;
 
   // Fonction pour mettre à jour l'index du slide actif
   // const onSlideChange = (swiper) => {
@@ -122,7 +124,7 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
    }
    // Correction du watcher
    watch(actualMode, (newVal, oldVal) => {
-     newEvent.value = newVal ? newEventJours : newEventNuit;
+     //newEvent.value = newVal ? newEventJours : newEventNuit;
    });
    
    const handleModeChange = (event) => {
