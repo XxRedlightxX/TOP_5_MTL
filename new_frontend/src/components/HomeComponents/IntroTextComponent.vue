@@ -1,14 +1,14 @@
 <template>
   <div id="introTextComponent">
-    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestias labore quasi,
-      voluptatibus nostrum aliquid soluta deleniti distinctio aspernatur numquam laborum
-      necessitatibus laboriosam temporibus ratione commodi optio atque inventore. Neque, quo.
-    </p>
+    <p>{{ text }}</p>
     <hr>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+  import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase';
+  const text = FakeDataBase.getIntroText();
+</script>
 
 <style lang="scss">
     #introTextComponent {

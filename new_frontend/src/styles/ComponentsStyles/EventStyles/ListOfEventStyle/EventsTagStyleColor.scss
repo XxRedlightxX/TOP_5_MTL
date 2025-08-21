@@ -1,0 +1,54 @@
+.light {
+    .eventFilter {
+        #left, #right {
+            color: var(--graphite06); 
+        }
+        #left:hover, #right:hover {
+            color: var(--graphite); 
+        }
+        .carousel {
+
+        .card {
+            .icon {
+                color: var(--graphite06);
+            }
+            .icon:hover {
+                color: var(--graphite);
+            }
+            h4 {
+                color: var(--graphite);
+            }
+            }
+        }
+    }
+}
+.dark {
+    .eventFilter {
+        #left, #right {
+        color: var(--light075);
+        }
+        #left:hover, #right:hover {
+        color: var(--light);
+        }
+        .carousel {
+
+            .card {
+                .icon {
+                    color: var(--ligh075);
+                }
+                .icon:hover {
+                    color: var(--light);
+                }
+                h4 {
+                    color: var(--light07);
+                }
+                }
+                
+            .card:hover {
+                h4 {
+                color: var(--light);
+                }
+            }
+        }
+    }
+}

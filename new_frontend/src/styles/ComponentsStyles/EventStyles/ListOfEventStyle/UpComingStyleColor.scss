@@ -1,0 +1,56 @@
+.light {
+  .upComingEvent {
+    background-color: transparent;
+      #left, #right {
+        color: var(--graphite06); 
+      }
+      #left:hover, #right:hover {
+        color: var(--graphite); 
+      }
+    .carousel {
+      background-color: transparent;
+      .card {
+        background-color: var(--light05);
+        color: var(--graphite); 
+          h2 {
+            color: var(--graphite); 
+          }
+          .eventDescriptionInfos {
+              .d {
+                  .icon {
+                    color: var(--graphite06);
+                  }
+              }
+            }
+      }
+    }
+  }
+}
+.dark {
+    .upComingEvent {
+        #left, #right {
+            color: var(--light075); 
+        }
+        #left:hover, #right:hover {
+            color: var(--light);
+            animation: neonGlow 0.5s ease-in-out infinite alternate;
+        }
+        .carousel {
+            .card {
+            background-color: var(--graphite015);
+            color: var(--light075); 
+                h2 {
+                color: var(--light075); 
+                }
+                .eventDescriptionInfos {
+                    .d {
+                    color: var(--light075); 
+                        .icon {
+                        color: var(--light075); 
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

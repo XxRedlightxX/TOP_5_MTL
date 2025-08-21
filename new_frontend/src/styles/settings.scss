@@ -10,7 +10,8 @@
 // );
 * {
     margin: 0px;
-    padding: 0px;;
+    padding: 0px;
+    text-align: center;
 }
 :root {
     --graphite: rgb(29, 30, 24);
@@ -20,12 +21,12 @@
     --graphite08: rgba(29, 30, 24, 0.8);
     
     --light: rgb(255, 255, 255);
-    --light015: rgba(255, 255, 255, 0.15); // --light-trabs015
-    --light02: rgba(255, 255, 255, 0.2); // --light-tans-glow-less
-    --light04: rgba(255, 255, 255, 0.4); // --light-trans-glow
-    --light05: rgba(255, 255, 255, 0.5); // --light-trans-2shine
-    --light07: rgba(255, 255, 255, 0.7); // --light-text
-    --light075: rgba(255, 255, 255, 0.75); // --light-trans-text
+    --light015: rgba(255, 255, 255, 0.15); // light-trabs015
+    --light02: rgba(255, 255, 255, 0.2); // light-tans-glow-less
+    --light04: rgba(255, 255, 255, 0.4); // light-trans-glow
+    --light05: rgba(255, 255, 255, 0.5); // light-trans-2shine
+    --light07: rgba(255, 255, 255, 0.7); // light-text
+    --light075: rgba(255, 255, 255, 0.75); // light-trans-text
 }
 
 .v-main{
@@ -33,10 +34,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    #menuComponent, .v-toolbar__content {
-        //position: relative;
-        overflow: visible;
-    }
     .view {
         flex-grow: 1;
     }
@@ -95,102 +92,102 @@
     @keyframes neonGlow {
         from {
             text-shadow:
-            0 0 1.5px var(--light-trans-glow),
-            0 0 2.5px var(--light-trans-glow),
-            0 0 5px var(--light-trans-glow),
-            0 0 10px var(--light-trans-glow),
-            0 0 20px var(--light-trans-glow),
-            0 0 25px var(--light-trans-glow),
-            0 0 30px var(--light-trans-glow),
-            0 0 33px var(--light-trans-glow);
+            0 0 1.5px var(--light04),
+            0 0 2.5px var(--light04),
+            0 0 5px var(--light04),
+            0 0 10px var(--light04),
+            0 0 20px var(--light04),
+            0 0 25px var(--light04),
+            0 0 30px var(--light04),
+            0 0 33px var(--light04);
         }
     
         to {
             text-shadow:
-                0 0 2.5px var(--light-trans-glow),
-                0 0 4px var(--light-trans-glow),
-                0 0 8px var(--light-trans-glow),
-                0 0 15px var(--light-trans-glow),
-                0 0 30px var(--light-trans-glow),
-                0 0 33px var(--light-trans-glow),
-                0 0 45px var(--light-trans-glow),
-                0 0 60px var(--light-trans-glow);
+                0 0 2.5px var(--light04),
+                0 0 4px var(--light04),
+                0 0 8px var(--light04),
+                0 0 15px var(--light04),
+                0 0 30px var(--light04),
+                0 0 33px var(--light04),
+                0 0 45px var(--light04),
+                0 0 60px var(--light04);
         }
     }
 
     @keyframes neonGlowLess {
         from {
             text-shadow:
-            0 0 1.5px var(--light-trans-glow-less),
-            0 0 2.5px var(--light-trans-glow-less),
-            0 0 5px var(--light-trans-glow-less),
-            0 0 10px var(--light-trans-glow-less),
-            0 0 20px var(--light-trans-glow-less),
-            0 0 25px var(--light-trans-glow-less),
-            0 0 30px var(--light-trans-glow-less),
-            0 0 33px var(--light-trans-glow-less);
+            0 0 1.5px var(--light02),
+            0 0 2.5px var(--light02),
+            0 0 5px var(--light02),
+            0 0 10px var(--light02),
+            0 0 20px var(--light02),
+            0 0 25px var(--light02),
+            0 0 30px var(--light02),
+            0 0 33px var(--light02);
         }
     
         to {
             text-shadow:
-                0 0 2.5px var(--light-trans-glow-less),
-                0 0 4px var(--light-trans-glow-less),
-                0 0 8px var(--light-trans-glow-less),
-                0 0 15px var(--light-trans-glow-less),
-                0 0 30px var(--light-trans-glow-less),
-                0 0 33px var(--light-trans-glow-less),
-                0 0 45px var(--light-trans-glow-less),
-                0 0 60px var(--light-trans-glow-less);
+                0 0 2.5px var(--light02),
+                0 0 4px var(--light02),
+                0 0 8px var(--light02),
+                0 0 15px var(--light02),
+                0 0 30px var(--light02),
+                0 0 33px var(--light02),
+                0 0 45px var(--light02),
+                0 0 60px var(--light02);
         }
     }
     @keyframes neonGlowBox {
         from {
             box-shadow:
-            0 0 1.5px var(--light-trans-glow),
-            0 0 2.5px var(--light-trans-glow),
-            0 0 5px var(--light-trans-glow),
-            0 0 10px var(--light-trans-glow),
-            0 0 20px var(--light-trans-glow),
-            0 0 25px var(--light-trans-glow),
-            0 0 30px var(--light-trans-glow),
-            0 0 33px var(--light-trans-glow);
+            0 0 1.5px var(--light04),
+            0 0 2.5px var(--light04),
+            0 0 5px var(--light04),
+            0 0 10px var(--light04),
+            0 0 20px var(--light04),
+            0 0 25px var(--light04),
+            0 0 30px var(--light04),
+            0 0 33px var(--light04);
         }
     
         to {
             box-shadow:
-                0 0 2.5px var(--light-trans-glow),
-                0 0 4px var(--light-trans-glow),
-                0 0 8px var(--light-trans-glow),
-                0 0 15px var(--light-trans-glow),
-                0 0 30px var(--light-trans-glow),
-                0 0 33px var(--light-trans-glow),
-                0 0 45px var(--light-trans-glow),
-                0 0 60px var(--light-trans-glow);
+                0 0 2.5px var(--light04),
+                0 0 4px var(--light04),
+                0 0 8px var(--light04),
+                0 0 15px var(--light04),
+                0 0 30px var(--light04),
+                0 0 33px var(--light04),
+                0 0 45px var(--light04),
+                0 0 60px var(--light04);
         }
     }
     @keyframes neonGlowBoxless {
         from {
             box-shadow:
-            0 0 0.75px var(--light-trans-glow),
-            0 0 1.25px var(--light-trans-glow),
-            0 0 2.5px var(--light-trans-glow),
-            0 0 5px var(--light-trans-glow),
-            0 0 10px var(--light-trans-glow),
-            0 0 12px var(--light-trans-glow),
-            0 0 15px var(--light-trans-glow),
-            0 0 16px var(--light-trans-glow);
+            0 0 0.75px var(--light04),
+            0 0 1.25px var(--light04),
+            0 0 2.5px var(--light04),
+            0 0 5px var(--light04),
+            0 0 10px var(--light04),
+            0 0 12px var(--light04),
+            0 0 15px var(--light04),
+            0 0 16px var(--light04);
         }
     
         to {
             box-shadow:
-                0 0 1.25px var(--light-trans-glow),
-                0 0 2px var(--light-trans-glow),
-                0 0 8px var(--light-trans-glow),
-                0 0 7px var(--light-trans-glow),
-                0 0 15px var(--light-trans-glow),
-                0 0 16px var(--light-trans-glow),
-                0 0 23px var(--light-trans-glow),
-                0 0 30px var(--light-trans-glow);
+                0 0 1.25px var(--light04),
+                0 0 2px var(--light04),
+                0 0 8px var(--light04),
+                0 0 7px var(--light04),
+                0 0 15px var(--light04),
+                0 0 16px var(--light04),
+                0 0 23px var(--light04),
+                0 0 30px var(--light04);
         }
     }
     @keyframes neonLogo {
@@ -199,6 +196,19 @@
         }
         100% {
             filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(80%) contrast(60%)  drop-shadow(0 0 10px #fff) drop-shadow(0 0 20px #fff) drop-shadow(0 0 30px #fff)
+        }
+    }
+}
+// @media screen and (min-width: 1025.1px){
+
+// }
+@media screen and (max-width: 1025px){
+    .v-main{
+        position: relative;
+        #menuComponent, .v-toolbar__content {
+            //position: relative;
+            overflow: visible;
+            position: absolute;
         }
     }
 }

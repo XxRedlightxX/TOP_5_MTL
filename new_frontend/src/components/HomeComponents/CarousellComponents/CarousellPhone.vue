@@ -17,34 +17,22 @@
 <script setup>
   import { ref, watch } from 'vue';
   import Setup from '@/JS/Setup';
+  import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase';
   import CarouselSwipper from './CarousellPhoneSwipper.vue';
 
   let actualMode = Setup.modeSetup()
   let actualLang = Setup.languageSetup()
 
-  const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque."
-  const newEventJours = [
-    { image: "https://picsum.photos/1894/799", title: "Mont-Royal", desc: text, rating: 3 },
-    { image: "https://picsum.photos/1894/780", title: "Vieux-Port", desc: text, rating: 5 },
-    { image: "https://picsum.photos/1894/792", title: "Laronde", desc: text, rating: 1 },
-    { image: "https://picsum.photos/1894/804", title: "Jardin Botanique", desc: text, rating: 2.5 }
-  ]
-
-  const newEventNuit = [
-    {image : "https://picsum.photos/1894/794", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
-    {image : "https://picsum.photos/1894/802", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {image : "https://picsum.photos/1894/801", title: "La Voute", desc: text, rating: 3.5 },
-    {image : "https://picsum.photos/1894/780", title: "Casino", desc: text, rating: 2 }
-  ]
+  const events = FakeDataBase.getNewEvents();
 
   let newEvent = ref(null)
-  newEvent.value = actualMode.value ? newEventJours : newEventNuit
+  newEvent.value = actualMode.value ? events.eventJour : events.eventNuit;
   let i = ref(0)
   const eventInfo = ref(newEvent.value[i.value])
 
   // Correction du watcher
   watch(actualMode, (newVal, oldVal) => {
-    newEvent.value = newVal ? newEventJours : newEventNuit
+    newEvent.value = newVal ? events.eventJour : events.eventNuit;
   })
 
   const changeInfos = () => {

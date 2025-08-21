@@ -9,12 +9,16 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     3dTextComponent: typeof import('./src/components/LogoComponent/3dTextComponent.vue')['default']
+    AllEventsComponent: typeof import('./src/components/EventComponents/ListOfEventsComponents/AllEventsComponent.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     CarousellComponent: typeof import('./src/components/HomeComponents/CarousellComponents/CarousellComponent.vue')['default']
     CarousellGrandEcrant: typeof import('./src/components/HomeComponents/CarousellComponents/CarousellGrandEcrant.vue')['default']
     CarousellPhone: typeof import('./src/components/HomeComponents/CarousellComponents/CarousellPhone.vue')['default']
     CarousellPhoneSwipper: typeof import('./src/components/HomeComponents/CarousellComponents/CarousellPhoneSwipper.vue')['default']
     ContactComponent: typeof import('./src/components/HomeComponents/ContactComponent.vue')['default']
+    EventsTagComponent: typeof import('./src/components/EventComponents/ListOfEventsComponents/EventsTagComponent.vue')['default']
+    FilterComponent: typeof import('./src/components/EventComponents/ListOfEventsComponents/FilterComponent.vue')['default']
+    FilterPopUpComponent: typeof import('./src/components/EventComponents/ListOfEventsComponents/FilterPopUpComponent.vue')['default']
     FooterComponent: typeof import('./src/components/StaticComponents/FooterComponent.vue')['default']
     FooterWaveComponent: typeof import('./src/components/StaticComponents/FooterWaveComponent.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
@@ -23,9 +27,12 @@ declare module 'vue' {
     LogoComponent: typeof import('./src/components/LogoComponent/LogoComponent.vue')['default']
     MenuComponent: typeof import('./src/components/StaticComponents/MenuComponent.vue')['default']
     NewEventComponent: typeof import('./src/components/HomeComponents/NewEventComponent.vue')['default']
+    PaginationComponent: typeof import('./src/components/EventComponents/ListOfEventsComponents/PaginationComponent.vue')['default']
     RatingComponent: typeof import('./src/components/StaticComponents/RatingComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UpComingEvent: typeof import('./src/components/EventComponents/ListOfEventsComponents/UpComingEventComponent.vue')['default']
+    UpComingEventComponent: typeof import('./src/components/EventComponents/ListOfEventsComponents/UpComingEventComponent.vue')['default']
     WaterButtonComponent: typeof import('./src/components/StaticComponents/WaterButtonComponent.vue')['default']
   }
 }

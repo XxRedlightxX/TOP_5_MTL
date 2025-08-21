@@ -21,10 +21,6 @@
   import { Pagination, Autoplay } from 'swiper/modules'; // Import required modules
   import { defineProps, defineEmits} from "vue";
 
-  const imgUrl1 = "https://picsum.photos/1894/800";
-  const imgUrl2 = "https://picsum.photos/1894/796";
-  const imgUrl3 = "https://picsum.photos/1894/805";
-  const imgUrl4 = "https://picsum.photos/1894/790";
   const modules = [Pagination, Autoplay];
 
   const props = defineProps({

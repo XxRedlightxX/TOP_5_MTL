@@ -156,24 +156,30 @@ const LocalStorageManager = {
   },
 
   /**
-   * Change la valeur du mode pour l'inverse du mode actual. Ex : Mode : true (WhiteMode) => false(DarkMode)
+   * Change la valeur du mode.
+   * - Sans paramètre : inverse le mode actuel.
+   * - Avec paramètre : applique directement la valeur donnée.
+   * @param {Boolean} [value] - Nouvelle valeur du Mode (optionnel).
    * @returns {Boolean} nouvelle valeur du Mode
    */
-  changeMode() {
-    const actualMode = !this.getMode();
+  changeMode(value) {
+    const actualMode = typeof value === "boolean" ? value : !this.getMode();
     this.setMode(actualMode);
     return actualMode;
   },
 
   /**
-   * Change la valeur du language pour l'inverse du language actual. Ex : language : true (FR) => false(EN)
-   * @returns 
+   * Change la valeur du language.
+   * - Sans paramètre : inverse le language actuel.
+   * - Avec paramètre : applique directement la valeur donnée.
+   * @param {Boolean} [value] - Nouvelle valeur du Language (optionnel).
+   * @returns {Boolean} nouvelle valeur du Language
    */
-  changeLanguage() {
-    const actualLang = !this.getLanguage();
+  changeLanguage(value) {
+    const actualLang = typeof value === "boolean" ? value : !this.getLanguage();
     this.setLanguage(actualLang);
     return actualLang;
-  }
+  },
 };
 
 export default LocalStorageManager;
