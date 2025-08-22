@@ -1,0 +1,59 @@
+#EventComment {
+    width: 60%;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px;
+    
+    .comments-list {
+        display: flex;
+        flex-direction: column;
+        max-height: 400px;
+        overflow: auto;
+        scrollbar-width: thin;
+
+        .comments {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+
+            .glas {
+                backdrop-filter: blur(0px);
+                -webkit-backdrop-filter: blur(0px);
+                margin-bottom: 2%;
+                padding-bottom: 1%;
+
+                .section  {
+                    display: flex;
+                    padding: 10px;
+                    gap: 1em;
+        
+                    p:last-child {
+                        font-size: small;
+                        font-weight: 300;
+                    }
+                }
+
+                .commen {
+                    padding-top: 10px;
+                    padding-left: 60px;
+               
+                    border-radius: 8px;
+                
+                    display: flex;
+                    flex-direction: column;
+                  
+                    p {
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
+    img {
+        max-width: 40px;
+        border-radius: 30px;
+        
+    }
+}

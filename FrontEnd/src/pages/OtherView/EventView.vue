@@ -10,14 +10,12 @@
                      :place="activity.lieu" />
                     <CommentSelf :activity-id="activity.id"/>
                 </div>
-                <PageCommentaire :comments="activity?.avis"  />
-                
-               
+                <PageCommentaire :comments="activity?.avis"  />   
             </div>
         </div>
         <div v-for="comment in activity?.avis" :key="comment.id">
-  <strong>{{ comment.user.name }}</strong> — {{ comment.contenu }} ({{ comment.etoiles }}★)
-</div>
+            <strong>{{ comment.user.name }}</strong> — {{ comment.contenu }} ({{ comment.etoiles }}★)
+        </div>
         <PageMap></PageMap>
     </div> 
 </template>

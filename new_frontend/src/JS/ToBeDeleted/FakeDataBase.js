@@ -241,6 +241,20 @@ const FakeDataBase = {
     const newEvent = { eventJour: newEventJours, eventNuit: newEventNuit };
     return newEvent;
   },
+  getOneEvent() {
+    const text =
+      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
+    const oneEvent = {
+      image: "https://picsum.photos/1895/795",
+      image2: "https://picsum.photos/286/425",
+      title: "Mont-Royal",
+      lieu: "Montreal, Vieux-port",
+      date: "11 Octobre 16h00",
+      desc: text,
+      rating: 3,
+    };
+    return oneEvent;
+  },
   getIntroText() {
     const text =
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestias labore quasi," +
