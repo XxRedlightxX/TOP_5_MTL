@@ -1,6 +1,9 @@
 import LocalStorageManager from "@/JS/LocalStaorageManager";
 import { ref } from "vue";
+import { useActivityStore } from "@/stores/activity";
 
+
+ const activitiesStore = useActivityStore();
 const text =
   "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
 
@@ -11,13 +14,15 @@ const text2b = "Découvrir les Organisateurs";
 
 const currentSlider = [
   {
-    image: "https://picsum.photos/1895/795",
-    image2: "https://picsum.photos/286/425",
-    title: "Mont-Royal",
+    id : null,
+    image: "",
+    title: "",
     desc: text,
+    lieu: null,
     rating: 1,
+    date:null 
   },
-  {
+  /*{
     image: "https://picsum.photos/1891/791",
     image2: "https://picsum.photos/287/426",
     title: "Vieux-Port",
@@ -37,7 +42,7 @@ const currentSlider = [
     title: "Jardin Botanique",
     desc: text,
     rating: 4,
-  },
+  },*/
 ];
 
 const currentSliderNuit = [
@@ -71,6 +76,8 @@ const currentSliderNuit = [
   },
 ];
 
+
+
 export default {
   data() {
     let actualMode = ref(LocalStorageManager.getMode());
@@ -88,7 +95,8 @@ export default {
     return {
       actualMode, // Intégration d'actualMode dans le data
       actualLang,
-      carouselItems: actualMode.value ? currentSlider : currentSliderNuit,
+      //carouselItems: actualMode.value ? currentSlider : currentSliderNuit,
+      carouselItems: [],
       textEvent: ref(actualLang.value ? text1a : text1b),
       textOrganisator: ref(actualLang.value ? text2a : text2b),
       timeRunning: 3000,
@@ -107,6 +115,12 @@ export default {
       this.setEvent(item);
       this.$router.push({ name: "Event" });
     },
+    getAvatarUrl (imagePath) {
+      if (!imagePath) return img;
+      console.log(imagePath +"bal")
+      return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
+    },
+
     showSlider(direction) {
       if (direction === "next") {
         this.carouselItems.push(this.carouselItems.shift());
@@ -135,10 +149,20 @@ export default {
       this.actualLang.value = JSON.parse(event.detail.storage);
     },
   },
-  mounted() {
+  async mounted() {
     window.addEventListener("mode-changed", this.handleModeChange);
     window.addEventListener("lang-changed", this.handleLangChange);
     this.setNextAuto();
+    await activitiesStore.getActivities("JOUR");
+    this.carouselItems =activitiesStore.activities.map(act => ({
+      image: act.image_data || "https://picsum.photos/1895/795", // fallback si pas d’image
+      id : act.id,
+      title: act.titre,           
+      desc: act.description,       
+      rating: act.note ?? 0        
+    }));
+    
+ 
   },
   beforeUnmount() {
     window.removeEventListener("mode-changed", this.handleModeChange);

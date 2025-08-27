@@ -12,18 +12,21 @@ export const formatDateSpecial  = (dateString) => {
 
 export const formatDateApi = (dateInput, timeInput) => {
     if (!dateInput || !timeInput) return null;
-  
-    
+
     const date = new Date(dateInput);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    
-   
+
     const [hours, minutes] = timeInput.split(':');
     const time = `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
-    
 
     return `${year}-${month}-${day} ${time}`;
+
+}
+
+export const getAvatarUrl =(imagePath) => {
+    if (!imagePath) return img;
+    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
 
 }
