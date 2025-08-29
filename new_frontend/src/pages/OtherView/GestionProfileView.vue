@@ -101,27 +101,33 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
+  import { ref, onMounted } from 'vue'
+  import { useRouter } from 'vue-router'
   import LocalStorageManager from '@/JS/LocalStorageManager'
   import Setup from '@/JS/Setup'
   import AvatarUploader from '../../components/ProfileComponents/ProfileGestionComponents/UserGestionComponents/AvatarComponent.vue'
   import waterButton from '../../components/StaticComponents/WaterButtonComponent.vue'
 
+  const router = useRouter()
+
+  // Initial setup
   const actualMode = Setup.modeSetup()
   const actualLang = Setup.languageSetup()
   let isLogged = Setup.loginSetup()
   let theUser = ref(null)
 
-  if (isLogged.value === true) {
-    theUser.value = LocalStorageManager.getLogUser()
-  }
-  else {
-    // redirect to a page.
-  }
-
-  if (theUser.value === null) {
-    theUser.value = LocalStorageManager.getLogUser()
-  }
+  onMounted(() => {
+    if (isLogged.value === true) {
+      theUser.value = LocalStorageManager.getLogUser()
+      if (theUser.value === null) {
+        // sécurité si jamais LocalStorage est vide
+        router.push('/profile')
+      }
+    } else {
+      // redirect direct si pas loggé
+      router.push('/profile')
+    }
+  })
 </script>
 
 <style lang="scss">
