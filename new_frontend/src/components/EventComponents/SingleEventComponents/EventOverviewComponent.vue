@@ -1,6 +1,6 @@
 <template>
   <div id="EventOverview">
-    <h1> Informations</h1>
+    <h1 class="h1"> Informations</h1>
 
     <div class="info">
       <div class="lol">

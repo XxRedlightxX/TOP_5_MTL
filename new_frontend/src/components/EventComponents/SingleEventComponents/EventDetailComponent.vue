@@ -3,7 +3,6 @@
     <div class="place-overview">
       <header class="header">
         <h1 class="header__title">{{props.activityTitle}}</h1>
-        <br>
       </header>
 
       <section class="overview">
