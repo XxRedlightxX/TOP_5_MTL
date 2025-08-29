@@ -1,0 +1,45 @@
+  .light {
+    .sign-in {
+      .v-field__overlay {
+        color: var(--graphite08);
+        background-color: var(--graphite);
+  
+        &:focus {
+          outline: none;
+        }
+      }      
+      .v-label, .v-field__input, h2, .mdi-close-circle:hover  {
+        color: var(--graphite);
+      }
+      .forgot {
+        color: var(--graphite08);
+      }
+      .forgot:hover {
+        color: var(--graphite);
+      }
+    }
+  }
+
+  .dark {
+    .sign-in{
+      .v-field__overlay {
+        //color: var(--light-text);
+        background-color: var(--light);
+
+        &:focus {
+          outline: none;
+          //background-color: var(--light02);
+        }
+      }
+      .v-label, .v-field__input, h2, .mdi-close-circle:hover  {
+        color: var(--light);
+      }
+      .forgot, .mdi-close-circle {
+        color: var(--light05);
+      }
+      .forgot:hover {
+        color: var(--light);
+        animation: neonGlowLess 0.5s ease-in-out infinite alternate;  
+      }
+    }
+  }

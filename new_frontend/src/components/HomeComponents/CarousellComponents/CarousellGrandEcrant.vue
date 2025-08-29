@@ -12,7 +12,7 @@
 
           <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
             <router-link class="btn roundBorderSmall" to="/Event" @click="setEvent(item)">{{ textEvent }}</router-link>
-            <router-link class="btn roundBorderSmall" to="/Event Organisator" @click="setEvent(item)">Découvrir les Organisateurs</router-link>
+            <router-link class="btn roundBorderSmall" to="/Event Organisator" @click="setOrganisator()">Découvrir les Organisateurs</router-link>
           </div>
           <div :class="index == 0 ? 'desc' : 'lostdesc'">
             <p>{{ item.desc }}</p>
@@ -76,6 +76,11 @@
   function setEvent(value) {
     LocalStorageManager.setEvent(value);
     console.log("Event value: ", value);
+  }
+
+  function setOrganisator() {
+    let user = FakeDataBase.getUser();
+    LocalStorageManager.setOrganisator(user);
   }
 
   function handleClick(event, item) {

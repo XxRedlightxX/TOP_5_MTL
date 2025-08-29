@@ -65,15 +65,15 @@ const routes = [
         component: () => import("@/pages/OtherView/EventOrganisatorView.vue"),
       },
 
-      // // Vue : ProfilesView
-      // {
-      //   path: "/GestionProfile",
-      //   name: "Gestion Profile",
-      //   // route level code-splitting
-      //   // this generates a separate chunk (Home-[hash].js) for this route
-      //   // which is lazy-loaded when the route is visited.
-      //   component: () => import("@/pages/ProfilesView/GestionProfileView.vue"),
-      // },
+      // Vue : ProfilesView
+      {
+        path: "/Gestion Profile",
+        name: "Gestion Profile",
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import("@/pages/OtherView/GestionProfileView.vue"),
+      },
 
       // // Vue : ErroView
       // {

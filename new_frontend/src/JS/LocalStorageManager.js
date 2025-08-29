@@ -163,8 +163,9 @@ const LocalStorageManager = {
    * @returns {Boolean} nouvelle valeur du Mode
    */
   changeMode(value) {
-    const actualMode = typeof value === "boolean" ? value : !this.getMode();
-    this.setMode(actualMode);
+    const actualMode =
+      typeof value === "boolean" ? value : !LocalStorageManager.getMode();
+    LocalStorageManager.setMode(actualMode);
     return actualMode;
   },
 
@@ -176,9 +177,21 @@ const LocalStorageManager = {
    * @returns {Boolean} nouvelle valeur du Language
    */
   changeLanguage(value) {
-    const actualLang = typeof value === "boolean" ? value : !this.getLanguage();
-    this.setLanguage(actualLang);
+    const actualLang =
+      typeof value === "boolean" ? value : !LocalStorageManager.getLanguage();
+    LocalStorageManager.setLanguage(actualLang);
     return actualLang;
+  },
+
+  logout() {
+    LocalStorageManager.setLogin(false);
+    LocalStorageManager.setLogUser(null);
+    return LocalStorageManager.getLogin();
+  },
+  login(user) {
+    LocalStorageManager.setLogUser(user);
+    LocalStorageManager.setLogin(true);
+    return LocalStorageManager.getLogin();
   },
 };
 

@@ -32,14 +32,14 @@
 
         #text3dComponent {
             position: absolute;
-            z-index: 1000;
+            z-index:40;
         }
         .wave {
             position: relative;
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            z-index: 100;
+            z-index: 10;
         }
         .wave:before, .wave:after {
             content: '';

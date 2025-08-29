@@ -22,7 +22,7 @@
 
 <style lang="scss">
     #text3dComponent{
-        z-index: 1000;
+        z-index: 10;
 
         .text{
             text-transform: uppercase;

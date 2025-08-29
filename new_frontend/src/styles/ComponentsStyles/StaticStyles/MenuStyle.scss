@@ -242,8 +242,8 @@
         .icons {
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
-            justify-self: flex-end;
+            justify-content: flex-end;
+            justify-self: flex-;
             margin-bottom: 65px;
 
             .v-icon {

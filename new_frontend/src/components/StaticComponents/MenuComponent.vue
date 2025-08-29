@@ -10,11 +10,12 @@
           <div class="links">
             <router-link to="/" :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'" translate="no">{{actualLang ? 'Home' : 'Accueil'}}</router-link>
             <router-link to="/Events" :title="actualLang ? 'Go to Event Page' : 'Allez a la page d\'aEvenement'" translate="no">{{actualLang ? 'Events' : 'Evenement'}}</router-link>
+            <router-link to="/Profile" class="profile" :title="actualLang ? 'Go to Profile Page' : 'Allez a la page Profile'">{{actualLang ? 'Profil' : 'Profile'}}</router-link>
           </div>
           <div class="icons">
-            <router-link to="/Profile" class="profile" :title="actualLang ? 'Go to Profile Page' : 'Allez a la page Profile'">
+            <!-- <router-link to="/Profile" class="profile" :title="actualLang ? 'Go to Profile Page' : 'Allez a la page Profile'">
               <v-icon icon="mdi-account-circle" class="icon"/>
-            </router-link>
+            </router-link> -->
             <v-icon 
               :icon="!actualMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'" 
               :class="['icon', 'iconn', { 'justGlow': !actualMode }]" 

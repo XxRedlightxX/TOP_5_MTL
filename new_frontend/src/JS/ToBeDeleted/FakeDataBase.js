@@ -284,6 +284,77 @@ const FakeDataBase = {
     ]);
     return eventFilters;
   },
+
+  getEvents() {
+    const text =
+      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
+    const Event = [
+      {
+        image: "https://picsum.photos/1895/795",
+        image2: "https://picsum.photos/286/425",
+        title: "Mont-Royal",
+        desc: text,
+        rating: 1,
+      },
+      {
+        image: "https://picsum.photos/1891/791",
+        image2: "https://picsum.photos/287/426",
+        title: "Vieux-Port",
+        desc: text,
+        rating: 3,
+      },
+      {
+        image: "https://picsum.photos/1892/792",
+        image2: "https://picsum.photos/288/427",
+        title: "Laronde",
+        desc: text,
+        rating: 5,
+      },
+      {
+        image: "https://picsum.photos/1894/794",
+        image2: "https://picsum.photos/289/428",
+        title: "Jardin Botanique",
+        desc: text,
+        rating: 4,
+      },
+      {
+        image: "https://picsum.photos/1892/790",
+        image2: "https://picsum.photos/288/430",
+        title: "truc 1",
+        desc: text,
+        rating: 3,
+      },
+      {
+        image: "https://picsum.photos/1890/794",
+        image2: "https://picsum.photos/288/428",
+        title: "truc 2",
+        desc: text,
+        rating: 1,
+      },
+    ];
+
+    return Event;
+  },
+
+  getUser() {
+    const text =
+      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestias labore quasi, " +
+      "voluptatibus nostrum aliquid soluta deleniti distinctio aspernatur numquam laborum necessitatibus " +
+      "laboriosam temporibus ratione commodi optio atque inventore. Neque, quo.";
+
+    let user = {
+      avatar: "https://picsum.photos/id/64/200/300",
+      username: "Utilisateur inconnu",
+      name: "Wakanda",
+      firstName: "Dede", // corrigé
+      email: "inconnu@email.com",
+      phoneNumber: "1122222222", // plus clair
+      desc: text,
+      listEvent: FakeDataBase.getEvents(), // évite problème de `this`
+    };
+
+    return user;
+  },
 };
 
 export default FakeDataBase;
