@@ -39,7 +39,7 @@ class ActivityResource extends JsonResource
                     'user'     => [
                         'id'    => $avis->User->id,
                         'name'  => $avis->User->name,
-                        'avatar'  => $avis->User->avatar,
+                        'image_data' => $avis->User->image_data,
                         'email' => $avis->User->email,
                     ]
                 ];

@@ -11,7 +11,7 @@
                 <div :class="index == 0 ? 'titlee' : 'lostTitle'">{{ item.title }}</div>
 
                     <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
-                        <router-link to="/Event" class="btn roundBorderSmall" @click="setEvent(item)">{{ textEvent }}</router-link>
+                        <router-link :to="{ name: 'show', params: {id: item.id}}" class="btn roundBorderSmall" @click="setEvent(item)">{{ textEvent }}</router-link>
                         <router-link to="/Event Organisator" class="btn roundBorderSmall" @click="setEvent(item)">Découvrir les Organisateurs</router-link>
                     </div>
                     <div :class="index == 0 ? 'desc' : 'lostdesc'">
@@ -40,7 +40,8 @@
     </div>
 </template>
 
-<script src="../../JS/HomeCarousellScript.js" ></script>
+<script src="../../JS/HomeCarousellScript.js" >
+</script>
 
 
 

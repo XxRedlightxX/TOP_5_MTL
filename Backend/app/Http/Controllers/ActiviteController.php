@@ -135,43 +135,27 @@ class ActiviteController extends Controller
         return $this->userService->findActivityById($activityId);
     }
 
-
-    
-   public function getActivityByDayTime(Request $request)
-    {
+    public function getActivityFilter(Request $request) {
         $validated = $request->validate([
-            'daytime' => 'required|string',
+            'daytime' => 'nullable|string',
+            'type'    => 'nullable|string',
+            'season'  => 'nullable|string',
+            'title'   => 'nullable|string',
         ]);
-        $activiteSaison = $this->userService->getActivitiesByDaytime($validated['daytime']);
+        if ($request->filled("season")) {
+             $activiteSaison = $this->userService->getActivitiesBySeason($validated['season']);
+        }
+         if ($request->filled("title")) {
+             $activiteSaison = $this->userService->getActivitiesByName($validated['title']);
+        }
+         if ($request->filled("type")) {
+             $activiteSaison = $this->userService->getActivitiesBySeason($validated['season']);
+        }
+         if ($request->filled("daytime")) {
+             $activiteSaison = $this->userService->getActivitiesByDaytime($validated['daytime']);
+        }
+
         return response()->json($activiteSaison);
-    }
-
-    public function getActivitybyType(Request $request) {
-        $validated =$request->validate([
-            'type' => 'required|string', 
-        ]);
-
-        $activiteType = $this->userService->getActivitiesByType($validated['type']);
-        return response()->json(  $activiteType);
-
-    }
-    
-    public function getActivityBySeason(Request $request) {
-        $validated =$request->validate([
-            'season' => 'required|string', 
-        ]);
-
-        $activiteSaison = $this->userService->getActivitiesBySeason($validated['season']);
-        return response()->json($activiteSaison);
-    }
-
-    public function getActivityByName(Request $request) {
-        $validated =$request->validate([
-            'title' => 'required|string', 
-        ]);
-
-        $activiteTitle = $this->userService->getActivitiesByName($validated['title']);
-        return response()->json($activiteTitle);
     }
 
     public function getActivityWithComments(int $activityId) {

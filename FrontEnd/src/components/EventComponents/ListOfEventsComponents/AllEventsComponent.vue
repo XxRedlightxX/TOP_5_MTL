@@ -4,7 +4,7 @@
     <div class="events">
       
    
-      <router-link :to="{ name: 'show', params: {id: item.id}} " class="events_card glass" v-for="(item, index) in newEvent">
+      <router-link :to="{ name: 'show', params: {id: item.id}} " class="events_card glass" v-for="(item, index) in listEvent">
         <div class="event_card_photo" >
             <!-- Main image -->
             <img :src="getAvatarUrl(item?.image)" class="product-thumb" alt="Event Image">
@@ -40,73 +40,34 @@ import { formatDateSpecial } from "@/JS/GlobalFunctions";
 
 
 
+ defineProps({
+      listEvent : Array
+  });
+
 
 const listActivities = ref([]);
 const activitiesStore = useActivityStore();
 
 const getAvatarUrl = (imagePath) => {
     if (!imagePath) return img;
-    console.log(imagePath);
-    console.log(`${import.meta.env.VITE_API_BASE_URL}${imagePath}`);
     return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
 };
 
 
 
-onMounted(async () => {
-  await activitiesStore.getActivities();
 
- 
-  newEvent.value = activitiesStore.activities.map(activity => ({
-    id : activity.id,
-    image: activity.image_data || "https://picsum.photos/1895/795",
-    title: activity.titre,
-    desc: activity.description || descText,
-    rating: activity.rating || 0,
-    lieu: activity.lieu,
-    date: activity.date,
-  }));
-});
   const actualMode = ref(LocalStorageManager.getMode());
 
 
-  const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
-  const newEventJours = [
-    { id: null,
-image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date:null },
-    { id: null,
-image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 5,lieu: null, date:null },
-    {id: null,
-image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 1 ,lieu: null, date:null},
-    { id: null,
-image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 2.5,lieu: null, date:null },
-    { id: null,
-image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 3 ,lieu: null, date:null},
-    { id: null,
-image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 4 ,lieu: null, date:null},
-    {id: null,
-image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3.5 ,lieu: null, date:null},
-    { id: null,
-image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 1.5,lieu: null, date:null },
-    { id: null,
-image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 4.5 ,lieu: null, date:null}
-  ];
 
-  const newEventNuit = [
-    {id :null,image : "https://picsum.photos/1895/795", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
-    {id :null ,image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {id :null ,image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
-    {id :null,image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
-    {id:null ,image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {id:null ,image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
-    {id:null ,image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {id:null ,image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
-    {id:null ,image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 }
-  ];
+
+
 
 
   let newEvent = ref(null);
   //newEvent.value = actualMode.value ? newEventJours : newEventNuit;
+
+
 
   // Fonction pour mettre à jour l'index du slide actif
   // const onSlideChange = (swiper) => {
@@ -124,7 +85,7 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
    }
    // Correction du watcher
    watch(actualMode, (newVal, oldVal) => {
-     //newEvent.value = newVal ? newEventJours : newEventNuit;
+      newEvent.value = newVal ? newEventJours : newEventNuit;
    });
    
    const handleModeChange = (event) => {

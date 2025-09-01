@@ -10,23 +10,23 @@
       @slideChange="onSlideChange"
     >
       <swiper-slide
-        v-for="(item, index) in newEvent"
+        v-for="(item, index) in listEvent"
         :key="index"
       >
-        <img :src="item.image2" alt="#">
+        <img :src="getAvatarUrl(item.image)" alt="#">
       </swiper-slide>
     </swiper>
 
     <div class="contentt">
       <div class="top">
-        <h2>{{ newEvent[indexSlide].title }}  </h2>
+        <h2>{{ listEvent[indexSlide].title }}  </h2>
         <router-link to="/Event" class="link" title="Go to the event Page" @click="setEvent(newEvent[indexSlide])">
           <v-icon icon="mdi-arrow-top-right-thin" class="icon glow"/>
         </router-link>
 
       </div>
-      <p>{{ newEvent[indexSlide].desc }}</p>
-      <Ratings :rating="newEvent[indexSlide].rating" :Rate="false"/>
+      <p>{{ listEvent[indexSlide].desc }}</p>
+      <Ratings :rating="listEvent[indexSlide].rating" :Rate="false"/>
     </div>
   </div>
 </template>
@@ -40,6 +40,9 @@
   import { EffectCards, Autoplay } from 'swiper/modules';
   import LocalStorageManager from "@/JS/LocalStaorageManager";
   import Ratings from "../RatingComponent.vue"
+  import {getAvatarUrl} from '@/JS/GlobalFunctions';
+
+  
 
   const modules = [EffectCards, Autoplay];
   const indexSlide = ref(0);
@@ -47,6 +50,12 @@
 
   const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
   const actualMode = ref(LocalStorageManager.getMode());
+
+
+   defineProps({
+      listEvent : Array
+  });
+
 
   if (actualMode.value == null){
       LocalStorageManager.setMode(true);
