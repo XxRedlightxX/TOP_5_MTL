@@ -35,12 +35,14 @@
 
     const activity = ref(null);
      const route = useRoute();
+     
    
 
     const {getActivityById} = useActivityStore();
 
      onMounted (async ()  =>
         activity.value = await getActivityById(route.params.id)
+        
         
     );
 

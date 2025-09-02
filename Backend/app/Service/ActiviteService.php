@@ -78,5 +78,10 @@ class ActiviteService {
         return $this->activiteDAO->getActivityByDayOrNight($activiteTypeName);
     }
 
+    public function getActivitiesByUpcoming()
+    {
+        return $this->activiteDAO->getUpcomingActivityByRecent();
+    }
+
 
 }

@@ -3,7 +3,7 @@
         <ListcategorieEvent></ListcategorieEvent>
         <div>
             <h3>{{ actualLang ? 'Up coming events' : 'Evenement en approche'}}</h3>
-            <UpComingEvent :list-event="eventsList"/>
+            <UpComingEvent :list-event="upComingEvents" />
         </div>
             <select v-model="activitiesStore.filters.daytime">
         <option value="">All times</option>
@@ -29,6 +29,7 @@
     let actualLang = ref(LocalStorageManager.getLang());
     const activitiesStore = useActivityStore();
     let eventsList = ref(null);
+    let upComingEvents = ref(null);
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
       const newEventJours = [
     { id: null,
@@ -63,10 +64,10 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
     {id:null ,image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 }
   ];
 
-    /*onMounted(async () => {
-      await activitiesStore.getActivities();
+    onMounted(async () => {
+      await activitiesStore.getUpcomingEvents();
 
-      eventsList.value = activitiesStore.activities.map(activity => ({
+      upComingEvents.value = activitiesStore.activities.map(activity => ({
         id : activity.id,
         image: activity.image_data || "https://picsum.photos/1895/795",
         title: activity.titre,
@@ -75,7 +76,7 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
         lieu: activity.lieu,
         date: activity.date,
       }));
-  });*/
+  });
   eventsList.value = actualMode.value ? newEventJours : newEventNuit;
 
   onMounted(async () => {

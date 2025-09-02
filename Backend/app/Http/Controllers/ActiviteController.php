@@ -161,6 +161,11 @@ class ActiviteController extends Controller
         return response()->json($activiteSaison);
     }
 
+
+    public function getUpcomingActivities() {
+          return $this->userService->getActivitiesByUpcoming();
+    }
+
     public function getActivityWithComments(int $activityId) {
 
         //$activity = Activite::findOrFail($activityId);

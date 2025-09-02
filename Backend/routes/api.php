@@ -37,6 +37,8 @@ Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);
 Route::get('/activite', [ActiviteController::class, 'getAllActivities']);
 
 Route::get('/user/activite', [ActiviteController::class, 'getUserActivities']);
+
+Route::get('/activite/test', [ActiviteController::class, 'getUpcomingActivities']);
 //
 
 

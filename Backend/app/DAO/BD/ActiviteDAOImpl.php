@@ -6,6 +6,8 @@ use App\DAO\SourceDonnes\ActiviteDAO;
 use App\Models\Activite;
 use App\Models\Avis;
 use App\Models\User;
+use Carbon\Carbon;
+
 
 class ActiviteDAOImpl implements ActiviteDAO {
 
@@ -70,9 +72,14 @@ class ActiviteDAOImpl implements ActiviteDAO {
         return  Activite::whereHas('saison', function ($query) 
         use ($nomSaison) {
             $query->where('statut', $nomSaison);
-        })->get();
+        })->get();  
+    }
 
-        
+    public function getUpcomingActivityByRecent() {
+          return Activite::whereDate('date', '>=', now())
+        ->orderBy('date', 'asc')
+        ->take(6) 
+        ->get();
     }
 
     public function getActivityByType(string $activiteType) {

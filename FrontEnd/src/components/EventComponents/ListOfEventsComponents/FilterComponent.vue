@@ -3,10 +3,15 @@
  
         <div class="button-container">
             <ul >
-                <li @click="changeEventType(0)"  :class="{ active: eventType === 0 }"><a>{{ actualLang ? "All" : "Tous"}}</a></li>
-                <li @click="changeEventType(1)" :class="{ active: eventType === 1 }"><a>{{ actualLang ? "Night Life" : "De nuit"}}</a></li>
-                <li @click="changeEventType(2)" :class="{ active: eventType === 2 }"><a>{{ actualLang ? "Day life" : "De Jour"}}</a></li>
-                
+                <li @click="eventType = 0" :class="{ active: eventType === 0 }">
+                    <a>{{ actualLang ? "All" : "Tous" }}</a>
+                </li>
+              <li @click="eventType = 1" :class="{ active: eventType === 1 }">
+                  <a>{{ actualLang ? "Night Life" : "De nuit" }}</a>
+              </li>
+              <li @click="eventType = 2" :class="{ active: eventType === 2 }">
+                  <a>{{ actualLang ? "Day Life" : "De Jour" }}</a>
+              </li>
                 
                 <li class="button-wrapper">
                   <button @click="toggleCalendarPopup">
@@ -27,8 +32,10 @@
  import { onMounted, ref, watch, onUnmounted } from 'vue'; 
  import LocalStorageManager from "@/JS/LocalStaorageManager"
  import FilterPopUpComponent from './FilterPopUpComponent.vue';
+ import { useActivityStore } from '@/stores/activity';
  
    const showCalendarPopup = ref(false);
+   const activitiesStore = useActivityStore();
    //const calendarInput = ref(null);
  
    const actualMode = ref(LocalStorageManager.getMode());
@@ -42,7 +49,19 @@
  
    const closePopup = () => {
      showCalendarPopup.value = false
-   } 
+   }
+
+   watch(eventType, async (val) => {
+  if (val === 0) {
+    activitiesStore.filters.daytime = "";       // All
+  } else if (val === 1) {
+    activitiesStore.filters.daytime = "NUIT";   // Night
+  } else if (val === 2) {
+    activitiesStore.filters.daytime = "JOUR";   // Day
+  }
+  await activitiesStore.getActivities();
+});
+
  
    /*const changeEventType = (index) => {
      eventType.value = index;
