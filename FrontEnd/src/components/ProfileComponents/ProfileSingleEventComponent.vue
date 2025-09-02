@@ -5,10 +5,12 @@
         </div>
 
         <div class="middle">
-            
+            {{ props.event.id }}
             <h2>{{ props.event.title }}</h2>
 
             <p>{{ props.event.desc }}</p>
+
+            
 
         </div>
 
@@ -28,11 +30,18 @@
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
     let actualMode = ref(storageManager.getMode());
+    let activityId = ref(null);
+
+    const emit = defineEmits(['popUpdate', 'popDelete'])
+
+    
     //var isShowUp = ref(false);
     const props = defineProps({
         event: Object, // Boolean type prop
         himself: Boolean, // Boolean type prop
     });
+    activityId.value =props.event.id
+    console.log(activityId.value)
 
     // Définir les événements émis par ce composant
     const emit = defineEmits(['popUpdate']);

@@ -5,7 +5,13 @@
             <h3>{{ actualLang ? 'Up coming events' : 'Evenement en approche'}}</h3>
             <UpComingEvent :list-event="eventsList"/>
         </div>
-        
+            <select v-model="activitiesStore.filters.daytime">
+        <option value="">All times</option>
+        <option value="JOUR">JOUR</option>
+        <option value="NUIT">Afternoon</option>
+        <option value="evening">Evening</option>
+    </select>
+
         <AlListEvent :list-event="eventsList"/>
     </div>
 </template>
@@ -15,7 +21,7 @@
     import UpComingEvent from '../../components/EventComponents/ListOfEventsComponents/UpComingEventComponent.vue'
     import AlListEvent from "../../components/EventComponents/ListOfEventsComponents/AllEventsComponent.vue"
     import LocalStorageManager from "@/JS/LocalStaorageManager"
-    import { ref, onMounted, onUnmounted, watch} from "vue";
+    import { ref, onMounted, onUnmounted, watch, computed} from "vue";
     import { useActivityStore } from '@/stores/activity';
 
 
@@ -57,8 +63,8 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
     {id:null ,image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 }
   ];
 
-    onMounted(async () => {
-      await activitiesStore.getActivities("JOUR");
+    /*onMounted(async () => {
+      await activitiesStore.getActivities();
 
       eventsList.value = activitiesStore.activities.map(activity => ({
         id : activity.id,
@@ -69,11 +75,28 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
         lieu: activity.lieu,
         date: activity.date,
       }));
-  });
+  });*/
   eventsList.value = actualMode.value ? newEventJours : newEventNuit;
 
+  onMounted(async () => {
+    await activitiesStore.getActivities();
+  });
 
-  
+  eventsList = computed(() => {
+  return activitiesStore.activities.map(activity => ({
+    id: activity.id,
+    image: activity.image_data || "https://picsum.photos/1895/795",
+    title: activity.titre,
+    desc: activity.description || "No description",
+    rating: activity.rating || 0,
+    lieu: activity.lieu,
+    date: activity.date,
+  }));
+})
+
+
+
+ 
 
    watch(actualMode, (newVal, oldVal) => {
       eventsList.value = newVal ? newEventJours : newEventNuit;

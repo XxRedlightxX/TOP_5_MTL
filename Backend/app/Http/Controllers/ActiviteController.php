@@ -149,10 +149,13 @@ class ActiviteController extends Controller
              $activiteSaison = $this->userService->getActivitiesByName($validated['title']);
         }
          if ($request->filled("type")) {
-             $activiteSaison = $this->userService->getActivitiesBySeason($validated['season']);
+             $activiteSaison = $this->userService->getActivitiesByType($validated['type']);
         }
          if ($request->filled("daytime")) {
              $activiteSaison = $this->userService->getActivitiesByDaytime($validated['daytime']);
+        } else {
+             $activiteSaison =$this->userService->getActivitiesList();
+
         }
 
         return response()->json($activiteSaison);

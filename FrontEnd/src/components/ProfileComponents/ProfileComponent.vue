@@ -18,6 +18,7 @@
     import ProfileList from "./ProfileListEventComponent.vue"
     import { useAuthStore } from "@/stores/auth";
     import { useActivityStore } from "@/stores/activity";
+    const test = ref(null);
 
     const props = defineProps({
         himself: Boolean, // Boolean type prop
@@ -27,8 +28,10 @@
     const authStore = useAuthStore();
     const ActivityStore = useActivityStore();
     onMounted(async () => {
-        await authStore.getUserActivities();
+       test.value = await ActivityStore.getUserActivities();
     });
+
+    console.log(test.value+ "ddssdsf");
  
 
  
@@ -37,11 +40,12 @@
          
 
   const listEvent = user?.activites?.map((act) => ({
+    id: act.id,
     image: "/src/assets/HomeCarousel/Mont-royal.jpg", 
     title: act.titre,
     desc: act.description || "Aucune description",
     lieu: act.lieu,
-    rating: 3 // ou autre champ si dispo
+    rating: 3 
   })) || [];
 
   return {

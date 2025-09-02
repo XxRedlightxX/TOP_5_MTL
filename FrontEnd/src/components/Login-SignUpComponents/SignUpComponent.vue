@@ -4,7 +4,7 @@
 
 
      <p v-if="authStore.user">{{ authStore.user.name }}</p>
-    <form class="sign-up glass">
+    <form class="sign-up glass" >
 
         <h2>{{actualLang ? 'sign-up' : 'Inscrivez-Vous'}}</h2>
 

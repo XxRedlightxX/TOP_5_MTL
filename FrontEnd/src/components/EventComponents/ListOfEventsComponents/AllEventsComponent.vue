@@ -2,7 +2,7 @@
    <div id="AllEventComponent">
     <FilterComponent/>
     <div class="events">
-      
+  
    
       <router-link :to="{ name: 'show', params: {id: item.id}} " class="events_card glass" v-for="(item, index) in listEvent">
         <div class="event_card_photo" >
@@ -47,6 +47,16 @@ import { formatDateSpecial } from "@/JS/GlobalFunctions";
 
 const listActivities = ref([]);
 const activitiesStore = useActivityStore();
+
+
+watch(
+  () => activitiesStore.filters.daytime,
+  async () => {
+    await activitiesStore.getActivities();
+    listEvent.value = activitiesStore.activities;
+  }
+);
+
 
 const getAvatarUrl = (imagePath) => {
     if (!imagePath) return img;

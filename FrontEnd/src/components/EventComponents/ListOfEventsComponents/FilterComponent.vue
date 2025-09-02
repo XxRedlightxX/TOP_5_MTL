@@ -44,17 +44,18 @@
      showCalendarPopup.value = false
    } 
  
-   const changeEventType = (index) => {
+   /*const changeEventType = (index) => {
      eventType.value = index;
      if(index == 1){
        LocalStorageManager.setMode(false);
+       
        actualMode.value = false;
      }
      else if (index ==2){
        LocalStorageManager.setMode(true);
        actualMode.value = true;
      }
-   };
+   };*/
  
    if (actualLang.value === null) {
         LocalStorageManager.setLang(true);

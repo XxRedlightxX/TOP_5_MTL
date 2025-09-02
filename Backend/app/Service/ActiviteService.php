@@ -75,7 +75,7 @@ class ActiviteService {
 
     public function getActivitiesByDaytime(string $activiteTypeName)
     {
-        return $this->activiteDAO->getActivityByName($activiteTypeName);
+        return $this->activiteDAO->getActivityByDayOrNight($activiteTypeName);
     }
 
 

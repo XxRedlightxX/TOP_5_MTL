@@ -20,6 +20,8 @@ Route::get("/users",[UserController::class, 'getUserList']);
 
 Route::get('/user/search', [UserController::class, 'getUserByEmail']);
 
+Route::post('/user/profile-picture', [UserController::class, 'updateProfilePicture']);
+
 
 // routes/api.php
 Route::get('/utilisateur/{user}/activites', [UserController::class, 'index']);
@@ -33,6 +35,8 @@ Route::post("/user/activite",[ActiviteController::class, 'addActivityUser']);
 Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);
 
 Route::get('/activite', [ActiviteController::class, 'getAllActivities']);
+
+Route::get('/user/activite', [ActiviteController::class, 'getUserActivities']);
 //
 
 
@@ -40,15 +44,7 @@ Route::put('/activite/{activiteId}', [ActiviteController::class, 'modifyActivity
 
 Route::delete('/activite/{activiteId}', [ActiviteController::class, 'deleteActivityById']);
 
-Route::get('/activite/search', [ActiviteController::class, 'getActivityByDayTime']);
-
-Route::get('/activite/search', [ActiviteController::class, 'getActivityBySeason']);
-
-Route::get('/activite/search', [ActiviteController::class, 'getActivitybyType']);
-
-Route::get('/activite/search', [ActiviteController::class, 'getActivityByName']);
-
-
+Route::get('/activite/filter', [ActiviteController::class, 'getActivityFilter']);
 // Conversation
 
 Route::get('/messagerie/conversation/{userB}', [ConversationController::class, 'getConversationBySender']);

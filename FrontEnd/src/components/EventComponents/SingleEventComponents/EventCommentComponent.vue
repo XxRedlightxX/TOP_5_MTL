@@ -8,7 +8,7 @@
       <div class="comments" v-for="comment2 in  props.comments" :key=" comment2.id">
         <div class="glas">
           <div class="section">
-            <img :src="user?.avatar" :alt="`Image of ${comment2.name}`">
+            <img :src="getAvatarUrl(comment2.user?.image_data)" :alt="`Image of ${comment2.name}`">
             <div class="comment">
               <p>{{ comment2.user?.name  }}</p>
               <p>{{ formatDate(comment2.date) }}</p>
@@ -31,6 +31,8 @@
 import Ratings from "../../RatingComponent.vue";
 import storageManager from "@/JS/LocalStaorageManager"
 import { ref, onMounted , onBeforeUnmount, computed  } from 'vue';
+import { getAvatarUrl } from "@/JS/GlobalFunctions";
+import { useUserStore } from '@/stores/user';
 
 
 const props = defineProps({
