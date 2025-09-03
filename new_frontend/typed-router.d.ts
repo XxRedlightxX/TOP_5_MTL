@@ -21,6 +21,7 @@ declare module 'vue-router/auto-routes' {
     '/MenuView/AllEventsView': RouteRecordInfo<'/MenuView/AllEventsView', '/MenuView/AllEventsView', Record<never, never>, Record<never, never>>,
     '/MenuView/HomeView': RouteRecordInfo<'/MenuView/HomeView', '/MenuView/HomeView', Record<never, never>, Record<never, never>>,
     '/MenuView/Login-ProfileView': RouteRecordInfo<'/MenuView/Login-ProfileView', '/MenuView/Login-ProfileView', Record<never, never>, Record<never, never>>,
+    '/OtherView/404View': RouteRecordInfo<'/OtherView/404View', '/OtherView/404View', Record<never, never>, Record<never, never>>,
     '/OtherView/EventOrganisatorView': RouteRecordInfo<'/OtherView/EventOrganisatorView', '/OtherView/EventOrganisatorView', Record<never, never>, Record<never, never>>,
     '/OtherView/EventView': RouteRecordInfo<'/OtherView/EventView', '/OtherView/EventView', Record<never, never>, Record<never, never>>,
     '/OtherView/GestionProfileView': RouteRecordInfo<'/OtherView/GestionProfileView', '/OtherView/GestionProfileView', Record<never, never>, Record<never, never>>,

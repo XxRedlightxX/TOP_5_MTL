@@ -94,9 +94,9 @@
       </div>
     </form>
     <waterButton :text="actualLang ? 'Send' : 'Envoyer'" :type="true" class="btn" @click="updateUser()"/>
-    <router-link to="/Profile" class="backProfile" :title="actualLang ? 'Back to Profile Page' : 'Retourner a la page Profile'">
+    <div class="backProfile" :title="actualLang ? 'Back to Profile Page' : 'Retourner a la page Profile'" @click="back()">
       <v-icon icon="mdi-arrow-left-bold-box" class="icon"/>
-    </router-link>
+    </div>
   </div>
 </template>
 
@@ -115,6 +115,10 @@
   const actualLang = Setup.languageSetup()
   let isLogged = Setup.loginSetup()
   let theUser = ref(null)
+
+  const back = () => {
+    router.go(-1)
+  }
 
   onMounted(() => {
     if (isLogged.value === true) {
@@ -143,6 +147,7 @@
         display: flex;
         justify-content: center;
         text-decoration: none;
+        cursor: pointer;
     }
 }
 .light {

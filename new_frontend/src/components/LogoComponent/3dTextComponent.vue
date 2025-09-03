@@ -16,7 +16,7 @@
   const props = defineProps({
     text: String,
     shadow: Boolean,
-    size: Number
+    size: Number,
   });
 </script>
 

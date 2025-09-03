@@ -19,9 +19,10 @@
   import Text from './3dTextComponent.vue';
 
   const props = defineProps({
-    size: Number
+    size: Number,
+    text: String
   });
-  const text = 'Drop';
+  const text = props.text == null ? 'Drop' : props.text;
 </script>
 
 <style lang="scss">
@@ -117,10 +118,10 @@
 
         #text3dComponent {
             width: 100%;
-            padding: 3% 10%;
+            padding: 7% 10%;
             //height: 60%;
             .text{
-                font-size: 7rem;
+                font-size: 10rem;
                 font-weight: 500;
             }
         }
@@ -139,6 +140,20 @@
                 .text{
                     font-size: 18vw;
                     font-weight: 300;
+                }
+            }
+        }
+        .large {
+            width: 350px;
+            height: 350px;
+
+            #text3dComponent {
+                width: 100%;
+                padding: 7% 10%;
+                //height: 60%;
+                .text{
+                    font-size: 7rem;
+                    font-weight: 500;
                 }
             }
         }

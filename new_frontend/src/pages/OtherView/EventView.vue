@@ -16,6 +16,7 @@
 
 <script setup>
   import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
   import EventComment from '@/components/EventComponents/SingleEventComponents/EventCommentComponent.vue';
   import EventCommentSelf from '@/components/EventComponents/SingleEventComponents/EventCommentSelfComponent.vue';
   import EventDetail from '@/components/EventComponents/SingleEventComponents/EventDetailComponent.vue';
@@ -29,7 +30,14 @@
     event.value = FakeDataBase.getOneEvent();
   }
 
+  const router = useRouter();
+
+  // rediriger vers home si l'event est null
+  const redirect = () => {
+    router.push({ name: 'Home' });
+  };
 </script>
+
 
 <style lang="scss">
 #event {
