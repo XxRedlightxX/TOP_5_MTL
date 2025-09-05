@@ -5,21 +5,21 @@
             <div class="event-create-form">
                 <span class="close" @click="pop" >&times;</span>
                 <h2>Create Event</h2>
-                <form>
+                <form @submit.prevent="testInput" >
                     <div class="form-group">
                         <label for="event-name">Event Name</label>
-                        <input type="text" id="event-name" placeholder="Enter event name" required>
+                        <input type="text" v-model="formDataEvent.titre" id="event-name" placeholder="Enter event name" required>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="event-date">Date</label>
-                            <input type="date" id="event-date" required>
+                            <input type="date"  ref="inputRefDate"  id="event-date" required>
                         </div>
 
                         <div class="form-group">
                             <label for="event-time">Time</label>
-                            <input type="time" id="event-time" required>
+                            <input type="time" ref="inputRefTime"  id="event-time" required>
                         </div>
 
                         <div class="form-group">
@@ -30,23 +30,40 @@
 
                     <div class="form-group">
                         <label for="event-location">Location</label>
-                        <input type="text" id="event-location" placeholder="Enter location" required>
+                        <input type="text"  v-model="formDataEvent.lieu" id="event-location" placeholder="Enter location" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="event-location">Description</label>
+                        <input type="text"  v-model="formDataEvent.description" id="event-description" placeholder="Enter description" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="event-location">statut_journee</label>
+                            <input type="text"  v-model="formDataEvent.statut_journee" id="event-description" placeholder="Enter description" required>
+                        </div>
+
+                        <select name="cars" id="cars">
+                            <option value="volvo">Volvo</option>
+                           
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label for="event-picture">Upload Picture</label>
-                        <input type="file" id="event-picture" accept="image/*">
+                        <input type="file"  id="event-picture" accept="image/*">
                     </div>
 
                     <div class="form-group">
                         <label for="event-hosts">Co-hosts</label>
-                        <input type="text" id="event-hosts" placeholder="Add other hosts (comma-separated)">
+                        <input type="text" id="event-hosts" v-model="formDataEvent.saison_id" placeholder="Add other hosts (comma-separated)">
                         <div class="form-group_images">
                             <!-- <img :src="imgUrl"> <img :src="imgUrl" alt=""> <img :src="imgUrl"> -->
                         </div>
                     </div>
                 
                     <div class="form-actions">
+                          <button  type="submit"  >{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
                         <waterButton :text="actualLang ? 'Create' : 'Creer'" :type="true" class="btnn"/>
                         <waterButton :text="actualLang ? 'Cancel' : 'Annuler'" :type="false" class="btnn"  @click="pop"/>
                     </div>
@@ -58,9 +75,57 @@
 </template>
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
+    import { ref, onMounted, onUnmounted, defineProps, defineEmits, reactive } from "vue";
     import waterButton from "@/components/WaterButtonComponent.vue";
-    //import imgUrl from "src/assets/";//"../../../assets/bob.jpg";
+    import { useActivityStore } from "@/stores/activity";
+    import { formatDateApi } from "@/JS/GlobalFunctions";
+
+    const {addEvent} = useActivityStore();
+
+    const inputRefDate = ref(null);
+    const inputRefTime = ref(null);
+    const result = ref(null);
+
+
+
+
+  const formDataEvent= reactive({
+        titre: "",
+        date: "",
+        description: "",
+        statut_journee : "",
+        lieu : "",
+        image_data : "",
+        
+saison_id
+ : null
+    })
+
+const testInput  =  async() => {
+  const dateValue = inputRefDate.value.value;
+  const timeValue = inputRefTime.value.value;
+  
+  const formattedDateTime = formatDateApi(dateValue, timeValue);
+  formDataEvent.date = formattedDateTime;
+  console.log(formDataEvent);
+  const test = await addEvent(formDataEvent);
+  console.log(test);
+
+
+};
+
+
+
+
+
+
+
+
+
+
+   
+
+    
 
     const props = defineProps({
         user: Object

@@ -9,12 +9,23 @@ import { registerPlugins } from '@/plugins'
 
 // Components
 import App from './App.vue'
+import routeur from "./router"
+import { createPinia } from 'pinia'
+import 'vuetify/styles' // Add this line
 
 // Composables
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
 
 const app = createApp(App)
+const pinia = createPinia() 
+
 
 registerPlugins(app)
 
+pinia.use(({store}) =>{
+    store.router = markRaw(routeur)
+
+})
+app.use(pinia)
+app.use(routeur)
 app.mount('#app')

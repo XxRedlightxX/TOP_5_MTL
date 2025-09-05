@@ -2,25 +2,29 @@
    <div id="AllEventComponent">
     <FilterComponent/>
     <div class="events">
-      <router-link to="/Event" class="events_card glass" v-for="(item, index) in newEvent" :key="index" @click="setEvent(item)">
-        <div class="event_card_photo">
+      
+   
+      <router-link :to="{ name: 'show', params: {id: item.id}} " class="events_card glass" v-for="(item, index) in newEvent">
+        <div class="event_card_photo" >
             <!-- Main image -->
             <img :src="item.image" class="product-thumb" alt="Event Image">
         </div>
-
+        
         <div class="desc">
             <strong>{{ item.title }}</strong>
             <div class="d1">
                 <v-icon icon="mdi-map-marker " :class="['icon', {'justGlow' : !actualMode}]"/>
-                Montreal, Vieux-Port
+               {{ item.lieu }}
             </div>
             <div class="d2">
                 <v-icon icon="mdi-clock-outline " :class="['icon', {'justGlow' : !actualMode}]"/>
-                Octobre 11 - 16:00pm
+                {{ formatDateSpecial(item.date) }}
             </div>
         </div>
       </router-link>
     </div>
+
+ 
     <PaginationComponent/>
   </div>
 </template>
@@ -31,35 +35,71 @@ import { onMounted, ref, watch, onUnmounted } from 'vue';
 import LocalStorageManager from "@/JS/LocalStaorageManager"
 import PaginationComponent from './PaginationComponent.vue';
 import FilterComponent from './FilterComponent.vue';
+import { useActivityStore } from '@/stores/activity';
+import { formatDateSpecial } from "@/JS/GlobalFunctions";
 
 
 
+
+const listActivities = ref([]);
+const activitiesStore = useActivityStore();
+
+const getAvatarUrl = (imagePath) => {
+    if (!imagePath) return img;
+    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
+};
+
+
+
+onMounted(async () => {
+  await activitiesStore.getActivities();
+
+ 
+  newEvent.value = activitiesStore.activities.map(activity => ({
+    id : activity.id,
+    image: activity.image || "https://picsum.photos/1895/795",
+    title: activity.titre,
+    desc: activity.description || descText,
+    rating: activity.rating || 0,
+    lieu: activity.lieu,
+    date: activity.date,
+  }));
+});
   const actualMode = ref(LocalStorageManager.getMode());
 
 
   const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
   const newEventJours = [
-    { image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3 },
-    { image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 5 },
-    { image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 1 },
-    { image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 2.5 },
-    { image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 3 },
-    { image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 4 },
-    { image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3.5 },
-    { image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 1.5 },
-    { image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 4.5 }
+    { id: null,
+image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date:null },
+    { id: null,
+image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 5,lieu: null, date:null },
+    {id: null,
+image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 1 ,lieu: null, date:null},
+    { id: null,
+image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 2.5,lieu: null, date:null },
+    { id: null,
+image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 3 ,lieu: null, date:null},
+    { id: null,
+image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 4 ,lieu: null, date:null},
+    {id: null,
+image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3.5 ,lieu: null, date:null},
+    { id: null,
+image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 1.5,lieu: null, date:null },
+    { id: null,
+image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 4.5 ,lieu: null, date:null}
   ];
 
   const newEventNuit = [
-    {image : "https://picsum.photos/1895/795", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
-    {image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
-    {image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
-    {image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
-    {image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
-    {image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 }
+    {id :null,image : "https://picsum.photos/1895/795", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
+    {id :null ,image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
+    {id :null ,image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
+    {id :null,image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
+    {id:null ,image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
+    {id:null ,image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
+    {id:null ,image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
+    {id:null ,image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
+    {id:null ,image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 }
   ];
 
 

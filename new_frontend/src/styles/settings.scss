@@ -1,0 +1,237 @@
+/**
+ * src/styles/settings.scss
+ *
+ * Configures SASS variables and Vuetify overwrites
+ */
+
+// https://vuetifyjs.com/features/sass-variables/`
+// @use 'vuetify/settings' with (
+//   $color-pack: false
+// );
+* {
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+}
+:root {
+    --graphite: rgb(29, 30, 24);
+    --graphite015: rgba(29, 30, 24, 0.15);
+    --graphite02: rgba(29, 30, 24, 0.2);
+    --graphite06: rgba(29, 30, 24, 0.6);
+    --graphite08: rgba(29, 30, 24, 0.8);
+    
+    --light: rgb(255, 255, 255);
+    --light015: rgba(255, 255, 255, 0.15); // light-trabs015
+    --light02: rgba(255, 255, 255, 0.2); // light-tans-glow-less
+    --light04: rgba(255, 255, 255, 0.4); // light-trans-glow
+    --light05: rgba(255, 255, 255, 0.5); // light-trans-2shine
+    --light07: rgba(255, 255, 255, 0.7); // light-text
+    --light075: rgba(255, 255, 255, 0.75); // light-trans-text
+}
+
+.v-main{
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .view {
+        flex-grow: 1;
+    }
+    .glass {
+        /* From https://css.glass */
+        background: rgba(255, 255, 255, 0.06);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        border: 1px solid rgba(255, 255, 255, 0);
+    }
+    .glass2, .glass3 {
+        /* From https://css.glass */
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        //border: 1px solid rgba(255, 255, 255, 0);
+    }
+    .glass5 {
+        /* From https://css.glass */
+        background: rgba(0, 0, 0, 0.23);
+        //border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(4.7px);
+        -webkit-backdrop-filter: blur(4.7px);
+    }
+    .glass3:hover {
+        /* From https://css.glass */
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        //border: 1px solid rgba(255, 255, 255, 0);
+    }
+    .glass4 {
+        /* From https://css.glass */
+        background: rgba(255, 255, 255, 0.62);
+        //border-radius: 0px;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        border: 1px solid rgba(255, 255, 255, 0);
+    }
+    .glow:hover, .justGlow {
+        color: var(--light);       
+        animation: neonGlow 0.5s ease-in-out infinite alternate;
+    }
+    .glowLess:hover, .justGlowless {
+        color: var(--light);
+        animation: neonGlowLess 0.5s ease-in-out infinite alternate;      
+        
+    }
+    .glowBox, .justGlowBox {
+        color: var(--light);       
+        animation: neonGlowBox 0.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes neonGlow {
+        from {
+            text-shadow:
+            0 0 1.5px var(--light04),
+            0 0 2.5px var(--light04),
+            0 0 5px var(--light04),
+            0 0 10px var(--light04),
+            0 0 20px var(--light04),
+            0 0 25px var(--light04),
+            0 0 30px var(--light04),
+            0 0 33px var(--light04);
+        }
+    
+        to {
+            text-shadow:
+                0 0 2.5px var(--light04),
+                0 0 4px var(--light04),
+                0 0 8px var(--light04),
+                0 0 15px var(--light04),
+                0 0 30px var(--light04),
+                0 0 33px var(--light04),
+                0 0 45px var(--light04),
+                0 0 60px var(--light04);
+        }
+    }
+
+    @keyframes neonGlowLess {
+        from {
+            text-shadow:
+            0 0 1.5px var(--light02),
+            0 0 2.5px var(--light02),
+            0 0 5px var(--light02),
+            0 0 10px var(--light02),
+            0 0 20px var(--light02),
+            0 0 25px var(--light02),
+            0 0 30px var(--light02),
+            0 0 33px var(--light02);
+        }
+    
+        to {
+            text-shadow:
+                0 0 2.5px var(--light02),
+                0 0 4px var(--light02),
+                0 0 8px var(--light02),
+                0 0 15px var(--light02),
+                0 0 30px var(--light02),
+                0 0 33px var(--light02),
+                0 0 45px var(--light02),
+                0 0 60px var(--light02);
+        }
+    }
+    @keyframes neonGlowBox {
+        from {
+            box-shadow:
+            0 0 1.5px var(--light04),
+            0 0 2.5px var(--light04),
+            0 0 5px var(--light04),
+            0 0 10px var(--light04),
+            0 0 20px var(--light04),
+            0 0 25px var(--light04),
+            0 0 30px var(--light04),
+            0 0 33px var(--light04);
+        }
+    
+        to {
+            box-shadow:
+                0 0 2.5px var(--light04),
+                0 0 4px var(--light04),
+                0 0 8px var(--light04),
+                0 0 15px var(--light04),
+                0 0 30px var(--light04),
+                0 0 33px var(--light04),
+                0 0 45px var(--light04),
+                0 0 60px var(--light04);
+        }
+    }
+    @keyframes neonGlowBoxless {
+        from {
+            box-shadow:
+            0 0 0.75px var(--light04),
+            0 0 1.25px var(--light04),
+            0 0 2.5px var(--light04),
+            0 0 5px var(--light04),
+            0 0 10px var(--light04),
+            0 0 12px var(--light04),
+            0 0 15px var(--light04),
+            0 0 16px var(--light04);
+        }
+    
+        to {
+            box-shadow:
+                0 0 1.25px var(--light04),
+                0 0 2px var(--light04),
+                0 0 8px var(--light04),
+                0 0 7px var(--light04),
+                0 0 15px var(--light04),
+                0 0 16px var(--light04),
+                0 0 23px var(--light04),
+                0 0 30px var(--light04);
+        }
+    }
+    @keyframes neonLogo {
+        0% {
+            filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(80%) contrast(60%) drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px #fff) drop-shadow(0 0 20px #fff);;
+        }
+        100% {
+            filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(80%) contrast(60%)  drop-shadow(0 0 10px #fff) drop-shadow(0 0 20px #fff) drop-shadow(0 0 30px #fff)
+        }
+    }
+}
+// @media screen and (min-width: 1025.1px){
+
+// }
+@media screen and (max-width: 1025px){
+    .v-main{
+        position: relative;
+        #menuComponent, .v-toolbar__content {
+            //position: relative;
+            overflow: visible;
+            position: absolute;
+        }
+    }
+}
+.light{
+    background: linear-gradient(to bottom, #efefef, #ccc);
+    // .v-field__overlay {
+    //     color: var(--graphite08);
+    //     background-color: var(--graphite);
+  
+    //     &:focus {
+    //       outline: none;
+    //     }
+    // }
+}
+
+.dark {
+    background: linear-gradient(to bottom, #ccc, rgb(29, 30, 24));
+    // .v-field__overlay {
+    //     color: var(--light07);
+    //     background-color: var(--light);
+
+    //     &:focus {
+    //       outline: none;
+    //     }
+    // }
+}

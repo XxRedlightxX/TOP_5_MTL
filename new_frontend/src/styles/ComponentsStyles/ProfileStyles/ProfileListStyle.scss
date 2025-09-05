@@ -1,0 +1,56 @@
+#profileListEventComponent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+    .head {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0% 0.7% 0% 0%;
+
+        h4 {
+            flex: 1;
+            font-size: 2rem;
+        }
+
+        .router {
+            border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+            transition: all 0.3s;
+            .icon:hover {
+                cursor: pointer;
+            }
+        }
+        .router:hover {
+            border-radius: 47% 53% 36% 64% / 40% 40% 60% 60%  ;
+        }
+
+    }
+    .body {
+        overflow: auto;
+        max-height: 500px;
+    }
+}
+@media screen and (min-width: 1025.1px) {
+    .head {
+        .router {
+            padding: 2% 2%;
+            .icon {
+                font-size: 2.5rem;
+            }
+        }
+  
+    }
+}
+@media screen and (max-width: 1025px) {
+    .head {
+        .router {
+            padding: 4% 4%;
+            .icon {
+                font-size: 3rem;
+            }
+        }
+  
+    }
+}

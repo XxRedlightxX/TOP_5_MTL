@@ -1,17 +1,19 @@
 <template>
-  <form class="sign-in glass">
+  <form class="sign-in glass" @submit.prevent="Login()">
 
     <h2>{{actualLang ? 'Sign In' : 'Connectez-Vous'}}</h2>
 
     <v-text-field
         :rules="Email"
         :label="actualLang ? 'Email' : 'Email'"
-        type="input"
+        type="email"
         clearable
         persistent-clear 
         hide-details="auto"
+        required
+        v-model="formData.email"
     ></v-text-field>
-
+   
     <v-text-field
         :rules="Password"
         :label="actualLang ? 'Password' : 'Mot de passe'"
@@ -19,29 +21,65 @@
         clearable
         persistent-clear 
         hide-details="auto"
+        required
+        v-model="formData.password"
     ></v-text-field>
+     <p v-if="errors.password" >{{ errors.password }} brrr</p>
+    
 
     <a href="#" class="forgot">{{actualLang ? 'Forgot your password ?' : 'Vous avez oublié votre mot de passe ?'}}</a>
 
-    <waterButton :text="actualLang ? 'Sign In' : 'Se connecter'" :type="true" @click="Login()"/>
-
+    <waterButton :text="actualLang ? 'Sign In' : 'Se connecter'" :type="true" />
+    <button  type="submit"  >{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
   </form>
 
 </template>
 
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted} from "vue";
+    import { ref, onMounted, onUnmounted,reactive } from "vue";
     import waterButton from "../WaterButtonComponent.vue"
-  
+    import { useAuthStore } from "@/stores/auth";
+    import { storeToRefs } from "pinia";
+
+
+    
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
 
-    const Login = () => {
-        storageManager.setLogin(true);
-        isLogged.value = storageManager.getLogin();
-    }
+    const {errors} = storeToRefs(useAuthStore());
 
+    onMounted(() => (errors.value = {}));
+
+    const formData =reactive({
+        email : "",
+        password : ""
+    })
+
+    const {authenticate}= useAuthStore();
+
+
+   
+
+
+
+   const Login = async () => {
+    try {
+
+   
+        const success = await authenticate('login', formData);
+        if (success) {
+            storageManager.setLogin(true);
+            isLogged.value = storageManager.getLogin();
+        } else {
+            console.log("Not Connect")
+        }
+    } catch (errors) {
+        // Handle any errors
+        console.error('Login error:', errors);
+    }
+}  
+    
     if (actualLang.value === null) {
         storageManager.setLang(true);
         actualLang.value = storageManager.getLang();

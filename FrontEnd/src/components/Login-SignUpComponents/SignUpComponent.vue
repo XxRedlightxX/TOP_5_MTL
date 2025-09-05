@@ -1,4 +1,9 @@
+
+
 <template>
+
+
+     <p v-if="authStore.user">{{ authStore.user.name }}</p>
     <form class="sign-up glass">
 
         <h2>{{actualLang ? 'sign-up' : 'Inscrivez-Vous'}}</h2>
@@ -11,6 +16,9 @@
             clearable
             persistent-clear 
             hide-details="auto"
+            v-model="formData.name"
+           required
+          
         ></v-text-field>
 
         <div class="sub">
@@ -22,6 +30,7 @@
                 clearable
                 persistent-clear 
                 hide-details="auto"
+                v-model = "formData.email"
             ></v-text-field>
 
             <v-text-field
@@ -43,6 +52,7 @@
             clearable
             persistent-clear 
             hide-details="auto"
+            v-model="formData.password"
         ></v-text-field>
 
         <v-text-field
@@ -53,22 +63,59 @@
             clearable
             persistent-clear 
             hide-details="auto"
+             v-model="formData.password_confirmation"
         ></v-text-field>
 
-        <!--<button type="submit">{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>-->
-        <waterButton :text="actualLang ? 'Sign Up' : 'S\'inscrire'" :type="true" @click=" Login()"/>
+        <v-radio-group 
+            v-model="formData.type_utilisateur" 
+         
+            :rules="[v => !!v || 'User type is required']"
+            required
+            >
+            <v-radio
+                v-for="(item, index) in items"
+                :key="index"
+                :label="item"
+                :value="item"
+            ></v-radio>
+    </v-radio-group>
+
+        
+    
+        <button  type="submit" @click="Login()" >{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
+        <!--<waterButton :text="actualLang ? 'Sign Up' : 'S\'inscrire'" :type="true" @click=" Login()"/>>-->
     </form>
 </template>
 
 <script setup>
+    import { useAuthStore } from "@/stores/auth";
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted} from "vue";
-    import waterButton from "../WaterButtonComponent.vue"
-  
+    import { ref, onMounted, onUnmounted, reactive} from "vue";
+    import waterButton from "../WaterButtonComponent.vue";
+
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
 
+
+    const {authenticate} = useAuthStore();
+    const authStore = useAuthStore();
+    const formData  = reactive({
+        name: '',
+        email : '',
+        type_utilisateur : null ,
+        password : '',
+        password_confirmation : '',
+    })
+
+  
+    const items = [
+        'particulier',
+        'organisateur',
+
+    ];
+   
     const Login = () => {
+        authenticate('register', formData);
         storageManager.setLogin(true);
         isLogged.value = storageManager.getLogin();
     }
