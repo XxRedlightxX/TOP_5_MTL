@@ -1,0 +1,111 @@
+// Composables
+import { createRouter, createWebHistory } from "vue-router";
+import "vuetify/dist/vuetify.css";
+//import { useAuthStore } from "@/stores/auth";
+
+const routes = [
+  // Vue : MenusView
+  {
+    path: "/",
+    name: "Home",
+
+    // route level code-splitting
+    // this generates a separate chunk (Home-[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("@/pages/MenuView/HomeView.vue"),
+  },
+  {
+    path: "/Events",
+    name: "Events",
+    //meta: { guest: true },
+    // route level code-splitting
+    // this generates a separate chunk (Home-[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("@/pages/MenuView/AllEventsView.vue"),
+  },
+  {
+    path: "/Profile",
+    name: "Profile",
+    //meta: { guest: true },
+    // route level code-splitting
+    // this generates a separate chunk (Home-[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("@/pages/MenuView/Login-ProfileView.vue"),
+  },
+
+  // // Vue : OtherView
+  {
+    path: "/Event",
+    name: "Event",
+    // route level code-splitting
+    // this generates a separate chunk (Home-[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("@/pages/OtherView/EventView.vue"),
+  },
+  {
+    path: "/Event Organisator",
+    name: "Event Organisator",
+    // route level code-splitting
+    // this generates a separate chunk (Home-[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("@/pages/OtherView/EventOrganisatorView.vue"),
+  },
+
+  // Vue : ProfilesView
+  {
+    path: "/Gestion Profile",
+    name: "Gestion Profile",
+    // route level code-splitting
+    // this generates a separate chunk (Home-[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("@/pages/OtherView/GestionProfileView.vue"),
+  },
+
+  // Vue : ErroView
+  {
+    path: "/:catchAll(.*)",
+    name: "404",
+    // route level code-splitting
+    // this generates a separate chunk (Home-[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("@/pages/OtherView/404View.vue"),
+  },
+  // {
+  //   path: "/Logo",
+  //   name: "Logo",
+  //   // route level code-splitting
+  //   // this generates a separate chunk (Home-[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () => import("@/pages/OtherView/LogoView.vue"),
+  // },
+
+  // {
+  //   path: "/UserProfile",
+  //   name: "UserProfile",
+  //   // route level code-splitting
+  //   // this generates a separate chunk (Home-[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () => import("@/components/ProfileComponents/ProfileComponent.vue"),
+  // },
+
+  // {
+  //   path: "/Event/:id?",
+  //   name: "show",
+  //   // route level code-splitting
+  //   // this generates a separate chunk (Home-[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () => import("@/pages/OtherView/EventView.vue"),
+  // },
+];
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
+});
+
+// router.beforeEach(async (to, from) => {
+//   const authStore = useAuthStore();
+//   await authStore.getUser();
+// });
+
+export default router;

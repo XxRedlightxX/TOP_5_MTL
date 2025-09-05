@@ -1,0 +1,98 @@
+.light {
+    #carouselGrand {
+        .list > .item > .content > .desc p{
+            color: var(--light-text);
+        }
+        .titlee {
+            color: var(--light);
+        }
+        .thumbnail .title {
+            color: var(--graphite06);
+        }
+        .overlayGrad {
+            background: linear-gradient(180deg, rgba(9, 30, 24, 0.3) 0%, rgba(9, 30, 24, 0.3) 60%,  #efefef 95%);
+        }
+        .arrows{
+            button{
+                color: var(--graphite);
+                animation: neonGlow 0.5s ease-in-out infinite alternate;
+            }
+            button:hover{
+                color: var(--dark);
+            }
+        }
+        .list {
+            .item {
+                .content {
+                    //color: var(--light);
+                    .buttons{
+
+                        .btn{
+                            //border: 2px solid var(--light05);
+                            color: var(--light);
+                            background: transparent;
+                            box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                                15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+                        }
+                        .btn:hover{
+                            box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.252), 15px 25px 10px rgba(0, 0, 0, 0.246),
+                                15px 20px 20px rgba(0, 0, 0, 0.159), inset -10px -10px 15px rgba(237, 237, 237, 0.54);
+                                color: var(--light-text);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.dark {
+    #carouselGrand {
+        .list > .item > .content > .desc p, .thumbnail .title {
+            color: var(--graphite);
+        }
+        .content .title {
+            color: var(--graphite);
+            z-index: 100;
+            animation: neonGlow 0.5s ease-in-out infinite alternate;
+        }
+        .overlayGrad {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(153,153,152, 0.3) 60%,  #ccc 95%);
+        }
+            /* arrows */
+        .arrows{
+            button{
+                color: var(--light-text);
+                animation: neonGlow 0.5s ease-in-out infinite alternate;
+            }
+            button:hover{
+                color: var(--light);
+            }
+        }
+        .list {
+            .item {
+                .content {
+                    .buttons{
+
+                        .btn{
+                            //border: 2px solid var(--light05);
+                            color: var(--graphite);
+                            background: transparent;
+                            box-shadow: 5px 5px 10px #0008,
+                                10px 6px 15px #0008 inset,
+                                -5px -5px 8px #f5f5ff inset,
+                                10px 6px 15px #0004 inset;
+                        }
+                        .btn:hover{
+                            color: var(--graphite06);
+                            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.26),
+                                10px 6px 15px rgba(0, 0, 0, 0.266) inset,
+                                -5px -5px 8px #f5f5ff99 inset,
+                                10px 6px 15px rgba(0, 0, 0, 0.151) inset;
+                            color: var(--light);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

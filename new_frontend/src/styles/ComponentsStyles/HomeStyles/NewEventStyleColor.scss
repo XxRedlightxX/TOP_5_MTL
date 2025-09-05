@@ -1,0 +1,59 @@
+.light {
+    #newEventComponent {
+        .swiper {
+            .swiper-slide {
+              color: #fff;
+            }
+        } 
+        .contentt {
+            .top {
+                h2 {
+                    color: var(--graphite); 
+                }
+                .icon {
+                    color: var(--graphite); 
+                    box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                                15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+                }
+                .icon:hover {
+                    color: var(--graphite06); 
+                }
+            }
+    
+            p {
+                color: var(--graphite06);
+            }
+        }
+    }
+}
+
+.dark {
+    #newEventComponent {
+        .swiper {
+            .swiper-slide {
+              color: #fff;
+            }
+        } 
+        .contentt {
+            .top {
+                h2 {
+                    color: var(--light); 
+                }
+                .icon {
+                    color: var(--light075); 
+                    box-shadow: 15px 25px 10px #f5f5ff44,
+                            10px 6px 15px #0008 inset,
+                            -5px -5px 8px #f5f5ff67 inset,
+                            10px 6px 15px #0004 inset;
+                }
+                .icon:hover {
+                    color: var(--light); 
+                }
+            }
+    
+            p {
+                color: var(--light07);
+            }
+        }
+    }
+}

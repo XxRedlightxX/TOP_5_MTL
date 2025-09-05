@@ -1,0 +1,37 @@
+  .light {
+    .sign-up {
+      .v-field__overlay {
+        color: var(--graphite08);
+        background-color: var(--graphite);
+        //background-color: red;
+  
+        &:focus {
+          outline: none;
+          //background-color: var(--graphite02);
+        }
+      }
+      .v-label, .v-field__input, h2, .mdi-close-circle:hover  {
+        color: var(--graphite);
+      }
+    }
+  }
+
+  .dark {
+    .sign-up {
+      .v-field__overlay {
+        //color: var(--light-text);
+        background-color: var(--light);
+
+        &:focus {
+          outline: none;
+          //background-color: var(--light02);
+        }
+      }
+      .v-label, .v-field__input, h2, .mdi-close-circle:hover  {
+        color: var(--light);
+      }
+      .mdi-close-circle {
+        color: var(--light05);
+      }
+    }
+  }
