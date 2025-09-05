@@ -2,7 +2,7 @@
 
 namespace App\DAO\SourceDonnes;
 
-interface interfaceDAO {
+interface InterfaceDAO {
     public function getById(int $id);
     public function getAll();
     public function save(array $entity); 

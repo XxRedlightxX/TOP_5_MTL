@@ -32,7 +32,7 @@
     let actualMode = ref(storageManager.getMode());
     let activityId = ref(null);
 
-    const emit = defineEmits(['popUpdate', 'popDelete'])
+    ///const emit = defineEmits(['popUpdate', 'popDelete'])
 
     
     //var isShowUp = ref(false);
