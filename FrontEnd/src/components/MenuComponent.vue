@@ -58,7 +58,7 @@
     watch(width, (newVal) => {
       if (newVal >= 1026) {
         seeBurgermenu.value = true;
-        console.log('Retour plein écrann :', newVal);
+        console.log('Retour plein écran :', newVal);
       }
     });
 
