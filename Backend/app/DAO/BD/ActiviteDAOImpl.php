@@ -76,8 +76,8 @@ class ActiviteDAOImpl implements ActiviteDAO {
     }
 
     public function getUpcomingActivityByRecent() {
-          return Activite::whereDate('date', '>=', now())
-        ->orderBy('date', 'asc')
+          return Activite::whereDate('date_debut', '>=', now())
+        ->orderBy('date_debut', 'asc')
         ->take(6) 
         ->get();
     }

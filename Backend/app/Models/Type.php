@@ -8,10 +8,10 @@ class Type extends Model
 {
 
       protected $table = 'type';
-    protected $fillable = ['nom'];
+    protected $fillable = ['nom', 'image_data'];
 
     public function activites()
     {
-        return $this->belongsToMany(Activite::class, 'typeactivite', 'type_id', 'activite_id');
+        return $this->hasMany(Activite::class, 'type');
     }
 }

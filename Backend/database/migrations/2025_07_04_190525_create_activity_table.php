@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('toute_la_journee')->default(false);
              $table->boolean('toute_annee')->default(false);
             $table->string("lieu");
-            $table->decimal('nombre_likes', 8, 2)->default(0);
+            $table->decimal('nombre_likes', 8, 1)->default(0);
             $table->decimal('latitude', 10, 8)->nullable()->default(0);
             $table->decimal('longitude', 11, 8)->nullable()->default(0);
             $table->enum('statut_journee', array_column(EnumMode::cases(), 'value'))
