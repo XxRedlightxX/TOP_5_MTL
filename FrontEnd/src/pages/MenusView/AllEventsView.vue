@@ -29,9 +29,12 @@
     let actualLang = ref(LocalStorageManager.getLang());
     const activitiesStore = useActivityStore();
     let eventsList = ref(null);
-    let upComingEvents = ref(null);
+    let upComingEvents = ref([]);
+
+   
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
-      const newEventJours = [
+    
+    const newEventJours = [
     { id: null,
 image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date:null },
     { id: null,
