@@ -4,7 +4,7 @@ import { useAuthStore } from "./auth";
 export const  useActivityStore = defineStore('activitiesStore', {
     state: () => {
         return {
-             activities: [],
+            activities: [],
              user : null,
             activity: null,
             loading : false,
@@ -138,34 +138,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
 
         },
 
-        async getByActivityByDayTime(dayTime) {
-            const token = localStorage.getItem("token");
-
-            // if no filter selected → fetch all events
-            let url = "http://127.0.0.1:8000/api/activite/search";
-            if (dayTime) {
-                url += `?statut_journee=${dayTime}`;
-            }
-
-            const res = await fetch(url, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            });
-
-            const data = await res.json();
-
-            if (data.errors) {
-                this.errors = data.errors;
-                return data.errors;
-            } else {
-                this.errors = {};
-                console.log(data)
-                return data;
-
-            }
-        },
+       
 
         async addEvent(formData) {
             const token = localStorage.getItem("token");
@@ -219,6 +192,41 @@ export const  useActivityStore = defineStore('activitiesStore', {
             }
            
         },
+
+   async getUpcomingEvents() {
+        const token = localStorage.getItem("token");
+
+        if (!token) return;
+
+        try {
+            const res = await fetch("/api/activite/test", {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            });
+
+            if (!res.ok) {
+                throw new Error(`Erreur API: ${res.status}`);
+            }
+
+            const data = await res.json();
+
+            
+            this.activities = data || [];
+
+            console.log("Upcoming events:", this.activities);
+            this.errors = {};
+            return this.activities;
+
+        } catch (err) {
+            console.error("getUpcomingEvents failed:", err);
+            this.errors = { upcoming: err.message };
+            return [];
+        }
+        }
+
+
 
 
          /*async getActivitiesFilter(dayTime) {
