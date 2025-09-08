@@ -41,10 +41,12 @@ class ActiviteController extends Controller
         $validated = $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
-            'date' => 'required|date',
+            'date_debut' => 'required|date',
+            'date_fin' => 'required|date',
             'lieu' => 'required|string|max:255',
             'statut_journee' => 'required|in:JOUR,NUIT', 
             'saison_id' => 'required|exists:saison,id',
+            'type_id' => 'required|exists:saison,id',
             'image_data' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -103,14 +105,14 @@ class ActiviteController extends Controller
         try {
         $validated = $contenu->validate([
             'contenu'=> 'required|min:3|max:1000',
-            'etoiles'=> 'nullable|integer|between:0,5',
+            'etoiles' => 'nullable|between:0,5'
         ]);
 
         $user =  $contenu->user();
         $userComment =$this->userService->addCommentToActivityFromUser( 
             $user->id , $activityId, 
     $validated['contenu'], $validated['etoiles']);
-
+        $this->userService->getEventAvgEtoiles($activityId);
         return response()->json($userComment);
     } catch (\Exception $e) {
         return response()->json($e->getMessage());
@@ -164,6 +166,17 @@ class ActiviteController extends Controller
 
     public function getUpcomingActivities() {
           return $this->userService->getActivitiesByUpcoming();
+    }
+     public function getAvgRatingActiviy(int $activityId) {
+        $activityRating= $this->userService->getEventAvgEtoiles($activityId);
+        $activity=Activite::findOrFail($activityId);
+        $activity->nombre_likes=$activityRating;
+        $activity->save();
+
+           return [
+            'average_rating' => round( $activityRating, 1),
+            'activity' => $activity 
+        ];
     }
 
     public function getActivityWithComments(int $activityId) {

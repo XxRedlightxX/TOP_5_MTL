@@ -51,6 +51,7 @@ class ActiviteService {
         return $this->activiteDAO->updateActivitybyUser( $activityId, $data);
     }
     public function addCommentToActivityFromUser(int $userId, int $activityId, string $contenu, int $nbEtoiles ) {
+   
         return  $this->activiteDAO->addCommentToActivity( $userId, $activityId,$contenu , $nbEtoiles);
     }
 
@@ -81,6 +82,11 @@ class ActiviteService {
     public function getActivitiesByUpcoming()
     {
         return $this->activiteDAO->getUpcomingActivityByRecent();
+    }
+
+    public function getEventAvgEtoiles($activityId) {
+        
+        return $this->activiteDAO->getEventAverageRating($activityId);
     }
 
 

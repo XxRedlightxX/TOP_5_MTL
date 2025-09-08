@@ -36,7 +36,7 @@
     
     const newEventJours = [
     { id: null,
-image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date:null },
+image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date_debut:null },
     { id: null,
 image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 5,lieu: null, date:null },
     {id: null,
@@ -77,7 +77,7 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
         desc: activity.description || descText,
         rating: activity.rating || 0,
         lieu: activity.lieu,
-        date: activity.date,
+        date: activity.date_debut,
       }));
   });
   eventsList.value = actualMode.value ? newEventJours : newEventNuit;
@@ -94,7 +94,7 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
     desc: activity.description || "No description",
     rating: activity.rating || 0,
     lieu: activity.lieu,
-    date: activity.date,
+    date: activity.date_debut,
   }));
 })
 

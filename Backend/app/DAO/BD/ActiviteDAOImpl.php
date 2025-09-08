@@ -103,7 +103,7 @@ class ActiviteDAOImpl implements ActiviteDAO {
     public function addCommentToActivity(int $userId, int $activityId, string $contenu, int $nbEtoiles) {
         $userExist = User::findOrFail($userId);
         $actvityExist = Activite::findOrFail($activityId);
-
+        
         return Avis::create([
             "utilisateur_id" => $userExist->id,
             "activite_id" => $actvityExist->id,
@@ -111,9 +111,9 @@ class ActiviteDAOImpl implements ActiviteDAO {
             "etoiles" => $nbEtoiles,
             "date" => now()
         ]);
-
-
     }
+
+    
 
    public function updateActivityByUser(int $activityId, array $activityData) {
         $activite = Activite::findOrFail($activityId);
@@ -122,6 +122,17 @@ class ActiviteDAOImpl implements ActiviteDAO {
 
         return $activite;
    }
+
+    public function getEventAverageRating($eventId)
+    {
+        $activityRating= Avis::where('activite_id', $eventId)->avg('etoiles');
+        $activity = Activite::findOrFail($eventId);
+
+        $activity->nombre_likes=$activityRating;
+        $activity->save();
+
+        return $activity;
+    }
 
 
 

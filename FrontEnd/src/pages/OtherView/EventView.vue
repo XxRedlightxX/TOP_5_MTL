@@ -42,8 +42,6 @@
 
      onMounted (async ()  =>
         activity.value = await getActivityById(route.params.id)
-        
-        
     );
 
    

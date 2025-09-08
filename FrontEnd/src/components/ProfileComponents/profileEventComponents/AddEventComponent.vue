@@ -91,13 +91,14 @@
 
     const formDataEvent= reactive({
             titre: "",
-            date: "",
+            date_debut: "",
+            date_fin: "2025-09-28 21:00:00",
             description: "",
             statut_journee : "",
             lieu : "",
             image_data : "",
-            saison_id
-            : null
+            saison_id: null,
+            type_id : 1,
     });
 
 
