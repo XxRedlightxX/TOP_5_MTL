@@ -20,7 +20,7 @@ const currentSlider = [
     desc: text,
     lieu: null,
     rating: 1,
-    date:null 
+    date_debut:null 
   },
   /*{
     image: "https://picsum.photos/1891/791",
@@ -116,6 +116,7 @@ export default {
       this.$router.push({ name: "Event" });
     },
     getAvatarUrl (imagePath) {
+      const img= "/images/default-avatar.png";
       if (!imagePath) return img;
       console.log(imagePath +"bal")
       return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
@@ -153,9 +154,9 @@ export default {
     window.addEventListener("mode-changed", this.handleModeChange);
     window.addEventListener("lang-changed", this.handleLangChange);
     this.setNextAuto();
-    await activitiesStore.getActivities("JOUR");
+    await activitiesStore.getHigherRateEvent();
     this.carouselItems =activitiesStore.activities.map(act => ({
-      image: act.image_data || "https://picsum.photos/1895/795", // fallback si pas d’image
+      image: act.image_data || "/images/default-avatar.png", // fallback si pas d’image
       id : act.id,
       title: act.titre,           
       desc: act.description,       

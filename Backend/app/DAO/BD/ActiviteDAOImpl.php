@@ -129,10 +129,15 @@ class ActiviteDAOImpl implements ActiviteDAO {
         $activity = Activite::findOrFail($eventId);
 
         $activity->nombre_likes=$activityRating;
-        $activity->save();
+        $activity->update();
 
         return $activity;
     }
+
+   public function getActivitiesMostLiked() {
+        return Activite::orderByDesc('nombre_likes')->take(4)->get();
+    }
+
 
 
 

@@ -88,30 +88,78 @@ export const  useActivityStore = defineStore('activitiesStore', {
         }
     },
 
+        async getHigherRateEvent() {
+                const token = localStorage.getItem("token");
+
+                if (token) {
+                    const res = await fetch("/api/likedActivities", {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                });
+                const data = await res.json();
+        
+                if (res.ok) {
+                    this.activities = data;
+                    
+                    return this.activities;
+                    
+                }else if(data.errors) {
+                    this.errors= data.errors;
+                    console.log(data.errors);
+                }       
+
+            }
+        },
+
 
 
 
         async getActivityById(activityId) {
-            const token = localStorage.getItem("token")
-            const res = await fetch(`/api/activity/${activityId}/comments`,{
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
+                const token = localStorage.getItem("token")
+                const res = await fetch(`/api/activity/${activityId}/comments`,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                });
 
-            const data = await res.json();
+                const data = await res.json();
 
-            if (res.ok) {
-                this.activity = data;
-                console.log(this.activity)
-                
-                return data;
-                
-            }else if(data.errors) {
-                    this.errors= data.errors;
-                    console.log(data.errors);
-            } 
+                if (res.ok) {
+                    this.activity = data;
+                    console.log(this.activity)
+                    
+                    return data;
+                    
+                }else if(data.errors) {
+                        this.errors= data.errors;
+                        console.log(data.errors);
+                } 
+            },
+
+        async getActivityById(activityId) {
+                const token = localStorage.getItem("token")
+                const res = await fetch(`/api/activity/${activityId}/comments`,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    this.activity = data;
+                    console.log(this.activity)
+                    
+                    return data;
+                    
+                }else if(data.errors) {
+                        this.errors= data.errors;
+                        console.log(data.errors);
+                } 
         },
 
         async addCommentToEvent(formData, activityId) {
@@ -146,7 +194,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 method: "POST",
                 body: formData,
                 headers: {
-                    
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
               

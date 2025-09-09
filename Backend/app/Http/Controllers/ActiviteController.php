@@ -167,7 +167,7 @@ class ActiviteController extends Controller
     public function getUpcomingActivities() {
           return $this->userService->getActivitiesByUpcoming();
     }
-     public function getAvgRatingActiviy(int $activityId) {
+     public function getAvgRatingActiviy($activityId) {
         $activityRating= $this->userService->getEventAvgEtoiles($activityId);
         $activity=Activite::findOrFail($activityId);
         $activity->nombre_likes=$activityRating;
@@ -177,6 +177,10 @@ class ActiviteController extends Controller
             'average_rating' => round( $activityRating, 1),
             'activity' => $activity 
         ];
+    }
+
+    public function getActivitiesMostLiked() {
+       return $this->userService->getActivitiesMostLiked();
     }
 
     public function getActivityWithComments(int $activityId) {

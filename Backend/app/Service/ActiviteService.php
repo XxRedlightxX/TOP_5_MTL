@@ -89,5 +89,9 @@ class ActiviteService {
         return $this->activiteDAO->getEventAverageRating($activityId);
     }
 
+    public function getActivitiesMostLiked() {
+        return $this->activiteDAO->getActivitiesMostLiked();
+    }
+
 
 }

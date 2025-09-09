@@ -2,12 +2,12 @@
     <div id="eventView">
         <div class="viewContent" v-if="activity">
            <PageDetail :activityTitle="activity.titre"
-            :activityDesc="activity.description" />
+            :activityDesc="activity.description"  />
             
             <div class="suite">
                 <div class="sub">
                     <PageDescription :host-name="activity.creator.name"
-                     :place="activity.lieu" />
+                     :place="activity.lieu" :-rating=activity.nombre_likes />
                     <CommentSelf :activity-id="activity.id"/>
                 </div>
                 <PageCommentaire :comments="activity?.avis"  />

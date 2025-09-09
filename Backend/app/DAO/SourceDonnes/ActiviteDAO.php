@@ -17,6 +17,7 @@ interface ActiviteDAO extends InterfaceDAO {
     public function getUpcomingActivityByRecent();
 
     public function getEventAverageRating($activityId);
+    public function getActivitiesMostLiked();
     public function getActivityByDayOrNight(string $activiteyDaytime);
 
     public function addCommentToActivity(int $userId, int $activityId, string $contenu, int $nbEtoiles);

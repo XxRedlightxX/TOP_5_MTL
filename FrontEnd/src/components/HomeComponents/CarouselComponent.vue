@@ -5,7 +5,7 @@
             <div v-for="(item, index) in carouselItems" :key="index" class="item">
             <div class="imgContainer">
                 <div class="overlayGrad"></div>
-                <img :src="getAvatarUrl(item.image)">
+                <img :src="getAvatarUrl(item?.image)">
             </div>
             <div class="content">
                 <div :class="index == 0 ? 'titlee' : 'lostTitle'">{{ item.title }}</div>

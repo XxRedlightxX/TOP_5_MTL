@@ -39,6 +39,14 @@ Route::get('/activite', [ActiviteController::class, 'getAllActivities']);
 Route::get('/user/activite', [ActiviteController::class, 'getUserActivities']);
 
 Route::get('/activite/test', [ActiviteController::class, 'getUpcomingActivities']);
+
+Route::get('/activite/{activityId}', [ActiviteController::class, 'getAvgRatingActiviy'])->whereNumber('activityId');
+
+Route::get('/likedActivities', [ActiviteController::class, 'getActivitiesMostLiked']);
+
+
+
+
 //
 
 
