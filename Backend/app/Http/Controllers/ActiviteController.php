@@ -202,6 +202,21 @@ class ActiviteController extends Controller
     }
 
 
+    public function getActivityFilters(Request $request)
+    {
+        $validated = $request->validate([
+            'daytime' => 'nullable|string',
+            'type'    => 'nullable|string',
+            'season'  => 'nullable|string',
+            'title'   => 'nullable|string',
+        ]);
+
+        $activities = $this->userService->getActivitiesFiltered($validated);
+
+        return response()->json($activities);
+    }
+
+
 
 
 

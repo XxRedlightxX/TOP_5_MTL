@@ -46,8 +46,8 @@ Route::get('/likedActivities', [ActiviteController::class, 'getActivitiesMostLik
 
 
 
-
-//
+// Multi-filtrage fonctionnel
+Route::get('/activite/filtrer', [ActiviteController::class, 'getActivityFilters']);
 
 
 Route::put('/activite/{activiteId}', [ActiviteController::class, 'modifyActivity']);

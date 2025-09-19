@@ -24,4 +24,8 @@ interface ActiviteDAO extends InterfaceDAO {
 
     public function updateActivitybyUser(int $activityId, array $activityData);
 
+    public function getFilteredActivities(array $filters);
+
+
+
 }

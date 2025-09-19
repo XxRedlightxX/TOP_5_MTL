@@ -93,5 +93,10 @@ class ActiviteService {
         return $this->activiteDAO->getActivitiesMostLiked();
     }
 
+     public function getActivitiesFiltered(array $filters)
+    {
+        return $this->activiteDAO->getFilteredActivities($filters);
+    }
+
 
 }

@@ -75,6 +75,9 @@ class ActiviteDAOImpl implements ActiviteDAO {
         })->get();  
     }
 
+  
+    
+
     public function getUpcomingActivityByRecent() {
           return Activite::whereDate('date_debut', '>=', now())
         ->orderBy('date_debut', 'asc')
@@ -83,9 +86,9 @@ class ActiviteDAOImpl implements ActiviteDAO {
     }
 
     public function getActivityByType(string $activiteType) {
-        return Activite::whereHas('types', function ($query) 
+        return Activite::whereHas('type', function ($query) 
         use ($activiteType) {
-            $query->where('nom', 'LIKE', "%{$activiteType}%");
+            $query->where('nom', '=', $activiteType);
         })->get();
     }
 
@@ -138,7 +141,31 @@ class ActiviteDAOImpl implements ActiviteDAO {
         return Activite::orderByDesc('nombre_likes')->take(4)->get();
     }
 
+    public function getFilteredActivities(array $filters)
+    {
+        $query = Activite::query();
 
+        if (!empty($filters['daytime'])) {
+            $query->where('statut_journee', $filters['daytime']);
+        }
 
+        if (!empty($filters['title'])) {
+            $query->where('titre', 'LIKE', "%{$filters['title']}%");
+        }
+
+        if (!empty($filters['season'])) {
+            $query->whereHas('saison', function ($q) use ($filters) {
+                $q->where('statut', $filters['season']);
+            });
+        }
+
+        if (!empty($filters['type'])) {
+            $query->whereHas('type', function ($q) use ($filters) {
+                $q->where('nom', $filters['type']);
+            });
+        }
+
+        return $query->get();
+    }
 
 }
