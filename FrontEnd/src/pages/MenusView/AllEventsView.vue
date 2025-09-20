@@ -5,12 +5,7 @@
             <h3>{{ actualLang ? 'Up coming events' : 'Evenement en approche'}}</h3>
             <UpComingEvent :list-event="upComingEvents" />
         </div>
-            <select v-model="activitiesStore.filters.daytime">
-        <option value="">All times</option>
-        <option value="JOUR">JOUR</option>
-        <option value="NUIT">Afternoon</option>
-        <option value="evening">Evening</option>
-    </select>
+      
 
         <AlListEvent :list-event="eventsList"/>
     </div>

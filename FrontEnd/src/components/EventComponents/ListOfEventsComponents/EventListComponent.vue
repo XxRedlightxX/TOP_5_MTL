@@ -45,12 +45,12 @@ import { onMounted, ref, watch, onUnmounted } from 'vue'; // Add ref here
         let containerWidth = item.offsetWidth; // Use offsetWidth for more accurate width
         
         nxtBtn[i].addEventListener('click', () => {
-            console.log("Next button clicked"); // For debugging
+            //console.log("Next button clicked"); // For debugging
             item.scrollLeft += containerWidth;
         });
 
         preBtn[i].addEventListener('click', () => {
-            console.log("Previous button clicked"); // For debugging
+            //console.log("Previous button clicked"); // For debugging
             item.scrollLeft -= containerWidth;
         });
     });

@@ -5,6 +5,7 @@ namespace App\DAO\BD;
 use App\DAO\SourceDonnes\ActiviteDAO;
 use App\Models\Activite;
 use App\Models\Avis;
+use App\Models\Type;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -23,6 +24,10 @@ class ActiviteDAOImpl implements ActiviteDAO {
      */
     public function getAll() {
         return Activite::all();
+    }
+
+    public function getAllCategories() {
+        return Type::all();
     }
 
     /**

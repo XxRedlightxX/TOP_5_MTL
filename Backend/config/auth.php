@@ -41,6 +41,11 @@ return [
             'provider' => 'users',
         ],
     ],
+     'api' => [
+        'driver' => 'sanctum', // This is the crucial line
+        'provider' => 'users',
+        'hash' => false,
+    ],
 
     /*
     |--------------------------------------------------------------------------

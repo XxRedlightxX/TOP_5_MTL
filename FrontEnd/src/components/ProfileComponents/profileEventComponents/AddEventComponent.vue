@@ -1,11 +1,10 @@
 <template>
     <div id="myModal" class="modal" style="display:none" @click.self="pop">
-        <!-- Modal content -->
         <div class="modal-content" @click.self="pop">
             <div class="event-create-form">
-                <span class="close" @click="pop" >&times;</span>
+                <span class="close" @click="pop">&times;</span>
                 <h2>Create Event</h2>
-                <form @submit.prevent="testInput" >
+                <form @submit.prevent="testInput">
                     <div class="form-group">
                         <label for="event-name">Event Name</label>
                         <input type="text" v-model="formDataEvent.titre" id="event-name" placeholder="Enter event name" required>
@@ -14,64 +13,65 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="event-date">Date</label>
-                            <input type="date"  ref="inputRefDate"  id="event-date" required>
+                            <input type="date" ref="inputRefDate" id="event-date" required>
                         </div>
 
                         <div class="form-group">
                             <label for="event-time">Time</label>
-                            <input type="time" ref="inputRefTime"  id="event-time" required>
+                            <input type="time" ref="inputRefTime" id="event-time" required>
                         </div>
 
                         <div class="form-group">
                             <label for="event-duration">Duration (hours)</label>
-                            <input type="number" id="event-duration" placeholder="e.g., 2" min="1" required>
+                            <input type="number" v-model="durationHours" id="event-duration" placeholder="e.g., 2" min="1" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="event-location">Location</label>
-                        <input type="text"  v-model="formDataEvent.lieu" id="event-location" placeholder="Enter location" required>
+                        <input type="text" v-model="formDataEvent.lieu" id="event-location" placeholder="Enter location" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="event-location">Description</label>
-                        <input type="text"  v-model="formDataEvent.description" id="event-description" placeholder="Enter description" required>
+                        <label for="event-description">Description</label>
+                        <input type="text" v-model="formDataEvent.description" id="event-description" placeholder="Enter description" required>
                     </div>
+
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="event-location">statut_journee</label>
-                            <input type="text"  v-model="formDataEvent.statut_journee" id="event-description" placeholder="Enter description" required>
+                            <label for="event-statut">Statut Journee</label>
+                            <input type="text" v-model="formDataEvent.statut_journee" id="event-statut" placeholder="Enter status" required>
                         </div>
 
-                        <select name="cars" id="cars">
-                            <option value="volvo">Volvo</option>
-                           
-                        </select>
+                        <div class="form-group">
+                            <label for="event-type">Type</label>
+                            <select id="event-type" v-model="formDataEvent.type_id" required>
+                                <option value="">Select Type</option>
+                                <option value="1">Type 1</option>
+                                <option value="2">Type 2</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="event-saison">Saison ID</label>
+                        <input type="number" v-model="formDataEvent.saison_id" id="event-saison" placeholder="Enter saison ID" required>
                     </div>
 
                     <div class="form-group">
                         <label for="event-picture">Upload Picture</label>
-                        <input type="file" name="file"  @change="handleFileUpload" id="event-picture"  accept="image/*">
+                        <input type="file" @change="handleFileUpload" id="event-picture" accept="image/*">
                     </div>
 
-                    <div class="form-group">
-                        <label for="event-hosts">Co-hosts</label>
-                        <input type="text" id="event-hosts" v-model="formDataEvent.saison_id" placeholder="Add other hosts (comma-separated)">
-                        <div class="form-group_images">
-                            <!-- <img :src="imgUrl"> <img :src="imgUrl" alt=""> <img :src="imgUrl"> -->
-                        </div>
-                    </div>
-                
                     <div class="form-actions">
-                          <button  type="submit"  >{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
-                        <waterButton :text="actualLang ? 'Create' : 'Creer'" :type="true" class="btnn"/>
-                        <waterButton :text="actualLang ? 'Cancel' : 'Annuler'" :type="false" class="btnn"  @click="pop"/>
+                        <button type="submit">{{ actualLang ? 'Create Event' : 'Créer Événement' }}</button>
+                        <waterButton :text="actualLang ? 'Cancel' : 'Annuler'" :type="false" class="btnn" @click="pop"/>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
 </template>
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
@@ -92,7 +92,7 @@
     const formDataEvent= reactive({
             titre: "",
             date_debut: "",
-            date_fin: "2025-09-28 21:00:00",
+            date_fin: "2025-09-30 21:00:00",
             description: "",
             statut_journee : "",
             lieu : "",
@@ -112,38 +112,47 @@
             return;
         }
         selectedFile.value = file;
+        
     };
 
 
 
 
-    const testInput  =  async() => {
-        const dateValue = inputRefDate.value.value;
-        const timeValue = inputRefTime.value.value;
-        
-        const formattedDateTime = formatDateApi(dateValue, timeValue);
-        formDataEvent.date = formattedDateTime;
+const testInput = async(event) => {
+    const dateValue = inputRefDate.value.value;
+    const timeValue = inputRefTime.value.value;
 
-        const formData = new FormData();
+    const formattedDateTime = formatDateApi(dateValue, timeValue);
+    formDataEvent.date_debut = formattedDateTime; // ✅ Fix: correct property
 
-        formData.append('titre', formDataEvent.titre);
-        formData.append('date', formDataEvent.date);
-        formData.append('description', formDataEvent.description);
-        formData.append('statut_journee', formDataEvent.statut_journee);
-        formData.append('lieu', formDataEvent.lieu);
-        formData.append('saison_id', formDataEvent.saison_id);
+    const formData = new FormData();
+    formData.append('titre', formDataEvent.titre);
+    formData.append('date_debut', formDataEvent.date_debut);
+    formData.append('date_fin', formDataEvent.date_fin);
+    formData.append('description', formDataEvent.description);
+    formData.append('statut_journee', formDataEvent.statut_journee);
+    formData.append('lieu', formDataEvent.lieu);
+    formData.append('saison_id', String(formDataEvent.saison_id));
+    formData.append('type_id', String(formDataEvent.type_id));
 
-            if (selectedFile.value) {
-                    formData.append('image_data', selectedFile.value);
-                }
-        const test = await addEvent(formData);
+    if (selectedFile.value) {
+        formData.append('image_data', selectedFile.value);
+    }
 
+    for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+    }
 
-
-        console.log(test);
-        pop();
-
-
+    try {
+        const eventUrl = await addEvent(formData);
+        if (eventUrl) {
+            console.log(eventUrl);
+            pop();
+        }
+    } catch (error) {
+        errorMessage.value = error.message;
+        console.error("Upload failed:", error);
+    }
 };
 
 

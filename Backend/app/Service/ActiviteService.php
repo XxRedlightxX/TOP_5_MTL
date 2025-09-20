@@ -98,5 +98,9 @@ class ActiviteService {
         return $this->activiteDAO->getFilteredActivities($filters);
     }
 
+    public function getAllCategoriesActivities() {
+        return $this->activiteDAO->getAllCategories();
+    }
+
 
 }

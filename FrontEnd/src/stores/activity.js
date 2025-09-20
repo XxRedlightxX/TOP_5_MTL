@@ -7,6 +7,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
             activities: [],
              user : null,
             activity: null,
+            categories : [],
             loading : false,
             filters: {
                 daytime: "" ?? null,
@@ -24,7 +25,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
     },
     actions : {
 
-        async getActivities(dayTime) {
+        async getActivities() {
 
             const params = new URLSearchParams();
  
@@ -36,7 +37,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 }
             }
 
-            const res = await fetch(`/api/activite/filter?${params.toString()}`, {
+            const res = await fetch(`/api/activite/filtrer?${params.toString()}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -194,11 +195,12 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 method: "POST",
                 body: formData,
                 headers: {
-                    'Content-Type': 'application/json',
+                     
                     'Authorization': `Bearer ${token}`
                 },
               
             });
+            
 
             const data = await res.json();
 
@@ -207,7 +209,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 return data.errors
             } else {
                 this.errors = {};
-                console.log(data)
+                console.log(data+"dadsadsa")
                 return data;
             }
         },
@@ -272,7 +274,32 @@ export const  useActivityStore = defineStore('activitiesStore', {
             this.errors = { upcoming: err.message };
             return [];
         }
+        },
+
+        async getCategories() {
+            const token = localStorage.getItem("token");
+
+            if (token) {
+                const res = await fetch("/api/categories", {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await res.json();
+       
+            if (res.ok) {
+                this.categories = data;
+                console.log(this.categories);
+                return this.categories;
+                
+            }else if(data.errors) {
+                this.errors= data.errors;
+                console.log(data.errors);
+            }       
+
         }
+    },
 
 
 

@@ -1,30 +1,38 @@
 <template>
-   <div id="AllEventComponent">
+  <div id="AllEventComponent">
     <FilterComponent/>
+    
     <div class="events">
-  
-   
-      <router-link :to="{ name: 'show', params: {id: item.id}} " class="events_card glass" v-for="(item, index) in listEvent">
-        <div class="event_card_photo" >
-            <!-- Main image -->
-            <img :src="getAvatarUrl(item?.image)" class="product-thumb" alt="Event Image">
+      <router-link 
+        v-if="listEvent.length" 
+        :to="{ name: 'show', params: { id: item.id } }" 
+        class="events_card glass" 
+        v-for="(item, index) in listEvent" 
+        :key="item.id"
+      >
+        <div class="event_card_photo">
+          <!-- Main image -->
+          <img :src="getAvatarUrl(item.image)" class="product-thumb" alt="Event Image">
         </div>
         
         <div class="desc">
-            <strong>{{ item.title }}</strong>
-            <div class="d1">
-                <v-icon icon="mdi-map-marker " :class="['icon', {'justGlow' : !actualMode}]"/>
-               {{ item.lieu }}
-            </div>
-            <div class="d2">
-                <v-icon icon="mdi-clock-outline " :class="['icon', {'justGlow' : !actualMode}]"/>
-                {{ formatDateSpecial(item.date) }}
-            </div>
+          <strong>{{ item.title }}</strong>
+          <div class="d1">
+            <v-icon icon="mdi-map-marker" :class="['icon', {'justGlow': !actualMode}]"/>
+            {{ item.lieu }}
+          </div>
+          <div class="d2">
+            <v-icon icon="mdi-clock-outline" :class="['icon', {'justGlow': !actualMode}]"/>
+            {{ formatDateSpecial(item.date) }}
+          </div>
         </div>
       </router-link>
+      
+      <div v-else class="no-events">
+        <p>No events available at the moment.</p>
+      </div>
     </div>
 
- 
     <PaginationComponent/>
   </div>
 </template>
@@ -49,13 +57,7 @@ const listActivities = ref([]);
 const activitiesStore = useActivityStore();
 
 
-watch(
-  () => activitiesStore.filters.daytime,
-  async () => {
-    await activitiesStore.getActivities();
-    listEvent.value = activitiesStore.activities;
-  }
-);
+
 
 
 const getAvatarUrl = (imagePath) => {

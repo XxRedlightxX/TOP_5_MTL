@@ -9,6 +9,7 @@ interface ActiviteDAO extends InterfaceDAO {
     public function getActivityBySeason(string $seasonName);
 
      public function addActivity(int $userId, array $activityData);
+    public function getAllCategories();
 
     public function getActivityByName(string $actvityName);
 

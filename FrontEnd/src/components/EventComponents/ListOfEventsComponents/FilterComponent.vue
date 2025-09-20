@@ -12,6 +12,11 @@
               <li @click="eventType = 2" :class="{ active: eventType === 2 }">
                   <a>{{ actualLang ? "Day Life" : "De Jour" }}</a>
               </li>
+
+              <li @click="eventType = 3" :class="{ active: eventType === 2 }">
+                  <a>{{ actualLang ? "Reset Filter" : "Reinitiliser les filters" }}</a>
+              </li>
+              
                 
                 <li class="button-wrapper">
                   <button @click="toggleCalendarPopup">
@@ -46,20 +51,30 @@
      showCalendarPopup.value = !showCalendarPopup.value;
      console.log(showCalendarPopup)
    };
+
+    const resetFilter = async () => {
+      selectedFilter.value = null;           
+      activitiesStore.filters.type = null;   
+      activitiesStore.filters.daytime = null;
+      await activitiesStore.getActivities(); 
+    };
  
    const closePopup = () => {
      showCalendarPopup.value = false
    }
 
-   watch(eventType, async (val) => {
-  if (val === 0) {
-    activitiesStore.filters.daytime = "";       // All
-  } else if (val === 1) {
-    activitiesStore.filters.daytime = "NUIT";   // Night
-  } else if (val === 2) {
-    activitiesStore.filters.daytime = "JOUR";   // Day
-  }
-  await activitiesStore.getActivities();
+  watch(eventType, async (val) => {
+    if (val === 0) {
+      activitiesStore.filters.daytime = "";
+    } else if (val === 1) {
+      activitiesStore.filters.daytime = "NUIT";   // Night
+    } else if (val === 2) {
+      activitiesStore.filters.daytime = "JOUR";   // Day
+    } else if(val ===3 ) {
+      activitiesStore.filters.daytime = "";
+      activitiesStore.filters.type = "";
+    }
+    await activitiesStore.getActivities();
 });
 
  
