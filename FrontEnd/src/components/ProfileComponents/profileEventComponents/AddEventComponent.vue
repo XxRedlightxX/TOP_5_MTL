@@ -123,7 +123,7 @@ const testInput = async(event) => {
     const timeValue = inputRefTime.value.value;
 
     const formattedDateTime = formatDateApi(dateValue, timeValue);
-    formDataEvent.date_debut = formattedDateTime; // ✅ Fix: correct property
+    formDataEvent.date_debut = formattedDateTime; 
 
     const formData = new FormData();
     formData.append('titre', formDataEvent.titre);
@@ -148,6 +148,7 @@ const testInput = async(event) => {
         if (eventUrl) {
             console.log(eventUrl);
             pop();
+            
         }
     } catch (error) {
         errorMessage.value = error.message;

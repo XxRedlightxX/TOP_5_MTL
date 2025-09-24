@@ -111,6 +111,7 @@ class ActiviteController extends Controller
             $activite = Activite::findOrFail($activiteId);
             Gate::authorize('delete', $activite);     
             $this->userService->deleteActivity($activiteId);
+            return response()->json(['message' => 'Deleted successfully']);
         } catch (ModelNotFoundException $e) {
         return response()->json(['error' => "Activity $activiteId not found"], 404);
         } catch (\Exception $e) {

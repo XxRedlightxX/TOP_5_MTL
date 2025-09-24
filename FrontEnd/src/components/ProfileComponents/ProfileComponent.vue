@@ -12,13 +12,20 @@
   
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref,computed, onMounted, onUnmounted, defineProps} from "vue";
+    import { ref,computed, onMounted, onUnmounted,watch, defineProps} from "vue";
     import ProfileHead from "./ProfileHeaderComponent.vue";
     import ProfileOther from "./ProfileOtherComponent.vue"
     import ProfileList from "./ProfileListEventComponent.vue"
     import { useAuthStore } from "@/stores/auth";
     import { useActivityStore } from "@/stores/activity";
-    const test = ref(null);
+    import { storeToRefs } from "pinia";
+    
+
+    let listEvent = ref([]);
+    let actualLang = ref(storageManager.getLang());
+    let isLogged = ref(storageManager.getLogin());
+    let actualMode = ref(storageManager.getMode());
+    let theOrganisator = ref(null);
 
     const props = defineProps({
         himself: Boolean, // Boolean type prop
@@ -26,45 +33,55 @@
     
    
     const authStore = useAuthStore();
+    const { user } = storeToRefs(authStore); 
     const ActivityStore = useActivityStore();
-    onMounted(async () => {
-       test.value = await ActivityStore.getUserActivities();
+  
+  
+    const organisator = ref({
+        avatar: "",
+        username: "",
+        name: "Wakanda",
+        fisrtName: "Dede", 
+        email: "",
+        num: 1122222222,
+        desc: "No description yet",
+        listEvent: []
     });
-
-    console.log(test.value+ "ddssdsf");
  
 
  
-    const organisator = computed(() => {
-    const user = authStore.user;
-         
+   watch(() => authStore.user, (newUser) => {
+    if (newUser) {
+        const events = newUser?.activites?.map((act) => ({
+            id: act.id,
+            image: act.image_data || "/src/assets/HomeCarousel/Mont-royal.jpg",
+            title: act.titre,
+            desc: act.description || "Aucune description",
+            lieu: act.lieu,
+            rating: 3
+        })) || [];
 
-  const listEvent = user?.activites?.map((act) => ({
-    id: act.id,
-    image: "/src/assets/HomeCarousel/Mont-royal.jpg", 
-    title: act.titre,
-    desc: act.description || "Aucune description",
-    lieu: act.lieu,
-    rating: 3 
-  })) || [];
+        listEvent.value = events;
+        
+        organisator.value = {
+            avatar: newUser?.image_data
+                ? `${import.meta.env.VITE_API_BASE_URL}${newUser.image_data}`
+                : "/src/assets/p1.jpg",
+            username: newUser?.name || "Utilisateur inconnu",
+            name: "Wakanda",
+            fisrtName: "Dede",
+            email: newUser?.email || "email inconnu",
+            num: 1122222222,
+            desc: "No description yet",
+            listEvent: events
+        };
+    }
+}, { immediate: true });
 
-  return {
-    avatar: user?.image_data
-      ? `${import.meta.env.VITE_API_BASE_URL}${user.image_data}`  
-      : "/src/assets/p1.jpg",
-    username: user?.name || "Utilisateur inconnu",
-    name: "Wakanda",
-    fisrtName: "Dede",
-    email: user?.email || "email inconnu",
-    num: 1122222222,
-    desc: "No description yet",
-    listEvent
-  };
-})
-    let actualLang = ref(storageManager.getLang());
-    let isLogged = ref(storageManager.getLogin());
-    let actualMode = ref(storageManager.getMode());
-    let theOrganisator = ref(null);
+    onMounted(async () => {
+        listEvent.value = await ActivityStore.getUserActivities();
+    });
+    
 
     if (props.himself){
         theOrganisator.value = storageManager.getLogUser();

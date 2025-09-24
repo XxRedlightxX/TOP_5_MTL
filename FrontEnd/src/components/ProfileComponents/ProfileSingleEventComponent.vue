@@ -1,9 +1,9 @@
 <template>
     <div id="profileSingleEventComponent" class="glass">
         <div class="first">
-            <img :src="props.event.image" alt="#">
+            <img :src="getAvatarUrl(props.event.image)" alt="#">
         </div>
-
+        
         <div class="middle">
             {{ props.event.id }}
             <h2>{{ props.event.title }}</h2>
@@ -16,7 +16,7 @@
 
         <div class="last"  v-show="props.himself">
             <v-icon icon="mdi-folder-edit" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Edit this Event' : 'Modifier cet evenement'" @click="showUp()"/>
-            <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Delette this Event' : 'Supprimer cet evenement'" @click="showDel()"/>
+            <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Delette this Event' : 'Supprimer cet evenement'"  @click="showDel()"/>
         </div>
 
     </div>
@@ -25,7 +25,7 @@
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
-
+    import { getAvatarUrl } from "@/JS/GlobalFunctions";
 
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
@@ -41,7 +41,7 @@
         himself: Boolean, // Boolean type prop
     });
     activityId.value =props.event.id
-    console.log(activityId.value)
+   
 
     // Définir les événements émis par ce composant
     const emit = defineEmits(['popUpdate']);

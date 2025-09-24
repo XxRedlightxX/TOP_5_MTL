@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
 import { useAuthStore } from "./auth";
+import { toRaw } from 'vue';
 
 export const  useActivityStore = defineStore('activitiesStore', {
     state: () => {
@@ -140,28 +141,6 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 } 
             },
 
-        async getActivityById(activityId) {
-                const token = localStorage.getItem("token")
-                const res = await fetch(`/api/activity/${activityId}/comments`,{
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                });
-
-                const data = await res.json();
-
-                if (res.ok) {
-                    this.activity = data;
-                    console.log(this.activity)
-                    
-                    return data;
-                    
-                }else if(data.errors) {
-                        this.errors= data.errors;
-                        console.log(data.errors);
-                } 
-        },
 
         async addCommentToEvent(formData, activityId) {
             const token = localStorage.getItem("token");
@@ -191,7 +170,8 @@ export const  useActivityStore = defineStore('activitiesStore', {
 
         async addEvent(formData) {
             const token = localStorage.getItem("token");
-            const res = await fetch("http://127.0.0.1:8000/api/user/activite", {
+
+            const res = await fetch(`http://127.0.0.1:8000/api/user/activite`, {
                 method: "POST",
                 body: formData,
                 headers: {
@@ -214,11 +194,37 @@ export const  useActivityStore = defineStore('activitiesStore', {
             }
         },
 
+         async updateEvent(activity, formData) {
+            const authStore = useAuthStore();
+
+            if (authStore.user.id === this.activity.creator.id) {
+                const res = await fetch(`http://127.0.0.1:8000/api/activite/${activity.id}`, {
+                    method: "POST", 
+                    headers: {
+                       
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    body: formData, 
+                });
+
+                const data = await res.json();
+
+                if (data.errors) {
+                    this.errors = data.errors;
+                     console.log(data.errors)
+                } else {
+                    this.errors = {};
+                    console.log(data+"s")
+                    return data;
+                }
+            }
+        },
+
          async deleteEvent(activity) {
             const token = localStorage.getItem("token");
             const authStore = useAuthStore();
-            if(authStore.user.id === activity.utilisateur_id) {
-                const res = await fetch(`/api/user/activite/${activity.id}`, {
+            if(authStore.user.id === this.activity.creator.id) {
+                const res = await fetch(`/api/activite/${activity.id}`, {
                 method: "delete",
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -238,7 +244,9 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 }
 
             } else {
-                console.log("Not Allowd")
+                console.log("Not Allowed");
+               
+              
             }
            
         },

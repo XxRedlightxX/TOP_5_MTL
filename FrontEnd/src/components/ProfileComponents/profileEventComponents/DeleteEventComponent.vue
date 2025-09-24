@@ -5,9 +5,10 @@
             <form>
                 <h3> Etes-vous sur de vouloir supprimer cet event ?</h3>
                 <div class="form-actions">
-                    <waterButton :text="actualLang ? 'Yes' : 'Oui'" :type="true" class="btnn"/>
+                    <waterButton :text="actualLang ? 'Yes' : 'Oui'" :type="true" class="btnn" @click="deleteEvent(activity)"/>
                     <waterButton :text="actualLang ? 'No' : 'Non'" :type="false" class="btnn"  @click="popDelete"/>
                 </div>
+                {{ props.eventId }}
             </form>
         </div>
     </div>
@@ -15,12 +16,36 @@
 </template>
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
+    import { ref, onMounted, onUnmounted, defineProps,watch,  defineEmits } from "vue";
     import waterButton from "@/components/WaterButtonComponent.vue";
+    import { useActivityStore } from "@/stores/activity";
+    
+
+    const activity = ref(null);
+
+    const {deleteEvent, getActivityById} = useActivityStore();
+
 
     const props = defineProps({
-        user: Object
+        user: Object,
+        eventId: Number
     });
+
+    watch(() => props.eventId, async (renderActivityId) => {
+        if (!renderActivityId) return
+        activity.value = await getActivityById(renderActivityId)
+    console.log("Fetched on change:", activity.value)
+    }, { immediate: true })
+
+    
+
+
+   
+
+
+
+
+  
 
 
     let actualLang = ref(storageManager.getLang());

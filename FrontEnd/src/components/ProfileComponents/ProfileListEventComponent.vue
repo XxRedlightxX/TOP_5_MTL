@@ -11,11 +11,11 @@
       </div>
   
       <div class="body">
-        <ProfileSingleEvent v-for="(item, index) in props.user.listEvent" :key="index" :event="item"  :himself="props.himself" @popUpdate="showUp2()" @popDelete="showDel2()"/>
+        <ProfileSingleEvent v-for="(item, index) in props.user.listEvent" :key="index" :event="item"  :himself="props.himself" @popUpdate="showUp2(item.id)" @popDelete="showDel2(item.id)"/>
       </div>
       <AddEvent @pop="showAdd2()" v-show="isShowAdd2"/>
-      <UpdateEvent @popUpdate="showUp2()" v-show="isShowUp2"/>
-      <DeleteEvent @popDelete="showDel2()" v-show="isShowDel2"/>
+      <UpdateEvent :eventId="selectedEventId" @popUpdate="showUp2()" v-show="isShowUp2"/>
+      <DeleteEvent :eventId="selectedEventId"  @popDelete="showDel2()" v-show="isShowDel2"/>
     </div>
   </template>
   
@@ -30,7 +30,9 @@
   const props = defineProps({
         himself: Boolean, // Boolean type prop
         user: Object
-    });
+  });
+
+  let selectedEventId = ref(null);
 
   
   let actualLang = ref(storageManager.getLang());
@@ -79,14 +81,19 @@
   let isShowDel2 = ref(false);
 
   const showAdd2 = () => {
+
     isShowAdd2.value = !isShowAdd2.value;
   }
-  const showUp2 = () => {
+  const showUp2 = (id) => {
+    selectedEventId = id
     isShowUp2.value = !isShowUp2.value;
   }
-  const showDel2 = () => {
+  const showDel2 = (id) => {
+    selectedEventId = id
     isShowDel2.value = !isShowDel2.value;
   }
+
+ 
 </script>
   
 
