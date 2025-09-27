@@ -68,6 +68,7 @@
     
     const { user } = storeToRefs(useActivityStore());
 
+
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
     let activity = ref(null);
@@ -169,8 +170,9 @@
                        console.log("Updated activity:", updated);
 
                         if (updated) {
-                        // Replace old activity with fresh one
+                         
                         activity.value = updated;
+                          await authStore.getUser();
                         console.log(updated)
                         }
                 } catch (error) {

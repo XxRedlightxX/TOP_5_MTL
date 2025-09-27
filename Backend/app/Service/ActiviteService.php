@@ -44,7 +44,7 @@ class ActiviteService {
 
       public function updateUserActivity( int $activityId, array $data): ?Activite
     {
-        // Option 1: Check policy in Service (alternative to Controller check)
+        
         $activity = Activite::findOrFail($activityId);
         
 

@@ -79,8 +79,11 @@
     import waterButton from "@/components/WaterButtonComponent.vue";
     import { useActivityStore } from "@/stores/activity";
     import { formatDateApi } from "@/JS/GlobalFunctions";
+    import { useAuthStore } from "@/stores/auth";
 
     const {addEvent} = useActivityStore();
+
+    const authStore = useAuthStore();
 
     const inputRefDate = ref(null);
     const inputRefTime = ref(null);
@@ -147,6 +150,8 @@ const testInput = async(event) => {
         const eventUrl = await addEvent(formData);
         if (eventUrl) {
             console.log(eventUrl);
+
+             await authStore.getUser();
             pop();
             
         }
