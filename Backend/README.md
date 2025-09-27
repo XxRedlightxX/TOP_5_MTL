@@ -2,7 +2,7 @@ cd .\Backend\
 composer global require laravel/installer
 
 compose update 
-
-php artisan sanctum:install
+composer require laravel/sanctum
 
 php artisan migrate
+php artisan serve

@@ -19,7 +19,7 @@
 
     <div class="contentt">
       <div class="top">
-        <h2>{{ newEvent[indexSlide].title }}  </h2>
+        <h2>{{ newEvent[indexSlide].titre }}  </h2>
         <router-link class="link" :title="actualLang ? 'Go to the event Page' : 'Allez a la page de l\'evenement'" to="/Event" @click="setEvent(newEvent[indexSlide])">
           <v-icon class="icon glow" icon="mdi-arrow-top-right-thin" />
         </router-link>
