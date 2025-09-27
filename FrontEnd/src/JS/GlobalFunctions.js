@@ -26,7 +26,8 @@ export const formatDateApi = (dateInput, timeInput) => {
 }
 
 export const getAvatarUrl =(imagePath) => {
+  const img= "/images/default-avatar.png";
     if (!imagePath) return img;
-    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
+    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}` ;
 
 }

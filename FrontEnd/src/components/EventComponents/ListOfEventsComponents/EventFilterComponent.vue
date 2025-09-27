@@ -2,36 +2,59 @@
     <div class="eventFilter" ref="wrapper">
       <span id="left" @click="scroll('left')" :class="[{'glow' : !actualMode}]"><</span>
       <ul class="carousel" ref="carousel">
-        <li v-for="(event, index) in eventFilters" :key="index" class="card" >
+        <li v-for="(event, index) in eventFilters" :key="index" class="card"
+          @click="selectFilter(event)" >
           <v-icon :icon="event.icon" :class="['icon', {'glow' : !actualMode}]"/>
           <h4>{{ event.Title }}</h4>
         </li>
       </ul>
       <span id="right" @click="scroll('right')" :class="[{'glow' : !actualMode}]">></span>
     </div>
+    <button @click="resetFilter">Reset Filter</button>
   </template>
   
   <script setup>
-    import { ref, onMounted, onBeforeUnmount } from 'vue';
+    import { ref, onMounted,watch, onBeforeUnmount } from 'vue';
+    import { useActivityStore } from '@/stores/activity';
+    const activitiesStore = useActivityStore();
+    const eventFilters = ref([{}]);
+    const selectedFilter = ref(null); 
+
+    
+    onMounted(async () => {
+      await activitiesStore.getCategories();
+
+      eventFilters.value = activitiesStore.categories.map(category => ({
+        Title: category.nom,
+        icon: category.image_data,
+      }));
+  });
+  //Reinitalise les filtees
+  const resetFilter = async () => {
+      selectedFilter.value = null;           
+      activitiesStore.filters.type = null;   
+      activitiesStore.filters.daytime = null;
+      await activitiesStore.getActivities(); 
+  };
+
+
+//Prend lobject selectionner en parametre retourne le filtrage de catagore
+const selectFilter = (filter) => {
+
+  selectedFilter.value = filter;
+
+};
+
+// Attend les changement de la fonction selectedFilter et update le UI
+watch(selectedFilter, async (newValue) => {
+  if (newValue) {
+    activitiesStore.filters.type = newValue.Title;
+    await activitiesStore.getActivities();
+  }
+}, { immediate: false });
+
   
-    const eventFilters = ref([
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-menu"},
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-menu"},
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-menu"},
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-nature"},
-      { Title: 'Nature', icon: "mdi-nature"}
-    ]);
+
   
     const wrapper = ref(null);
     const carousel = ref(null);

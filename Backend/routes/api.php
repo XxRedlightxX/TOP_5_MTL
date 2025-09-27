@@ -30,7 +30,12 @@ Route::post("/user",[UserController::class, 'addUser']);
 
 Route::put('/user/{userId}', [UserController::class, 'modifyUser']);
 
-Route::post("/user/activite",[ActiviteController::class, 'addActivityUser']);
+Route::options('/user/activite', function () {
+    return response()->json();
+});
+
+// Your existing POST route
+Route::post("/user/activite", [ActiviteController::class, 'addActivityUser']);
 
 Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);
 
@@ -39,10 +44,20 @@ Route::get('/activite', [ActiviteController::class, 'getAllActivities']);
 Route::get('/user/activite', [ActiviteController::class, 'getUserActivities']);
 
 Route::get('/activite/test', [ActiviteController::class, 'getUpcomingActivities']);
-//
+
+Route::get('/activite/{activityId}', [ActiviteController::class, 'getAvgRatingActiviy'])->whereNumber('activityId');
+
+Route::get('/likedActivities', [ActiviteController::class, 'getActivitiesMostLiked']);
+
+Route::get('/categories', [ActiviteController::class, 'getActivitiesCategories']);
 
 
-Route::put('/activite/{activiteId}', [ActiviteController::class, 'modifyActivity']);
+
+// Multi-filtrage fonctionnel
+Route::get('/activite/filtrer', [ActiviteController::class, 'getActivityFilters']);
+
+
+Route::post('/activite/{activiteId}', [ActiviteController::class, 'modifyActivity']);
 
 Route::delete('/activite/{activiteId}', [ActiviteController::class, 'deleteActivityById']);
 

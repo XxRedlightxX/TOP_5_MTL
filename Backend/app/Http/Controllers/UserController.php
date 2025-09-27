@@ -66,9 +66,9 @@ class UserController extends Controller
         try {
             $validatedInputUser = $request->validate([
                 'name' =>  'required|string|max:255',
-                'email' => 'required|string|max:255',
-                'type_utilisateur' => 'required|in:organisateur,particulier', 
-                'password' => 'required|string|max:255'
+                'email' => 'nullable|string|max:255',
+                'type_utilisateur' => 'nullable|in:organisateur,particulier', 
+                'password' => 'nullable|string|max:255'
             ]);
             $user2 = User::findOrFail($userId);
             $currentUser = $request->user();

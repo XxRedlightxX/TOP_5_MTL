@@ -44,13 +44,14 @@ class ActiviteService {
 
       public function updateUserActivity( int $activityId, array $data): ?Activite
     {
-        // Option 1: Check policy in Service (alternative to Controller check)
+        
         $activity = Activite::findOrFail($activityId);
         
 
         return $this->activiteDAO->updateActivitybyUser( $activityId, $data);
     }
     public function addCommentToActivityFromUser(int $userId, int $activityId, string $contenu, int $nbEtoiles ) {
+   
         return  $this->activiteDAO->addCommentToActivity( $userId, $activityId,$contenu , $nbEtoiles);
     }
 
@@ -81,6 +82,24 @@ class ActiviteService {
     public function getActivitiesByUpcoming()
     {
         return $this->activiteDAO->getUpcomingActivityByRecent();
+    }
+
+    public function getEventAvgEtoiles($activityId) {
+        
+        return $this->activiteDAO->getEventAverageRating($activityId);
+    }
+
+    public function getActivitiesMostLiked() {
+        return $this->activiteDAO->getActivitiesMostLiked();
+    }
+
+     public function getActivitiesFiltered(array $filters)
+    {
+        return $this->activiteDAO->getFilteredActivities($filters);
+    }
+
+    public function getAllCategoriesActivities() {
+        return $this->activiteDAO->getAllCategories();
     }
 
 

@@ -39,14 +39,14 @@
 
 
      onMounted(async () => {
-      await activitiesStore.getActivities("JOUR");
+      await activitiesStore.getUpcomingEvents();
 
       eventsList.value = activitiesStore.activities.map(activity => ({
         id : activity.id,
         image: activity.image_data || "https://picsum.photos/1895/795",
         title: activity.titre,
         desc: activity.description || descText,
-        rating: activity.rating || 0,
+        rating: activity.nombre_likes || 2,
         lieu: activity.lieu,
         date: activity.date,
       }));

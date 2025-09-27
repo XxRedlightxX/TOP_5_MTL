@@ -1,12 +1,14 @@
 import {defineStore} from "pinia";
 import { useAuthStore } from "./auth";
+import { toRaw } from 'vue';
 
 export const  useActivityStore = defineStore('activitiesStore', {
     state: () => {
         return {
-             activities: [],
+            activities: [],
              user : null,
             activity: null,
+            categories : [],
             loading : false,
             filters: {
                 daytime: "" ?? null,
@@ -24,7 +26,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
     },
     actions : {
 
-        async getActivities(dayTime) {
+        async getActivities() {
 
             const params = new URLSearchParams();
  
@@ -36,7 +38,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 }
             }
 
-            const res = await fetch(`/api/activite/filter?${params.toString()}`, {
+            const res = await fetch(`/api/activite/filtrer?${params.toString()}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -88,31 +90,57 @@ export const  useActivityStore = defineStore('activitiesStore', {
         }
     },
 
+        async getHigherRateEvent() {
+                const token = localStorage.getItem("token");
+
+                if (token) {
+                    const res = await fetch("/api/likedActivities", {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                });
+                const data = await res.json();
+        
+                if (res.ok) {
+                    this.activities = data;
+                    
+                    return this.activities;
+                    
+                }else if(data.errors) {
+                    this.errors= data.errors;
+                    console.log(data.errors);
+                }       
+
+            }
+        },
+
 
 
 
         async getActivityById(activityId) {
-            const token = localStorage.getItem("token")
-            const res = await fetch(`/api/activity/${activityId}/comments`,{
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
+                const token = localStorage.getItem("token")
+                const res = await fetch(`/api/activity/${activityId}/comments`,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                });
 
-            const data = await res.json();
+                const data = await res.json();
 
-            if (res.ok) {
-                this.activity = data;
-                console.log(this.activity)
-                
-                return data;
-                
-            }else if(data.errors) {
-                    this.errors= data.errors;
-                    console.log(data.errors);
-            } 
-        },
+                if (res.ok) {
+                    this.activity = data;
+                    console.log(this.activity)
+                    
+                    return data;
+                    
+                }else if(data.errors) {
+                        this.errors= data.errors;
+                        console.log(data.errors);
+                } 
+            },
+
 
         async addCommentToEvent(formData, activityId) {
             const token = localStorage.getItem("token");
@@ -138,46 +166,21 @@ export const  useActivityStore = defineStore('activitiesStore', {
 
         },
 
-        async getByActivityByDayTime(dayTime) {
-            const token = localStorage.getItem("token");
-
-            // if no filter selected → fetch all events
-            let url = "http://127.0.0.1:8000/api/activite/search";
-            if (dayTime) {
-                url += `?statut_journee=${dayTime}`;
-            }
-
-            const res = await fetch(url, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            });
-
-            const data = await res.json();
-
-            if (data.errors) {
-                this.errors = data.errors;
-                return data.errors;
-            } else {
-                this.errors = {};
-                console.log(data)
-                return data;
-
-            }
-        },
+       
 
         async addEvent(formData) {
             const token = localStorage.getItem("token");
-            const res = await fetch("http://127.0.0.1:8000/api/user/activite", {
+
+            const res = await fetch(`http://127.0.0.1:8000/api/user/activite`, {
                 method: "POST",
                 body: formData,
                 headers: {
-                    
+                     
                     'Authorization': `Bearer ${token}`
                 },
               
             });
+            
 
             const data = await res.json();
 
@@ -186,16 +189,42 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 return data.errors
             } else {
                 this.errors = {};
-                console.log(data)
+                console.log(data+"dadsadsa")
                 return data;
+            }
+        },
+
+         async updateEvent(activity, formData) {
+            const authStore = useAuthStore();
+
+            if (authStore.user.id === this.activity.creator.id) {
+                const res = await fetch(`http://127.0.0.1:8000/api/activite/${activity.id}`, {
+                    method: "POST", 
+                    headers: {
+                       
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    body: formData, 
+                });
+
+                const data = await res.json();
+
+                if (data.errors) {
+                    this.errors = data.errors;
+                     console.log(data.errors)
+                } else {
+                    this.errors = {};
+                    console.log(data+"s")
+                    return data;
+                }
             }
         },
 
          async deleteEvent(activity) {
             const token = localStorage.getItem("token");
             const authStore = useAuthStore();
-            if(authStore.user.id === activity.utilisateur_id) {
-                const res = await fetch(`/api/user/activite/${activity.id}`, {
+            if(authStore.user.id === this.activity.creator.id) {
+                const res = await fetch(`/api/activite/${activity.id}`, {
                 method: "delete",
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -215,10 +244,72 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 }
 
             } else {
-                console.log("Not Allowd")
+                console.log("Not Allowed");
+               
+              
             }
            
         },
+
+   async getUpcomingEvents() {
+        const token = localStorage.getItem("token");
+
+        if (!token) return;
+
+        try {
+            const res = await fetch("/api/activite/test", {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            });
+
+            if (!res.ok) {
+                throw new Error(`Erreur API: ${res.status}`);
+            }
+
+            const data = await res.json();
+
+            
+            this.activities = data || [];
+
+            console.log("Upcoming events:", this.activities);
+            this.errors = {};
+            return this.activities;
+
+        } catch (err) {
+            console.error("getUpcomingEvents failed:", err);
+            this.errors = { upcoming: err.message };
+            return [];
+        }
+        },
+
+        async getCategories() {
+            const token = localStorage.getItem("token");
+
+            if (token) {
+                const res = await fetch("/api/categories", {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await res.json();
+       
+            if (res.ok) {
+                this.categories = data;
+                console.log(this.categories);
+                return this.categories;
+                
+            }else if(data.errors) {
+                this.errors= data.errors;
+                console.log(data.errors);
+            }       
+
+        }
+    },
+
+
 
 
          /*async getActivitiesFilter(dayTime) {

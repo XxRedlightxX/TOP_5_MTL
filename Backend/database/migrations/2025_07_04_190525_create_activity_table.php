@@ -15,14 +15,20 @@ return new class extends Migration
             $table->id();
             $table->string("titre");
             $table->text("description");
-            $table->dateTime("date");
+            $table->dateTime("date_debut");
+            $table->dateTime("date_fin");
+            $table->boolean('toute_la_journee')->default(false);
+             $table->boolean('toute_annee')->default(false);
             $table->string("lieu");
-            $table->unsignedBigInteger('nombre_likes')->default(0);;
+            $table->decimal('nombre_likes', 8, 1)->default(0);
+            $table->decimal('latitude', 10, 8)->nullable()->default(0);
+            $table->decimal('longitude', 11, 8)->nullable()->default(0);
             $table->enum('statut_journee', array_column(EnumMode::cases(), 'value'))
                     ->default(EnumMode::JOUR->value);
             $table->string('image_data')->nullable();
             $table->foreignId("utilisateur_id")->constrained('utilisateur')->onDelete('cascade');
             $table->foreignId("saison_id")->constrained('saison')->onDelete('cascade');
+            $table->foreignId("type_id")->constrained('type')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

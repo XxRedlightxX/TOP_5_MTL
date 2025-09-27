@@ -20,6 +20,7 @@ class ActivityResource extends JsonResource
             'description'=> $this->description,
             'date'       => $this->date,
             'lieu'       => $this->lieu,
+            'nombre_likes' => $this->nombre_likes,
 
             // Activity creator
             'creator'    => [

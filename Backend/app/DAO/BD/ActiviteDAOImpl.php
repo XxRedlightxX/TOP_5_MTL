@@ -5,6 +5,7 @@ namespace App\DAO\BD;
 use App\DAO\SourceDonnes\ActiviteDAO;
 use App\Models\Activite;
 use App\Models\Avis;
+use App\Models\Type;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -23,6 +24,10 @@ class ActiviteDAOImpl implements ActiviteDAO {
      */
     public function getAll() {
         return Activite::all();
+    }
+
+    public function getAllCategories() {
+        return Type::all();
     }
 
     /**
@@ -75,17 +80,20 @@ class ActiviteDAOImpl implements ActiviteDAO {
         })->get();  
     }
 
+  
+    
+
     public function getUpcomingActivityByRecent() {
-          return Activite::whereDate('date', '>=', now())
-        ->orderBy('date', 'asc')
+          return Activite::whereDate('date_debut', '>=', now())
+        ->orderBy('date_debut', 'asc')
         ->take(6) 
         ->get();
     }
 
     public function getActivityByType(string $activiteType) {
-        return Activite::whereHas('types', function ($query) 
+        return Activite::whereHas('type', function ($query) 
         use ($activiteType) {
-            $query->where('nom', 'LIKE', "%{$activiteType}%");
+            $query->where('nom', '=', $activiteType);
         })->get();
     }
 
@@ -103,7 +111,7 @@ class ActiviteDAOImpl implements ActiviteDAO {
     public function addCommentToActivity(int $userId, int $activityId, string $contenu, int $nbEtoiles) {
         $userExist = User::findOrFail($userId);
         $actvityExist = Activite::findOrFail($activityId);
-
+        
         return Avis::create([
             "utilisateur_id" => $userExist->id,
             "activite_id" => $actvityExist->id,
@@ -111,9 +119,9 @@ class ActiviteDAOImpl implements ActiviteDAO {
             "etoiles" => $nbEtoiles,
             "date" => now()
         ]);
-
-
     }
+
+    
 
    public function updateActivityByUser(int $activityId, array $activityData) {
         $activite = Activite::findOrFail($activityId);
@@ -123,6 +131,46 @@ class ActiviteDAOImpl implements ActiviteDAO {
         return $activite;
    }
 
+    public function getEventAverageRating($eventId)
+    {
+        $activityRating= Avis::where('activite_id', $eventId)->avg('etoiles');
+        $activity = Activite::findOrFail($eventId);
 
+        $activity->nombre_likes=$activityRating;
+        $activity->update();
+
+        return $activity;
+    }
+
+   public function getActivitiesMostLiked() {
+        return Activite::orderByDesc('nombre_likes')->take(4)->get();
+    }
+
+    public function getFilteredActivities(array $filters)
+    {
+        $query = Activite::query();
+
+        if (!empty($filters['daytime'])) {
+            $query->where('statut_journee', $filters['daytime']);
+        }
+
+        if (!empty($filters['title'])) {
+            $query->where('titre', 'LIKE', "%{$filters['title']}%");
+        }
+
+        if (!empty($filters['season'])) {
+            $query->whereHas('saison', function ($q) use ($filters) {
+                $q->where('statut', $filters['season']);
+            });
+        }
+
+        if (!empty($filters['type'])) {
+            $query->whereHas('type', function ($q) use ($filters) {
+                $q->where('nom', $filters['type']);
+            });
+        }
+
+        return $query->get();
+    }
 
 }

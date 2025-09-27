@@ -5,12 +5,7 @@
             <h3>{{ actualLang ? 'Up coming events' : 'Evenement en approche'}}</h3>
             <UpComingEvent :list-event="upComingEvents" />
         </div>
-            <select v-model="activitiesStore.filters.daytime">
-        <option value="">All times</option>
-        <option value="JOUR">JOUR</option>
-        <option value="NUIT">Afternoon</option>
-        <option value="evening">Evening</option>
-    </select>
+      
 
         <AlListEvent :list-event="eventsList"/>
     </div>
@@ -29,11 +24,14 @@
     let actualLang = ref(LocalStorageManager.getLang());
     const activitiesStore = useActivityStore();
     let eventsList = ref(null);
-    let upComingEvents = ref(null);
+    let upComingEvents = ref([]);
+
+   
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
-      const newEventJours = [
+    
+    const newEventJours = [
     { id: null,
-image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date:null },
+image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date_debut:null },
     { id: null,
 image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 5,lieu: null, date:null },
     {id: null,
@@ -74,7 +72,7 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
         desc: activity.description || descText,
         rating: activity.rating || 0,
         lieu: activity.lieu,
-        date: activity.date,
+        date: activity.date_debut,
       }));
   });
   eventsList.value = actualMode.value ? newEventJours : newEventNuit;
@@ -91,7 +89,7 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
     desc: activity.description || "No description",
     rating: activity.rating || 0,
     lieu: activity.lieu,
-    date: activity.date,
+    date: activity.date_debut,
   }));
 })
 

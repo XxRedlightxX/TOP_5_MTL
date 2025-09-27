@@ -22,6 +22,7 @@ export const useUserStore = defineStore('userStore', {
             const token = localStorage.getItem("token")
             if (token) {
                 const res = await fetch("/api/activite", {
+                    
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -45,6 +46,39 @@ export const useUserStore = defineStore('userStore', {
             
             }
         },
+
+        async modifyUser(formData) {
+            const token = localStorage.getItem("token");
+            const authStore = useAuthStore();
+            if (token && authStore.user?.id) {
+                const res = await fetch(`http://127.0.0.1:8000/api/user/${authStore.user.id}`, {
+                method: "put",
+                headers: {
+                     'Content-Type': 'application/json', // Add this
+                'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                   
+                },
+                body: JSON.stringify(formData), 
+            });
+             if (!res.ok) {
+                const text = await res.text(); // debug pour voir la réponse Laravel
+                throw new Error(`HTTP ${res.status}: ${text}`);
+            }
+
+            const data = await res.json();
+
+            if (data.errors) {
+                this.errors = data.errors;
+                console.log("Validation errors:", data.errors);
+                return null;
+            } else {
+                this.errors = {};
+                this.user = data;
+                return this.user;
+            }
+        }
+    },
 
         async addImageProfile(formData) {
             const token = localStorage.getItem("token")

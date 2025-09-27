@@ -9,10 +9,9 @@ class Activite extends Model
     protected $table = 'activite';
 
      protected $fillable = [
-        
-        'titre', 'description', 'date', 'lieu',
+        'titre', 'description', 'date_debut', 'date_fin', 'latitude', 'longitude', 'lieu',
         'nombre_likes', 'statut_journee', 'image_data',
-        'utilisateur_id', 'saison_id'
+        'utilisateur_id', 'saison_id', 'type_id'
     ];
 
     public function User()
@@ -40,9 +39,9 @@ class Activite extends Model
         return $this->hasMany(Like::class);
     }
 
-    public function types()
+    public function type()
     {
-        return $this->belongsToMany(Type::class, 'typeactivite', 'activite_id', 'type_id');
+        return $this->belongsTo(Type::class);
     }
 
 }

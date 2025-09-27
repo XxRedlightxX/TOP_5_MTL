@@ -13,28 +13,31 @@
                         clearable
                         persistent-clear 
                         hide-details="auto"
+                        
                     />
 
 
                     <v-text-field
                         :rules="Name"
-                        :label="`${actualLang ? 'First name' : 'Prenom'} : ${theUser?.fistname || ''}`"
+                        :label="`${actualLang ? 'User Type' : 'Type Utilisateur'} : ${theUser?.type_utilisateur || ''}`"
                         
                         type="input"
                         clearable
                         persistent-clear 
                         hide-details="auto"
+                        v-model="formDataUser.type_utilisateur"
                     ></v-text-field>
                 </div>
 
                 <v-text-field
                     :rules="Name"
-                        :label="`${actualLang ? 'Username' : 'Nom d\'utilisateur'} : ${theUser?.username || ''}`"
+                        :label="`${actualLang ? 'Username' : 'Nom d\'utilisateur'} : ${theUser?.name || ''}`"
                     
                     type="input"
                     clearable
                     persistent-clear 
                     hide-details="auto"
+                    v-model="formDataUser.name"
                 ></v-text-field>
 
                 <div class="sub">
@@ -47,6 +50,7 @@
                         clearable
                         persistent-clear 
                         hide-details="auto"
+                        v-model="formDataUser.email"
                     ></v-text-field>
 
                     <v-text-field
@@ -100,32 +104,39 @@
 
 <script setup>
     import AvatarUploader from '../../components/ProfileComponents/ProfileGestionComponents/AvatarUploader.vue';
-    import waterButton from '../../components/WaterButtonComponent.vue'
-    import storageManager from "@/JS/LocalStaorageManager"
-    import { ref, onMounted, onUnmounted } from 'vue';
+    import waterButton from '../../components/WaterButtonComponent.vue';
+    import storageManager from "@/JS/LocalStaorageManager";
+    import { ref, onMounted, onUnmounted, reactive } from 'vue';
+    import { useAuthStore } from '@/stores/auth';
+    import { useUserStore } from '@/stores/user';
+
+
+    const authStore = useAuthStore();
+    const errorMessage = ref(null);
+    const  validationErrors  = ref(null);
+    const { modifyUser} = useUserStore();
+
+    const formDataUser = reactive({
+        name : authStore.user.name,
+        email : authStore.user.email,
+        type_utilisateur : authStore.user.type_utilisateur
+    })
+
+    
+   
 
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
-    const user = {
-        avatar: "/src/assets/p1.jpg",
-        username: "Debrazer",
-        name: "Wakanda",
-        fisrtName: "Dede",
-        email: "dedeTheBest@gmail.com",
-        num: 1122222222,
-        desc: text,
-        listEvent: [
-            { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text, rating: 1 },
-            { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 },
-            { image: "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text, rating: 5 },
-            { image: "/src/assets/HomeCarousel/Jardin-botanique.jpg", title: "Jardin Botanique", desc: text, rating: 4 },
-            { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 3 }
-        ]
-    };
-
+ 
     const actualMode = ref(storageManager.getMode());
     const actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
     let theUser = ref(null);
+
+    theUser=authStore.user;
+
+
+
+
 
     if (actualLang.value === null) {
         storageManager.setLang(true);
@@ -169,7 +180,21 @@
     console.log('isLoged : ' + isLogged.value);
     console.log('the user : ' + theUser.value);
 
-    const updateUser = () => {
+    const updateUser = async () => {
+
+        console.log(formDataUser);
+      
+      
+        try {
+            const modifiedUser =await modifyUser(formDataUser);
+            if (modifiedUser) {
+                await authStore.getUser();
+            }
+
+        } catch (error) {
+            errorMessage.value = error.message;
+            console.error("Upload failed:", error);
+        }
 
     }
 </script>
