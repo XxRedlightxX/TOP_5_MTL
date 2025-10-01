@@ -4,9 +4,9 @@
         <div class="top">
             
             <ProfileHead :himself="props.himself" :user="organisator"></ProfileHead>
-            <ProfileOther v-show="props.himself" :user="theOrganisator"></ProfileOther>
+            <ProfileOther v-show="props.himself" :user="organisator"></ProfileOther>
         </div>
-        <ProfileList :himself="props.himself" :user="theOrganisator"></ProfileList>
+        <ProfileList :himself="props.himself" :user="organisator"></ProfileList>
     </div>
   </template>
   
@@ -21,7 +21,7 @@
     import { storeToRefs } from "pinia";
     
 
-    let listEvent = ref([]);
+    const listEvent = ref([]);
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
     let actualMode = ref(storageManager.getMode());
@@ -40,11 +40,11 @@
     const organisator = ref({
         avatar: "",
         username: "",
-        name: "Wakanda",
-        fisrtName: "Dede", 
+        name: "",
+        fisrtName: "", 
         email: "",
-        num: 1122222222,
-        desc: "No description yet",
+        num: null,
+        desc: "No description yete",
         listEvent: []
     });
  
