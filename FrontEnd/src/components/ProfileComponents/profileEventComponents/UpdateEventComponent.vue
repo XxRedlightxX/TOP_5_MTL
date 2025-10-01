@@ -172,7 +172,7 @@
                         if (updated) {
                          
                         activity.value = updated;
-                          await authStore.getUser();
+                        await authStore.getUser();
                         console.log(updated)
                         }
                 } catch (error) {

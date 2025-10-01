@@ -2,16 +2,16 @@
     <div id="singleEventComponent">
         <div class="place-overview" >
             <header class="header">
-                <h1 class="header__title">{{activityTitle}}</h1>
+                <h1 class="header__title">{{props.activityTitle}} </h1>
                 <br>
             </header>
 
             <section class="overview">
                 <div class="overview__image">
-                    <img :src="getAvatarUrl(event.image)" alt="Mont Saint-Michel" />
+                    <img :src="getAvatarUrl(props.activityImage)" alt="Mont Saint-Michel" />
                 </div>
                 <div class="overview__details">
-                    <h3 class="overview__description">{{activityDesc}}</h3>
+                    <h3 class="overview__description">{{props.activityDesc}}</h3>
                 </div>
             </section>
         </div>
@@ -27,10 +27,13 @@
 
     //const activity = ref(null);
 
-    defineProps({
-        activityTitle: String,
-        activityDesc: String
-    });
+ const props = defineProps({
+  activityTitle: String,
+  activityDesc: String,
+  activityImage: String,
+});
+
+    console.log(props.activityImage +"dd");
   
 
     const route = useRoute()

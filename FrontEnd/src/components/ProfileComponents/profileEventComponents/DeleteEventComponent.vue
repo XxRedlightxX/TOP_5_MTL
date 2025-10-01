@@ -60,8 +60,9 @@
     const deleteEventByWindow = async() => {
         const IsSuccess = await deleteEvent(activity.value);
          if (IsSuccess) {
-            await authStore.getUser();
             popDelete();
+            await authStore.getUser();
+            
         } 
 
     }

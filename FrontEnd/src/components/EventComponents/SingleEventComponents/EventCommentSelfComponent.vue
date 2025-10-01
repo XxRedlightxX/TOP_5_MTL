@@ -11,7 +11,7 @@
                    
                     />
                     <waterButton :text="actualLang ? 'Send' : 'Envoyer'" :type="true" @click="sendComment" />
-                    
+                    <LoadingComponent v-if="loading"></LoadingComponent>
                 </div>
             </form>
         </div>
@@ -21,14 +21,16 @@
 
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager"
-    import { ref, onMounted, onUnmounted, reactive,defineProps } from "vue";
+    import { ref, onMounted, onUnmounted, reactive,defineProps, defineEmits } from "vue";
     import Ratings from "../../RatingComponent.vue";
     import waterButton from "../../WaterButtonComponent.vue"
     import { useActivityStore } from "@/stores/activity";
+    import LoadingComponent from "@/components/LoadingComponent.vue";
 
     const {addCommentToEvent} = useActivityStore();
-
-
+    const emit = defineEmits(['comment-added']);
+    
+    const loading = ref(false);
     const formCommentUser = reactive({
         contenu : "",
         etoiles : null,
@@ -41,14 +43,28 @@
         activityId: Number,
     });
     const sendComment = async () => {
+        
         try {
-            await addCommentToEvent(formCommentUser, props.activityId);
+            if (!formCommentUser.contenu.trim() || !formCommentUser.etoiles) {
+                console.error('Please fill all fields');
+                return;
+            }
+            loading.value = true;
+            const result =await addCommentToEvent(formCommentUser, props.activityId);
+            emit('comment-added', result);
+
+            formCommentUser.contenu = "";
+            formCommentUser.etoiles = null;
+
            
         } catch (error) {
             console.error('Failed to add comment:', error);
+        } finally {
+            loading.value = false;
         }
     };
 
+   
     
 
     let actualLang = ref(storageManager.getLang());
