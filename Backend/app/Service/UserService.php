@@ -4,6 +4,7 @@ namespace App\Service;
 use App\Models\User;
 use App\DAO\SourceDonnes\UserDAO;
 use App\Models\Activite;
+use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Service\DTO\AuthResult;
@@ -21,6 +22,10 @@ class UserService {
     }
 
     public function creatUser(  $user) {
+        $existUser=$this->daoUser->getByEmail($user['email']);
+        if ($existUser->isNotEmpty()) {
+            throw new Exception("There is already a user with email: {$user['email']}");
+        }
         return $this->daoUser->save($user);
     }
 
@@ -34,7 +39,7 @@ class UserService {
 
     public function getUserEmailandPassword(string $userEmail, $userPassword) {
        $user = $this->daoUser->checkEmailAndPasswordExist($userEmail, $userPassword);
-
+        
         if ($user) {
             $token = $user->createToken($user->name)->plainTextToken;
             return new AuthResult(true, $user, 'Login succ.', $token);

@@ -1,18 +1,17 @@
 <template>
-  <form class="sign-in glass" @submit.prevent="Login()">
+  <form class="sign-in glass">
 
     <h2>{{actualLang ? 'Sign In' : 'Connectez-Vous'}}</h2>
-
+  
     <v-text-field
-        :rules="Email"
         :label="actualLang ? 'Email' : 'Email'"
-        type="email"
         clearable
         persistent-clear 
         hide-details="auto"
         required
         v-model="formData.email"
     ></v-text-field>
+    <p v-if="errors.email" class="error">{{ errors.email[0] }}</p>
    
     <v-text-field
         :rules="Password"
@@ -28,9 +27,9 @@
     
 
     <a href="#" class="forgot">{{actualLang ? 'Forgot your password ?' : 'Vous avez oublié votre mot de passe ?'}}</a>
-
-    <waterButton :text="actualLang ? 'Sign In' : 'Se connecter'" :type="true" />
-    <button  type="submit"  >{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
+    <p v-if="errors.general" class="error">{{ errors.general[0] }}</p>
+  
+    <waterButton :text="actualLang ? 'Sign In' : 'Se connecter'" :type="true" @click="Login()" />
   </form>
 
 </template>
@@ -65,8 +64,6 @@
 
    const Login = async () => {
     try {
-
-   
         const success = await authenticate('login', formData);
         if (success) {
             storageManager.setLogin(true);

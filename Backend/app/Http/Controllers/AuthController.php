@@ -15,10 +15,10 @@ class AuthController extends Controller
         $this->userService = $userService;
     }
     public function register(Request $request) {
-        
+
          $validated =$request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
             'type_utilisateur' => 'required|in:organisateur,particulier', 
             'password' => 'required|confirmed|max:255',
         ]);
@@ -26,11 +26,17 @@ class AuthController extends Controller
         $user = $this->userService->creatUser($validated);
 
         $token = $user->createToken($request->name);
+        if ($user) {
+            return [
+                'user'=> $user,
+                'token' =>$token->plainTextToken
+            ];
+        }
+         return response()->json([
+        'error' => $user->message,
+    ], 401);
+    
 
-        return [
-            'user'=> $user,
-            'token' =>$token->plainTextToken
-        ];
 
         
     }

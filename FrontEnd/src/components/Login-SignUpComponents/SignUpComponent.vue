@@ -4,9 +4,11 @@
 
 
      <p v-if="authStore.user">{{ authStore.user.name }}</p>
+       <p v-if="errors.general" class="error">{{ errors.general[0] }}</p>
     <form class="sign-up glass" >
 
         <h2>{{actualLang ? 'sign-up' : 'Inscrivez-Vous'}}</h2>
+       
 
         <v-text-field
             :rules="Name"
@@ -20,6 +22,7 @@
            required
           
         ></v-text-field>
+         <p v-if="errors.name" class="error">{{ errors.name[0] }}</p>
 
         <div class="sub">
             <v-text-field
@@ -32,6 +35,8 @@
                 hide-details="auto"
                 v-model = "formData.email"
             ></v-text-field>
+             <p v-if="errors.email" class="error">{{ errors.email[0] }}</p>
+             
 
             <v-text-field
                 :rules="Number"
@@ -54,6 +59,7 @@
             hide-details="auto"
             v-model="formData.password"
         ></v-text-field>
+        <p v-if="errors.email" class="error">{{ errors.password[0] }}</p>
 
         <v-text-field
             :rules="Password"
@@ -82,8 +88,8 @@
 
         
     
-        <button  type="submit" @click="Login()" >{{actualLang ? 'Sign Up' : 'S\'inscrire'}}</button>
-        <!--<waterButton :text="actualLang ? 'Sign Up' : 'S\'inscrire'" :type="true" @click=" Login()"/>>-->
+        
+        <waterButton :text="actualLang ? 'Sign Up' : 'S\'inscrire'" :type="true" @click="Login()" />
     </form>
 </template>
 
@@ -92,12 +98,15 @@
     import storageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted, reactive} from "vue";
     import waterButton from "../WaterButtonComponent.vue";
+    import { storeToRefs } from "pinia";
 
     let actualLang = ref(storageManager.getLang());
+    const { errors } = storeToRefs(useAuthStore());
     let isLogged = ref(storageManager.getLogin());
 
-
+    onMounted(() => (errors.value = {}));
     const {authenticate} = useAuthStore();
+
     const authStore = useAuthStore();
     const formData  = reactive({
         name: '',
@@ -114,10 +123,19 @@
 
     ];
    
-    const Login = () => {
-        authenticate('register', formData);
-        storageManager.setLogin(true);
-        isLogged.value = storageManager.getLogin();
+    const Login = async() => {
+        try {
+            const success = await authenticate('register', formData);
+            if (success) {
+                storageManager.setLogin(true);
+                isLogged.value = storageManager.getLogin();
+            } else {
+                console.log("Not Connect")
+            }
+        } catch (errors) {
+            // Handle any errors
+            console.error('Login error:', errors);
+        }
     }
 
     if (actualLang.value === null) {
