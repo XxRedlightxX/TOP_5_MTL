@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch, nextTick } from "vue";
+import { ref, onMounted } from "vue";
 import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
@@ -14,6 +14,7 @@ import "leaflet-geosearch/dist/geosearch.css";
 const mapContainer = ref(null);
 const map = ref(null);
 const coords = ref(null);
+const emit = defineEmits(['event-coords']);
 
 onMounted(async () => {
   
@@ -41,6 +42,8 @@ onMounted(async () => {
       lng: result.location.x,
     };
     console.log("Selected:", coords.value);
+    emit("event-coords",coords.value);
+
   });
 
   L.marker([45.5019, -73.5674]).addTo(map.value).bindPopup("Hello Montréal!");

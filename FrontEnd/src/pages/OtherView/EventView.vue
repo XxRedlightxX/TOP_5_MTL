@@ -20,7 +20,8 @@
             </div>
         </div>
      
-        <PageMap></PageMap>
+        <PageMap :lat="activity?.latitude" :lng="activity?.longitude"></PageMap>
+       
     </div> 
 </template>
 
@@ -33,6 +34,7 @@
     import CommentSelf from "../../components/EventComponents/SingleEventComponents/EventCommentSelfComponent.vue"
     import { useActivityStore } from '@/stores/activity';
     import { useRoute } from 'vue-router';
+    import MapComponent from '@/components/MapComponent.vue';
 
 
     const activity = ref(null);
@@ -45,6 +47,7 @@
 
     const fetchActivity = async () => {
         activity.value = await getActivityById(route.params.id);
+        console.log(activity.value)
     };
 
     const handleCommentAdded = async (result) => {

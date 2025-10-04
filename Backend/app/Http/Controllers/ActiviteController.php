@@ -44,6 +44,8 @@ class ActiviteController extends Controller
             'description' => 'required|string',
             'date_debut' => 'required|date',
             'date_fin' => 'required|date',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
             'lieu' => 'required|string|max:255',
             'statut_journee' => 'required|in:JOUR,NUIT', 
             'saison_id' => 'required|exists:saison,id',

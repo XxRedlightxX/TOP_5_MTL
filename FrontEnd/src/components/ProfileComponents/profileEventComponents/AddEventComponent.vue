@@ -63,7 +63,7 @@
                         <label for="event-picture">Upload Picture</label>
                         <input type="file" @change="handleFileUpload" id="event-picture" accept="image/*">
                     </div>
-                    <MapComponent ></MapComponent>
+                    <MapComponent @event-coords="handleEventCoords"></MapComponent>
                     
                     <div class="form-actions">
                         <button type="submit">{{ actualLang ? 'Create Event' : 'Créer Événement' }}</button>
@@ -96,6 +96,7 @@
     const selectedFile = ref(null)
     const errorMessage = ref(null);
     const  validationErrors  = ref(null);
+  
 
     const formDataEvent= reactive({
             titre: "",
@@ -107,6 +108,8 @@
             image_data : "",
             saison_id: null,
             type_id : 1,
+            longitude : "",
+            latitude : ""
     });
 
 
@@ -142,6 +145,9 @@ const testInput = async(event) => {
     formData.append('lieu', formDataEvent.lieu);
     formData.append('saison_id', String(formDataEvent.saison_id));
     formData.append('type_id', String(formDataEvent.type_id));
+    formData.append('latitude', String(formDataEvent.latitude));
+    formData.append('longitude', String(formDataEvent.longitude));
+    
 
     if (selectedFile.value) {
         formData.append('image_data', selectedFile.value);
@@ -151,20 +157,38 @@ const testInput = async(event) => {
         console.log(key, value);
     }
 
-    try {
-        const eventUrl = await addEvent(formData);
-        if (eventUrl) {
-            console.log(eventUrl);
+        try {
+            const eventUrl = await addEvent(formData);
+            if (eventUrl) {
+                console.log(eventUrl);
 
-             await authStore.getUser();
-            pop();
-            
+                await authStore.getUser();
+                pop();
+                
+            }
+        } catch (error) {
+            errorMessage.value = error.message;
+            console.error("Upload failed:", error);
         }
-    } catch (error) {
-        errorMessage.value = error.message;
-        console.error("Upload failed:", error);
-    }
+    };
+
+   const handleEventCoords = (coords) => {
+    console.log("Received coordinates:", coords);
+    console.log("Latitude:", coords.lat);
+    console.log("Longitude:", coords.lng);
+  
+   
+
+
+    
+    // You can now use the coordinates in your form
+    formDataEvent.latitude = coords.lat;
+    formDataEvent.longitude = coords.lng;
+    
 };
+
+    
+
 
     const props = defineProps({
         user: Object
