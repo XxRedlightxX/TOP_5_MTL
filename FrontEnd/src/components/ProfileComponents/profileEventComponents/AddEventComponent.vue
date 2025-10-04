@@ -1,5 +1,5 @@
 <template>
-    <div id="myModal" class="modal" style="display:none" @click.self="pop">
+    <div id="myModal" class="modal" style="" @click.self="pop">
         <div class="modal-content" @click.self="pop">
             <div class="event-create-form">
                 <span class="close" @click="pop">&times;</span>
@@ -63,13 +63,17 @@
                         <label for="event-picture">Upload Picture</label>
                         <input type="file" @change="handleFileUpload" id="event-picture" accept="image/*">
                     </div>
-
+                    <MapComponent ></MapComponent>
+                    
                     <div class="form-actions">
                         <button type="submit">{{ actualLang ? 'Create Event' : 'Créer Événement' }}</button>
                         <waterButton :text="actualLang ? 'Cancel' : 'Annuler'" :type="false" class="btnn" @click="pop"/>
                     </div>
                 </form>
+                
             </div>
+            
+              
         </div>
     </div>
 </template>
@@ -80,6 +84,7 @@
     import { useActivityStore } from "@/stores/activity";
     import { formatDateApi } from "@/JS/GlobalFunctions";
     import { useAuthStore } from "@/stores/auth";
+    import MapComponent from "@/components/MapComponent.vue";
 
     const {addEvent} = useActivityStore();
 
@@ -161,19 +166,6 @@ const testInput = async(event) => {
     }
 };
 
-
-
-
-
-
-
-
-
-
-   
-
-    
-
     const props = defineProps({
         user: Object
     });
@@ -237,8 +229,11 @@ const testInput = async(event) => {
         top: 0%;
         width: 100%; 
         height: 100%; 
-        overflow: hidden; 
+        //overflow: hidden; 
         z-index: 500; 
+
+        
+        
 
         .modal-content {
             background-color: transparent;
