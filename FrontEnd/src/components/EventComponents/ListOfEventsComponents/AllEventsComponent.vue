@@ -4,10 +4,10 @@
     
     <div class="events">
       <router-link 
-        v-if="listEvent.length" 
+        v-if="paginatedEvents.length" 
         :to="{ name: 'show', params: { id: item.id } }" 
         class="events_card glass" 
-        v-for="(item, index) in listEvent" 
+        v-for="(item, index) in paginatedEvents" 
         :key="item.id"
       >
         <div class="event_card_photo">
@@ -33,30 +33,66 @@
       </div>
     </div>
 
-    <PaginationComponent/>
+   <PaginationComponent 
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :visible-pages="visiblePages"
+      @page-change="goToPage"
+    />
   </div>
 </template>
 
 <script setup >
 
-import { onMounted, ref, watch, onUnmounted } from 'vue'; 
+import { onMounted, ref, watch, onUnmounted , computed,} from 'vue'; 
 import LocalStorageManager from "@/JS/LocalStaorageManager"
 import PaginationComponent from './PaginationComponent.vue';
 import FilterComponent from './FilterComponent.vue';
 import { useActivityStore } from '@/stores/activity';
 import { formatDateSpecial } from "@/JS/GlobalFunctions";
 
+const eventsPerPage = 9;
+const currentPage = ref(0);
 
 
- defineProps({
-      listEvent : Array
-  });
+
+const props = defineProps({
+  listEvent: Array
+});
 
 
 const listActivities = ref([]);
 const activitiesStore = useActivityStore();
 
+const totalPages = computed(() => Math.ceil(props.listEvent.length / eventsPerPage));
 
+const paginatedEvents = computed(() => {
+  const start = currentPage.value * eventsPerPage;
+  const end = start + eventsPerPage;
+  return props.listEvent.slice(start, end);
+});
+
+const visiblePages = computed(() => {
+  const maxVisiblePages = 5;
+  const pages = [];
+  
+  let startPage = Math.max(0, currentPage.value - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(totalPages.value - 1, startPage + maxVisiblePages - 1);
+  
+  startPage = Math.max(0, endPage - maxVisiblePages + 1);
+  
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i + 1);
+  }
+  
+  return pages;
+});
+
+const goToPage = (pageIndex) => {
+  if (pageIndex >= 0 && pageIndex < totalPages.value) {
+    currentPage.value = pageIndex;
+  }
+};
 
 
 
@@ -68,7 +104,7 @@ const getAvatarUrl = (imagePath) => {
 
 
 
-  const actualMode = ref(LocalStorageManager.getMode());
+const actualMode = ref(LocalStorageManager.getMode());
 
 
 
@@ -76,7 +112,7 @@ const getAvatarUrl = (imagePath) => {
 
 
 
-  let newEvent = ref(null);
+let newEvent = ref(null);
   //newEvent.value = actualMode.value ? newEventJours : newEventNuit;
 
 
