@@ -15,6 +15,10 @@ interface ActiviteDAO extends InterfaceDAO {
 
     public function getActivityByType(string $activityType);
 
+    public function getActivityFromSeason(string $season);
+
+    public function getActivityFromCategoryType(string $type);
+
     public function getUpcomingActivityByRecent();
 
     public function getEventAverageRating($activityId);

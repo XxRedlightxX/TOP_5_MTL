@@ -5,6 +5,7 @@ namespace App\DAO\BD;
 use App\DAO\SourceDonnes\ActiviteDAO;
 use App\Models\Activite;
 use App\Models\Avis;
+use App\Models\Saison;
 use App\Models\Type;
 use App\Models\User;
 use Carbon\Carbon;
@@ -171,6 +172,15 @@ class ActiviteDAOImpl implements ActiviteDAO {
         }
 
         return $query->get();
+    }
+
+
+    public function getActivityFromSeason(string $seasonName) {
+        return Saison::where('statut', $seasonName)->first();
+    }
+
+    public function getActivityFromCategoryType(string $typeName) {
+        return  Type::where('nom', $typeName)->first();
     }
 
 }

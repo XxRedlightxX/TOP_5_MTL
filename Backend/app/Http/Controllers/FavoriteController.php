@@ -18,7 +18,8 @@ class FavoriteController extends Controller
     }
 
 
-    public function getAllFavoriteActivites(User $user) {
+    public function getAllFavoriteActivites(Request $request) {
+        $user =  $request->user();
 
         return $user->load('favoris');
     }
@@ -33,7 +34,7 @@ class FavoriteController extends Controller
         $this->userService->addFavoriteActivity($user->id, $validated['id']);
 
         return response()->json([
-           ""
+           "This activity has been deleted from favorite" , 
         
         ], 201);
 
