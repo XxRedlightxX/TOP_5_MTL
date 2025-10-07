@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import { useAuthStore } from "./auth";
-import { toRaw } from 'vue';
+
 
 export const  useActivityStore = defineStore('activitiesStore', {
     state: () => {
@@ -308,6 +308,45 @@ export const  useActivityStore = defineStore('activitiesStore', {
 
         }
     },
+
+      async getFavoritesActivities() {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            this.errors = { message: "No token found" };
+            return null;
+        }
+
+        this.isLoading = true;
+        this.errors = {};
+
+        try {
+            const res = await fetch("/api/favorite", {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            
+            // Check if response is OK before parsing JSON
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            
+            const data = await res.json();
+            console.log("Favorites data:", data);
+            return data;
+            
+        } catch (error) {
+            this.errors = { 
+                message: error.message || "Failed to fetch favorites" 
+            };
+            console.error("Fetch error:", error);
+            return null;
+        } finally {
+            this.isLoading = false;
+        }
+}
 
 
 

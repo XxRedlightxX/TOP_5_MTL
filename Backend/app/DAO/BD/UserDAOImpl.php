@@ -17,8 +17,15 @@ class UserDAOImpl implements UserDAO {
      */
     public function getByEmail(string $email) {
         
-       return User::where('email', $email)->get();
+       return User::where('email',
+        $email)->get();
     }
+
+    public function getByUsername(string $username) {
+        
+       return User::where('username', $username)->get();
+    }
+
 
     /**
      * @inheritDoc

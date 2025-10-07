@@ -1,0 +1,63 @@
+.listFollowers {
+  border: 1px dotted #ccc;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  padding: 15px;
+
+  .rangee {
+    display: grid;
+    grid-template-columns: 30% 50% 20%;
+    align-items: center;
+    gap: 5px;
+    min-height: 80px;
+
+    .test:first-child {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      
+      img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+
+    .test:nth-child(2) {
+      .user {
+        h4 {
+          margin: 2px 0;
+          
+          &:first-child {
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+          }
+          
+          &:last-child {
+            color: #666;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+
+    .test:last-child {
+      display: flex;
+      justify-content: flex-end;
+      
+      .icon {
+         font-size: 3.2rem;
+        cursor: pointer;
+       
+        transition: all 0.3s ease;
+        
+        &:hover {
+          transform: scale(1.1);
+          color: #cc0000;
+        }
+      }
+    }
+  }
+}

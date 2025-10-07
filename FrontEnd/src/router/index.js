@@ -21,7 +21,7 @@ const routes = [
       {
         path: "/Events",
         name: "Events",
-         meta: { guest: true },
+        meta: { guest: true },
         // route level code-splitting
         // this generates a separate chunk (Home-[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -76,6 +76,16 @@ const routes = [
         component: () => import("@/pages/ProfilesView/GestionProfileView.vue"),
       },
 
+       // Vue : TEST
+      {
+        path: "/Test",
+        name: "TEST",
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import("@/pages/MenusView/Test.vue"),
+      },
+
       // Vue : ErroView
       {
         path: "/error",
@@ -101,6 +111,12 @@ const routes = [
         // this generates a separate chunk (Home-[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import("@/pages/OtherView/EventView.vue"),
+      },
+
+      {
+        path: "/Event/update/:id",
+        name: "delete",
+        component: () => import("@/components/ProfileComponents/profileEventComponents/DeleteEventComponent.vue"),
       },
     ],
   },

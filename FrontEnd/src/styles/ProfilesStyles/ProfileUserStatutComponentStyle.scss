@@ -1,0 +1,28 @@
+#profileUserStatut {
+     //border-style: double;
+     height: 100%;
+    .sub-menu {
+        display: flex;
+        justify-content: center;
+        //border-style: dotted;
+
+        li {
+            list-style-type: none;
+            padding : 30px;
+            font-weight: bold;
+        }
+
+        li:hover {
+            border-bottom: solid;
+            cursor: pointer;
+        }
+    }
+
+    .listUser {
+        
+        //border-style: dotted;
+        height: 100%;
+    }
+
+   
+}

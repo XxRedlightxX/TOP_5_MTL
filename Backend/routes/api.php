@@ -92,7 +92,7 @@ Route::get('/followings', [FollowController::class, 'getfollowings']);
 
 Route::post('/favorite', [FavoriteController::class, 'addActivityToFavorite']);
 
-Route::get('/favorite/{user}', [FavoriteController::class, 'getAllFavoriteActivites']);
+Route::get('/favorite', [FavoriteController::class, 'getAllFavoriteActivites']);
 
 Route::delete('/favorite/{activityId}', [FavoriteController::class, 'deleteFavoriteActivity']);
 

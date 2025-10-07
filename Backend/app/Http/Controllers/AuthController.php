@@ -17,15 +17,16 @@ class AuthController extends Controller
     public function register(Request $request) {
 
          $validated =$request->validate([
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'num_tel' => 'required|string|max:20|regex:/^[0-9\-\+\s\(\)]+$/',
             'type_utilisateur' => 'required|in:organisateur,particulier', 
             'password' => 'required|confirmed|max:255',
         ]);
 
         $user = $this->userService->creatUser($validated);
 
-        $token = $user->createToken($request->name);
+        $token = $user->createToken($request->username);
         if ($user) {
             return [
                 'user'=> $user,

@@ -66,7 +66,10 @@ class UserController extends Controller
         try {
             $validatedInputUser = $request->validate([
                 'name' =>  'required|string|max:255',
+                'username' =>  'required|string|max:255',
+                'num_tel' =>  'required|string|max:255',
                 'email' => 'nullable|string|max:255',
+                'description' => 'nullable|string|max:255',
                 'type_utilisateur' => 'nullable|in:organisateur,particulier', 
                 'password' => 'nullable|string|max:255'
             ]);

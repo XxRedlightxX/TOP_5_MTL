@@ -15,8 +15,11 @@ return new class extends Migration
         Schema::create('utilisateur', function (Blueprint $table) {
             $table->id();
             $table->string('image_data')->nullable();
-            $table->string('name');
+            $table->string('name')->nullable();
+            $table->string('username')->unique();
+            $table->string('num_tel')->nullable();
             $table->string('email')->unique();
+            $table->longText('description')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('type_utilisateur', array_column(EnumUser::cases(), 'value'))

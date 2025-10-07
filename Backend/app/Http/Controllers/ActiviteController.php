@@ -84,7 +84,7 @@ class ActiviteController extends Controller
         try {
         
             $activite = Activite::findOrFail($activiteId);
-            $this->authorize('update', $activite);
+            //$this->authorize('update', $activite);
         
         
         

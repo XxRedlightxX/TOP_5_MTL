@@ -18,11 +18,11 @@
             clearable
             persistent-clear 
             hide-details="auto"
-            v-model="formData.name"
+            v-model="formData.username"
            required
           
         ></v-text-field>
-         <p v-if="errors.name" class="error">{{ errors.name[0] }}</p>
+         <p v-if="errors.username" class="error">{{ errors.username[0] }}</p>
 
         <div class="sub">
             <v-text-field
@@ -46,7 +46,9 @@
                 clearable
                 persistent-clear 
                 hide-details="auto"
+                v-model = "formData.num_tel"
             ></v-text-field>
+             <p v-if="errors.num_tel" class="error">{{ errors.num_tel[0] }}</p>
         </div>
 
         <v-text-field
@@ -59,7 +61,7 @@
             hide-details="auto"
             v-model="formData.password"
         ></v-text-field>
-        <p v-if="errors.email" class="error">{{ errors.password[0] }}</p>
+        <p v-if="errors.password" class="error">{{ errors.password[0] }}</p>
 
         <v-text-field
             :rules="Password"
@@ -109,8 +111,9 @@
 
     const authStore = useAuthStore();
     const formData  = reactive({
-        name: '',
+        username: '',
         email : '',
+        num_tel : '',
         type_utilisateur : null ,
         password : '',
         password_confirmation : '',
@@ -129,9 +132,8 @@
             if (success) {
                 storageManager.setLogin(true);
                 isLogged.value = storageManager.getLogin();
-            } else {
-                console.log("Not Connect")
             }
+            console.log(success + "Authenticated") 
         } catch (errors) {
             // Handle any errors
             console.error('Login error:', errors);
