@@ -27,6 +27,13 @@ class UserDAOImpl implements UserDAO {
     }
 
 
+   /**
+ * Searches for users by username using case-insensitive partial matching
+ */
+    public function getUserBysearchUsername(string $username) {
+        return User::where('username', 'LIKE', '%' . $username . '%')->get();
+    }
+
     /**
      * @inheritDoc
      */

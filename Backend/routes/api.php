@@ -26,6 +26,8 @@ Route::post('/user/profile-picture', [UserController::class, 'updateProfilePictu
 // routes/api.php
 Route::get('/utilisateur/{user}/activites', [UserController::class, 'index']);
 
+Route::get('/user/search', [UserController::class, 'getUserBySearchUser']);
+
 Route::post("/user",[UserController::class, 'addUser']);
 
 Route::put('/user/{userId}', [UserController::class, 'modifyUser']);

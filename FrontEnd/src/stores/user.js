@@ -7,6 +7,7 @@ export const useUserStore = defineStore('userStore', {
     state: () => {
         return {
             user : null,
+            users : [],
             errors: {},
             validationErrors : {}
            
@@ -158,18 +159,38 @@ export const useUserStore = defineStore('userStore', {
             this.errors = {};
             console.log(data)
             return data;
+
             
+        }
+    },
+
+   async searchUsers(username) {
+    const token = localStorage.getItem("token");
+    if (!token) return [];
+    
+    try {
+        const res = await fetch(`/api/user/search?username=${encodeURIComponent(username)}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         
-            
+        const response = await res.json();
+        
+        if (!res.ok || response.error) {
+            this.errors = response.error || 'Search failed';
+            return [];
         }
+        
+        this.errors = {};
+        return response.data; 
+                   
+    } catch (error) {
+        console.error("Search error:", error);
+        return [];
+    }
 
-
-
-
-
-            
-
-        }
+}
 
         
         

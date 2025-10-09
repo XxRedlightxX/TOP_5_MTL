@@ -31,6 +31,7 @@ class FollowController extends Controller
             return match ($result) {
             'followed' => response()->json(['message' => 'Vous avez follow', 'followed_username' =>  $user = User::findOrFail($request->follower_id)], 200),
             'user_not_found' => response()->json(['message' => 'Déjà liké'], 409),
+            'user_unfollow' => response()->json(['message' => 'Unfollowed successfully.']),
             'same_user' => response()->json(['message' => 'Utilisateur non trouvé'], 404)};
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

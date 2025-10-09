@@ -38,10 +38,9 @@ class UserService {
         $this->daoUser->delete($userId);
     }
 
-    public function getUserById(string $userEmail){
-       return  $this->daoUser->findById($userEmail);
+     public function getUserByUsername(string $username){
+       return  $this->daoUser->getUserBysearchUsername($username);
     }
-
     public function getUserEmailandPassword(string $userEmail, $userPassword) {
        $user = $this->daoUser->checkEmailAndPasswordExist($userEmail, $userPassword);
         

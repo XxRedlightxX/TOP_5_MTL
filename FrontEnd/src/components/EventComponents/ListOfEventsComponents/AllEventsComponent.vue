@@ -11,6 +11,7 @@
         :key="item.id"
       >
         <div class="event_card_photo">
+          <span class="overlay"> <img src="" alt=""></span>
           <!-- Main image -->
           <img :src="getAvatarUrl(item.image)" class="product-thumb" alt="Event Image">
         </div>

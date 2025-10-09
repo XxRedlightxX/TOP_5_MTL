@@ -35,6 +35,19 @@ class UserController extends Controller
         }
     }
 
+     public function getUserBySearchUser(Request $request)
+    {
+        $validated = $request->validate([
+            'username' => 'required'
+        ]);
+
+        $user = $this->userService->getUserByUsername($validated['username']);
+
+        return response()->json(['data' => $user], 200);
+    }
+
+    
+
     public function getUserByEmail(Request $request)
     {
         $validated = $request->validate([
@@ -101,6 +114,8 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+
 
 
 
