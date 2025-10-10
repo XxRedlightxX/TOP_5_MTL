@@ -1,24 +1,27 @@
 <template>
     <div id="eventView">
+        
         <div class="viewContent" v-if="activity">
            <PageDetail :activityTitle="activity.titre"
-            :activityDesc="activity.description"  />
+            :activityDesc="activity.description" :activity-image="activity.image_data"  />
             
             <div class="suite">
                 <div class="sub">
                     <PageDescription :host-name="activity.creator.name"
-                     :place="activity.lieu" :-rating=activity.nombre_likes />
-                    <CommentSelf :activity-id="activity.id"/>
+                    :place="activity.lieu" :-rating=activity.nombre_likes 
+                    :start-date="activity.date_debut"
+                    :end-date="activity.date_fin"/>
+                    <CommentSelf :activity-id="activity.id"
+                    @comment-added="handleCommentAdded"/>
                 </div>
                 <PageCommentaire :comments="activity?.avis"  />
                 
-               
+        
             </div>
         </div>
-        <div v-for="comment in activity?.avis" :key="comment.id">
-  <strong>{{ comment.user.name }}</strong> — {{ comment.contenu }} ({{ comment.etoiles }}★)
-</div>
-        <PageMap></PageMap>
+     
+        <PageMap :lat="activity?.latitude" :lng="activity?.longitude"></PageMap>
+       
     </div> 
 </template>
 
@@ -31,22 +34,31 @@
     import CommentSelf from "../../components/EventComponents/SingleEventComponents/EventCommentSelfComponent.vue"
     import { useActivityStore } from '@/stores/activity';
     import { useRoute } from 'vue-router';
+    import MapComponent from '@/components/MapComponent.vue';
 
 
     const activity = ref(null);
-     const route = useRoute();
+    const route = useRoute();
+    const { getActivityById } = useActivityStore();
      
-   
+    onMounted(async () => {
+        await fetchActivity();
+    });
 
-    const {getActivityById} = useActivityStore();
+    const fetchActivity = async () => {
+        activity.value = await getActivityById(route.params.id);
+        console.log(activity.value)
+    };
 
-     onMounted (async ()  =>
-        activity.value = await getActivityById(route.params.id)
-    );
-
+    const handleCommentAdded = async (result) => {
+        if (result) {
+            await fetchActivity();
+        }
+    };
    
     
 
 </script>
 
 <style src="../../styles/EventsStyles/SingleEventsStyles/EventView.scss"></style>
+

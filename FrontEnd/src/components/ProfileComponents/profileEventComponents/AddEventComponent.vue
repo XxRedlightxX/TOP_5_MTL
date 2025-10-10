@@ -1,5 +1,5 @@
 <template>
-    <div id="myModal" class="modal" style="display:none" @click.self="pop">
+    <div id="myModal" class="modal" style="" @click.self="pop">
         <div class="modal-content" @click.self="pop">
             <div class="event-create-form">
                 <span class="close" @click="pop">&times;</span>
@@ -38,38 +38,50 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="event-statut">Statut Journee</label>
-                            <input type="text" v-model="formDataEvent.statut_journee" id="event-statut" placeholder="Enter status" required>
+                       <div class="form-group">
+                            <label for="event-type">Daytime</label>
+                            <select id="event-type" v-model="formDataEvent.statut_journee" required>
+                                <option value="JOUR">Day</option>
+                                <option value="NUIT">Night</option>
+                            </select>
                         </div>
+
+
+                         <div class="form-group">
+                            <label for="event-type">Season</label>
+                            <select id="event-type" v-model="formDataEvent.saison_name" required>
+                                <option value="été">Summer</option>
+                                <option value="hiver">Winter</option>
+                                <option value="printemps">Spring</option>
+                                <option value="automne">Automn</option>
+                              
+                            </select>
+                        </div>
+
+                        
 
                         <div class="form-group">
                             <label for="event-type">Type</label>
-                            <select id="event-type" v-model="formDataEvent.type_id" required>
-                                <option value="">Select Type</option>
-                                <option value="1">Type 1</option>
-                                <option value="2">Type 2</option>
-                                <!-- Add more options as needed -->
+                            <select id="event-type" v-model="formDataEvent.type_name" required>
+                                <option  v-for="category in listCategories" key="category.id" :value="category.nom"> {{ category.nom }}</option>
                             </select>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="event-saison">Saison ID</label>
-                        <input type="number" v-model="formDataEvent.saison_id" id="event-saison" placeholder="Enter saison ID" required>
-                    </div>
-
                     <div class="form-group">
                         <label for="event-picture">Upload Picture</label>
                         <input type="file" @change="handleFileUpload" id="event-picture" accept="image/*">
                     </div>
-
+                    <MapComponent @event-coords="handleEventCoords"></MapComponent>
+                    
                     <div class="form-actions">
                         <button type="submit">{{ actualLang ? 'Create Event' : 'Créer Événement' }}</button>
                         <waterButton :text="actualLang ? 'Cancel' : 'Annuler'" :type="false" class="btnn" @click="pop"/>
                     </div>
                 </form>
+                
             </div>
+            
+              
         </div>
     </div>
 </template>
@@ -80,8 +92,10 @@
     import { useActivityStore } from "@/stores/activity";
     import { formatDateApi } from "@/JS/GlobalFunctions";
     import { useAuthStore } from "@/stores/auth";
+    import MapComponent from "@/components/MapComponent.vue";
 
     const {addEvent} = useActivityStore();
+    const activitiesStore = useActivityStore();
 
     const authStore = useAuthStore();
 
@@ -91,6 +105,8 @@
     const selectedFile = ref(null)
     const errorMessage = ref(null);
     const  validationErrors  = ref(null);
+    const listCategories = ref([])
+  
 
     const formDataEvent= reactive({
             titre: "",
@@ -100,8 +116,10 @@
             statut_journee : "",
             lieu : "",
             image_data : "",
-            saison_id: null,
-            type_id : 1,
+            saison_name: "",
+            type_name : "",
+            longitude : "",
+            latitude : ""
     });
 
 
@@ -135,8 +153,11 @@ const testInput = async(event) => {
     formData.append('description', formDataEvent.description);
     formData.append('statut_journee', formDataEvent.statut_journee);
     formData.append('lieu', formDataEvent.lieu);
-    formData.append('saison_id', String(formDataEvent.saison_id));
-    formData.append('type_id', String(formDataEvent.type_id));
+    formData.append('saison_name', String(formDataEvent.saison_name));
+    formData.append('type_name', String(formDataEvent.type_name));
+    formData.append('latitude', String(formDataEvent.latitude));
+    formData.append('longitude', String(formDataEvent.longitude));
+    
 
     if (selectedFile.value) {
         formData.append('image_data', selectedFile.value);
@@ -146,33 +167,31 @@ const testInput = async(event) => {
         console.log(key, value);
     }
 
-    try {
-        const eventUrl = await addEvent(formData);
-        if (eventUrl) {
-            console.log(eventUrl);
+        try {
+            const eventUrl = await addEvent(formData);
+            if (eventUrl) {
+                console.log(eventUrl);
 
-             await authStore.getUser();
-            pop();
-            
+                await authStore.getUser();
+                pop();
+                
+            }
+        } catch (error) {
+            errorMessage.value = error.message;
+            console.error("Upload failed:", error);
         }
-    } catch (error) {
-        errorMessage.value = error.message;
-        console.error("Upload failed:", error);
-    }
-};
+    };
 
-
-
-
-
-
-
-
-
-
-   
+   const handleEventCoords = (coords) => {
+        console.log("Received coordinates:", coords);
+        console.log("Latitude:", coords.lat);
+        console.log("Longitude:", coords.lng);
+        formDataEvent.latitude = coords.lat;
+        formDataEvent.longitude = coords.lng;
+    };
 
     
+
 
     const props = defineProps({
         user: Object
@@ -206,12 +225,19 @@ const testInput = async(event) => {
     isLogged.value = JSON.parse(event.detail.storage);
     };
 
+     onMounted(async () => {
+        listCategories.value =await activitiesStore.getCategories();
+        console.log(listCategories)
+     
+     });
+
 
 
     // Add event listener for mode changes
     onMounted(() => {
     window.addEventListener('lang-changed', handleLangChange);
     window.addEventListener('login-changed', handleLoginChange);
+
     });
 
     // Remove event listener when component is unmounted
@@ -237,8 +263,11 @@ const testInput = async(event) => {
         top: 0%;
         width: 100%; 
         height: 100%; 
-        overflow: hidden; 
+        //overflow: hidden; 
         z-index: 500; 
+
+        
+        
 
         .modal-content {
             background-color: transparent;
@@ -264,16 +293,35 @@ const testInput = async(event) => {
                     }
                 }
                 form {
+
+                    .glass {
+                        color : black
+                    }
+                        
+                    
                     .form-group {
                         display: flex;
                         flex-direction: column;
-                
+
+                       
+                        
                         label {
                         text-align: left;
                         }
                 
                         input {
                             transition: all 0.3s;
+                            color: black;
+                            border-color: black;
+                        }
+                            
+                        select {
+                          
+                            background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Custom arrow SVG */
+                            background-repeat: no-repeat;
+                            background-position: right 10px center;
+                            padding-right: 30px;
+                            color : black;
                         }
 
                         &_images {

@@ -26,6 +26,8 @@ Route::post('/user/profile-picture', [UserController::class, 'updateProfilePictu
 // routes/api.php
 Route::get('/utilisateur/{user}/activites', [UserController::class, 'index']);
 
+Route::get('/user/search', [UserController::class, 'getUserBySearchUser']);
+
 Route::post("/user",[UserController::class, 'addUser']);
 
 Route::put('/user/{userId}', [UserController::class, 'modifyUser']);
@@ -92,7 +94,7 @@ Route::get('/followings', [FollowController::class, 'getfollowings']);
 
 Route::post('/favorite', [FavoriteController::class, 'addActivityToFavorite']);
 
-Route::get('/favorite/{user}', [FavoriteController::class, 'getAllFavoriteActivites']);
+Route::get('/favorite', [FavoriteController::class, 'getAllFavoriteActivites']);
 
 Route::delete('/favorite/{activityId}', [FavoriteController::class, 'deleteFavoriteActivity']);
 

@@ -4,14 +4,15 @@
     
     <h1> {{actualLang ? 'Comments' : "Commentaires"}}</h1>
 
-    <div class="comments-list">
-      <div class="comments" v-for="comment2 in  props.comments" :key=" comment2.id">
+    <div class="comments-list" v-if="props.comments && props.comments.length">
+      <div class="comments"  v-for="comment2 in  props.comments"
+       :key=" comment2.id">
         <div class="glas">
           <div class="section">
             <img :src="getAvatarUrl(comment2.user?.image_data)" :alt="`Image of ${comment2.name}`">
             <div class="comment">
               <p>{{ comment2.user?.name  }}</p>
-              <p>{{ formatDate(comment2.date) }}</p>
+              <p>{{ formatDateComment(comment2.date) }}{{   comment2.user?.date}}</p>
             </div>
           </div>
           <div class="commen" >
@@ -19,8 +20,12 @@
             <Ratings :rating="comment2.etoiles" :Rate="false"/>
           </div>
         </div>
+        
       </div>
+      
+     
     </div>
+     <div v-else> No</div>
 
    
 
@@ -33,6 +38,7 @@ import storageManager from "@/JS/LocalStaorageManager"
 import { ref, onMounted , onBeforeUnmount, computed  } from 'vue';
 import { getAvatarUrl } from "@/JS/GlobalFunctions";
 import { useUserStore } from '@/stores/user';
+import { formatDateComment } from "@/JS/GlobalFunctions";
 
 
 const props = defineProps({

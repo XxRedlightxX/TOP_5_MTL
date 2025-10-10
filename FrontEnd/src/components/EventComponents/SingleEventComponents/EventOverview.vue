@@ -11,7 +11,7 @@
                 <Ratings :rating=Rating :Rate="false"/>
             </div>
             <h3><strong>{{ actualLang ? 'Location : ': 'Emplacement : ' }}</strong> {{ place }}</h3>
-            <h3><strong>{{ actualLang ? 'Open from : ': 'Ouvert de : ' }}</strong> 9h - 19h, {{ actualLang ? 'everydays': 'tous les jours' }}</h3>
+            <h3><strong>{{ actualLang ? 'Open from : ': 'Ouvert de : ' }}</strong> {{ formatDateEventStartandEnd(startDate,endDate) }}</h3>
         </div>
     </div>
 
@@ -21,6 +21,7 @@
     import { ref, onMounted, onUnmounted } from 'vue';
     import LocalStorageManager from "@/JS/LocalStaorageManager";
     import Ratings from "../../RatingComponent.vue"
+    import { formatDateEventStartandEnd } from '@/JS/GlobalFunctions';
 
     const event = ref(LocalStorageManager.getEvent())
 
@@ -39,6 +40,8 @@
         hostName: String,
         place : String,
         Rating: Number,
+        startDate: String,
+        endDate: String,
 
     });
 

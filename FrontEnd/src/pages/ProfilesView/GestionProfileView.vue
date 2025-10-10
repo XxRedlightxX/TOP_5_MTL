@@ -13,7 +13,7 @@
                         clearable
                         persistent-clear 
                         hide-details="auto"
-                        
+                        v-model="formDataUser.name"
                     />
 
 
@@ -37,7 +37,7 @@
                     clearable
                     persistent-clear 
                     hide-details="auto"
-                    v-model="formDataUser.name"
+                    v-model="formDataUser.username"
                 ></v-text-field>
 
                 <div class="sub">
@@ -62,10 +62,11 @@
                         clearable
                         persistent-clear 
                         hide-details="auto"
+                        v-model="formDataUser.num_tel"
                     ></v-text-field>
                 </div>
 
-                <v-textarea :label="actualLang ? 'Type your Message' : 'Entrez votre message'" >{{ theUser.desc }}</v-textarea>
+                <v-textarea :label="actualLang ? 'Type your Message' : 'Entrez votre message'"  v-model="formDataUser.description">{{ theUser.desc }}</v-textarea>
             </div>
 
             <div class="rightForm">
@@ -118,6 +119,9 @@
 
     const formDataUser = reactive({
         name : authStore.user.name,
+        username : authStore.user.username,
+        description : authStore.user.description,
+        num_tel : authStore.user.num_tel,
         email : authStore.user.email,
         type_utilisateur : authStore.user.type_utilisateur
     })

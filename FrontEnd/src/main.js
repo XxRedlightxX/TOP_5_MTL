@@ -7,11 +7,11 @@ Bootstraps Vuetify and other plugins then mounts the App`*/
 import { registerPlugins } from "@/plugins";
 
 // Components
-import App from "./App.vue";
-import routeur from "./router";
-import { createPinia } from "pinia";
-import "vuetify/styles"; // Add this line
-
+import App from './App.vue'
+import routeur from "./router"
+import { createPinia } from 'pinia'
+import 'vuetify/styles' // Add this line
+//import 'leaflet/dist/leaflet.css'
 // Composables
 import { createApp, markRaw } from "vue";
 

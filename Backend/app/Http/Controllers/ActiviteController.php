@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ActivityResource;
 use App\Models\Activite;
 use App\Models\Avis;
+use App\Models\Saison;
+use App\Models\Type;
 use App\Models\User;
 use App\Service\ActiviteService;
 
@@ -44,24 +46,33 @@ class ActiviteController extends Controller
             'description' => 'required|string',
             'date_debut' => 'required|date',
             'date_fin' => 'required|date',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
             'lieu' => 'required|string|max:255',
             'statut_journee' => 'required|in:JOUR,NUIT', 
-            'saison_id' => 'required|exists:saison,id',
-            'type_id' => 'required|exists:type,id',
+            'saison_name' => 'required|string|exists:saison,statut', // Change to name
+            'type_name' => 'required|string|exists:type,nom', 
             'image_data' => 'nullable|image|mimes:jpeg,png,jpg,gif'
         ]);
 
         
-         $user = $request->user();
+        $user = $request->user();
 
          
         if ($request->hasFile('image_data')) {
             $path = $request->file('image_data')->store('events', 'public');
         }
 
-        $this->authorize('create',$user );
-        $activity = $this->userService->createActivite($validated['titre'],$user->id, $validated);
+        $saison = $this->userService->getActivityFromSeason($validated['saison_name']);
+        $type =  $this->userService->getActivityFromCategory($validated['type_name']);
 
+        
+        $validated['saison_id'] = $saison->id;
+        $validated['type_id'] = $type->id;
+
+        $this->authorize('create',$user );
+
+        $activity = $this->userService->createActivite($validated['titre'],$user->id, $validated);
         $activity->image_data=$path;
         $activity->update();
 
@@ -73,7 +84,7 @@ class ActiviteController extends Controller
         try {
         
             $activite = Activite::findOrFail($activiteId);
-            $this->authorize('update', $activite);
+            //$this->authorize('update', $activite);
         
         
         

@@ -13,7 +13,7 @@
       <div class="body">
         <ProfileSingleEvent v-for="(item, index) in props.user.listEvent" :key="index" :event="item"  :himself="props.himself" @popUpdate="showUp2(item.id)" @popDelete="showDel2(item.id)"/>
       </div>
-      <AddEvent @pop="showAdd2()" v-show="isShowAdd2"/>
+      <AddEvent ref="addEventRef" @pop="showAdd2()" v-show="isShowAdd2"/>
       <UpdateEvent :eventId="selectedEventId" @popUpdate="showUp2()" v-show="isShowUp2"/>
       <DeleteEvent :eventId="selectedEventId"  @popDelete="showDel2()" v-show="isShowDel2"/>
     </div>
@@ -21,17 +21,17 @@
   
 <script setup>
   import storageManager from "@/JS/LocalStaorageManager";
-  import { ref, onMounted, onUnmounted, defineProps } from "vue";
+  import { ref, onMounted, onUnmounted, defineProps, nextTick } from "vue";
   import ProfileSingleEvent from "./ProfileSingleEventComponent.vue";
   import AddEvent from "./profileEventComponents/AddEventComponent.vue"
   import UpdateEvent from "./profileEventComponents/UpdateEventComponent.vue"
   import DeleteEvent from "./profileEventComponents/DeleteEventComponent.vue"
-
+ 
   const props = defineProps({
         himself: Boolean, // Boolean type prop
         user: Object
   });
-
+  const addEventRef = ref(null);
   let selectedEventId = ref(null);
 
   
@@ -80,9 +80,16 @@
   let isShowUp2 = ref(false);
   let isShowDel2 = ref(false);
 
-  const showAdd2 = () => {
+  const showAdd2 = async () => {
 
     isShowAdd2.value = !isShowAdd2.value;
+     if (isShowAdd2.value) {
+        await nextTick();
+    setTimeout(() => {
+      addEventRef.value?.refreshMap?.();
+    }, 300);
+    console.log(addEventRef.value+"k")
+  }
   }
   const showUp2 = (id) => {
     selectedEventId = id

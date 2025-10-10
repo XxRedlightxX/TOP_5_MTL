@@ -12,6 +12,9 @@ interface UserDAO extends InterfaceDAO {
     public function checkEmailAndPasswordExist(string $email, $password);
     public function update(int $userid, array $data): ?User;
     public function getByEmail(string $email);
+    public function getByUsername(string $username);
+
+    public function getUserBysearchUsername(string $username);
     public function addActivity(int $userId, array $activityData);
 
     public function isFollowing(User $follower, User $followed): bool;

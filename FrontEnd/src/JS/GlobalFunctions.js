@@ -25,6 +25,55 @@ export const formatDateApi = (dateInput, timeInput) => {
 
 }
 
+export const formatDateComment = (dateString, actualLang) => {
+  const safeString = dateString.replace(" ", "T");
+  const date = new Date(safeString);
+  const now = new Date();
+
+  const diffMs = now - date;
+  const diffSec = Math.round(diffMs / 1000);
+  const diffMin = Math.round(diffSec / 60);
+  const diffHours = Math.round(diffMin / 60);
+  const diffDays = Math.round(diffHours / 24);
+
+  if (diffDays >= 1) {
+    return actualLang 
+      ? `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+      : `il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`;
+  } else if (diffHours >= 1) {
+    return actualLang
+      ? `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
+      : `il y a ${diffHours} heure${diffHours > 1 ? 's' : ''}`;
+  } else if (diffMin >= 1) {
+    return actualLang
+      ? `${diffMin} minute${diffMin > 1 ? 's' : ''} ago`
+      : `il y a ${diffMin} minute${diffMin > 1 ? 's' : ''}`;
+  } else {
+    return actualLang ? 'just now' : 'à l’instant';
+  }
+
+}
+
+export const formatDateEventStartandEnd = (aStartDateEvent, aEndDate) => {
+  const start = new Date(aStartDateEvent);
+  const end = new Date(aEndDate);
+
+  const optionsDay = { month: "long", day: "numeric" };
+  const optionsTime = { hour: "2-digit", minute: "2-digit", hour12: false };
+
+  const startDay = new Intl.DateTimeFormat("en-US", optionsDay).format(start);
+  const startTime = new Intl.DateTimeFormat("en-US", optionsTime).format(start);
+  const endDay = new Intl.DateTimeFormat("en-US", optionsDay).format(end);
+  const endTime = new Intl.DateTimeFormat("en-US", optionsTime).format(end);
+
+  
+  if (start.toDateString() === end.toDateString()) {
+    return `${startDay} · ${startTime} - ${endTime}`;
+  } else {
+    return `${startDay} · ${startTime} - ${endDay} · ${endTime}`;
+  }
+}
+
 export const getAvatarUrl =(imagePath) => {
   const img= "/images/default-avatar.png";
     if (!imagePath) return img;

@@ -1,22 +1,22 @@
 <template>
      <div class="paginationComponent">
        <ul class="pagination">
-         <li @click="prevPage" :class="['pageText', currentPage > 0 ? 'glowPJ' : '']">
-           {{ actualLang ? "Prev" : "Precedent"}}
+          <li @click="emitPageChange(currentPage - 1)" :class="['pageText', currentPage > 0 ? 'glowPJ' : '']">
+        {{ actualLang ? "Prev" : "Précédent" }}
+      </li>
+ 
+        <li 
+        v-for="pageNumber in visiblePages" 
+        :key="pageNumber" 
+        @click="emitPageChange(pageNumber - 1)" 
+        :class="{ active: currentPage === pageNumber - 1 }"
+      >
+           {{ pageNumber }}
          </li>
  
-         <li 
-           v-for="(page, index) in pages" 
-           :key="index" 
-           @click="changePage(index)" 
-           :class="{ active: currentPage === index }"
-         >
-           {{ page }}
-         </li>
- 
-         <li @click="nextPage" :class="['pageText', currentPage < pages.length -1 ? 'glowPJ' : '']">
-           {{ actualLang ? "Next" : "Suivant"}}
-         </li>
+           <li @click="emitPageChange(currentPage + 1)" :class="['pageText', currentPage < totalPages - 1 ? 'glowPJ' : '']">
+        {{ actualLang ? "Next" : "Suivant" }}
+      </li>
        </ul>
      </div>
  </template>
@@ -24,6 +24,27 @@
  <script setup >
  import { onMounted, ref, onUnmounted } from 'vue'; 
  import LocalStorageManager from "@/JS/LocalStaorageManager"
+
+ const props = defineProps({
+  currentPage: {
+    type: Number,
+    required: true
+  },
+  totalPages: {
+    type: Number,
+    required: true
+  },
+  visiblePages: {
+    type: Array,
+    required: true
+  }
+});
+
+const emit = defineEmits(['page-change']);
+
+const emitPageChange = (pageIndex) => {
+  emit('page-change', pageIndex);
+};
 
     const pages = [1, 2, 3, 4, 5];
     const currentPage = ref(0);

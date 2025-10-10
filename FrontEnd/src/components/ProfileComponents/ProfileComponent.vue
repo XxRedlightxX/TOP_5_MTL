@@ -4,9 +4,10 @@
         <div class="top">
             
             <ProfileHead :himself="props.himself" :user="organisator"></ProfileHead>
-            <ProfileOther v-show="props.himself" :user="theOrganisator"></ProfileOther>
+            <ProfileOther v-show="props.himself" :user="organisator"></ProfileOther>
+            
         </div>
-        <ProfileList :himself="props.himself" :user="theOrganisator"></ProfileList>
+        <ProfileList :himself="props.himself" :user="organisator"></ProfileList>
     </div>
   </template>
   
@@ -16,12 +17,13 @@
     import ProfileHead from "./ProfileHeaderComponent.vue";
     import ProfileOther from "./ProfileOtherComponent.vue"
     import ProfileList from "./ProfileListEventComponent.vue"
+    import ProfileUserStatut from "./ProfileUserStatutComponent.vue";
     import { useAuthStore } from "@/stores/auth";
     import { useActivityStore } from "@/stores/activity";
     import { storeToRefs } from "pinia";
     
 
-    let listEvent = ref([]);
+    const listEvent = ref([]);
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
     let actualMode = ref(storageManager.getMode());
@@ -40,15 +42,15 @@
     const organisator = ref({
         avatar: "",
         username: "",
-        name: "Wakanda",
-        fisrtName: "Dede", 
+        name: "",
+        fisrtName: "", 
         email: "",
-        num: 1122222222,
-        desc: "No description yet",
+        num: null,
+        description: "No description yetee",
         listEvent: []
     });
  
-
+    
  
    watch(() => authStore.user, (newUser) => {
     if (newUser) {
@@ -67,12 +69,12 @@
             avatar: newUser?.image_data
                 ? `${import.meta.env.VITE_API_BASE_URL}${newUser.image_data}`
                 : "/src/assets/p1.jpg",
-            username: newUser?.name || "Utilisateur inconnu",
-            name: "Wakanda",
+            username: newUser?.username || "Utilisateur inconnu",
+            name: newUser?.name,
             fisrtName: "Dede",
             email: newUser?.email || "email inconnu",
-            num: 1122222222,
-            desc: "No description yet",
+            num: newUser?.num_tel || 5143239697  ,
+            description:  newUser?.description ||  "No description yet",
             listEvent: events
         };
     }

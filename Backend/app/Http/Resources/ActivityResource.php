@@ -17,8 +17,12 @@ class ActivityResource extends JsonResource
        return [
             'id'         => $this->id,
             'titre'      => $this->titre,
+            'image_data'      => $this->image_data,
             'description'=> $this->description,
-            'date'       => $this->date,
+            'date_debut'  => $this->date_debut,
+            'date_fin'  => $this->date_fin,
+            'latitude'  => $this->latitude,
+            'longitude'  => $this->longitude,
             'lieu'       => $this->lieu,
             'nombre_likes' => $this->nombre_likes,
 

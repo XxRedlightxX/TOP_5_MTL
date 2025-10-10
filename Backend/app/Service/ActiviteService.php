@@ -102,5 +102,13 @@ class ActiviteService {
         return $this->activiteDAO->getAllCategories();
     }
 
+    public function getActivityFromSeason(string $aSeason) {
+        return $this->activiteDAO->getActivityFromSeason($aSeason);
+    }
+
+    public function getActivityFromCategory(string $aTypeCategory) {
+        return $this->activiteDAO->getActivityFromCategoryType($aTypeCategory);
+    }
+
 
 }

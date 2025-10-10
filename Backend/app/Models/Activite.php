@@ -10,7 +10,7 @@ class Activite extends Model
 
      protected $fillable = [
         'titre', 'description', 'date_debut', 'date_fin', 'latitude', 'longitude', 'lieu',
-        'nombre_likes', 'statut_journee', 'image_data',
+        'nombre_likes', 'statut_journee', 'image_data', 
         'utilisateur_id', 'saison_id', 'type_id'
     ];
 

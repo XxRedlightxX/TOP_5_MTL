@@ -48,16 +48,22 @@ export const useAuthStore = defineStore('authStore', {
         });
 
         const data = await res.json();
-        if (data.error) {
-            this.error = data.error;
-            console.log(this.error);
-            return false
+        if (data.errors) {
+            // Validation errors (like missing email, bad format, etc.)
+            this.errors = data.errors;
+            console.log(this.errors);
+            return false;
+        } else if (data.error) {
+            // Authentication error (invalid credentials)
+            this.errors = { general: [data.error] };
+             console.log(this.errors);
+            return false;
         } else {
+            // Success
             this.errors = {};
             localStorage.setItem("token", data.token);
             this.user = data.user;
             return true;
-            
         }
 
     },

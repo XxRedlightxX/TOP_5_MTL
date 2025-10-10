@@ -8,6 +8,7 @@
             <Contact/>
         </div> -->
     </div>
+  
 </template>
 
 <script setup>
@@ -16,6 +17,7 @@
     import IntroText from "../../components/HomeComponents/IntroTextComponent.vue"
     import NewEvent from "../../components/HomeComponents/NewEventComponent.vue"
     import Contact from "../../components/HomeComponents/ContactComponent.vue"
+    import MapComponent from "@/components/MapComponent.vue"
     import { ref, onMounted, onUnmounted, watch} from "vue";
     import { useActivityStore } from '@/stores/activity';
 
@@ -33,9 +35,6 @@
             lieu: null, date:null 
         },
     ]
-
-    
-
 
 
      onMounted(async () => {
