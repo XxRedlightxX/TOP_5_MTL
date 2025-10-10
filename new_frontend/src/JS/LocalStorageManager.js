@@ -28,10 +28,10 @@ const LocalStorageManager = {
    * @param {boolean} value true = dark, false = light
    */
   setMode(value) {
-    localStorage.setItem("mode", JSON.stringify(value));
+    localStorage.setItem('mode', JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent("mode-changed", {
-        detail: { storage: localStorage.getItem("mode") },
+      new CustomEvent('mode-changed', {
+        detail: { storage: localStorage.getItem('mode') },
       })
     );
   },
@@ -41,7 +41,7 @@ const LocalStorageManager = {
    * @returns {boolean|null} mode actuel ou null si non défini
    */
   getMode() {
-    const mode = localStorage.getItem("mode");
+    const mode = localStorage.getItem('mode');
     return mode ? JSON.parse(mode) : null;
   },
 
@@ -50,10 +50,10 @@ const LocalStorageManager = {
    * @param {boolean} value ex: true = "fr", false = "en"
    */
   setLanguage(value) {
-    localStorage.setItem("lang", JSON.stringify(value));
+    localStorage.setItem('lang', JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent("lang-changed", {
-        detail: { storage: localStorage.getItem("lang") },
+      new CustomEvent('lang-changed', {
+        detail: { storage: localStorage.getItem('lang') },
       })
     );
   },
@@ -63,7 +63,7 @@ const LocalStorageManager = {
    * @returns {boolean|null} langue actuelle ou null si non défini.  ex: true = "fr", false = "en"
    */
   getLanguage() {
-    const lang = localStorage.getItem("lang");
+    const lang = localStorage.getItem('lang');
     return lang ? JSON.parse(lang) : null;
   },
 
@@ -72,10 +72,10 @@ const LocalStorageManager = {
    * @param {object} value objet événement
    */
   setEvent(value) {
-    localStorage.setItem("event", JSON.stringify(value));
+    localStorage.setItem('event', JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent("event-changed", {
-        detail: { storage: localStorage.getItem("event") },
+      new CustomEvent('event-changed', {
+        detail: { storage: localStorage.getItem('event') },
       })
     );
   },
@@ -85,7 +85,7 @@ const LocalStorageManager = {
    * @returns {object|null} objet event ou null si non défini
    */
   getEvent() {
-    const event = localStorage.getItem("event");
+    const event = localStorage.getItem('event');
     return event ? JSON.parse(event) : null;
   },
 
@@ -94,10 +94,10 @@ const LocalStorageManager = {
    * @param {boolean} value true = connecté, false = déconnecté
    */
   setLogin(value) {
-    localStorage.setItem("login", JSON.stringify(value));
+    localStorage.setItem('login', JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent("login-changed", {
-        detail: { storage: localStorage.getItem("login") },
+      new CustomEvent('login-changed', {
+        detail: { storage: localStorage.getItem('login') },
       })
     );
   },
@@ -107,7 +107,7 @@ const LocalStorageManager = {
    * @returns {boolean|null} true/false ou null si non défini
    */
   getLogin() {
-    const login = localStorage.getItem("login");
+    const login = localStorage.getItem('login');
     return login ? JSON.parse(login) : null;
   },
 
@@ -116,10 +116,10 @@ const LocalStorageManager = {
    * @param {object} value objet user
    */
   setLogUser(value) {
-    localStorage.setItem("logUserr", JSON.stringify(value));
+    localStorage.setItem('logUserr', JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent("logUserr-changed", {
-        detail: { storage: localStorage.getItem("logUserr") },
+      new CustomEvent('logUserr-changed', {
+        detail: { storage: localStorage.getItem('logUserr') },
       })
     );
   },
@@ -129,7 +129,7 @@ const LocalStorageManager = {
    * @returns {object|null} objet user ou null si non défini
    */
   getLogUser() {
-    const logUser = localStorage.getItem("logUserr");
+    const logUser = localStorage.getItem('logUserr');
     return logUser ? JSON.parse(logUser) : null;
   },
 
@@ -138,10 +138,10 @@ const LocalStorageManager = {
    * @param {object} value objet organisateur
    */
   setOrganisator(value) {
-    localStorage.setItem("organisator", JSON.stringify(value));
+    localStorage.setItem('organisator', JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent("organisator-changed", {
-        detail: { storage: localStorage.getItem("organisator") },
+      new CustomEvent('organisator-changed', {
+        detail: { storage: localStorage.getItem('organisator') },
       })
     );
   },
@@ -151,9 +151,33 @@ const LocalStorageManager = {
    * @returns {object|null} objet organisateur ou null si non défini
    */
   getOrganisator() {
-    const organisator = localStorage.getItem("organisator");
+    const organisator = localStorage.getItem('organisator');
     return organisator ? JSON.parse(organisator) : null;
   },
+
+
+
+  /**
+   * 
+   */
+  setHightEvents(value) {
+    localStorage.setItem('HightEvent', JSON.stringify(value));
+    window.dispatchEvent(
+      new CustomEvent('HightEvent-changed', {
+        detail: { storage: localStorage.getItem('HightEvent') },
+      })
+    );
+  },
+
+  /**
+   * 
+   */
+  getHightEvents() {
+    const hightEvent = localStorage.getItem('HightEvent');
+    return hightEvent ? JSON.parse(event) : null;
+  },
+
+
 
   /**
    * Change la valeur du mode.
@@ -164,7 +188,7 @@ const LocalStorageManager = {
    */
   changeMode(value) {
     const actualMode =
-      typeof value === "boolean" ? value : !LocalStorageManager.getMode();
+      typeof value === 'boolean' ? value : !LocalStorageManager.getMode();
     LocalStorageManager.setMode(actualMode);
     return actualMode;
   },
@@ -178,7 +202,7 @@ const LocalStorageManager = {
    */
   changeLanguage(value) {
     const actualLang =
-      typeof value === "boolean" ? value : !LocalStorageManager.getLanguage();
+      typeof value === 'boolean' ? value : !LocalStorageManager.getLanguage();
     LocalStorageManager.setLanguage(actualLang);
     return actualLang;
   },

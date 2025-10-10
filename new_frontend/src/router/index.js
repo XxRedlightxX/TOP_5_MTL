@@ -1,7 +1,7 @@
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
 import "vuetify/dist/vuetify.css";
-//import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/auth";
 
 const routes = [
   // Vue : MenusView
@@ -107,5 +107,17 @@ const router = createRouter({
 //   const authStore = useAuthStore();
 //   await authStore.getUser();
 // });
+router.beforeEach(async (to, from) => {
+  const authStore = useAuthStore();
+  await authStore.getUser();
+
+  // if (authStore.user && to.meta.guest) {
+  //   return { name: "home" };
+  // }
+
+  // if (!authStore.user && to.meta.auth) {
+  //   return { name: "login" };
+  // }
+});
 
 export default router;

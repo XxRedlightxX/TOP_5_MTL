@@ -15,15 +15,6 @@
   import Contact from '@/components/HomeComponents/ContactComponent.vue';
   import IntroText from '@/components/HomeComponents/IntroTextComponent.vue';
   import NewEvent from '@/components/HomeComponents/NewEventComponent.vue';
-
-  // onBeforeRouteEnter((to, from, next) => {
-  //   if (!sessionStorage.getItem("reloaded")) {
-  //     sessionStorage.setItem("reloaded", "true");
-  //     window.location.reload();
-  //   } else {
-  //     next();
-  //   }
-  // });
 </script>
 
 <style lang="scss">

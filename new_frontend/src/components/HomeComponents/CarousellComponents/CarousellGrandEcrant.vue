@@ -53,7 +53,7 @@
   const text2b = "Découvrir les Organisateurs";
 
   // Récupération des données fake DB
-  const events = FakeDataBase.getCarousellEvent();
+  const events = FakeDataBase.getCarousellEvent();//LocalStorageManager.getHightEvent(); //
 
   // router
   const router = useRouter();

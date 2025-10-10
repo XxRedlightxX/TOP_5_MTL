@@ -1,12 +1,12 @@
 <template>
     <div id="homeView">
         <Carousel/>
-        <CarousellPhone/>
+        <!-- <CarousellPhone/>
         <div class="homeContent">
             <IntroText/>
-            <NewEvent :list-event="eventsList"/><!---->
+            <NewEvent :list-event="eventsList"/>
             <Contact/>
-        </div>
+        </div> -->
     </div>
 </template>
 
