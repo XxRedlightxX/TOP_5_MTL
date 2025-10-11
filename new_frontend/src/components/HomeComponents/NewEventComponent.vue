@@ -32,15 +32,20 @@
 </template>
 
 <script setup>
+  import { ref, watch } from 'vue';
+
+  import Ratings from '../StaticComponents/RatingComponent.vue'
+  
   import { Autoplay, EffectCards } from 'swiper/modules';
   import { Swiper, SwiperSlide } from 'swiper/vue';
-  import { onMounted, onUnmounted, ref, watch } from 'vue';
-  import Setup from '@/JS/Setup';
-  import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase';
-  import Ratings from '../StaticComponents/RatingComponent.vue'
   import 'swiper/css';
   import 'swiper/css/effect-cards';
   import 'swiper/css/autoplay';
+
+  import Setup from '@/JS/Setup';
+  import SetupEvent from '@/JS/SetupEvents'
+  import LocalStorageManager from '@/JS/LocalStorageManager';
+  import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase';
 
   const modules = [EffectCards, Autoplay];
   const indexSlide = ref(0);
@@ -48,16 +53,16 @@
 
   let actualMode = Setup.modeSetup();
   let actualLang = Setup.languageSetup();
+  let newEvents = SetupEvent.newEventsSetup();
 
+  // to be deleted
   const events = FakeDataBase.getNewEvents();
-
-  let newEvent = ref(null);
-  newEvent.value = actualMode.value ? events.eventJour : events.eventNuit;
-
+  let newEvent = ref([]);
   // Correction du watcher
   watch(actualMode, (newVal, oldVal) => {
     newEvent.value = newVal ? events.eventJour : events.eventNuit;
   });
+  ///
 
   // Fonction pour mettre à jour l'index du slide actif
   const onSlideChange = (swiper) => {
@@ -68,6 +73,8 @@
     LocalStorageManager.setEvent(value);
     console.log("event value : ", value);
   };
+
+  console.log('events : ' + newEvents)
 </script>
 
 <style src="../../styles/ComponentsStyles/HomeStyles/NewEventStyle.scss"></style>

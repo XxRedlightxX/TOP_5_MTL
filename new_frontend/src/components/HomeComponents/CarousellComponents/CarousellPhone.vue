@@ -15,25 +15,30 @@
   </div>
 </template>
 <script setup>
-  import { ref, watch } from 'vue';
+  import { ref, watch, defineProps } from 'vue';
   import Setup from '@/JS/Setup';
   import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase';
   import CarouselSwipper from './CarousellPhoneSwipper.vue';
 
   let actualMode = Setup.modeSetup()
   let actualLang = Setup.languageSetup()
+  const props = defineProps({
+    events: Object,
+  })
 
+  // to be deleted
   const events = FakeDataBase.getNewEvents();
 
   let newEvent = ref(null)
   newEvent.value = actualMode.value ? events.eventJour : events.eventNuit;
-  let i = ref(0)
-  const eventInfo = ref(newEvent.value[i.value])
-
-  // Correction du watcher
+    // Correction du watcher
   watch(actualMode, (newVal, oldVal) => {
     newEvent.value = newVal ? events.eventJour : events.eventNuit;
   })
+
+  ///
+  let i = ref(0)
+  const eventInfo = ref(newEvent.value[i.value])
 
   const changeInfos = () => {
     if (i.value === newEvent.value.length - 1) {

@@ -5,8 +5,7 @@
  * + émission d'événements personnalisés pour la synchronisation réactive.
  *
  * Principe :
- *  - Chaque donnée (mode, langue, login, user, etc.) est stockée dans localStorage
- *    au format JSON.
+ *  - Chaque donnée (mode, langue, login, user, etc.) est stockée dans localStorage au format JSON.
  *  - À chaque modification, un événement personnalisé "xxx-changed" est dispatché.
  *  - Les composants Vue (via Setup.js) écoutent ces événements et se mettent à jour automatiquement.
  *
@@ -21,197 +20,219 @@
  *   - login-changed
  *   - logUserr-changed
  *   - organisator-changed
+ *   - HightEvent-changed
+ *   - NewEvent-changed
+ *   - UpcomingEvent-changed
  */
 const LocalStorageManager = {
-  /**
-   * Définit le mode dark/light
-   * @param {boolean} value true = dark, false = light
-   */
+  /** --------------------------
+   * SECTION : CONFIGURATION GLOBALE
+   * -------------------------- */
+
+  /** Définit le mode dark/light */
   setMode(value) {
-    localStorage.setItem('mode', JSON.stringify(value));
+    localStorage.setItem("mode", JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent('mode-changed', {
-        detail: { storage: localStorage.getItem('mode') },
+      new CustomEvent("mode-changed", {
+        detail: { storage: localStorage.getItem("mode") },
       })
     );
   },
 
-  /**
-   * Récupère le mode dark/light
-   * @returns {boolean|null} mode actuel ou null si non défini
-   */
+  /** Récupère le mode dark/light */
   getMode() {
-    const mode = localStorage.getItem('mode');
+    const mode = localStorage.getItem("mode");
     return mode ? JSON.parse(mode) : null;
   },
 
-  /**
-   * Définit la langue
-   * @param {boolean} value ex: true = "fr", false = "en"
-   */
+  /** Définit la langue */
   setLanguage(value) {
-    localStorage.setItem('lang', JSON.stringify(value));
+    localStorage.setItem("lang", JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent('lang-changed', {
-        detail: { storage: localStorage.getItem('lang') },
+      new CustomEvent("lang-changed", {
+        detail: { storage: localStorage.getItem("lang") },
       })
     );
   },
 
-  /**
-   * Récupère la langue
-   * @returns {boolean|null} langue actuelle ou null si non défini.  ex: true = "fr", false = "en"
-   */
+  /** Récupère la langue */
   getLanguage() {
-    const lang = localStorage.getItem('lang');
+    const lang = localStorage.getItem("lang");
     return lang ? JSON.parse(lang) : null;
   },
+
+  /** --------------------------
+   * SECTION : ÉVÉNEMENTS
+   * -------------------------- */
 
   /**
    * Définit l'événement affiché dans la page "single event"
    * @param {object} value objet événement
    */
   setEvent(value) {
-    localStorage.setItem('event', JSON.stringify(value));
+    localStorage.setItem("event", JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent('event-changed', {
-        detail: { storage: localStorage.getItem('event') },
+      new CustomEvent("event-changed", {
+        detail: { storage: localStorage.getItem("event") },
       })
     );
   },
 
-  /**
-   * Récupère l'événement affiché
-   * @returns {object|null} objet event ou null si non défini
-   */
+  /** Récupère l'événement affiché */
   getEvent() {
-    const event = localStorage.getItem('event');
+    const event = localStorage.getItem("event");
     return event ? JSON.parse(event) : null;
   },
 
   /**
-   * Définit l'état de connexion
-   * @param {boolean} value true = connecté, false = déconnecté
+   * Définit les événements les mieux notés
+   * @param {Array} value liste d’événements
    */
-  setLogin(value) {
-    localStorage.setItem('login', JSON.stringify(value));
+  setHightRateEvents(value) {
+    localStorage.setItem("HightEvent", JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent('login-changed', {
-        detail: { storage: localStorage.getItem('login') },
+      new CustomEvent("HightEvent-changed", {
+        detail: { storage: localStorage.getItem("HightEvent") },
       })
     );
   },
 
+  /** Récupère les événements les mieux notés */
+  getHightRateEvents() {
+    const hightEvent = localStorage.getItem("HightEvent");
+    return hightEvent ? JSON.parse(hightEvent) : null;
+  },
+
   /**
-   * Récupère l'état de connexion
-   * @returns {boolean|null} true/false ou null si non défini
+   * Définit les nouveaux événements
+   * @param {Array} value liste d’événements récents
    */
+  setNewEvents(value) {
+    localStorage.setItem("NewEvent", JSON.stringify(value));
+    window.dispatchEvent(
+      new CustomEvent("NewEvent-changed", {
+        detail: { storage: localStorage.getItem("NewEvent") },
+      })
+    );
+  },
+
+  /** Récupère les nouveaux événements */
+  getNewEvents() {
+    const newEvent = localStorage.getItem("NewEvent");
+    return newEvent ? JSON.parse(newEvent) : null;
+  },
+
+  /**
+   * Définit les événements à venir
+   * @param {Array} value liste d’événements à venir
+   */
+  setUpcomingEvents(value) {
+    localStorage.setItem("UpcomingEvent", JSON.stringify(value));
+    window.dispatchEvent(
+      new CustomEvent("UpcomingEvent-changed", {
+        detail: { storage: localStorage.getItem("UpcomingEvent") },
+      })
+    );
+  },
+
+  /** Récupère les événements à venir */
+  getUpcomingEvents() {
+    const upcomingEvent = localStorage.getItem("UpcomingEvent");
+    return upcomingEvent ? JSON.parse(upcomingEvent) : null;
+  },
+
+  /** --------------------------
+   * SECTION : AUTHENTIFICATION
+   * -------------------------- */
+
+  /** Définit l'état de connexion */
+  setLogin(value) {
+    localStorage.setItem("login", JSON.stringify(value));
+    window.dispatchEvent(
+      new CustomEvent("login-changed", {
+        detail: { storage: localStorage.getItem("login") },
+      })
+    );
+  },
+
+  /** Récupère l'état de connexion */
   getLogin() {
-    const login = localStorage.getItem('login');
+    const login = localStorage.getItem("login");
     return login ? JSON.parse(login) : null;
   },
 
-  /**
-   * Définit l'utilisateur connecté
-   * @param {object} value objet user
-   */
+  /** Définit l'utilisateur connecté */
   setLogUser(value) {
-    localStorage.setItem('logUserr', JSON.stringify(value));
+    localStorage.setItem("logUserr", JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent('logUserr-changed', {
-        detail: { storage: localStorage.getItem('logUserr') },
+      new CustomEvent("logUserr-changed", {
+        detail: { storage: localStorage.getItem("logUserr") },
       })
     );
   },
 
-  /**
-   * Récupère l'utilisateur connecté
-   * @returns {object|null} objet user ou null si non défini
-   */
+  /** Récupère l'utilisateur connecté */
   getLogUser() {
-    const logUser = localStorage.getItem('logUserr');
+    const logUser = localStorage.getItem("logUserr");
     return logUser ? JSON.parse(logUser) : null;
   },
 
-  /**
-   * Définit l'organisateur affiché
-   * @param {object} value objet organisateur
-   */
+  /** --------------------------
+   * SECTION : ORGANISATEUR
+   * -------------------------- */
+
+  /** Définit l'organisateur affiché */
   setOrganisator(value) {
-    localStorage.setItem('organisator', JSON.stringify(value));
+    localStorage.setItem("organisator", JSON.stringify(value));
     window.dispatchEvent(
-      new CustomEvent('organisator-changed', {
-        detail: { storage: localStorage.getItem('organisator') },
+      new CustomEvent("organisator-changed", {
+        detail: { storage: localStorage.getItem("organisator") },
       })
     );
   },
 
-  /**
-   * Récupère l'organisateur affiché
-   * @returns {object|null} objet organisateur ou null si non défini
-   */
+  /** Récupère l'organisateur affiché */
   getOrganisator() {
-    const organisator = localStorage.getItem('organisator');
+    const organisator = localStorage.getItem("organisator");
     return organisator ? JSON.parse(organisator) : null;
   },
 
-
-
-  /**
-   * 
-   */
-  setHightEvents(value) {
-    localStorage.setItem('HightEvent', JSON.stringify(value));
-    window.dispatchEvent(
-      new CustomEvent('HightEvent-changed', {
-        detail: { storage: localStorage.getItem('HightEvent') },
-      })
-    );
-  },
+  /** --------------------------
+   * SECTION : UTILITAIRES
+   * -------------------------- */
 
   /**
-   * 
-   */
-  getHightEvents() {
-    const hightEvent = localStorage.getItem('HightEvent');
-    return hightEvent ? JSON.parse(event) : null;
-  },
-
-
-
-  /**
-   * Change la valeur du mode.
-   * - Sans paramètre : inverse le mode actuel.
-   * - Avec paramètre : applique directement la valeur donnée.
-   * @param {Boolean} [value] - Nouvelle valeur du Mode (optionnel).
+   * Change la valeur du mode (toggle ou assignation directe)
+   * @param {Boolean} [value] - Nouvelle valeur du Mode (optionnel)
    * @returns {Boolean} nouvelle valeur du Mode
    */
   changeMode(value) {
     const actualMode =
-      typeof value === 'boolean' ? value : !LocalStorageManager.getMode();
+      typeof value === "boolean" ? value : !LocalStorageManager.getMode();
     LocalStorageManager.setMode(actualMode);
     return actualMode;
   },
 
   /**
-   * Change la valeur du language.
-   * - Sans paramètre : inverse le language actuel.
-   * - Avec paramètre : applique directement la valeur donnée.
-   * @param {Boolean} [value] - Nouvelle valeur du Language (optionnel).
-   * @returns {Boolean} nouvelle valeur du Language
+   * Change la valeur du language (toggle ou assignation directe)
+   * @param {Boolean} [value] - Nouvelle valeur du Langage (optionnel)
+   * @returns {Boolean} nouvelle valeur du Langage
    */
   changeLanguage(value) {
     const actualLang =
-      typeof value === 'boolean' ? value : !LocalStorageManager.getLanguage();
+      typeof value === "boolean" ? value : !LocalStorageManager.getLanguage();
     LocalStorageManager.setLanguage(actualLang);
     return actualLang;
   },
 
+  /** Déconnecte l'utilisateur */
   logout() {
     LocalStorageManager.setLogin(false);
     LocalStorageManager.setLogUser(null);
     return LocalStorageManager.getLogin();
   },
+
+  /** Connecte l'utilisateur */
   login(user) {
     LocalStorageManager.setLogUser(user);
     LocalStorageManager.setLogin(true);

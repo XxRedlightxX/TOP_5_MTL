@@ -1,24 +1,46 @@
+/**
+ * ==========================================================
+ * MODULE : Setup
+ * ==========================================================
+ * 🧩 Rôle :
+ *  Gestion centralisée des données locales (LocalStorage)
+ *  avec réactivité (Vue 3) et synchronisation automatique via
+ *  des CustomEvents pour maintenir un état global cohérent
+ *  dans toute l’application MTL’s Source.
+ *
+ * 🛠 Technologies :
+ *  - Vue 3 (ref, onMounted, onUnmounted)
+ *  - LocalStorageManager (lecture/écriture du stockage local)
+ *  - CustomEvent pour la propagation des changements
+ *
+ * 🔄 Fonctionnement général :
+ *  Chaque méthode `SetupXxx()` :
+ *    1. Crée une variable réactive `ref()` basée sur LocalStorage.
+ *    2. Initialise la valeur si elle est absente (`nullInitialiser`).
+ *    3. Écoute les changements via un `CustomEvent` (xxx-changed).
+ *    4. Retire proprement l’écouteur à la destruction du composant.
+ *
+ * 📦 Exemples d’utilisation :
+ *  ```js
+ *  const actualMode = Setup.modeSetup();        // Thème sombre/clair
+ *  const currentLang = Setup.languageSetup();   // Langue active
+ *  const isLoggedIn = Setup.loginSetup();       // Statut de connexion
+ *  ```
+ */
+
 import { ref, onMounted, onUnmounted } from "vue";
 import LocalStorageManager from "@/JS/LocalStorageManager";
+import { useActivityStore } from "@/stores/activity";
 
-/**
- * Setup : gestion centralisée des données stockées dans LocalStorage
- * avec réactivité Vue (ref) et synchronisation automatique via des events.
- *
- * Chaque méthode SetupXxx :
- *  - Initialise une valeur réactive (ref) à partir de LocalStorage
- *  - Si la valeur est absente, l'initialise avec une valeur par défaut
- *  - Écoute les événements personnalisés ("xxx-changed") pour rester synchro
- *  - Nettoie l'écouteur d'événement lors du démontage du composant
- *
- * Exemple d'utilisation dans un composant :
- *    const actualMode = Setup.modeSetup();
- *    const actualLang = Setup.languageSetup();
- */
 const Setup = {
   /**
-   * Gère le mode dark/light (booléen)
-   * @returns {Ref<boolean>} mode actuel
+   * ----------------------------------------------------------
+   * MODE JOUR / NUIT
+   * ----------------------------------------------------------
+   * Initialise et gère le mode d’affichage (dark / light).
+   * Met à jour automatiquement quand un `mode-changed` est émis.
+   *
+   * @returns {Ref<boolean>} Référence réactive du mode actuel (true = mode jour)
    */
   modeSetup() {
     const actualMode = ref(LocalStorageManager.getMode());
@@ -27,7 +49,7 @@ const Setup = {
       actualMode,
       LocalStorageManager.setMode,
       LocalStorageManager.getMode,
-      true // valeur par défaut = dark mode activé
+      true // valeur par défaut = mode jour activé
     );
 
     const handleModeChange = (event) => {
@@ -46,8 +68,13 @@ const Setup = {
   },
 
   /**
-   * Gère la langue sélectionnée (string)
-   * @returns {Ref<string>} langue actuelle
+   * ----------------------------------------------------------
+   * LANGUE DE L’APPLICATION
+   * ----------------------------------------------------------
+   * Initialise et gère la langue sélectionnée par l’utilisateur.
+   * Synchronisation automatique via `lang-changed`.
+   *
+   * @returns {Ref<string>} Langue actuelle (ex: "fr", "en")
    */
   languageSetup() {
     const actualLang = ref(LocalStorageManager.getLanguage());
@@ -56,16 +83,12 @@ const Setup = {
       actualLang,
       LocalStorageManager.setLanguage,
       LocalStorageManager.getLanguage,
-      true // valeur par défaut = français
+      "fr" // valeur par défaut = français
     );
 
     const handleLanguageChange = (event) => {
       actualLang.value = JSON.parse(event.detail.storage);
     };
-
-    //     const handleLanguageChange = (event) => {
-    //   actualLang.value = !!JSON.parse(event.detail.storage); // force bool
-    // };
 
     onMounted(() => {
       window.addEventListener("lang-changed", handleLanguageChange);
@@ -79,8 +102,13 @@ const Setup = {
   },
 
   /**
-   * Gère l'événement sélectionné (objet)
-   * @returns {Ref<object>} event actuel
+   * ----------------------------------------------------------
+   * ÉVÉNEMENT SÉLECTIONNÉ
+   * ----------------------------------------------------------
+   * Conserve l’événement actuellement visualisé ou sélectionné.
+   * Synchronisation via `event-changed`.
+   *
+   * @returns {Ref<object>} Événement actuel (vide si aucun)
    */
   eventSetup() {
     const actualEvent = ref(LocalStorageManager.getEvent());
@@ -108,8 +136,13 @@ const Setup = {
   },
 
   /**
-   * Gère l'état de connexion (booléen)
-   * @returns {Ref<boolean>} login actuel
+   * ----------------------------------------------------------
+   * ÉTAT DE CONNEXION
+   * ----------------------------------------------------------
+   * Gère la variable de connexion globale (connecté ou non).
+   * Met à jour quand `login-changed` est émis.
+   *
+   * @returns {Ref<boolean>} Statut de connexion actuel
    */
   loginSetup() {
     const actualLogin = ref(LocalStorageManager.getLogin());
@@ -118,7 +151,7 @@ const Setup = {
       actualLogin,
       LocalStorageManager.setLogin,
       LocalStorageManager.getLogin,
-      false // valeur par défaut = pas connecté
+      false // valeur par défaut = non connecté
     );
 
     const handleLoginChange = (event) => {
@@ -137,8 +170,13 @@ const Setup = {
   },
 
   /**
-   * Gère l'utilisateur connecté (objet)
-   * @returns {Ref<object>} utilisateur actuel
+   * ----------------------------------------------------------
+   * UTILISATEUR CONNECTÉ
+   * ----------------------------------------------------------
+   * Gère les informations de l’utilisateur actuellement connecté.
+   * Synchronisation automatique via `logUserr-changed`.
+   *
+   * @returns {Ref<object>} Données utilisateur (vide si non connecté)
    */
   userSetup() {
     const actualUser = ref(LocalStorageManager.getLogUser());
@@ -166,8 +204,13 @@ const Setup = {
   },
 
   /**
-   * Gère l'organisateur affiché (objet)
-   * @returns {Ref<object>} organisateur actuel
+   * ----------------------------------------------------------
+   * ORGANISATEUR ACTUEL
+   * ----------------------------------------------------------
+   * Gère les informations de l’organisateur affiché.
+   * Met à jour quand `organisator-changed` est détecté.
+   *
+   * @returns {Ref<object>} Données de l’organisateur actif
    */
   organisatorSetup() {
     const actualOrganisator = ref(LocalStorageManager.getOrganisator());
@@ -198,15 +241,17 @@ const Setup = {
   },
 
   /**
-   * Méthode utilitaire générique :
-   * - Vérifie si une valeur est `null` dans LocalStorage
-   * - Si oui, initialise avec une valeur par défaut
-   * - Retourne toujours une ref synchronisée
+   * ----------------------------------------------------------
+   * MÉTHODE UTILITAIRE GÉNÉRIQUE
+   * ----------------------------------------------------------
+   * Vérifie si une valeur issue du LocalStorage est `null`.
+   * Si c’est le cas, initialise une valeur par défaut et la
+   * sauvegarde via le setter associé.
    *
-   * @param {Ref<any>} valueRef ref réactive
-   * @param {Function} setter fonction setter de LocalStorageManager
-   * @param {Function} getter fonction getter de LocalStorageManager
-   * @param {any} defaultValue valeur par défaut si null
+   * @param {Ref<any>} valueRef - Référence réactive surveillée
+   * @param {Function} setter - Fonction pour écrire dans LocalStorage
+   * @param {Function} getter - Fonction pour relire la valeur du LocalStorage
+   * @param {any} [defaultValue=true] - Valeur par défaut si le stockage est vide
    */
   nullInitialiser(valueRef, setter, getter, defaultValue = true) {
     if (valueRef.value === null) {

@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-  import { ref, watch, onMounted, onBeforeUnmount } from "vue";
+  import { ref, watch, onMounted, defineProps } from "vue";
   import { useRouter } from "vue-router";
   import LocalStorageManager from "../../../JS/LocalStorageManager";
   import Setup from "../../../JS/Setup";
@@ -53,7 +53,7 @@
   const text2b = "Découvrir les Organisateurs";
 
   // Récupération des données fake DB
-  const events = FakeDataBase.getCarousellEvent();//LocalStorageManager.getHightEvent(); //
+  const events = FakeDataBase.getCarousellEvent();
 
   // router
   const router = useRouter();
@@ -61,6 +61,9 @@
   // Mode & Lang depuis Setup
   const actualMode = ref(Setup.modeSetup().value);
   const actualLang = ref(Setup.languageSetup().value);
+  const props = defineProps({
+    events: Object,
+  })
 
   // État réactif du carrousel
   const carouselItems = ref(actualMode.value ? events.eventJour : events.eventNuit);
@@ -114,26 +117,27 @@
     }, timeAutoNext);
   }
 
-  function handleModeChange(event) {
-    actualMode.value = JSON.parse(event.detail.storage);
-  }
+  // function handleModeChange(event) {
+  //   actualMode.value = JSON.parse(event.detail.storage);
+  // }
 
-  function handleLangChange(event) {
-    actualLang.value = JSON.parse(event.detail.storage);
-  }
+  // function handleLangChange(event) {
+  //   actualLang.value = JSON.parse(event.detail.storage);
+  // }
 
-  // Lifecycle
+  Lifecycle
   onMounted(() => {
-    window.addEventListener("mode-changed", handleModeChange);
-    window.addEventListener("lang-changed", handleLangChange);
+    // window.addEventListener("mode-changed", handleModeChange);
+    // window.addEventListener("lang-changed", handleLangChange);
     setNextAuto();
   });
 
-  onBeforeUnmount(() => {
-    window.removeEventListener("mode-changed", handleModeChange);
-    window.removeEventListener("lang-changed", handleLangChange);
-  });
+  // onBeforeUnmount(() => {
+  //   window.removeEventListener("mode-changed", handleModeChange);
+  //   window.removeEventListener("lang-changed", handleLangChange);
+  // });
 
+  // to be deleted
   // Watchers
   watch(actualMode, (newVal) => {
     console.log("Mode changed: ", newVal);
@@ -144,6 +148,7 @@
     textEvent.value = newVal ? text1a : text1b;
     textOrganisator.value = newVal ? text2a : text2b;
   });
+  ///
 </script>
 <!-- <script src='../../../JS/ToBeDeleted/CarousellScript.js'></script> -->
 
