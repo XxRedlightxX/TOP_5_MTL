@@ -28,7 +28,7 @@
           />
         </div>
 
-        <div class="user-info">
+        <div class="user-info"  >
           <strong>{{ user.username }}</strong>
           <p>{{ user.name }}</p>
         </div>
@@ -47,7 +47,7 @@
       v-else-if="showResults && searchQuery && !isSearching"
       class="no-results"
     >
-      {{ actualLang ? 'No users found' : 'Aucun utilisateur trouvé' }}
+     No Users
     </div>
   </div>
 </template>
@@ -67,6 +67,7 @@ const showResults = ref(false);
 const searchInput = ref(null);
 
 let searchTimeout = null;
+const emit = defineEmits(['user']);
 
 const handleSearch = () => {
   clearTimeout(searchTimeout);
@@ -119,6 +120,7 @@ const toggleFollow = async (user) => {
 };
 
 const selectUser = (user) => {
+  emit("user", user.id);
   console.log("Selected user:", user);
 };
 </script>

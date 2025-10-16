@@ -17,6 +17,7 @@
   import LocalStorageManager from "@/JS/LocalStaorageManager"
   import { ref, onMounted, onUnmounted} from "vue";
   import { useAuthStore } from "./stores/auth";
+  import MapComponent from "./components/MapComponent.vue";
 
 
 

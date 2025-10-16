@@ -66,10 +66,12 @@
     try {
         const success = await authenticate('login', formData);
         if (success) {
+            console.log(success +" state")
             storageManager.setLogin(true);
             isLogged.value = storageManager.getLogin();
         } else {
-            console.log("Not Connect")
+            console.log("Not Connect");
+             storageManager.setLogin(false);
         }
     } catch (errors) {
         // Handle any errors

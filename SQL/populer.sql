@@ -22,16 +22,16 @@ VALUES
 -- -----------------------------------------------------
 INSERT INTO type (nom, image_data, created_at, updated_at)
 VALUES
-('Concert', 'https://picsum.photos/200/200', NOW(), NOW()),
-('Festival', 'https://picsum.photos/200/200', NOW(), NOW()),
-('Sport', 'https://picsum.photos/200/200', NOW(), NOW()),
-('Exposition', 'https://picsum.photos/200/200', NOW(), NOW()),
-('Atelier', 'https://picsum.photos/200/200', NOW(), NOW()),
-('Conférence', 'https://picsum.photos/200/200', NOW(), NOW()),
-('Spectacle', 'https://picsum.photos/200/200', NOW(), NOW()),
-('Balade', 'https://picsum.photos/200/200', NOW(), NOW()),
-('Visite guidée', 'https://picsum.photos/200/200', NOW(), NOW()),
-('Cinéma', 'https://picsum.photos/200/200', NOW(), NOW());
+('Concert', 'mdi-music', NOW(), NOW()),
+('Festival', 'mdi-party-popper', NOW(), NOW()),
+('Sport', 'mdi-soccer', NOW(), NOW()),
+('Exposition', 'mdi-image-frame', NOW(), NOW()),
+('Atelier', 'mdi-hammer-wrench', NOW(), NOW()),
+('Conférence', 'mdi-podium', NOW(), NOW()),
+('Spectacle', 'mdi-drama-masks', NOW(), NOW()),
+('Balade', 'mdi-walk', NOW(), NOW()),
+('Visite guidée', 'mdi-map-marker', NOW(), NOW()),
+('Cinéma', 'mdi-movie', NOW(), NOW());
 
 -- -----------------------------------------------------
 -- SAISONS
