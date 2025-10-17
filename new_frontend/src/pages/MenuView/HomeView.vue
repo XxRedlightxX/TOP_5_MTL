@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-  //import { onBeforeRouteEnter } from 'vue-router';
   import CarousellComponent from '@/components/HomeComponents/CarousellComponents/CarousellComponent.vue';
   import Contact from '@/components/HomeComponents/ContactComponent.vue';
   import IntroText from '@/components/HomeComponents/IntroTextComponent.vue';

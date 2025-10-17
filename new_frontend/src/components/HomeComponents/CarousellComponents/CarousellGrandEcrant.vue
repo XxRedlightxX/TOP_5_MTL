@@ -125,7 +125,7 @@
   //   actualLang.value = JSON.parse(event.detail.storage);
   // }
 
-  Lifecycle
+  //Lifecycle
   onMounted(() => {
     // window.addEventListener("mode-changed", handleModeChange);
     // window.addEventListener("lang-changed", handleLangChange);

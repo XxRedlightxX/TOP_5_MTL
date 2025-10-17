@@ -53,7 +53,7 @@
 
   let actualMode = Setup.modeSetup();
   let actualLang = Setup.languageSetup();
-  let newEvents = SetupEvent.newEventsSetup();
+  //let newEvents = SetupEvent.newEventsSetup();
 
   // to be deleted
   const events = FakeDataBase.getNewEvents();
@@ -74,7 +74,7 @@
     console.log("event value : ", value);
   };
 
-  console.log('events : ' + newEvents)
+  //console.log('events : ' + newEvents)
 </script>
 
 <style src="../../styles/ComponentsStyles/HomeStyles/NewEventStyle.scss"></style>

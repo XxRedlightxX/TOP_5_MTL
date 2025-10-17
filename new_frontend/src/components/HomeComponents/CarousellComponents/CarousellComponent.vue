@@ -13,9 +13,9 @@
   import CarousellGrandEcrant from './CarousellGrandEcrant.vue'
   import CarousellPhone from './CarousellPhone.vue'
 
-  let hightRatedActivities = SetupEvent.higherRateEventsSetup();
+  //let hightRatedActivities = SetupEvent.higherRateEventsSetup();
 
-  console.log('events : ' + hightRatedActivities)
+  //console.log('events : ' + hightRatedActivities)
 
 </script>
 
