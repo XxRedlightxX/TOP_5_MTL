@@ -38,10 +38,13 @@ class MessageSent implements ShouldBroadcastNow
         ];
     }
 
+    /**
+     * Redéfintion du nom Broadcast.
+     *
+     * 
+     */
     public function broadcastAs()
     {
-        return 'MessageSent'; // Then Echo would listen for 'NewMessage'
+        return 'MessageSent'; 
     }
-
-    
 }
