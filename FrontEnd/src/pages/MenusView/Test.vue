@@ -1,42 +1,21 @@
 <template>
     
-   <!--<div id="MessagePage">
-        <h1>Chat</h1>
-
-       <h1>Chat</h1>
-    <br /><br /><br />
-
-    <div>
-      <div v-for="(msg, i) in messages" :key="i">
-        <b v-if="msg.sender_id === userId">You:</b>
-        <b v-else>Friend:</b>
-        {{ msg.message }}
-      </div>
-
-      <input
-        v-model="newMessage"
-        @keyup.enter="sendMessage"
-        placeholder="Type message..."
-        style="color: black"
-      />
-    </div>
-  
-
-
-        -<div class="MessageSection">
-
-            <ListUserMessage/>
-            <Message/>
+   <div id="MessagePage">
+       <h2>Chat</h2>
+        <div class="MessageSection">
+         
+            <ListUserMessage @user-selected="test"/>
+            <Message />
             <ProfileUserMessage/>
             
         </div>
 
-   </div>-->
+   </div>
 
-   <div id="MessagePage">
+   <!--<div id="MessagePage">
     <h1>Chat with {{ otherUser?.name || otherUser?.username || 'User' }}</h1>
 
-    <!-- 🧠 Debug / Connection Info -->
+    
     <div class="debug-bar">
       <small>
         <b>Status:</b>
@@ -52,10 +31,10 @@
       </div>
     </div>
 
-    <!-- 🔍 Search User -->
+
     <SearchBar @user="handleMessage" />
 
-    <!-- 👤 Other User Info -->
+   
     <div v-if="otherUser" class="user-info">
       <img v-if="otherUser.image_data" :src="otherUser.image_data" alt="Avatar" class="avatar" />
       <div class="user-details">
@@ -64,7 +43,7 @@
       </div>
     </div>
 
-    <!-- 💬 Chat Messages -->
+ 
     <div v-if="friendId" class="chat-container">
       <div class="messages" ref="messagesContainer">
         <div v-if="messages.length === 0" class="no-messages">
@@ -84,7 +63,7 @@
         </div>
       </div>
 
-      <!-- ✏️ Input -->
+  
       <div class="input-container">
         <input
           v-model="newMessage"
@@ -103,20 +82,46 @@
       </div>
     </div>
 
-    <!-- ❌ No Chat Selected -->
+   
     <div v-else class="no-chat-selected">
       <p>Select a user to start chatting</p>
     </div>
   </div>
+  -->
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { ref, onMounted, onUnmounted, nextTick, computed, watch } from 'vue'
+import ListUserMessage from '@/components/MessagingComponents/ListUserMessageComponent.vue';
+import Message from '@/components/MessagingComponents/MessageComponent.vue';
+import ProfileUserMessage from '@/components/MessagingComponents/ProfileUserMessageComponent.vue';
+import { useMessageStore } from '@/stores/Message';
 import SearchBar from '@/components/SearchBarComponent.vue'
-import '../../JS/config/echo'
+import '../../JS/config/echo';
 
-const authStore = useAuthStore()
+
+const messageStore = useMessageStore();
+const testId = ref(null);
+
+const {getConversationsFromUser} = useMessageStore()
+let userFriend = ref(null);
+watch(userFriend, (newValue, oldValue) => {
+  console.log("userFriend changed:", newValue, "Test");
+}, { deep: true });
+
+
+const test = async (pUserFriend) => {
+  console.log("Selected user Grand:", pUserFriend);
+  const user = pUserFriend
+  // Use the parameter that was definitely passed to this function
+  userFriend.value = await getConversationsFromUser(user);
+
+  console.log("Conversations:", userFriend.value);
+}  
+
+
+
+/*const authStore = useAuthStore()
 const messages = ref([])
 const otherUser = ref(null)
 const newMessage = ref('')
@@ -480,11 +485,11 @@ window.Echo.private(`chat.${userId}`).listenToAll((event, data) => {
     console.log('🎯 MANUAL EVENT CAPTURE:', event, data);
 });
 
-
+*/
 </script>
 
-<style scoped>
-#MessagePage {
+<style src="../../styles/MessageStyle/MessageStyle.scss"></style>
+/*#MessagePage {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
@@ -632,5 +637,4 @@ window.Echo.private(`chat.${userId}`).listenToAll((event, data) => {
   background: white;
   border-radius: 8px;
   margin-top: 20px;
-}
-</style>
+}*/

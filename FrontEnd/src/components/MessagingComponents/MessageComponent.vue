@@ -1,31 +1,37 @@
 <template>
     <div id="Message">
+        <!-- Messages List -->
         <div class="messagelist">
-            <div v-for="message in messages" :key="message.id" 
-                 :class="message.isMine ? 'myUserMessage' : 'otherUserMessage'">
-                
+            <div 
+                v-for="message in messages" 
+                :key="message.id" 
+                :class="message.isMine ? 'myUserMessage' : 'otherUserMessage'"
+            >
+                <!-- Other User Avatar -->
                 <div v-if="!message.isMine" class="avatar-other">
                     <img :src="message.avatar" :alt="message.senderName" />
                 </div>
                 
+                <!-- Message Content -->
                 <div :class="message.isMine ? 'avatar-info-me' : 'avatar-info'">
                     <div :class="message.isMine ? 'message-me' : 'message'">
-                        <p>{{ message.content }}</p>
+                        <p>{{ message.contenu }}</p>
                     </div>
-                    <span class="timestamp">{{ message.timestamp }}</span>
+                    <span class="timestamp">{{ formatTimestamp(message.timestamp) }}</span>
                 </div>
                 
+                <!-- My Avatar -->
                 <div v-if="message.isMine" class="avatar-me">
                     <img :src="message.avatar" :alt="message.senderName" />
                 </div>
             </div>
         </div>
 
-        <!-- Input and Send Button -->
+        <!-- Message Input -->
         <div class="message-input-container">
             <v-text-field
                 v-model="newMessage"
-                :label="actualLang ? 'Type a message...' : 'Tapez un message...'"
+                :label="inputPlaceholder"
                 variant="outlined"
                 hide-details
                 class="message-input"
@@ -35,13 +41,11 @@
                 <template v-slot:append>
                     <v-btn
                         icon
-                       
                         @click="sendMessage"
                         :disabled="!newMessage.trim()"
                         class="send-button"
                     >
-                         <v-icon icon="mdi-send" :class="['icon', {'justGlow' : !actualMode}]"/>
-                      
+                        <v-icon icon="mdi-send" :class="['icon', {'justGlow' : !actualMode}]"/>
                     </v-btn>
                 </template>
             </v-text-field>
@@ -50,149 +54,201 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, watch, onUnmounted, computed } from 'vue';
+import { useMessageStore } from '@/stores/Message';
+import { useAuthStore } from '@/stores/auth';
 
+// Stores
+const messageStore = useMessageStore();
+const authStore = useAuthStore();
+const { getConversationsFromUser, addMessageFromUser } = useMessageStore();
+
+// Refs
 const messages = ref([]);
 const newMessage = ref('');
 const messageInput = ref(null);
 
-// Sample message data
-const sampleMessages = [
-    {
-        id: 1,
-        senderName: "Sarah Chen",
-        content: "Hey! How's your day going? 😊",
-        timestamp: "2:30pm",
-        isMine: false,
-        avatar: "/src/assets/p1.jpg"
-    },
-    {
-        id: 2,
-        senderName: "Me",
-        content: "Hey! My day is going well, thanks for asking! Just finished my morning meetings. How about you?",
-        timestamp: "2:31pm",
-        isMine: true,
-        avatar: "/src/assets/p2.jpg"
-    },
-    {
-        id: 3,
-        senderName: "Sarah Chen",
-        content: "I was wondering if you've had a chance to look at the project documentation I sent you last week? There are some important updates about the new API endpoints.",
-        timestamp: "2:32pm",
-        isMine: false,
-        avatar: "/src/assets/p1.jpg"
-    },
-    {
-        id: 4,
-        senderName: "Me",
-        content: "Yes, I reviewed the documentation yesterday. The new OAuth 2.0 flow looks solid, but I noticed we might need to handle token refresh differently for offline scenarios.",
-        timestamp: "2:35pm",
-        isMine: true,
-        avatar: "/src/assets/p2.jpg"
-    },
-    {
-        id: 5,
-        senderName: "Sarah Chen",
-        content: "That's a great point! I actually discussed this with the security team and they suggested implementing a retry mechanism with exponential backoff.",
-        timestamp: "2:37pm",
-        isMine: false,
-        avatar: "/src/assets/p1.jpg"
-    },
-    {
-        id: 6,
-        senderName: "Sarah Chen",
-        content: "Also, don't forget about the team meeting tomorrow at 10 AM to discuss the Q3 roadmap! 🚀",
-        timestamp: "2:38pm",
-        isMine: false,
-        avatar: "/src/assets/p1.jpg"
-    },
-    {
-        id: 7,
-        senderName: "Me",
-        content: "Perfect! The caching strategy makes sense. I'll start implementing the authentication module today. Looking forward to the meeting tomorrow! 👍",
-        timestamp: "2:40pm",
-        isMine: true,
-        avatar: "/src/assets/p2.jpg"
-    },
-    {
-        id: 8,
-        senderName: "Me",
-        content: "By the way, did you see the new design mockups for the dashboard? The dark mode looks amazing! 🌙",
-        timestamp: "2:41pm",
-        isMine: true,
-        avatar: "/src/assets/p2.jpg"
-    }
-];
-
-// Simulate loading messages
-onMounted(() => {
-    messages.value = sampleMessages;
+// Props
+const props = defineProps({
+    userMessage: Object,
+    actualLang: Boolean,
+    actualMode: Boolean
 });
 
-// Send new message
-const sendMessage = () => {
-    if (!newMessage.value.trim()) return;
+// Computed
+const currentUserId = authStore.user?.id;
+const inputPlaceholder = computed(() => 
+    props.actualLang ? 'Type a message...' : 'Tapez un message...'
+);
 
-    const message = {
-        id: messages.value.length + 1,
-        senderName: "Me",
-        content: newMessage.value.trim(),
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isMine: true,
-        avatar: "/src/assets/p2.jpg"
-    };
+// Constants
+const AVATARS = {
+    MINE: "/src/assets/p2.jpg",
+    OTHER: "/src/assets/p1.jpg"
+};
+
+// Echo Management
+const setupEchoListener = () => {
+    if (!window.Echo || !messageStore.userFriend) return;
+
+    const channel = window.Echo.private(`chat.${currentUserId}`);
     
-    messages.value.push(message);
+    channel.listen('.MessageSent', handleIncomingMessage);
+};
+
+// Permet l utilisateur de quitter le chat
+const removeEchoListener = () => {
+    if (!window.Echo || !currentUserId) return;
+    window.Echo.leave(`chat.${currentUserId}`);
+};
+
+const handleIncomingMessage = (event) => {
+    console.log('🔔 New message event:', event);
+    
+    const messageData = event.conversation || event.message || event;
+    if (!messageData) {
+        console.warn('No message data found in event');
+        return;
+    }
+    
+    const processedMessages = processMessages([messageData], currentUserId);
+    const newMessage = processedMessages[0];
+    
+    if (isValidMessage(newMessage)) {
+        addMessageIfNotExists(newMessage);
+    }
+};
+
+// Formate le message 
+const processMessages = (messagesData, currentUserId) => {
+    if (!Array.isArray(messagesData)) return [];
+
+    return messagesData
+        .filter(message => message && typeof message === 'object')
+        .map(message => ({
+            id: message.id ?? Date.now(),
+            contenu: message.contenu ?? '',
+            expediteur_id: message.expediteur_id,
+            destinataire_id: message.destinataire_id,
+            timestamp: message.date || message.timestamp || new Date().toISOString(),
+            isMine: message.expediteur_id === currentUserId,
+            avatar: message.avatar || (message.expediteur_id === currentUserId ? AVATARS.MINE : AVATARS.OTHER),
+            senderName: message.senderName || (message.expediteur_id === currentUserId ? "Me" : "Other User")
+        }));
+};
+
+const isValidMessage = (message) => {
+    return message && message.id && message.contenu;
+};
+
+const addMessageIfNotExists = (newMessage) => {
+    const messageExists = messages.value.some(msg => msg.id === newMessage.id);
+    if (!messageExists) {
+        messages.value.push(newMessage);
+        scrollToBottom();
+       
+    }
+};
+
+// Message Operations
+const fetchMessages = async (userFriendId) => {
+    if (!userFriendId) {
+        messages.value = [];
+        return;
+    }
+
+    try {
+        removeEchoListener();
+        
+        const conversations = await getConversationsFromUser(userFriendId);
+        messages.value = processMessages(conversations, currentUserId);
+        
+        setupEchoListener();
+        scrollToBottom();
+    } catch (error) {
+        console.error("Error fetching messages:", error);
+        messages.value = [];
+    }
+};
+
+const sendMessage = async () => {
+    const messageContent = newMessage.value.trim();
+    if (!messageContent) return;
+
+    try {
+        const messageData = { contenu: messageContent };
+        const sentMessage = await addMessageFromUser(messageStore.userFriend, messageData);
+
+        if (sentMessage) {
+            const processedMessage = processMessages([sentMessage], currentUserId)[0];
+            addMessageIfNotExists(processedMessage);
+        } else {
+            // Fallback: Add local message
+            const localMessage = createLocalMessage(messageContent);
+            addMessageIfNotExists(localMessage);
+        }
+
+        resetMessageInput();
+    } catch (error) {
+        console.error("Error sending message:", error);
+        // Fallback on error
+        const localMessage = createLocalMessage(messageContent);
+        addMessageIfNotExists(localMessage);
+        resetMessageInput();
+    }
+};
+
+const createLocalMessage = (content) => ({
+    id: Date.now(),
+    contenu: content,
+    timestamp: new Date().toISOString(),
+    expediteur_id: currentUserId,
+    isMine: true,
+    avatar: AVATARS.MINE,
+    senderName: "Me"
+});
+
+const resetMessageInput = () => {
     newMessage.value = '';
+    scrollToBottom();
+    nextTick(() => messageInput.value?.focus());
+};
+
+// UI Helpers
+const formatTimestamp = (timestamp) => {
+    if (!timestamp) return '';
     
-    // Clear input and focus
+    try {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch (error) {
+        return String(timestamp);
+    }
+};
+
+const scrollToBottom = () => {
     nextTick(() => {
-        if (messageInput.value) {
-            messageInput.value.focus();
+        const messageList = document.querySelector('.messagelist');
+        if (messageList) {
+            messageList.scrollTop = messageList.scrollHeight;
         }
     });
-
-    // Simulate reply after a delay
-    setTimeout(() => {
-        simulateIncomingMessage();
-    }, 1000 + Math.random() * 2000);
 };
 
-// Function to add new messages
-const addNewMessage = (content, isMine = false) => {
-    const newMessage = {
-        id: messages.value.length + 1,
-        senderName: isMine ? "Me" : "Sarah Chen",
-        content: content,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isMine: isMine,
-        avatar: isMine ? "/src/assets/p2.jpg" : "/src/assets/p1.jpg"
-    };
-    
-    messages.value.push(newMessage);
-};
+// Lifecycle
+onMounted(() => {
+    fetchMessages(messageStore.userFriend);
+});
 
-// Function to simulate receiving a message
-const simulateIncomingMessage = () => {
-    const responses = [
-        "That sounds good! Let me know if you need any help with the implementation.",
-        "I just checked the mockups and they look fantastic! The UX team did a great job.",
-        "Can you share your progress on the authentication module by end of day?",
-        "The backend team just deployed the new endpoints to the staging environment.",
-        "Thanks for the update! Looking forward to seeing the progress.",
-        "That's exactly what we needed. Great work!",
-        "I'll review it and get back to you with feedback.",
-        "Perfect timing! The client just asked about this feature."
-    ];
-    
-    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-    addNewMessage(randomResponse, false);
-};
+watch(
+    () => messageStore.userFriend,
+    (newUser) => {
+        fetchMessages(newUser);
+    }
+);
 
-// Expose functions if needed
-defineExpose({
-    addNewMessage,
-    simulateIncomingMessage
+onUnmounted(() => {
+    removeEchoListener();
 });
 </script>
 

@@ -56,7 +56,9 @@
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useFriendStore } from "@/stores/Friend";
+import { useMessageStore } from "@/stores/Message";
 
+const messageStore = useMessageStore();
 const userStore = useUserStore();
 const { addUserFollowings } = useFriendStore();
 
@@ -120,8 +122,11 @@ const toggleFollow = async (user) => {
 };
 
 const selectUser = (user) => {
-  emit("user", user.id);
-  console.log("Selected user:", user);
+
+  messageStore.setUserFriend(user)
+  emit("user", user);
+ 
+
 };
 </script>
 

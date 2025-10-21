@@ -34,7 +34,7 @@ export const useFriendStore = defineStore('friendStore', {
             const data = await res.json();
            
             if (res.ok) {
-                this.followings = data;
+                
                 console.log("Followers data:", data);
                 return data;
                 
@@ -43,9 +43,6 @@ export const useFriendStore = defineStore('friendStore', {
                 console.log(data.errors);
             }        
 
-            else {
-                console.log("NOPE")
-            }
 
             
             }

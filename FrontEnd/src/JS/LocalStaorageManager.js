@@ -15,6 +15,22 @@ const StorageManager = {
     return mode ? JSON.parse(mode) : null;
   },
 
+  setUserList(value) {
+    localStorage.setItem("List", JSON.stringify(value));
+    window.dispatchEvent(
+      new CustomEvent("userlist-changed", {
+        detail: {
+          storage: localStorage.getItem("List"),
+        },
+      })
+    );
+  },
+
+  getUserList() {
+    const list = localStorage.getItem("List");
+    return list ? JSON.parse(list) : [];
+  },
+
   // gere les event a afficher a la page single event
   setEvent(value) {
     localStorage.setItem("event", JSON.stringify(value));
