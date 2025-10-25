@@ -31,7 +31,13 @@ class ActiviteController extends Controller
     public function __construct(ActiviteService $userService)
     {
         $this->userService = $userService;
-         $this->middleware('auth:sanctum');
+         $this->middleware('auth:sanctum')->only([
+        'addActivityUser',
+        'modifyActivity',
+        'deleteActivityById',
+        'addCommentToActivity',
+        'getUserActivities',
+    ]);
     }
 
     public function getAllActivities() {

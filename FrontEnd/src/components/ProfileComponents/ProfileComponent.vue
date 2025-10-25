@@ -17,7 +17,6 @@
     import ProfileHead from "./ProfileHeaderComponent.vue";
     import ProfileOther from "./ProfileOtherComponent.vue"
     import ProfileList from "./ProfileListEventComponent.vue"
-    import ProfileUserStatut from "./ProfileUserStatutComponent.vue";
     import { useAuthStore } from "@/stores/auth";
     import { useActivityStore } from "@/stores/activity";
     import { storeToRefs } from "pinia";
@@ -56,7 +55,7 @@
     if (newUser) {
         const events = newUser?.activites?.map((act) => ({
             id: act.id,
-            image: act.image_data || "/src/assets/HomeCarousel/Mont-royal.jpg",
+            image: act.image_data,
             title: act.titre,
             desc: act.description || "Aucune description",
             lieu: act.lieu,
@@ -68,7 +67,7 @@
         organisator.value = {
             avatar: newUser?.image_data
                 ? `${import.meta.env.VITE_API_BASE_URL}${newUser.image_data}`
-                : "/src/assets/p1.jpg",
+                : "/src/assets/UnknowUser.jpg",
             username: newUser?.username || "Utilisateur inconnu",
             name: newUser?.name,
             fisrtName: "Dede",

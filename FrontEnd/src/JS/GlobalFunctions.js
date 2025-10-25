@@ -74,8 +74,15 @@ export const formatDateEventStartandEnd = (aStartDateEvent, aEndDate) => {
   }
 }
 
-export const getAvatarUrl =(imagePath) => {
-  const img= "/images/default-avatar.png";
+export const getAvatarUrl = (imagePath) => {
+  const img= "/src/assets/UnknowUser.jpg";
+    if (!imagePath) return img;
+    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}` ;
+
+}
+
+export const getEventUrl = (imagePath) => {
+  const img= "/src/assets/Curtain.jpg";
     if (!imagePath) return img;
     return `${import.meta.env.VITE_API_BASE_URL}${imagePath}` ;
 

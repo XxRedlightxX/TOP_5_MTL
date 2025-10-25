@@ -1,7 +1,12 @@
 <template>
     <div id="Message">
         <!-- Messages List -->
-        <div class="messagelist">
+        <div class="messagelist" >
+            <div v-if="messages.length === 0" class="no-messages">
+            <div class="no-messages-text">{{  actualLang ? "Aucun message pour l'instant" : 'No messages yet' }}</div>
+            <div class="no-messages-subtext">{{  actualLang ? "Commence ta conversation en envoyant un message" : 'Start a conversation by sending a message!' }}</div>
+        </div>
+    
             <div 
                 v-for="message in messages" 
                 :key="message.id" 
@@ -9,7 +14,7 @@
             >
                 <!-- Other User Avatar -->
                 <div v-if="!message.isMine" class="avatar-other">
-                    <img :src="message.avatar" :alt="message.senderName" />
+                    <img :src="getAvatarUrl(message.avatar)" :alt="message.senderName" />
                 </div>
                 
                 <!-- Message Content -->
@@ -22,7 +27,7 @@
                 
                 <!-- My Avatar -->
                 <div v-if="message.isMine" class="avatar-me">
-                    <img :src="message.avatar" :alt="message.senderName" />
+                    <img :src="getAvatarUrl(message.avatar)" :alt="message.senderName" />
                 </div>
             </div>
         </div>
@@ -57,6 +62,8 @@
 import { ref, onMounted, nextTick, watch, onUnmounted, computed } from 'vue';
 import { useMessageStore } from '@/stores/Message';
 import { useAuthStore } from '@/stores/auth';
+import storageManager from "@/JS/LocalStaorageManager";
+import { getAvatarUrl } from '@/JS/GlobalFunctions';
 
 // Stores
 const messageStore = useMessageStore();
@@ -67,6 +74,8 @@ const { getConversationsFromUser, addMessageFromUser } = useMessageStore();
 const messages = ref([]);
 const newMessage = ref('');
 const messageInput = ref(null);
+let actualMode = ref(storageManager.getMode());
+let actualLang = ref(storageManager.getLang());
 
 // Props
 const props = defineProps({
@@ -132,7 +141,7 @@ const processMessages = (messagesData, currentUserId) => {
             destinataire_id: message.destinataire_id,
             timestamp: message.date || message.timestamp || new Date().toISOString(),
             isMine: message.expediteur_id === currentUserId,
-            avatar: message.avatar || (message.expediteur_id === currentUserId ? AVATARS.MINE : AVATARS.OTHER),
+            avatar: message.image_data,
             senderName: message.senderName || (message.expediteur_id === currentUserId ? "Me" : "Other User")
         }));
 };
@@ -235,9 +244,15 @@ const scrollToBottom = () => {
     });
 };
 
+  const handleLangChange = (event) => {
+        actualLang.value = JSON.parse(event.detail.storage);
+};
+
+
 // Lifecycle
 onMounted(() => {
     fetchMessages(messageStore.userFriend);
+    window.addEventListener('lang-changed', handleLangChange);
 });
 
 watch(
@@ -249,6 +264,7 @@ watch(
 
 onUnmounted(() => {
     removeEchoListener();
+    window.removeEventListener('lang-changed', handleLangChange);
 });
 </script>
 

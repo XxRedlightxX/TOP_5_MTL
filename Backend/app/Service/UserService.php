@@ -49,7 +49,7 @@ class UserService {
             return new AuthResult(true, $user, 'Login succ.', $token);
         }
 
-         return new AuthResult(false, null, 'Invalid credentials.', null);
+        return new AuthResult(false, null, 'Invalid credentials.', null);
     }
 
 

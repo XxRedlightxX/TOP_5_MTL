@@ -100,6 +100,8 @@ Route::post('/favorite', [FavoriteController::class, 'addActivityToFavorite']);
 
 Route::get('/favorite', [FavoriteController::class, 'getAllFavoriteActivites']);
 
+Route::get('/isFavorite/{activityId}', [FavoriteController::class, 'IsFavoriteActivityFromUser']);
+
 Route::delete('/favorite/{activityId}', [FavoriteController::class, 'deleteFavoriteActivity']);
 
 

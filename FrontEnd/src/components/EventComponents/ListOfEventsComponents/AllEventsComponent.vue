@@ -11,9 +11,17 @@
         :key="item.id"
       >
         <div class="event_card_photo">
-          <span class="overlay"> <img src="" alt=""></span>
+           <span class="overlay" > 
+            <v-icon
+        :color="isLiked(item.id) ? 'red' : 'grey'"
+        :icon="isLiked(item.id) ? 'mdi-heart' : 'mdi-heart-outline'"
+        size="40"
+        @click.stop.prevent="toggleLike(item.id)"
+        class="clickable-heart"
+      />
+          </span>
           <!-- Main image -->
-          <img :src="getAvatarUrl(item.image)" class="product-thumb" alt="Event Image">
+          <img :src="getEventUrl(item.image)" class="product-thumb" alt="Event Image">
         </div>
         
         <div class="desc">
@@ -51,15 +59,33 @@ import PaginationComponent from './PaginationComponent.vue';
 import FilterComponent from './FilterComponent.vue';
 import { useActivityStore } from '@/stores/activity';
 import { formatDateSpecial } from "@/JS/GlobalFunctions";
+import { getEventUrl } from '@/JS/GlobalFunctions';
+
+
 
 const eventsPerPage = 9;
 const currentPage = ref(0);
-
-
+const {addFavoritesActivities} = useActivityStore()
 
 const props = defineProps({
   listEvent: Array
 });
+
+const likedEvents = ref([])
+
+// toggle like for one event
+const toggleLike =async (id) =>{
+  if (likedEvents.value.includes(id)) {
+    likedEvents.value = likedEvents.value.filter(e => e !== id)
+  } else {
+    likedEvents.value.push(id)
+  }
+}
+
+// check if specific event is liked
+function isLiked(id) {
+  return likedEvents.value.includes(id)
+}
 
 
 const listActivities = ref([]);
@@ -96,60 +122,40 @@ const goToPage = (pageIndex) => {
 };
 
 
-
-const getAvatarUrl = (imagePath) => {
-    if (!imagePath) return img;
-    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
-};
-
-
-
-
 const actualMode = ref(LocalStorageManager.getMode());
-
-
-
-
-
-
 
 let newEvent = ref(null);
   //newEvent.value = actualMode.value ? newEventJours : newEventNuit;
-
-
 
   // Fonction pour mettre à jour l'index du slide actif
   // const onSlideChange = (swiper) => {
   //   indexSlide.value = swiper.activeIndex;
   // };
 
-  const setEvent = (value) => {
-    LocalStorageManager.setEvent(value);
-    console.log("event value : ", value);
-  };
 
-  if (actualMode.value == null){
-       LocalStorageManager.setMode(true);
-       actualMode.value = LocalStorageManager.getMode();
-   }
-   // Correction du watcher
-   watch(actualMode, (newVal, oldVal) => {
-      newEvent.value = newVal ? newEventJours : newEventNuit;
-   });
-   
-   const handleModeChange = (event) => {
-       actualMode.value = JSON.parse(event.detail.storage);
-   };
-     // Add event listener for mode changes
-   onMounted(() => {
-       window.addEventListener('mode-changed', handleModeChange);
-      
-   });
- 
-   // Remove event listener when component is unmounted
-   onUnmounted(() => {
-       window.removeEventListener('mode-changed', handleModeChange);
-   });
+
+if (actualMode.value == null){
+      LocalStorageManager.setMode(true);
+      actualMode.value = LocalStorageManager.getMode();
+  }
+  // Correction du watcher
+  watch(actualMode, (newVal, oldVal) => {
+    newEvent.value = newVal ? newEventJours : newEventNuit;
+  });
+  
+  const handleModeChange = (event) => {
+      actualMode.value = JSON.parse(event.detail.storage);
+  };
+    // Add event listener for mode changes
+  onMounted(() => {
+      window.addEventListener('mode-changed', handleModeChange);
+    
+  });
+
+  // Remove event listener when component is unmounted
+  onUnmounted(() => {
+      window.removeEventListener('mode-changed', handleModeChange);
+  });
 
 </script>
 

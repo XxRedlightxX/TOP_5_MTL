@@ -3,11 +3,13 @@
 namespace App\DAO\SourceDonnes;
 use App\Models\User;
 use App\DAO\SourceDonnes\InterfaceDAO;
-
+use App\Models\Activite;
 
 interface FavoriteDAO extends InterfaceDAO {
 
     public function getFavoriteActivities(int $userId, int $activityId);
+
+    public function isFavoriteActivityUser( User $userId, Activite $activityId) : bool;
 
     public function addActivityToFavorite(int $userId, int $activityId);
 

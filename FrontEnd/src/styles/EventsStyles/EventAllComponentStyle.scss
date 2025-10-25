@@ -31,6 +31,14 @@
           position: absolute;
           top: 1%;
           right: 1%;
+
+          .clickable-heart {
+            cursor: pointer;
+            transition: transform 0.15s ease, color 0.25s ease;
+          }
+          .clickable-heart:active {
+            transform: scale(1.2);
+          }
         }
 
         .product-thumb {

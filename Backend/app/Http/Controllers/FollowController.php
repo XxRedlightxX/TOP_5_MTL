@@ -40,7 +40,7 @@ class FollowController extends Controller
 
      public function deleteFollow(Request $request, $followedId)
     {
-         $user =  $request->user();
+        $user =  $request->user();
         $this->followService->unfollow($user->id, $followedId);
         return response()->json(['message' => 'Unfollowed successfully.']);
     }

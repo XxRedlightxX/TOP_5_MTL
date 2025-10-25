@@ -19,7 +19,7 @@ class FavoriteDAOImpl implements FavoriteDAO {
      * @inheritDoc
      */
     public function addActivityToFavorite(int $userId, int $activityId) {
-         $user =User::findOrFail($userId);
+        $user =User::findOrFail($userId);
         $activity = Activite::findOrFail($activityId);
 
         $user->favoris()->attach( $activity->id);
@@ -68,5 +68,13 @@ class FavoriteDAOImpl implements FavoriteDAO {
         $activity = Activite::findOrFail($activityId);
         $user->favoris()->detach( $activity->id);
 
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isFavoriteActivityUser(User $user, Activite $activity): bool {
+        
+         return $user->favoris()->where('activite_id', $activity->id)->exists();
     }
 }

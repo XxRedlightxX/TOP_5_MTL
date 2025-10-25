@@ -4,10 +4,12 @@
           <SearchBar @user="handleUser"/>
         
         <div class="UserList">
-            <div class="UserCard" v-if="userListRecentMessage.length > 0" v-for="user in userListRecentMessage" :key="user.id">
+            <div class="UserCard" v-if="userListRecentMessage.length > 0" 
+                v-for="user in userListRecentMessage" :key="user.id"
+                  @mousedown.prevent="selectUser(user)">
                 <div class="user-content">
                     <div class="user-avatar-image">
-                        <img src='/src/assets/p1.jpg' :alt="user.username" />
+                        <img :src=getAvatarUrl(user.image_data) :alt="user.username" />
                     </div>
                     <div class="user-info">
                         <strong>{{ user.username }}</strong>
@@ -29,37 +31,41 @@
     import { onMounted, ref, onUnmounted } from 'vue'; 
     import LocalStorageManager from "@/JS/LocalStaorageManager";
     import { useMessageStore } from '@/stores/Message';
+    import { getAvatarUrl } from '@/JS/GlobalFunctions';
 
+    const emit = defineEmits(['user-selected']);
     const messageStore = useMessageStore();
-    const emit = defineEmits(['user-selected'])
-
+    
     let userListRecentMessage = ref([])
     onMounted(() => {
         userListRecentMessage.value = LocalStorageManager.getUserList();
     });
 
-
-   
-const handleUser = (pUserFriend) => {
-    
-    emit("user-selected", pUserFriend);
-
-    const IsExistsUser = userListRecentMessage.value.some(
-        (u) => u.id === pUserFriend.id
-    );
-    
-    if (!IsExistsUser) {
-        // Immutable update
-        userListRecentMessage.value = [
-            ...userListRecentMessage.value,
-            pUserFriend
-        ];
-        
-        console.log(userListRecentMessage.value);
-        LocalStorageManager.setUserList(userListRecentMessage.value);
+    const selectUser = (pUser) => {
+        messageStore.setUserFriend(pUser);
     }
 
-};
+
+   
+    const handleUser = (pUserFriend) => {
+        
+        emit("user-selected", pUserFriend);
+        const IsExistsUser = userListRecentMessage.value.some(
+            (u) => u.id === pUserFriend.id
+        );
+        
+        if (!IsExistsUser) {
+            
+            userListRecentMessage.value = [
+                ...userListRecentMessage.value,
+                pUserFriend
+            ];
+            
+            console.log(userListRecentMessage.value);
+            LocalStorageManager.setUserList(userListRecentMessage.value);
+        }
+
+    };
 
 
 </script>

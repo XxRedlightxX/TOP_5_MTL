@@ -1,7 +1,7 @@
 <template>
-    
+   
    <div id="MessagePage">
-       <h2>Chat</h2>
+        <h2>Chat</h2>
         <div class="MessageSection">
          
             <ListUserMessage @user-selected="test"/>
