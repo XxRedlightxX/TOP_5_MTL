@@ -8,6 +8,7 @@ use App\Models\Avis;
 use App\Models\Saison;
 use App\Models\Type;
 use App\Models\User;
+use App\Notifications\NewEventNotification;
 use App\Service\ActiviteService;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Policies\ActivityPolicy;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Illuminate\Auth\Access\AuthorizationException;
 
@@ -81,6 +83,8 @@ class ActiviteController extends Controller
         $activity = $this->userService->createActivite($validated['titre'],$user->id, $validated);
         $activity->image_data=$path;
         $activity->update();
+
+        Notification::send($user, new NewEventNotification($activity));
 
         return response()->json([ $path, $activity
         ], 201);

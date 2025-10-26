@@ -96,12 +96,10 @@ import ListUserMessage from '@/components/MessagingComponents/ListUserMessageCom
 import Message from '@/components/MessagingComponents/MessageComponent.vue';
 import ProfileUserMessage from '@/components/MessagingComponents/ProfileUserMessageComponent.vue';
 import { useMessageStore } from '@/stores/Message';
-import SearchBar from '@/components/SearchBarComponent.vue'
 import '../../JS/config/echo';
 
 
-const messageStore = useMessageStore();
-const testId = ref(null);
+
 
 const {getConversationsFromUser} = useMessageStore()
 let userFriend = ref(null);

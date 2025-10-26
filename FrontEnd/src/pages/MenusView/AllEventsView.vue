@@ -1,9 +1,11 @@
 <template>
+  <Notification/>
     <div id="allEventView">
+    
         <ListcategorieEvent></ListcategorieEvent>
         <div>
             <h3>{{ actualLang ? 'Up coming events' : 'Evenement en approche'}}</h3>
-            <UpComingEvent :list-event="upComingEvents" />
+            <UpComingEvent  :list-event="upComingEvents" />
         </div>
       
 
@@ -18,6 +20,7 @@
     import LocalStorageManager from "@/JS/LocalStaorageManager"
     import { ref, onMounted, onUnmounted, watch, computed} from "vue";
     import { useActivityStore } from '@/stores/activity';
+    import Notification from "@/components/NotificationComponent.vue";
 
 
     const actualMode = ref(LocalStorageManager.getMode());

@@ -10,7 +10,7 @@
       </ul>
       <span id="right" @click="scroll('right')" :class="[{'glow' : !actualMode}]">></span>
     </div>
-    <button @click="resetFilter">Reset Filter</button>
+    
   </template>
   
   <script setup>

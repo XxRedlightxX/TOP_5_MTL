@@ -1,8 +1,10 @@
 <template>
   <div class="upComingEvent" ref="wrapper">
     <span id="left" @click="scroll('left')"><</span>
-    <ul class="carousel" ref="carousel">
-      <router-link :to="{ name: 'show', params: {id: event.id}}" v-for="(event, index) in  listEvent" :key="index" class="card">
+    <ul class="carousel" ref="carousel" >
+      
+      <router-link :to="{ name: 'show', params: {id: event.id}}" v-for="(event, index) in  listEvent" 
+      :key="index" class="card" >
         <div class="img">
           <img :src="getEventUrl(event.image)" alt="img" draggable="false" />
         </div>
