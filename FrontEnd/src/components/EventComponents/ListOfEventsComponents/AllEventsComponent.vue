@@ -13,7 +13,7 @@
         <div class="event_card_photo">
            <span class="overlay" > 
           <v-icon
-          :size="30"
+          :size="40"
           :color="isFavorite(item.id) ? 'red' : 'grey'"
           :icon="isFavorite(item.id) ? 'mdi-heart' : 'mdi-heart-outline'"
           @click.stop.prevent="toggleLike(item.id)"

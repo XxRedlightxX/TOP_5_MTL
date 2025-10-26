@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Service;
+
+use App\DAO\SourceDonnes\FollowDAO;
 use App\Models\User;
 use App\DAO\SourceDonnes\UserDAO;
 use App\Models\Activite;
@@ -39,6 +41,7 @@ class UserService {
     }
 
      public function getUserByUsername(string $username){
+
        return  $this->daoUser->getUserBysearchUsername($username);
     }
     public function getUserEmailandPassword(string $userEmail, $userPassword) {
@@ -55,6 +58,7 @@ class UserService {
 
 
      public function searchUserbyEmail(string $userEmail){
+
        return  $this->daoUser->getByEmail($userEmail);
     }
 

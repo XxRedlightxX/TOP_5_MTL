@@ -71,8 +71,8 @@
                 break;
             
             default:
-                followersOrFollowings =await getListUserFollowers('followers');
                 IsShowFollowers.value = true;
+                followersOrFollowings =await getListUserFollowers('followers');
                 IsShowFollowings.value = false;
                 IsShowFavorites.value = false;
         }
