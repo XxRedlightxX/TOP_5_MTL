@@ -59,7 +59,7 @@ class UserService {
     }
 
     public function updateUser(int $userId, array $userData): ?User
-{
+    {
     // Check if email exists for other users
     $existingUserWithEmail = $this->daoUser->getByEmail($userData['email']);
     if ($existingUserWithEmail->isNotEmpty() && $existingUserWithEmail->first()->id != $userId) {

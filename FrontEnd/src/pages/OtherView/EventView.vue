@@ -47,7 +47,6 @@
 
     const fetchActivity = async () => {
         activity.value = await getActivityById(route.params.id);
-        console.log(activity.value)
     };
 
     const handleCommentAdded = async (result) => {

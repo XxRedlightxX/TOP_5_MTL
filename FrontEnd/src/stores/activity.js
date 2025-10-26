@@ -30,7 +30,6 @@ export const  useActivityStore = defineStore('activitiesStore', {
 
             const params = new URLSearchParams();
  
-            const token = localStorage.getItem("token")
             for (const [key, value] of Object.entries(this.filters)) {
                 if (value) {
                 params.append(key, value);
@@ -41,7 +40,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
             const res = await fetch(`/api/activite/filtrer?${params.toString()}`, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                
             },
             });
             
@@ -60,9 +59,6 @@ export const  useActivityStore = defineStore('activitiesStore', {
             else {
                  console.error("Error fetching activities", data);
             }
-
-            
-          
         },
 
         async getUserActivities() {
@@ -92,27 +88,21 @@ export const  useActivityStore = defineStore('activitiesStore', {
 
         async getHigherRateEvent() {
                 const token = localStorage.getItem("token");
-
-                if (token) {
-                    const res = await fetch("/api/likedActivities", {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
+                const res = await fetch("/api/likedActivities", {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 });
                 const data = await res.json();
-        
                 if (res.ok) {
                     this.activities = data;
-                    
                     return this.activities;
                     
                 }else if(data.errors) {
                     this.errors= data.errors;
                     console.log(data.errors);
                 }       
-
-            }
         },
 
 
@@ -309,7 +299,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
         }
     },
 
-      async getFavoritesActivities() {
+      async getListFavoritesActivities() {
         const token = localStorage.getItem("token");
 
         if (!token) {
@@ -346,7 +336,84 @@ export const  useActivityStore = defineStore('activitiesStore', {
         } finally {
             this.isLoading = false;
         }
-}
+    },
+
+    async getFavoritesActivities() {
+  const token = localStorage.getItem("token")
+  if (!token) return []
+
+  try {
+    const res = await fetch("/api/favorite", {
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+    })
+
+    if (!res.ok) return []
+
+    const data = await res.json()
+
+    if (!data?.favoris) return []
+
+    return data.favoris // array of fav objects
+  } catch (err) {
+    console.error(err)
+    return []
+  }
+},
+
+    async addFavoritesActivities(activityId) {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            this.errors = { message: "No token found" };
+            return null;
+        }
+
+        this.isLoading = true;
+        this.errors = {};
+
+        try {
+            const res = await fetch("/api/favorite", {
+                method : "post",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ id: activityId }),
+            });
+            
+            // Check if response is OK before parsing JSON
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            
+            const data = await res.json();
+            console.log("Favorites data:", data);
+            return data.favorited;
+            
+        } catch (error) {
+            this.errors = { 
+                message: error.message || "Failed to fetch favorites" 
+            };
+            console.error("Fetch error:", error);
+            return null;
+        } finally {
+            this.isLoading = false;
+        }
+    },
+
+    async checkIfFavorite(activityId) {
+        try {
+            const token = localStorage.getItem('token')
+            const res = await fetch(`/api/isFavorite/${activityId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+            })
+            const data = await res.json();
+            return data;
+        } catch (err) {
+            console.error('Error checking favorite:', err)
+        }
+    }
 
 
 

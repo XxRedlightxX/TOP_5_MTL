@@ -12,13 +12,12 @@
       >
         <div class="event_card_photo">
            <span class="overlay" > 
-            <v-icon
-        :color="isLiked(item.id) ? 'red' : 'grey'"
-        :icon="isLiked(item.id) ? 'mdi-heart' : 'mdi-heart-outline'"
-        size="40"
-        @click.stop.prevent="toggleLike(item.id)"
-        class="clickable-heart"
-      />
+          <v-icon
+          :size="30"
+          :color="isFavorite(item.id) ? 'red' : 'grey'"
+          :icon="isFavorite(item.id) ? 'mdi-heart' : 'mdi-heart-outline'"
+          @click.stop.prevent="toggleLike(item.id)"
+          />
           </span>
           <!-- Main image -->
           <img :src="getEventUrl(item.image)" class="product-thumb" alt="Event Image">
@@ -62,34 +61,42 @@ import { formatDateSpecial } from "@/JS/GlobalFunctions";
 import { getEventUrl } from '@/JS/GlobalFunctions';
 
 
-
+const activityStore = useActivityStore()
+const favorites = ref(new Set());
 const eventsPerPage = 9;
 const currentPage = ref(0);
-const {addFavoritesActivities} = useActivityStore()
 
 const props = defineProps({
   listEvent: Array
 });
 
-const likedEvents = ref([])
 
+const isFavorite = (id) => {
+  return favorites.value && favorites.value.has ? favorites.value.has(id) : false
+}
 // toggle like for one event
-const toggleLike =async (id) =>{
-  if (likedEvents.value.includes(id)) {
-    likedEvents.value = likedEvents.value.filter(e => e !== id)
+const toggleLike = async (eventId) => {
+  const result = await activityStore.addFavoritesActivities(eventId) // returns true/false
+
+  if (result) {
+    favorites.value.add(eventId)
   } else {
-    likedEvents.value.push(id)
+    favorites.value.delete(eventId)
   }
 }
 
-// check if specific event is liked
-function isLiked(id) {
-  return likedEvents.value.includes(id)
+
+async function loadFavorites() {
+  const favs = await activityStore.getFavoritesActivities() || []  // always an array
+  if (favs && Array.isArray(favs)) {
+    favorites.value = new Set(favs.map(fav => fav.id))
+  } else {
+    favorites.value = new Set()
+  }
 }
 
 
-const listActivities = ref([]);
-const activitiesStore = useActivityStore();
+
 
 const totalPages = computed(() => Math.ceil(props.listEvent.length / eventsPerPage));
 
@@ -131,6 +138,10 @@ let newEvent = ref(null);
   // const onSlideChange = (swiper) => {
   //   indexSlide.value = swiper.activeIndex;
   // };
+
+onMounted(() => {
+  loadFavorites()
+})
 
 
 

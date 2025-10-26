@@ -20,9 +20,6 @@ class FollowService {
         $this->userDAO = $userDAO;
     }
 
-
-    
-
     public function follow(int $followerId, int $followedId): User|string
     {
         $follower = $this->userDAO->findById($followerId);
