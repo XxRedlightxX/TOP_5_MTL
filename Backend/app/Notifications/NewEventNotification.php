@@ -46,7 +46,7 @@ class NewEventNotification extends Notification implements ShouldQueue
         ]);
     }
 
-    // 👇 broadcast on a public channel
+    //  broadcast on a public channel
     public function broadcastOn()
     {
         return ['public-events'];

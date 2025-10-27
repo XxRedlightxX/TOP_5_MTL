@@ -1,7 +1,7 @@
 <template>
-  <Notification/>
+  
     <div id="allEventView">
-    
+        
         <ListcategorieEvent></ListcategorieEvent>
         <div>
             <h3>{{ actualLang ? 'Up coming events' : 'Evenement en approche'}}</h3>
