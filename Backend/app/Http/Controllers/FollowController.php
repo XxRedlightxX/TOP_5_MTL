@@ -18,6 +18,7 @@ class FollowController extends Controller
     public function __construct(FollowService $followService, UserService $userService)
     {
         $this->followService = $followService;
+        $this->userService = $userService;
         $this->middleware('auth:sanctum');
     }
     public function addFollowAUser(Request $request)
@@ -32,7 +33,7 @@ class FollowController extends Controller
     try {
         $result = $this->followService->follow($user->id, $targetId);
 
-        $targetUser =$this->userService->findById($targetId);
+        $targetUser =$this->userService->getUserById($targetId);
 
         return match ($result) {
             'followed' => response()->json([

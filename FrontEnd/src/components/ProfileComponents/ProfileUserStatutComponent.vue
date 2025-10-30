@@ -40,7 +40,7 @@
     const {getListUserFollowers} = useFriendStore();
     const { getListFavoritesActivities} =useActivityStore();
 
-    let IsShowFollowers = ref(false);
+    let IsShowFollowers = ref(true);
     let IsShowFollowings = ref(false);
     let IsShowFavorites = ref(false);
 
@@ -72,7 +72,6 @@
             
             default:
                 IsShowFollowers.value = true;
-                followersOrFollowings =await getListUserFollowers('followers');
                 IsShowFollowings.value = false;
                 IsShowFavorites.value = false;
         }

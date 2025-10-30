@@ -8,7 +8,7 @@
                 <div class="test">
                     <img
                         alt="John"
-                        :src="value.image"
+                        :src="getAvatarUrl(value.image_data)"
                         :key="authStore?.user.image_data"
                     />
                 </div>
@@ -38,6 +38,7 @@
     import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
     import WaterButton from "@/components/WaterButtonComponent.vue";
     import storageManager from "@/JS/LocalStaorageManager";
+    import { getAvatarUrl } from "@/JS/GlobalFunctions";
     
     let actualMode = ref(storageManager.getMode());
     let actualLang = ref(storageManager.getLang());

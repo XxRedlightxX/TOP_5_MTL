@@ -12,7 +12,7 @@ const routes = [
       {
         path: "/",
         name: "Home",
-        
+        meta: { guest: true },
         // route level code-splitting
         // this generates a separate chunk (Home-[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -31,6 +31,7 @@ const routes = [
       {
         path: "/UserProfile",
         name: "UserProfile",
+         meta: { auth: true },
         // route level code-splitting
         // this generates a separate chunk (Home-[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -80,6 +81,7 @@ const routes = [
       {
         path: "/Test",
         name: "Chat",
+        meta: { auth: true },
         // route level code-splitting
         // this generates a separate chunk (Home-[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -131,13 +133,9 @@ router.beforeEach(async (to, from) => {
   const authStore = useAuthStore();
   await authStore.getUser();
 
-  /*if (authStore.user && to.meta.guest) {
-    return { name: "home" };
+   if (!authStore.user && to.meta.auth) {
+    return { name: "Profile" };
   }
-
-  if (!authStore.user && to.meta.auth) {
-    return { name: "login" };
-  }*/
 });
 
 export default router;

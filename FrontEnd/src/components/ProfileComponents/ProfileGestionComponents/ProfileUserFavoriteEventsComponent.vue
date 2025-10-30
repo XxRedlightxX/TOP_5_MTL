@@ -9,7 +9,7 @@
                         <img
                             alt="John"
                             :src="getAvatarUrl(value.image_data)"
-                            :key="authStore?.user.image_data"
+                            
                         />
                     </div>
                     <div class="test">
@@ -29,7 +29,7 @@
         </div>
         <div v-else>
         
-        <p>{{ actualLang ? 'No Favorite yet' : 'Aucun Favoris' }}</p>
+        <p>{{ actualLang ? 'No Favorites yet' : 'Aucun Favoris' }}</p>
     </div>
      </div>
    

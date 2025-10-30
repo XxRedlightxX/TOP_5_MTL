@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Service\DTO\AuthResult;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class UserService {
 
@@ -53,6 +54,10 @@ class UserService {
         }
 
         return new AuthResult(false, null, 'Invalid credentials.', null);
+    }
+
+    public function getUserById(int $pUserId): User {
+        return $this->daoUser->findById($pUserId);
     }
 
 

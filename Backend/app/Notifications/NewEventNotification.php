@@ -43,6 +43,7 @@ class NewEventNotification extends Notification implements ShouldQueue
             'saison_id'  => $this->event->saison_id,
             'type_id'  => $this->event->type_id,
             
+            
         ]);
     }
 

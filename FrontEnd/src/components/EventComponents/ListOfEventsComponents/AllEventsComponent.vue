@@ -1,8 +1,13 @@
 <template>
   <div id="AllEventComponent">
     <FilterComponent/>
+
     
-    <div class="events">
+      <LoadingEvents v-if="isLoading"  :eventCount="eventsPerPage"  />
+      
+   
+    
+    <div class="events" >
       <router-link 
         v-if="paginatedEvents.length" 
         :to="{ name: 'show', params: { id: item.id } }" 
@@ -41,7 +46,8 @@
       </div>
     </div>
 
-   <PaginationComponent 
+   <PaginationComponent
+      v-if="!isLoading && paginatedEvents.length"
       :current-page="currentPage"
       :total-pages="totalPages"
       :visible-pages="visiblePages"
@@ -59,9 +65,11 @@ import FilterComponent from './FilterComponent.vue';
 import { useActivityStore } from '@/stores/activity';
 import { formatDateSpecial } from "@/JS/GlobalFunctions";
 import { getEventUrl } from '@/JS/GlobalFunctions';
+import LoadingEvents from '@/components/LoadingEventsComponents.vue';
 
 
-const activityStore = useActivityStore()
+const activityStore = useActivityStore();
+const isLoading = computed(() => activityStore.isLoading)
 const favorites = ref(new Set());
 const eventsPerPage = 9;
 const currentPage = ref(0);
@@ -87,7 +95,7 @@ const toggleLike = async (eventId) => {
 
 
 async function loadFavorites() {
-  const favs = await activityStore.getFavoritesActivities() || []  // always an array
+  const favs = await activityStore.getFavoritesActivities() || [] 
   if (favs && Array.isArray(favs)) {
     favorites.value = new Set(favs.map(fav => fav.id))
   } else {

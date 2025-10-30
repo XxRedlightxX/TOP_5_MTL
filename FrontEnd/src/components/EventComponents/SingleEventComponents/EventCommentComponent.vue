@@ -3,8 +3,8 @@
 
     
     <h1> {{actualLang ? 'Comments' : "Commentaires"}}</h1>
-
-    <div class="comments-list" v-if="props.comments && props.comments.length">
+    <Loading  v-if="isLoading"/>
+    <div class="comments-list" v-if="props.comments && props.comments.length && !isLoading">
       <div class="comments"  v-for="comment2 in  props.comments"
        :key=" comment2.id">
         <div class="glas">
@@ -14,6 +14,7 @@
               <p>{{ comment2.user?.name  }}</p>
               <p>{{ formatDateComment(comment2.date) }}{{   comment2.user?.date}}</p>
             </div>
+            
           </div>
           <div class="commen" >
             <p>{{ comment2.contenu }}</p>
@@ -22,10 +23,10 @@
         </div>
         
       </div>
-      
-     
+       
     </div>
-     <div v-else> No</div>
+    
+     <div v-else>{{actualLang ? 'No comments' : "Aucun commentaires"}}</div>
 
    
 
@@ -39,6 +40,12 @@ import { ref, onMounted , onBeforeUnmount, computed  } from 'vue';
 import { getAvatarUrl } from "@/JS/GlobalFunctions";
 import { useUserStore } from '@/stores/user';
 import { formatDateComment } from "@/JS/GlobalFunctions";
+import Loading from "@/components/LoadingComponent.vue";
+import { useActivityStore } from "@/stores/activity";
+import { isPlainObject } from "vuetify/lib/util/helpers.mjs";
+
+const activitiesStore = useActivityStore()
+const isLoading = computed(() => activitiesStore.isLoading);
 
 
 const props = defineProps({
@@ -96,23 +103,8 @@ if (actualLang.value == null) {
   actualLang.value = storageManager.getLang();
 }
 
-const persons = ref([
-  { id: 1, name: 'Alice', image: "/src/assets/HomeCarousel/profil.jpeg" },
-  { id: 2, name: 'Bob', image: "/src/assets/bob.jpg" },
-  { id: 3, name: 'Michelle', image: "/src/assets/HomeCarousel/profil.jpeg" },
-  { id: 4, name: 'Nick', image: "/src/assets/bob.jpg" }
-]);
+;
 
-const comments = ref([
-  { id: 1, personId: 1, text: 'Très bel endroit pour se retrouver dans les journées chaudes de l\'été.', rating: 3 },
-  { id: 2, personId: 2, text: 'It was cool to look at and had interesting attractions. Would recommend and is worth the visit. It was very pretty and well kept, something for everyone. But, DO. NOT. GO. ON. THE. FERRIS. WHEEL.', rating: 4 },
-  { id: 3, personId: 3, text: 'Très bel endroit pour se retrouver dans les journées chaudes de l\'été.', rating: 1 },
-  { id: 4, personId: 4, text: 'Très bel endroit pour se retrouver dans les journées chaudes de l\'été.', rating: 5 }
-]);
-
-const getCommentsForPerson = (personId) => {
-  return comments.value.filter(comment => comment.personId === personId);
-};
 
 const handleLangChange = (event) => {
   actualLang.value = JSON.parse(event.detail.storage);

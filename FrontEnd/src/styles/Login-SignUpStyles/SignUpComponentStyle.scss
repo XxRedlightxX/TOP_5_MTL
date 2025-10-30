@@ -1,131 +1,123 @@
 .sign-up {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: flex-start;
     flex-direction: column;
-    
+
     text-align: center;
+    gap: 6px; // Further reduced
 
-    .v-text-field {
-      border: none;
-      padding: 8px 15px;
-      margin: 6px 0;
-      width: 100%;
-      max-height: 65px;
-      overflow: hidden;
-
-      &:focus {
-        outline: none;
-      }
+    .v-radio-group {
+        padding: 4px 15px; // Reduced
+      
+        width: 100% !important;
+        
+        .v-input__control {
+            display: flex !important;
+            flex-direction: row !important;
+        }
+        
+        .v-selection-control-group {
+            display: flex !important;
+            flex-direction: row !important;
+            width: 100% !important;
+        }
     }
+
+    .field-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 55px; 
+        
+        .v-text-field {
+            border: none;
+            padding: 2px 12px; 
+            width: 100%;
+            min-height: 55px; 
+        }
+        
+        .error {
+            color: red;
+            font-size: 0.8rem; 
+            margin-top: 1px; 
+            text-align: left;
+            padding: 0 12px; // Reduced
+            min-height: 14px; // Reduced
+        }
+    }
+
     .sub {
         width: 100%;
         display: flex;
         flex-direction: row;   
         justify-content: space-between;
-        .v-text-field {
-            width: 50%;
-        }
-    }
-    button {
-      border-radius: 5px;
-      font-size: 1rem;
-      font-weight: bold;
-      padding: 10px 40px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: transform .1s ease-in;
-
-      &:active {
-        transform: scale(.9);
-      }
-
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-  @media screen and (min-width: 1025.1px) {
-    .sign-up {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      flex-direction: column;
-      padding: 5% 3%;
-      border-top-right-radius: 16px;
-      border-bottom-right-radius: 16px;
-
-      #waterButtonComponent {
-        width: 40%;
-        margin: 2% auto 0% auto;
-      }
-    }
-  }
-  
-  @media screen and (max-width: 1025px) {
-    .sign-up {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      flex-direction: column;
-      padding: 5% 0%;
-      border-top-right-radius: 0px;
-      border-bottom-right-radius: 0px;
       
-      #waterButtonComponent {
-        width: 70%;
-        margin: 5% auto 0% auto;
-      }
-    }
-  }
-  .light {
-    .sign-up {
-      .v-field__overlay {
-        color: var(--graphite08);
-        background-color: var(--graphite);
-        //background-color: red;
-  
-        &:focus {
-          outline: none;
-          //background-color: var(--graphite02);
+        
+        .field-container {
+            width: 50%;
+          
         }
-      }
-      button {
+    }
+    
+    button {
+       
+        border-radius: 5px;
         background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
         color: #fff;
-      }
-      button:hover {
-        background: linear-gradient(to bottom, var(--graphite015), var(--graphite06));
-      }
-    }
-  }
+        font-size: 0.9rem; 
+        font-weight: bold;
+        padding: 8px 30px; 
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: transform .1s ease-in;
+        margin-top: 8px; 
 
-  .dark {
-    .sign-up {
-      .v-field__overlay {
-        //color: var(--light-text);
-        background-color: var(--light);
+        &:active {
+            transform: scale(.9);
+        }
 
         &:focus {
-          outline: none;
-          //background-color: var(--light-trans-glow-less);
+            outline: none;
         }
-      }
-      .v-label, .v-field__input, h2, .mdi-close-circle:hover  {
-        color: var(--light);
-      }
-      .mdi-close-circle {
-        color: var(--light-trans-2Shine);
-      }
-      button {
-        background: linear-gradient(to bottom, var(--light-trans-glow-less), var(--light-trans-2Shine));
-        color: var(--graphite08);
-      }
-      button:hover {
-        color: var(--light);
-        animation: neonGlowLess 0.5s ease-in-out infinite alternate;
-        background: linear-gradient(to bottom, var(--light-trans015), var(--light-trans-glow-less));
-      }
+        
+        &:hover {
+            background: linear-gradient(to bottom, var(--graphite015), var(--graphite06));
+        }
     }
-  }
+}
+
+// Update media queries with further reduced spacing
+@media screen and (min-width: 1025.1px) {
+    .sign-up {
+        gap: 8px; // Further reduced
+        padding: 2% 3%; // Further reduced
+
+        #waterButtonComponent {
+            width: 40%;
+            margin: 0% auto 0% auto; // Remove top margin
+        }
+    }
+}
+
+@media screen and (max-width: 1025px) {
+    .sign-up {
+        gap: 6px; // Further reduced
+        padding: 2% 0%; // Further reduced
+        
+        .sub {
+            flex-direction: column; // Stack on mobile
+            gap: 6px;
+            
+            .field-container {
+                width: 100%;
+            }
+        }
+        
+        #waterButtonComponent {
+            width: 70%;
+            margin: 2% auto 0% auto; // Reduced margin
+        }
+    }
+}

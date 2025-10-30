@@ -39,6 +39,7 @@ class ActiviteController extends Controller
         'deleteActivityById',
         'addCommentToActivity',
         'getUserActivities',
+        
     ]);
     }
 

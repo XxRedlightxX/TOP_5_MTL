@@ -9,7 +9,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
              user : null,
             activity: null,
             categories : [],
-            loading : false,
+            isLoading : false,
             filters: {
                 daytime: "" ?? null,
                 type: "",
@@ -27,43 +27,51 @@ export const  useActivityStore = defineStore('activitiesStore', {
     actions : {
 
         async getActivities() {
-
-            const params = new URLSearchParams();
- 
-            for (const [key, value] of Object.entries(this.filters)) {
-                if (value) {
-                params.append(key, value);
-               
+            this.isLoading = true; // Start loading
+            this.errors = {};
+            try {
+                const params = new URLSearchParams();
+    
+                for (const [key, value] of Object.entries(this.filters)) {
+                    if (value) {
+                    params.append(key, value);
+                
+                    }
                 }
-            }
 
-            const res = await fetch(`/api/activite/filtrer?${params.toString()}`, {
-            headers: {
-                'Content-Type': 'application/json',
+                const res = await fetch(`/api/activite/filtrer?${params.toString()}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    
+                },
+                });
                 
-            },
-            });
+                const data = await res.json();
+                console.log(data)
             
-            const data = await res.json();
-            console.log(data)
-        
-            if (res.ok) {
-                this.activities = data;
-                return this.activities;
-                
-            }else if(data.errors) {
-                this.errors= data.errors;
-                console.log(data.errors);
-            }        
+                if (res.ok) {
+                    this.activities = data;
+                    return this.activities;
+                    
+                }else if(data.errors) {
+                    this.errors= data.errors;
+                    console.log(data.errors);
+                }        
 
-            else {
-                 console.error("Error fetching activities", data);
+                else {
+                    console.error("Error fetching activities", data);
+                }
+            } catch (error) {
+                console.error("Network error:", error);
+                this.errors = { network: "Failed to fetch activities" };
+            } finally {
+                this.isLoading = false; // End loading
             }
         },
 
         async getUserActivities() {
             const token = localStorage.getItem("token");
-
+            
             if (token) {
                 const res = await fetch("/api/user/activite", {
                 headers: {
@@ -87,72 +95,98 @@ export const  useActivityStore = defineStore('activitiesStore', {
     },
 
         async getHigherRateEvent() {
-                const token = localStorage.getItem("token");
-                const res = await fetch("/api/likedActivities", {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    this.activities = data;
-                    return this.activities;
-                    
-                }else if(data.errors) {
-                    this.errors= data.errors;
-                    console.log(data.errors);
-                }       
+                
+                try {
+                    this.isLoading=true;
+                    const res = await fetch("/api/likedActivities", {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        
+                    },
+                    });
+                        const data = await res.json();
+                    if (res.ok) {
+                        this.activities = data;
+                        return this.activities;
+                        
+                    }else if(data.errors) {
+                        this.errors= data.errors;
+                        console.log(data.errors);
+                    }
+                } catch ($error) {
+                    return $error;
+                } finally {
+                    this.isLoading=false;
+                }
+
         },
 
 
 
 
         async getActivityById(activityId) {
-                const token = localStorage.getItem("token")
+           
+            try {
+                this.isLoading=true;
                 const res = await fetch(`/api/activity/${activityId}/comments`,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        
+                    },
+                });
+                
+                const data = await res.json();
+
+                if (res.ok) {
+                    this.activity = data;
+                    console.log(this.activity);
+                    return data;
+                }
+                else if(data.errors) {
+                    this.errors= data.errors;
+                    console.log(data.errors);
+                   
+                }
+            } catch ($error) {
+                return $error;
+            } finally {
+                this.isLoading=false;
+            }
+        },
+
+
+        async addCommentToEvent(formData, activityId) {
+            const token = localStorage.getItem("token");
+            if (!token) return this.router.push({ name: "Profile" });
+            try {
+                this.isLoading =true
+               
+                const res = await fetch(`/api/activity/${activityId}/comments`,{
+                method: "post",
+                body: JSON.stringify(formData),
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
                 });
-
+              
                 const data = await res.json();
-
-                if (res.ok) {
-                    this.activity = data;
-                    console.log(this.activity)
+                if (data.error) {
+                    this.error = data.error;
+                    console.log(this.error);
+                    
+                    return data.error;
+                } else {
+                    this.errors = {};
+                    console.log(data)
                     
                     return data;
-                    
-                }else if(data.errors) {
-                        this.errors= data.errors;
-                        console.log(data.errors);
-                } 
-            },
+                }
+            } catch ($error) {
 
-
-        async addCommentToEvent(formData, activityId) {
-            const token = localStorage.getItem("token");
-            const res = await fetch(`/api/activity/${activityId}/comments`,{
-            method: "post",
-            body: JSON.stringify(formData),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-
-        const data = await res.json();
-        if (data.error) {
-            this.error = data.error;
-            console.log(this.error);
-            return data.error;
-        } else {
-            this.errors = {};
-            console.log(data)
-            return data;
-        }
+            } finally {
+                this.isLoading =false
+            }
 
         },
 
@@ -160,7 +194,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
 
         async addEvent(formData) {
             const token = localStorage.getItem("token");
-
+            if (!token) return this.router.push({ name: "Profile" });
             const res = await fetch(`http://127.0.0.1:8000/api/user/activite`, {
                 method: "POST",
                 body: formData,
@@ -170,8 +204,6 @@ export const  useActivityStore = defineStore('activitiesStore', {
                 },
               
             });
-            
-
             const data = await res.json();
 
             if(data.errors) {
@@ -242,14 +274,10 @@ export const  useActivityStore = defineStore('activitiesStore', {
         },
 
    async getUpcomingEvents() {
-        const token = localStorage.getItem("token");
-
-        if (!token) return;
-
         try {
             const res = await fetch("/api/activite/test", {
             headers: {
-                'Authorization': `Bearer ${token}`,
+               
                 'Content-Type': 'application/json',
             },
             });
@@ -259,8 +287,6 @@ export const  useActivityStore = defineStore('activitiesStore', {
             }
 
             const data = await res.json();
-
-            
             this.activities = data || [];
 
             console.log("Upcoming events:", this.activities);
@@ -275,13 +301,10 @@ export const  useActivityStore = defineStore('activitiesStore', {
         },
 
         async getCategories() {
-            const token = localStorage.getItem("token");
-
-            if (token) {
-                const res = await fetch("/api/categories", {
+            const res = await fetch("/api/categories", {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    
                 },
             });
             const data = await res.json();
@@ -294,9 +317,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
             }else if(data.errors) {
                 this.errors= data.errors;
                 console.log(data.errors);
-            }       
-
-        }
+            }
     },
 
       async getListFavoritesActivities() {
@@ -339,35 +360,31 @@ export const  useActivityStore = defineStore('activitiesStore', {
     },
 
     async getFavoritesActivities() {
-  const token = localStorage.getItem("token")
-  if (!token) return []
+        const token = localStorage.getItem("token")
+        if (!token) return []
 
-  try {
-    const res = await fetch("/api/favorite", {
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-    })
+        try {
+            const res = await fetch("/api/favorite", {
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+            })
 
-    if (!res.ok) return []
+            if (!res.ok) return []
 
-    const data = await res.json()
+            const data = await res.json()
 
-    if (!data?.favoris) return []
+            if (!data?.favoris) return []
 
-    return data.favoris // array of fav objects
-  } catch (err) {
-    console.error(err)
-    return []
-  }
+            return data.favoris // array of fav objects
+        } catch (err) {
+            console.error(err)
+            return []
+        }
 },
 
     async addFavoritesActivities(activityId) {
         const token = localStorage.getItem("token");
-        if (!token) {
-            this.errors = { message: "No token found" };
-            return null;
-        }
-
-        this.isLoading = true;
+        if (!token) return this.router.push({ name: "Profile" });
+        
         this.errors = {};
 
         try {
@@ -396,7 +413,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
             console.error("Fetch error:", error);
             return null;
         } finally {
-            this.isLoading = false;
+            
         }
     },
 
