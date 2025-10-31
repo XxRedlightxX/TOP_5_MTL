@@ -77,26 +77,25 @@ export const useActivityStore = defineStore("activitiesStore", {
     },
 
     async getHigherRateEvent() {
-      const token = localStorage.getItem("token");
+      //const token = localStorage.getItem("token");
 
-      if (token) {
-        const res = await fetch("/api/likedActivities", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await res.json();
+      const res = await fetch("/api/likedActivities", {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      console.log("dataaa :", data);
 
-        if (res.ok) {
-          this.activities = data;
-          console.log("dataaa : " + data);
+      if (res.ok) {
+        this.activities = data;
+        console.log("dataaa :", data);
 
-          return this.activities;
-        } else if (data.errors) {
-          this.errors = data.errors;
-          console.log(data.errors);
-        }
+        return this.activities;
+      } else if (data.errors) {
+        this.errors = data.errors;
+        console.log(data.errors);
       }
     },
 

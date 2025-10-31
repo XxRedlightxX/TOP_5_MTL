@@ -75,7 +75,7 @@ const SetupEvents = {
       window.removeEventListener(eventName, handleStorageChange);
     });
 
-    return SetupEvents.actualEventsSetupGeneric(storedData);
+    return storedData; //SetupEvents.actualEventsSetupGeneric(storedData);
   },
 
   /**
