@@ -1,5 +1,5 @@
 <template>
-  <div id="carouselGrand">
+  <div v-if="carouselItems.length > 0" id="carouselGrand">
     <!-- list item -->
     <div class="list">
       <div v-for="(item, index) in carouselItems" :key="index" class="item">
@@ -52,21 +52,23 @@
   const text2a = "Organisator";
   const text2b = "Découvrir les Organisateurs";
 
-  // Récupération des données fake DB
-  const events = FakeDataBase.getCarousellEvent();
-
   // router
   const router = useRouter();
 
   // Mode & Lang depuis Setup
   const actualMode = ref(Setup.modeSetup().value);
   const actualLang = ref(Setup.languageSetup().value);
+
   const props = defineProps({
-    events: Object,
-  })
+    events: {
+      type: Array,
+      default: () => []
+    }
+  });
+
 
   // État réactif du carrousel
-  const carouselItems = ref(actualMode.value ? events.eventJour : events.eventNuit);
+  const carouselItems = ref([]);
   const textEvent = ref(actualLang.value ? text1a : text1b);
   const textOrganisator = ref(actualLang.value ? text2a : text2b);
 
@@ -91,6 +93,12 @@
     setEvent(item);
     router.push({ name: "Event" });
   }
+
+  //Lifecycle
+  onMounted(() => {
+    carouselItems.value = props.events;
+    setNextAuto();
+  });
 
   function showSlider(direction) {
     if (direction === "next") {
@@ -117,33 +125,7 @@
     }, timeAutoNext);
   }
 
-  // function handleModeChange(event) {
-  //   actualMode.value = JSON.parse(event.detail.storage);
-  // }
-
-  // function handleLangChange(event) {
-  //   actualLang.value = JSON.parse(event.detail.storage);
-  // }
-
-  //Lifecycle
-  onMounted(() => {
-    // window.addEventListener("mode-changed", handleModeChange);
-    // window.addEventListener("lang-changed", handleLangChange);
-    setNextAuto();
-  });
-
-  // onBeforeUnmount(() => {
-  //   window.removeEventListener("mode-changed", handleModeChange);
-  //   window.removeEventListener("lang-changed", handleLangChange);
-  // });
-
   // to be deleted
-  // Watchers
-  watch(actualMode, (newVal) => {
-    console.log("Mode changed: ", newVal);
-    carouselItems.value = newVal ? events.eventJour : events.eventNuit;
-  });
-
   watch(actualLang, (newVal) => {
     textEvent.value = newVal ? text1a : text1b;
     textOrganisator.value = newVal ? text2a : text2b;

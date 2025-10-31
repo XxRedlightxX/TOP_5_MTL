@@ -53,6 +53,17 @@ export default defineConfig({
     extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
   },
   server: {
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:8000/",
+        changeOrigin: true,
+
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    },
     port: 3000,
   },
   css: {

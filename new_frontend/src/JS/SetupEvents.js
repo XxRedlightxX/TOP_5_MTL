@@ -16,7 +16,7 @@
  * une version générique pour centraliser la logique commune.
  */
 
-import { ref, onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import LocalStorageManager from "@/JS/LocalStorageManager";
 import { useActivityStore } from "@/stores/activity";
 import Setup from "./Setup";
@@ -51,10 +51,9 @@ const SetupEvents = {
     const storedData = ref(getFunction());
 
     // Si aucun événement n'est enregistré, récupération depuis l'API
-    if (storedData.value != null) {
+    if (storedData.value == null) {
       const activitiesStore = useActivityStore();
       const apiData = await fetchFunction.call(activitiesStore);
-      console.log("data : ", apiData);
       storedData.value = SetupEvents.setListOfEvents(apiData);
       setFunction(storedData.value);
     }
@@ -75,7 +74,7 @@ const SetupEvents = {
       window.removeEventListener(eventName, handleStorageChange);
     });
 
-    return storedData; //SetupEvents.actualEventsSetupGeneric(storedData);
+    return storedData.value; // SetupEvents.actualEventsSetupGeneric(storedData);
   },
 
   /**
@@ -213,29 +212,50 @@ const SetupEvents = {
    * ----------------------------------------------------------
    */
 
-  /**
-   * Transforme les données brutes reçues de l’API en un format exploitable
-   * pour l’application (clé → valeur standardisée).
-   *
-   * @param {Object} data - Données d’activités reçues depuis l’API
-   * @returns {Array<Object>} Liste formatée d’événements
-   */
   setListOfEvents(data) {
-    let organizedData = ref([]);
+    const organizedData = ref([]);
     const descriptionText = "Description not found";
+    const defaultImage = "https://picsum.photos/640/480"; // Fallback image
 
-    if (data != null) {
+    if (Array.isArray(data)) {
+      // ✅ Cas : l’API retourne un tableau d’événements (ton cas actuel)
+      organizedData.value = data.map((activity) => ({
+        id: activity.id,
+        image: activity.image_data || defaultImage,
+        image2: activity.image_data2 || defaultImage,
+        title: activity.titre,
+        desc: activity.description || descriptionText,
+        rating: Number.parseFloat(activity.nombre_likes) || 0,
+        lieu: activity.lieu,
+        date_debut: activity.date_debut,
+        date_fin: activity.date_fin,
+        statut_journee: activity.statut_journee,
+        utilisateur_id: activity.utilisateur_id,
+        type_id: activity.type_id,
+        saison_id: activity.saison_id,
+      }));
+    } else if (data && Array.isArray(data.activities)) {
+      // ⚙️ Cas ancien format : { activities: [...] }
       organizedData.value = data.activities.map((activity) => ({
         id: activity.id,
         image: activity.image_data || defaultImage,
+        image2: activity.image_data2 || defaultImage,
         title: activity.titre,
         desc: activity.description || descriptionText,
-        rating: activity.nombre_likes || 2,
+        rating: Number.parseFloat(activity.nombre_likes) || 0,
         lieu: activity.lieu,
-        date: activity.date,
+        date_debut: activity.date_debut,
+        date_fin: activity.date_fin,
+        statut_journee: activity.statut_journee,
+        utilisateur_id: activity.utilisateur_id,
+        type_id: activity.type_id,
+        saison_id: activity.saison_id,
       }));
+    } else {
+      console.warn("⚠️ Données inattendues dans setListOfEvents :", data);
     }
 
+    //console.log("✅ organised value :", organizedData.value);
     return organizedData.value;
   },
 };

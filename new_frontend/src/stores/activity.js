@@ -86,11 +86,9 @@ export const useActivityStore = defineStore("activitiesStore", {
         },
       });
       const data = await res.json();
-      console.log("dataaa :", data);
 
       if (res.ok) {
         this.activities = data;
-        console.log("dataaa :", data);
 
         return this.activities;
       } else if (data.errors) {

@@ -1,6 +1,6 @@
 <template>
-  <div id="carousellPhoneComponent">
-    <CarouselSwipper :events="newEvent" @phoneEventSwiped="changeInfos"/>
+  <div v-if="newEvent.length > 0 && eventInfo != null" id="carousellPhoneComponent">
+    <CarouselSwipper :events="newEvent" @phone-event-swiped="changeInfos" />
 
     <div class="reste">
       <div class="carousellPhoneSwipperInfos">
@@ -8,50 +8,50 @@
         <p>{{ eventInfo.desc }}</p>
       </div>
       <div class="carousellPhoneSwipperBtn">
-        <router-link to="/Event" class="button" @click="setEvent()"> {{ actualLang ? "See the event" : "Voir l'evenement" }}</router-link>
-        <router-link to="/Event Organisator" class="button" @click="setEvent()">{{ actualLang ? "Organisator" : "Découvrir les Organisateurs" }}</router-link>
+        <router-link class="button" to="/Event" @click="setEvent()"> {{ actualLang ? "See the event" : "Voir l'evenement" }}</router-link>
+        <router-link class="button" to="/Event Organisator" @click="setEvent()">{{ actualLang ? "Organisator" : "Découvrir les Organisateurs" }}</router-link>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-  import { ref, watch, defineProps } from 'vue';
-  import Setup from '@/JS/Setup';
-  import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase';
-  import CarouselSwipper from './CarousellPhoneSwipper.vue';
+  import { defineProps, onMounted, ref, watch } from 'vue'
+  import Setup from '@/JS/Setup'
+  import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase'
+  import CarouselSwipper from './CarousellPhoneSwipper.vue'
 
   let actualMode = Setup.modeSetup()
   let actualLang = Setup.languageSetup()
   const props = defineProps({
-    events: Object,
+    events: {
+      type: Array,
+      default: () => [],
+    },
   })
 
-  // to be deleted
-  const events = FakeDataBase.getNewEvents();
+  let newEvent = ref([])
 
-  let newEvent = ref(null)
-  newEvent.value = actualMode.value ? events.eventJour : events.eventNuit;
-    // Correction du watcher
-  watch(actualMode, (newVal, oldVal) => {
-    newEvent.value = newVal ? events.eventJour : events.eventNuit;
-  })
-
-  ///
   let i = ref(0)
-  const eventInfo = ref(newEvent.value[i.value])
+  const eventInfo = ref(null)
 
-  const changeInfos = () => {
-    if (i.value === newEvent.value.length - 1) {
-      i.value = 0
-    } else {
-      i.value++
-    }
+  // Méthode appelée quand le slide change
+  const changeInfos = currentIndex => {
+    // ✅ Utiliser l’index envoyé par le carrousel
+    i.value = currentIndex
+
+    // ✅ Mettre à jour l'événement affiché
     eventInfo.value = newEvent.value[i.value]
-  };
+    console.log('infooo :', eventInfo)
+  }
 
   const setEvent = () => {
     LocalStorageManager.setEvent(eventInfo.value)
   }
+
+  onMounted(() => {
+    newEvent.value = props.events
+    eventInfo.value = newEvent.value[0]
+  })
 </script>
 
 <style lang="scss">

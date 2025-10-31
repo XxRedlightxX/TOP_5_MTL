@@ -17,7 +17,7 @@
 
   onMounted(async () => {
     hightRatedActivities.value = await SetupEvent.higherRateEventsSetup();
-    console.log('events : ', hightRatedActivities.value);
+    console.log('events : ', hightRatedActivities);
   });
 
 </script>
