@@ -51,9 +51,10 @@ const SetupEvents = {
     const storedData = ref(getFunction());
 
     // Si aucun événement n'est enregistré, récupération depuis l'API
-    if (storedData.value == null) {
+    if (storedData.value != null) {
       const activitiesStore = useActivityStore();
       const apiData = await fetchFunction.call(activitiesStore);
+      console.log("data : ", apiData);
       storedData.value = SetupEvents.setListOfEvents(apiData);
       setFunction(storedData.value);
     }
@@ -74,7 +75,7 @@ const SetupEvents = {
       window.removeEventListener(eventName, handleStorageChange);
     });
 
-    return Setup.actualEventsSetupGeneric(storedData);
+    return SetupEvents.actualEventsSetupGeneric(storedData);
   },
 
   /**
@@ -133,7 +134,7 @@ const SetupEvents = {
    * @returns {Ref<Array>} Liste réactive des meilleurs événements
    */
   async higherRateEventsSetup() {
-    return await Setup.eventsSetupGeneric(
+    return await SetupEvents.eventsSetupGeneric(
       "HightEvent",
       "HightEvent-changed",
       useActivityStore().getHigherRateEvent,
@@ -148,9 +149,9 @@ const SetupEvents = {
    * @param {Ref<Object>} higherRateEvents - Données d’événements "Higher Rate"
    * @returns {Ref<Array>} Liste d’événements adaptés au mode actuel
    */
-  actualHigherRateEventsSetup(higherRateEvents) {
-    return Setup.actualEventsSetupGeneric(higherRateEvents);
-  },
+  // actualHigherRateEventsSetup(higherRateEvents) {
+  //   return Setup.actualEventsSetupGeneric(higherRateEvents);
+  // },
 
   /**
    * Initialise la configuration des nouveaux événements (New Events)
@@ -160,7 +161,7 @@ const SetupEvents = {
    * @returns {Ref<Array>} Liste réactive des nouveaux événements
    */
   async newEventsSetup() {
-    return await Setup.eventsSetupGeneric(
+    return await SetupEvents.eventsSetupGeneric(
       "NewEvent",
       "NewEvent-changed",
       useActivityStore().getNewEvent,
@@ -175,9 +176,9 @@ const SetupEvents = {
    * @param {Ref<Object>} newEvents - Données réactives des nouveaux événements
    * @returns {Ref<Array>} Liste d’événements filtrés selon le mode
    */
-  actualnewEventsSetup(newEvents) {
-    return Setup.actualEventsSetupGeneric(newEvents);
-  },
+  // actualnewEventsSetup(newEvents) {
+  //   return Setup.actualEventsSetupGeneric(newEvents);
+  // },
 
   /**
    * Initialise la configuration des événements à venir (Upcoming Events)
@@ -187,7 +188,7 @@ const SetupEvents = {
    * @returns {Ref<Array>} Liste réactive des événements à venir
    */
   async upcomingEventSetup() {
-    return await Setup.eventsSetupGeneric(
+    return await SetupEvents.eventsSetupGeneric(
       "UpcomingEvent",
       "UpcomingEvent-changed",
       useActivityStore().getUpcomingEvent,
@@ -202,9 +203,9 @@ const SetupEvents = {
    * @param {Ref<Object>} upcomingEvents - Données réactives des événements à venir
    * @returns {Ref<Array>} Liste d’événements filtrés selon le mode
    */
-  actualupcomingEventSetup(upcomingEvents) {
-    return Setup.actualEventsSetupGeneric(upcomingEvents);
-  },
+  // actualupcomingEventSetup(upcomingEvents) {
+  //   return Setup.actualEventsSetupGeneric(upcomingEvents);
+  // },
 
   /**
    * ----------------------------------------------------------
@@ -239,4 +240,4 @@ const SetupEvents = {
   },
 };
 
-export default Setup;
+export default SetupEvents;

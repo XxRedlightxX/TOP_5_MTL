@@ -1,10 +1,3 @@
-/**
-* retourne les event ainsi :
-* data {
-* eventJour: [liste event jours],
-* eventNuit: [liste event nuits]
-* }
-*/
 -- -----------------------------------------------------
 -- HIGH RATED ACTIVITES 
 -- -----------------------------------------------------
@@ -211,7 +204,7 @@ VALUES
  4, 2, 4, NOW(), NOW());
 
 -- -----------------------------------------------------
---NEW ACTIVITES
+-- NEW ACTIVITES
 -- -----------------------------------------------------
 INSERT INTO activite (
   titre, description, date_debut, date_fin, toute_la_journee, toute_annee,
@@ -346,4 +339,3 @@ VALUES
  0, 0, 'Café L’Aiguille', 2.8, 45.519, -73.584, 'nuit',
  'https://picsum.photos/640/480', 'https://picsum.photos/640/480',
  1, 4, 1, NOW(), NOW());
-

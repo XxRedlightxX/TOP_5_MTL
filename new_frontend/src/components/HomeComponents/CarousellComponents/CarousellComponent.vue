@@ -1,5 +1,5 @@
 <template>
-  <div id="carousellComponent">
+  <div v-if="hightRatedActivities != null" id="carousellComponent">
     <CarousellGrandEcrant :events="hightRatedActivities"/>
     <CarousellPhone :events="hightRatedActivities"/>
   </div>
@@ -13,9 +13,12 @@
   import CarousellGrandEcrant from './CarousellGrandEcrant.vue'
   import CarousellPhone from './CarousellPhone.vue'
 
-  //let hightRatedActivities = SetupEvent.higherRateEventsSetup();
-
-  //console.log('events : ' + hightRatedActivities)
+  const hightRatedActivities = ref(null);
+  
+  onMounted(async () => {
+    hightRatedActivities.value = await SetupEvent.higherRateEventsSetup();
+    console.log("events :", hightRatedActivities.value);
+  });
 
 </script>
 
