@@ -1,5 +1,5 @@
 <template>
-     <p v-if="authStore.user">{{ authStore.user.name }}</p>
+    
     <div id="avatarUploader"  v-if="authStore.user">
         <v-avatar size="180" >
             <img
@@ -21,11 +21,12 @@
 </template>
 
 <script setup>
-import defaultImg from '../../../assets/p1.jpg';
+
 import storageManager from "../../../JS/LocalStaorageManager"
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useUserStore } from '@/stores/user';
+import { getAvatarUrl } from "@/JS/GlobalFunctions";
 
 
 const authStore = useAuthStore();
@@ -35,10 +36,6 @@ const errorMessage = ref(null);
 const  validationErrors  = ref(null);
 
 
-const getAvatarUrl = (imagePath) => {
-    if (!imagePath) return img;
-    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
-};
 
 
 const uploadAvatar = async (event) => {
@@ -68,44 +65,6 @@ const uploadAvatar = async (event) => {
     console.error("Upload failed:", error);
   }
 }
-
-/*  const formData = new FormData();
-  
-  formData.append('image_data', selectedFile.value);
-
-
-  try {
-    const res = await fetch('http://127.0.0.1:8000/api/user/profile-picture',  {
-      method: "POST",
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-        
-      },
-      body: formData
-    });
-
-    const data = await res.json();
-    console.log("Full response:", data);
-
-    if (!res.ok) {
-      if (data.errors) {
-        validationErrors.value = data.errors;
-        console.error("Validation errors:", data.errors);
-      }
-      throw new Error(data.message || 'Upload failed');
-    }
-
-    if (data.avatar_url) {
-      authStore.user.image_data = data.avatar_url;
-   
-      await authStore.getUser();
-    }
-  } catch (err) {
-    console.error("Upload error:", err);
-    errorMessage.value = err.message;
-  }
-}*/
-///
 
 const img = ref(null);
 const actualMode = ref(storageManager.getMode());
@@ -152,7 +111,7 @@ const onFileChange = (event) => {
 };*/
 
 // Initialize with default image if no file selected
-img.value = defaultImg;
+
 
 </script>
 

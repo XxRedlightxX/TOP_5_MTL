@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Service\FollowService;
 use App\Service\UserService;
-
-
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -17,10 +16,12 @@ class UserController extends Controller
 
 
     protected $userService;
+    protected $followService;
 
-      public function __construct(UserService $userService)
+      public function __construct(UserService $userService, FollowService $followService)
     {
         $this->userService = $userService;
+        $this->followService = $followService;
          $this->middleware('auth:sanctum');
 
       
@@ -40,10 +41,18 @@ class UserController extends Controller
         $validated = $request->validate([
             'username' => 'required'
         ]);
+        $authUser=$request->user();
 
-        $user = $this->userService->getUserByUsername($validated['username']);
+        $users = $this->userService->getUserByUsername($validated['username']);
 
-        return response()->json(['data' => $user], 200);
+         $users->transform(function ($user) use ($authUser) {
+            $user->is_followed = $authUser
+            ? $this->followService->isFollowing($authUser, $user)
+            : false;
+        return $user;
+    });
+
+        return response()->json(['data' => $users], 200);
     }
 
     

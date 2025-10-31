@@ -27,7 +27,7 @@
 
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, defineProps, defineEmits, reactive } from "vue";
+    import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
     import ProfileUserFollowers from "./ProfileGestionComponents/ProfileUserFollowersComponent.vue";
     import ProfileUserFollowings from "./ProfileGestionComponents/ProfileUserFollowingsComponent.vue";
     import ProfileUserFavoriteEvents from "./ProfileGestionComponents/ProfileUserFavoriteEventsComponent.vue";
@@ -38,7 +38,7 @@
     let followersOrFollowings = ref([]);
     let favoriteEvents = ref([]);
     const {getListUserFollowers} = useFriendStore();
-    const { getFavoritesActivities} =useActivityStore();
+    const { getListFavoritesActivities} =useActivityStore();
 
     let IsShowFollowers = ref(false);
     let IsShowFollowings = ref(false);
@@ -66,13 +66,13 @@
              case 2:
                 IsShowFollowers.value = false;
                 IsShowFollowings.value = false;
-                favoriteEvents =await getFavoritesActivities();
+                favoriteEvents =await getListFavoritesActivities();
                 IsShowFavorites.value = !IsShowFavorites.value;
                 break;
             
             default:
-              
                 IsShowFollowers.value = true;
+                followersOrFollowings =await getListUserFollowers('followers');
                 IsShowFollowings.value = false;
                 IsShowFavorites.value = false;
         }

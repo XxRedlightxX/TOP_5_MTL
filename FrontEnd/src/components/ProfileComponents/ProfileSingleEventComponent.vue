@@ -1,7 +1,7 @@
 <template>
     <div id="profileSingleEventComponent" class="glass">
         <div class="first">
-            <img :src="getAvatarUrl(props.event.image)" alt="#">
+            <img :src="getEventUrl(props.event.image)" alt="#">
         </div>
         
         <div class="middle">
@@ -25,7 +25,7 @@
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
     import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
-    import { getAvatarUrl } from "@/JS/GlobalFunctions";
+    import { getEventUrl } from "@/JS/GlobalFunctions";
 
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());

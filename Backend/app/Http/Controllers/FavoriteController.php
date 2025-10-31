@@ -24,20 +24,40 @@ class FavoriteController extends Controller
         return $user->load('favoris');
     }
 
-    public function addActivityToFavorite(Request $request) {
+    public function IsFavoriteActivityFromUser(Request $request,int $activityId) {
+        $authUser = $request->user();
+        $IsExisting = $this->userService->IsFavoriteActivityFromUser($authUser->id, $activityId );
+        return response()->json([
+            'favorite' => $IsExisting,
+            ], 200);
+    }
+
+    public function addActivityToFavorite(Request $request) 
+    {
         $validated = $request->validate([
-            'id' => 'required'
+            'id' => 'required|integer'
         ]);
 
-        $user =  $request->user();
+        $user = $request->user();
 
-        $this->userService->addFavoriteActivity($user->id, $validated['id']);
+        try {
+            $result = $this->userService->addFavoriteActivity($user->id, $validated['id']);
+            
+            $message = $result['favorited'] 
+                ? 'Vous avez mis en favori un activite' 
+                : 'Activité retirée des favoris';
+            
+            return response()->json([
+                'message' => $message,
+                'favorited' => $result['favorited'],
+                
+            ], 200);
 
-        return response()->json([
-           "This activity has been deleted from favorite" , 
-        
-        ], 201);
-
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 404);
+        }
     }
 
     public function deleteFavoriteActivity(Request $request, int $activityId) {

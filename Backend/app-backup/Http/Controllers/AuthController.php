@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Service\UserService;
+use Illuminate\Http\Request;
+
+class AuthController extends Controller
+{
+
+     protected $userService;
+
+      public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+    public function register(Request $request) {
+
+         $validated =$request->validate([
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'num_tel' => 'required|string|max:20|regex:/^[0-9\-\+\s\(\)]+$/',
+            'type_utilisateur' => 'required|in:organisateur,particulier', 
+            'password' => 'required|confirmed|max:255',
+        ]);
+
+        $user = $this->userService->creatUser($validated);
+
+        $token = $user->createToken($request->username);
+        if ($user) {
+            return [
+                'user'=> $user,
+                'token' =>$token->plainTextToken
+            ];
+        }
+         return response()->json([
+        'error' => $user->message,
+    ], 401);
+    
+
+
+        
+    }
+
+     public function login(Request $request) {
+         $validated =$request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $result = $this->userService->getUserEmailandPassword(
+            $validated['email'],
+            $validated['password']);
+
+        if ($result->success) {
+        return response()->json([
+            'user' => $result->user,
+            'token' => $result->token,
+            'message' => $result->message,
+        ]);
+    }
+
+    return response()->json([
+        'error' => $result->message,
+    ], 401);
+       
+    }
+
+    public function logout(Request $request) {
+        $request->user()->tokens()->delete();
+
+        $user = $request->user();
+        $email = $user->email;
+
+        return [
+            'message' => 'You are logged out '.$email
+        ];
+    }
+
+}

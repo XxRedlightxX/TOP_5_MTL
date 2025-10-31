@@ -1,12 +1,15 @@
 <template>
+   
     <div id="ListUserMessage">
-        <SearchBarComponent/>
+          <SearchBar @user="handleUser"/>
         
         <div class="UserList">
-            <div class="UserCard" v-for="user in userList" :key="user.id">
+            <div class="UserCard" v-if="userListRecentMessage.length > 0" 
+                v-for="user in userListRecentMessage" :key="user.id"
+                  @mousedown.prevent="selectUser(user)">
                 <div class="user-content">
                     <div class="user-avatar-image">
-                        <img src='/src/assets/p1.jpg' :alt="user.username" />
+                        <img :src=getAvatarUrl(user.image_data) :alt="user.username" />
                     </div>
                     <div class="user-info">
                         <strong>{{ user.username }}</strong>
@@ -17,34 +20,52 @@
                     {{ user.time }}
                 </div>
             </div>
+            <div v-else>
+                No Messages yet
+            </div>
         </div>
     </div>
 </template>
 <script setup>
-import SearchBarComponent from '../SearchBarComponent.vue';
-import { onMounted, ref, onUnmounted } from 'vue'; 
-import LocalStorageManager from "@/JS/LocalStaorageManager"
+    import SearchBar from '../SearchBarComponent.vue';
+    import { onMounted, ref, onUnmounted } from 'vue'; 
+    import LocalStorageManager from "@/JS/LocalStaorageManager";
+    import { useMessageStore } from '@/stores/Message';
+    import { getAvatarUrl } from '@/JS/GlobalFunctions';
 
-const userList = [
-    {
-        id: 1,
-        username: "John",
-        name: "Nolan",
-        time: "5:00pm"
-    },
-    {
-        id: 2,
-        username: "Sarah",
-        name: "Johnson",
-        time: "3:30pm"
-    },
-    {
-        id: 3,
-        username: "Mike",
-        name: "Chen",
-        time: "1:15pm"
+    const emit = defineEmits(['user-selected']);
+    const messageStore = useMessageStore();
+    
+    let userListRecentMessage = ref([])
+    onMounted(() => {
+        userListRecentMessage.value = LocalStorageManager.getUserList();
+    });
+
+    const selectUser = (pUser) => {
+        messageStore.setUserFriend(pUser);
     }
-];
+
+
+   
+    const handleUser = (pUserFriend) => {
+        
+        emit("user-selected", pUserFriend);
+        const IsExistsUser = userListRecentMessage.value.some(
+            (u) => u.id === pUserFriend.id
+        );
+        
+        if (!IsExistsUser) {
+            
+            userListRecentMessage.value = [
+                ...userListRecentMessage.value,
+                pUserFriend
+            ];
+            
+            console.log(userListRecentMessage.value);
+            LocalStorageManager.setUserList(userListRecentMessage.value);
+        }
+
+    };
 
 
 </script>

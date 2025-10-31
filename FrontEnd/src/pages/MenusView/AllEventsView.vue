@@ -31,35 +31,11 @@
     
     const newEventJours = [
     { id: null,
-image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date_debut:null },
-    { id: null,
-image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 5,lieu: null, date:null },
-    {id: null,
-image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 1 ,lieu: null, date:null},
-    { id: null,
-image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 2.5,lieu: null, date:null },
-    { id: null,
-image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 3 ,lieu: null, date:null},
-    { id: null,
-image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 4 ,lieu: null, date:null},
-    {id: null,
-image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3.5 ,lieu: null, date:null},
-    { id: null,
-image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 1.5,lieu: null, date:null },
-    { id: null,
-image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 4.5 ,lieu: null, date:null}
+image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date_debut:null }
   ];
 
   const newEventNuit = [
     {id :null,image : "https://picsum.photos/1895/795", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
-    {id :null ,image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {id :null ,image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
-    {id :null,image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
-    {id:null ,image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {id:null ,image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
-    {id:null ,image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {id:null ,image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
-    {id:null ,image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 }
   ];
 
     onMounted(async () => {
@@ -67,7 +43,7 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
 
       upComingEvents.value = activitiesStore.activities.map(activity => ({
         id : activity.id,
-        image: activity.image_data || "https://picsum.photos/1895/795",
+        image: activity.image_data ,
         title: activity.titre,
         desc: activity.description || descText,
         rating: activity.rating || 0,
@@ -84,7 +60,7 @@ image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating
   eventsList = computed(() => {
   return activitiesStore.activities.map(activity => ({
     id: activity.id,
-    image: activity.image_data || "https://picsum.photos/1895/795",
+    image: activity.image_data,
     title: activity.titre,
     desc: activity.description || "No description",
     rating: activity.rating || 0,

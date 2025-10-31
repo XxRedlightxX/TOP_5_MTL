@@ -20,14 +20,11 @@ class FollowService {
         $this->userDAO = $userDAO;
     }
 
-
-    
-
     public function follow(int $followerId, int $followedId): User|string
     {
         $follower = $this->userDAO->findById($followerId);
         $followed = $this->userDAO->findById($followedId);
-        $isExistingFollower = $this->userDAO->isFollowing($follower, $followed);
+        $isExistingFollower = $this->isFollowing($follower, $followed);
 
         if (!$follower || !$followed) {
             return 'user_not_found';
@@ -42,6 +39,11 @@ class FollowService {
 
         $this->userDAO->follow($follower, $followed);
          return 'followed';
+    }
+
+    public function isFollowing(User $follower, User $followed) {
+        return $this->userDAO->isFollowing($follower, $followed);
+
     }
 
     public function unfollow(int $followerId, int $followedId): void

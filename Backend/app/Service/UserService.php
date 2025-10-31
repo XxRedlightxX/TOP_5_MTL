@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Service;
+
+use App\DAO\SourceDonnes\FollowDAO;
 use App\Models\User;
 use App\DAO\SourceDonnes\UserDAO;
 use App\Models\Activite;
@@ -39,27 +41,29 @@ class UserService {
     }
 
      public function getUserByUsername(string $username){
+
        return  $this->daoUser->getUserBysearchUsername($username);
     }
     public function getUserEmailandPassword(string $userEmail, $userPassword) {
        $user = $this->daoUser->checkEmailAndPasswordExist($userEmail, $userPassword);
         
         if ($user) {
-            $token = $user->createToken($user->name)->plainTextToken;
+            $token = $user->createToken($user->username)->plainTextToken;
             return new AuthResult(true, $user, 'Login succ.', $token);
         }
 
-         return new AuthResult(false, null, 'Invalid credentials.', null);
+        return new AuthResult(false, null, 'Invalid credentials.', null);
     }
 
 
 
      public function searchUserbyEmail(string $userEmail){
+
        return  $this->daoUser->getByEmail($userEmail);
     }
 
     public function updateUser(int $userId, array $userData): ?User
-{
+    {
     // Check if email exists for other users
     $existingUserWithEmail = $this->daoUser->getByEmail($userData['email']);
     if ($existingUserWithEmail->isNotEmpty() && $existingUserWithEmail->first()->id != $userId) {

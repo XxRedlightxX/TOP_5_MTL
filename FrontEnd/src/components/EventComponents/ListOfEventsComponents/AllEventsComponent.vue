@@ -11,9 +11,16 @@
         :key="item.id"
       >
         <div class="event_card_photo">
-          <span class="overlay"> <img src="" alt=""></span>
+           <span class="overlay" > 
+          <v-icon
+          :size="40"
+          :color="isFavorite(item.id) ? 'red' : 'grey'"
+          :icon="isFavorite(item.id) ? 'mdi-heart' : 'mdi-heart-outline'"
+          @click.stop.prevent="toggleLike(item.id)"
+          />
+          </span>
           <!-- Main image -->
-          <img :src="getAvatarUrl(item.image)" class="product-thumb" alt="Event Image">
+          <img :src="getEventUrl(item.image)" class="product-thumb" alt="Event Image">
         </div>
         
         <div class="desc">
@@ -51,19 +58,45 @@ import PaginationComponent from './PaginationComponent.vue';
 import FilterComponent from './FilterComponent.vue';
 import { useActivityStore } from '@/stores/activity';
 import { formatDateSpecial } from "@/JS/GlobalFunctions";
+import { getEventUrl } from '@/JS/GlobalFunctions';
 
+
+const activityStore = useActivityStore()
+const favorites = ref(new Set());
 const eventsPerPage = 9;
 const currentPage = ref(0);
-
-
 
 const props = defineProps({
   listEvent: Array
 });
 
 
-const listActivities = ref([]);
-const activitiesStore = useActivityStore();
+const isFavorite = (id) => {
+  return favorites.value && favorites.value.has ? favorites.value.has(id) : false
+}
+// toggle like for one event
+const toggleLike = async (eventId) => {
+  const result = await activityStore.addFavoritesActivities(eventId) // returns true/false
+
+  if (result) {
+    favorites.value.add(eventId)
+  } else {
+    favorites.value.delete(eventId)
+  }
+}
+
+
+async function loadFavorites() {
+  const favs = await activityStore.getFavoritesActivities() || []  // always an array
+  if (favs && Array.isArray(favs)) {
+    favorites.value = new Set(favs.map(fav => fav.id))
+  } else {
+    favorites.value = new Set()
+  }
+}
+
+
+
 
 const totalPages = computed(() => Math.ceil(props.listEvent.length / eventsPerPage));
 
@@ -96,60 +129,44 @@ const goToPage = (pageIndex) => {
 };
 
 
-
-const getAvatarUrl = (imagePath) => {
-    if (!imagePath) return img;
-    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
-};
-
-
-
-
 const actualMode = ref(LocalStorageManager.getMode());
-
-
-
-
-
-
 
 let newEvent = ref(null);
   //newEvent.value = actualMode.value ? newEventJours : newEventNuit;
-
-
 
   // Fonction pour mettre à jour l'index du slide actif
   // const onSlideChange = (swiper) => {
   //   indexSlide.value = swiper.activeIndex;
   // };
 
-  const setEvent = (value) => {
-    LocalStorageManager.setEvent(value);
-    console.log("event value : ", value);
-  };
+onMounted(() => {
+  loadFavorites()
+})
 
-  if (actualMode.value == null){
-       LocalStorageManager.setMode(true);
-       actualMode.value = LocalStorageManager.getMode();
-   }
-   // Correction du watcher
-   watch(actualMode, (newVal, oldVal) => {
-      newEvent.value = newVal ? newEventJours : newEventNuit;
-   });
-   
-   const handleModeChange = (event) => {
-       actualMode.value = JSON.parse(event.detail.storage);
-   };
-     // Add event listener for mode changes
-   onMounted(() => {
-       window.addEventListener('mode-changed', handleModeChange);
-      
-   });
- 
-   // Remove event listener when component is unmounted
-   onUnmounted(() => {
-       window.removeEventListener('mode-changed', handleModeChange);
-   });
+
+
+if (actualMode.value == null){
+      LocalStorageManager.setMode(true);
+      actualMode.value = LocalStorageManager.getMode();
+  }
+  // Correction du watcher
+  watch(actualMode, (newVal, oldVal) => {
+    newEvent.value = newVal ? newEventJours : newEventNuit;
+  });
+  
+  const handleModeChange = (event) => {
+      actualMode.value = JSON.parse(event.detail.storage);
+  };
+    // Add event listener for mode changes
+  onMounted(() => {
+      window.addEventListener('mode-changed', handleModeChange);
+    
+  });
+
+  // Remove event listener when component is unmounted
+  onUnmounted(() => {
+      window.removeEventListener('mode-changed', handleModeChange);
+  });
 
 </script>
 

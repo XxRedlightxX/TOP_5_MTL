@@ -4,7 +4,7 @@
     <ul class="carousel" ref="carousel">
       <router-link :to="{ name: 'show', params: {id: event.id}}" v-for="(event, index) in  listEvent" :key="index" class="card">
         <div class="img">
-          <img :src="getAvatarUrl(event.image)" alt="img" draggable="false" />
+          <img :src="getEventUrl(event.image)" alt="img" draggable="false" />
         </div>
         <h2>{{ event.title }}</h2>
         <div class="eventDescriptionInfos">
@@ -26,7 +26,7 @@
 <script setup>
   import { ref, onMounted, onBeforeUnmount, onUnmounted, watch,defineProps } from 'vue';
   import LocalStorageManager from "../../../JS/LocalStaorageManager";
-  import { getAvatarUrl, formatDateSpecial } from '@/JS/GlobalFunctions';
+  import { getAvatarUrl, formatDateSpecial, getEventUrl } from '@/JS/GlobalFunctions';
 
   defineProps( {
     listEvent : Array

@@ -1,131 +1,119 @@
-import {defineStore} from "pinia";
+import { defineStore } from "pinia";
 import { useAuthStore } from "./auth";
 
+export const useFriendStore = defineStore("friendStore", {
+  state: () => ({
+    followers: [],
+    followings: new Set(), 
+    errors: {},
+    validationErrors: {},
+    isLoading: false,
+  }),
 
+  getters: {
+    followersCount: (state) => state.followers.length,
+    followingCount: (state) => state.followings.size,
+  },
 
-export const useFriendStore = defineStore('friendStore', {
-    state: () => {
-        return {
-            followers : [{}],
-            followings : [],
-            errors: {},
-            validationErrors : {},
-            isLoading : false
-           
-        }
+  actions: {
+    // ✅ Fetch followers or followings
+    async getListUserFollowers(apiRoute = "followers") {
+      const token = localStorage.getItem("token");
+      if (!token) return [];
+
+      this.isLoading = true;
+      try {
+        const res = await fetch(`/api/${apiRoute}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.message || "Failed to fetch");
+
+        // if apiRoute === "followers", store followers
+        if (apiRoute.includes("followers")) this.followers = data;
+        // if apiRoute === "followings", store followings
+        if (apiRoute.includes("followings"))
+          this.followings = new Set(data.map((u) => u.id));
+
+        return data;
+      } catch (err) {
+        console.error("Fetch error:", err);
+        this.errors = { message: err.message };
+        return [];
+      } finally {
+        this.isLoading = false;
+      }
     },
 
-    getters : {
-        followersCount: (state) => state.followers.length
-       
-    },
-    actions : {
+    // Toggle between add and delete follow
+   async addUserFollowings(formData) {
+    const token = localStorage.getItem("token");
+    if (!token) return { message: "No token" };
 
-        async getListUserFollowers(apiRoute) {
-            const token = localStorage.getItem("token")
-            if (token) {
-                const res = await fetch(`/api/${apiRoute}`, {
-                    
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-            const data = await res.json();
-           
-            if (res.ok) {
-                this.followings = data;
-                console.log("Followers data:", data);
-                return data;
-                
-            }else if(data.errors) {
-                this.errors= data.errors;
-                console.log(data.errors);
-            }        
+    this.isLoading = true;
 
-            else {
-                console.log("NOPE")
-            }
-
-            
-            }
-        },
-
-async addUserFollowings(formData) {
-  const token = localStorage.getItem("token");
-  if (!token) return;
-
-  try {
-    const res = await fetch(`/api/follow`, {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-    });
-
-    // Backend might not always return JSON if there's an error
-    let data;
     try {
-      data = await res.json();
-    } catch (e) {
-      console.error("Failed to parse JSON:", e);
-      data = { message: "Invalid JSON response" };
+      const res = await fetch(`/api/follow`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.message === "Vous avez follow") {
+        this.followings.add(formData);
+      } else if (res.ok && data.message === "Unfollowed successfully.") {
+        this.followings.delete(formData);
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Error in addUserFollowings:", error);
+      return { message: "Request failed", error };
+    } finally {
+      this.isLoading = false;
     }
+  },
 
-    console.log("Raw backend response:", data);
+    // Unfollow User
+    async deleteUserFollowing(userId) {
+      const token = localStorage.getItem("token");
+      if (!token) return { message: "No token" };
 
-    // ✅ Always return the backend data, no matter what
-    return data;
+      try {
+        const res = await fetch(`/api/follow/${userId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-  } catch (error) {
-    console.error("Error in addUserFollowings:", error);
-    return { message: "Request failed", error };
-  }
-},
+        const data = await res.json();
 
-      async deleteUserFollowing($userId) {
-            const token = localStorage.getItem("token")
-            if (token) {
-                const res = await fetch(`/api/follow/${$userId}`, {
-                method: "DELETE",
-               
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-            const data = await res.json();
-            if (data.errors) {
-              if(data.errors) {
-                this.errors = data.errors;
-                return data.errors
-            } else {
-                this.errors = {};
-                console.log(data+"dadsadsa")
-                return data;
-            }
+        if (res.ok) {
+          this.followings.delete(userId);
         }
-    }
-    }
 
-
-       
-
-
-
-
-
-            
-
-        
-
-        
-        
-
-
-      
-   
+        return data;
+      } catch (err) {
+        console.error("deleteUserFollowing error:", err);
+        return { message: "Error", err };
+      }
     },
+
+  
+    isFollowing(userId) {
+      return this.followings.has(userId);
+    },
+  },
 });

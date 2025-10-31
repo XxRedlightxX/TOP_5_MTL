@@ -31,7 +31,13 @@ class ActiviteController extends Controller
     public function __construct(ActiviteService $userService)
     {
         $this->userService = $userService;
-         $this->middleware('auth:sanctum');
+         $this->middleware('auth:sanctum')->only([
+        'addActivityUser',
+        'modifyActivity',
+        'deleteActivityById',
+        'addCommentToActivity',
+        'getUserActivities',
+    ]);
     }
 
     public function getAllActivities() {
@@ -86,16 +92,14 @@ class ActiviteController extends Controller
             $activite = Activite::findOrFail($activiteId);
             //$this->authorize('update', $activite);
         
-        
-        
-        $validatedInputActivity = $request->validate([
-            'titre' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'image_data' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'date_debut' => 'nullable|date',
-            'lieu' => 'nullable|string|max:255',
-            'statut_journee' => 'nullable|in:JOUR,NUIT', 
-        ]);
+            $validatedInputActivity = $request->validate([
+                'titre' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
+                'image_data' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'date_debut' => 'nullable|date',
+                'lieu' => 'nullable|string|max:255',
+                'statut_journee' => 'nullable|in:JOUR,NUIT', 
+            ]);
 
             if ($request->hasFile('image_data')) {
             $image = $request->file('image_data');

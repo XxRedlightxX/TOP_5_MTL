@@ -28,7 +28,7 @@
           />
         </div>
 
-        <div class="user-info">
+        <div class="user-info"  >
           <strong>{{ user.username }}</strong>
           <p>{{ user.name }}</p>
         </div>
@@ -40,6 +40,8 @@
         >
           {{ user.is_followed ? 'mdi-account-minus' : 'mdi-account-plus' }}
         </v-icon>
+
+
       </div>
     </div>
 
@@ -47,18 +49,21 @@
       v-else-if="showResults && searchQuery && !isSearching"
       class="no-results"
     >
-      {{ actualLang ? 'No users found' : 'Aucun utilisateur trouvé' }}
+     No Users
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref ,onMounted} from "vue";
 import { useUserStore } from "@/stores/user";
 import { useFriendStore } from "@/stores/Friend";
+import { useMessageStore } from "@/stores/Message";
 
+const messageStore = useMessageStore();
 const userStore = useUserStore();
-const { addUserFollowings } = useFriendStore();
+const friendStore = useFriendStore();
+
 
 const searchQuery = ref("");
 const searchResults = ref([]);
@@ -67,6 +72,7 @@ const showResults = ref(false);
 const searchInput = ref(null);
 
 let searchTimeout = null;
+const emit = defineEmits(['user']);
 
 const handleSearch = () => {
   clearTimeout(searchTimeout);
@@ -86,7 +92,7 @@ const performSearch = async () => {
     const results = await userStore.searchUsers(query);
     searchResults.value = results.map((user) => ({
       ...user,
-      is_followed: user.is_followed ?? false,
+     is_followed: user.is_followed ?? false,
     }));
     showResults.value = true;
   } catch (error) {
@@ -105,22 +111,29 @@ const onBlur = () => {
 
 const toggleFollow = async (user) => {
   try {
-    const res = await addUserFollowings({ follower_id: user.id });
-    console.log("Follow/Unfollow response:", res);
+    const res = await friendStore.addUserFollowings({ follower_id: user.id });
 
-    if (res?.message === "Vous avez follow") {
-      user.is_followed = true;
-    } else if (res?.message === "Unfollowed successfully.") {
-      user.is_followed = false;
+    if (res?.is_followed !== undefined) {
+      // Update both the UI and local data
+      user.is_followed = res.is_followed;
     }
+
+    console.log("Follow/Unfollow response:", res);
   } catch (error) {
     console.error("Follow/Unfollow error:", error);
   }
 };
 
+
 const selectUser = (user) => {
-  console.log("Selected user:", user);
+  messageStore.setUserFriend(user)
+  emit("user", user);
 };
+
+onMounted(async () => {
+  await friendStore.getListUserFollowers(); // backend returns followed IDs
+});
+
 </script>
 
 <style scoped>
