@@ -1,6 +1,7 @@
 #AllEventComponent {
   display: flex;
   flex-direction: column;
+
   gap: 2%;
   .events {
     display: grid;
@@ -98,7 +99,7 @@
   #AllEventComponent {
     .events {
       grid-template-columns: auto auto auto;
-      width: 96%;
+      width: 92%;
       margin: 5% auto 3% auto;
     }
   }

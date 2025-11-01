@@ -26,10 +26,10 @@
     .carousel {
       display: grid;
       grid-auto-flow: column;
-      grid-auto-columns: calc((100% / 6) - 12px);
+     grid-auto-columns: calc((100% / 6) - 6px); 
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      gap: 16px;
+      gap: 8px;
       border-radius: 8px;
       scroll-behavior: smooth;
       scrollbar-width: none;
@@ -38,27 +38,64 @@
       overflow-y: hidden;
       padding-top: 2%;
   
-      .card {
-          scroll-snap-align: start;
-          list-style: none;
-          //background: #fff;
-          cursor: pointer;
-          //padding-bottom: 15px;
-          border-radius: 8px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          height: 100%;
-  
-  
-          .icon {
-            font-size: 3rem;
-          }
-          h4 {
-            font-weight: normal;
-              font-size: 0.8rem;
-          }
-        }
+  .card {
+  scroll-snap-align: start;
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  border-radius: 14px;
+  padding: 10px 6px;
+  transition: all 0.25s ease;
+  position: relative;
+  background: transparent;
+
+  .icon {
+    font-size: 2.8rem;
+    transition: transform 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+    opacity: 0.85;
+  }
+
+  h4 {
+    font-weight: 500;
+    font-size: 0.8rem;
+    margin-top: 6px;
+    transition: color 0.25s ease, opacity 0.25s ease;
+    opacity: 0.85;
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.03);
+    background: rgba(128, 128, 128, 0.08);
+  }
+
+  &.active {
+    background: rgba(128, 128, 128, 0.15);
+    border: 1.5px solid rgba(128, 128, 128, 0.5);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transform: scale(1.02);
+    z-index: 2;
+
+    .icon {
+      color: var(--graphite, #6e6e6e);
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    h4 {
+      color: var(--graphite, #5a5a5a);
+      opacity: 1;
+      font-weight: 600;
+    }
+
+  }
+}
+
+
     }
   }
   .light {

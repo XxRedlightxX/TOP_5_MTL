@@ -1,12 +1,8 @@
 <template>
   <div id="AllEventComponent">
     <FilterComponent/>
-
-    
-      <LoadingEvents v-if="isLoading"  :eventCount="eventsPerPage"  />
+      <LoadingEvents v-if="isLoading"  :eventCount="eventsPerPage" />
       
-   
-    
     <div class="events" >
       <router-link 
         v-if="paginatedEvents.length" 

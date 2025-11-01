@@ -87,3 +87,18 @@ export const getEventUrl = (imagePath) => {
     return `${import.meta.env.VITE_API_BASE_URL}${imagePath}` ;
 
 }
+
+export const formatDateEventEndDate = (startDateTime, hours) => {
+    const startDate = new Date(startDateTime);
+    const endDate = new Date(startDate.getTime() + (hours * 60 * 60 * 1000)); 
+    
+  
+    const year = endDate.getFullYear();
+    const month = String(endDate.getMonth() + 1).padStart(2, '0');
+    const day = String(endDate.getDate()).padStart(2, '0');
+    const hoursFormatted = String(endDate.getHours()).padStart(2, '0');
+    const minutes = String(endDate.getMinutes()).padStart(2, '0');
+    const seconds = String(endDate.getSeconds()).padStart(2, '0');
+    
+    return `${year}-${month}-${day} ${hoursFormatted}:${minutes}:${seconds}`;
+};

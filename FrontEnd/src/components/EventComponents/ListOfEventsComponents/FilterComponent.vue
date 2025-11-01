@@ -3,7 +3,7 @@
  
         <div class="button-container">
             <ul >
-                <li @click="eventType = 0" :class="{ active: eventType === 0 }">
+                <li @click="eventType = 3" :class="{ active: eventType === 0 }">
                     <a>{{ actualLang ? "All" : "Tous" }}</a>
                 </li>
               <li @click="eventType = 1" :class="{ active: eventType === 1 }">
@@ -13,11 +13,6 @@
                   <a>{{ actualLang ? "Day Life" : "De Jour" }}</a>
               </li>
 
-              <li @click="eventType = 3" :class="{ active: eventType === 2 }">
-                  <a>{{ actualLang ? "Reset Filter" : "Reinitiliser les filters" }}</a>
-              </li>
-              
-                
                 <li class="button-wrapper">
                   <button @click="toggleCalendarPopup">
                       <v-icon icon="mdi-filter-variant " :class="['icon', {'justGlow' : !actualMode}]"/>
@@ -52,12 +47,7 @@
      console.log(showCalendarPopup)
    };
 
-    const resetFilter = async () => {
-      selectedFilter.value = null;           
-      activitiesStore.filters.type = null;   
-      activitiesStore.filters.daytime = null;
-      await activitiesStore.getActivities(); 
-    };
+    
  
    const closePopup = () => {
      showCalendarPopup.value = false
@@ -142,18 +132,24 @@
 #AllEventComponent {
   .button-container {
     margin: 1% 0%;
+   
+     margin: 0 3%;
+
 
     ul {
       display: flex;
       align-items: center;
       list-style-type: none;
-      margin: 0;
+      margin: 3;
       padding: 0;
       width: 100%;
+      //border-style: dashed;
   
       li {
         padding: 10px;
         height: 100%;
+        
+        
 
         a {
           font-family:'Times New Roman', Times, serif;

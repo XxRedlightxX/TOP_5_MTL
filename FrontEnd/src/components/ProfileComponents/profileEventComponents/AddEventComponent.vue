@@ -23,7 +23,7 @@
 
                         <div class="form-group">
                             <label for="event-duration">Duration (hours)</label>
-                            <input type="number" v-model="durationHours" id="event-duration" placeholder="e.g., 2" min="1" required>
+                            <input type="number" ref="inputRefDurationHours" id="event-duration" placeholder="e.g., 2" min="1" required>
                         </div>
                     </div>
 
@@ -41,6 +41,7 @@
                        <div class="form-group">
                             <label for="event-type">Daytime</label>
                             <select id="event-type" v-model="formDataEvent.statut_journee" required>
+                                <option disabled value="">Select a Daytime</option>
                                 <option value="JOUR">Day</option>
                                 <option value="NUIT">Night</option>
                             </select>
@@ -50,7 +51,8 @@
                          <div class="form-group">
                             <label for="event-type">Season</label>
                             <select id="event-type" v-model="formDataEvent.saison_name" required>
-                                <option value="été">Summer</option>
+                                <option disabled value="">Select a Season</option>
+                                <option value="été" selected>Summer</option>
                                 <option value="hiver">Winter</option>
                                 <option value="printemps">Spring</option>
                                 <option value="automne">Automn</option>
@@ -63,6 +65,7 @@
                         <div class="form-group">
                             <label for="event-type">Type</label>
                             <select id="event-type" v-model="formDataEvent.type_name" required>
+                                <option disabled value="">Select Category</option>
                                 <option  v-for="category in listCategories" key="category.id" :value="category.nom"> {{ category.nom }}</option>
                             </select>
                         </div>
@@ -74,7 +77,9 @@
                     <MapComponent @event-coords="handleEventCoords"></MapComponent>
                     
                     <div class="form-actions">
-                        <button type="submit">{{ actualLang ? 'Create Event' : 'Créer Événement' }}</button>
+                        
+                        <waterButton :text="actualLang ? 'Create Event' : 'Créer Événement'"  :type="false" 
+    buttonType="submit" class="btnn" @click="pop"/>
                         <waterButton :text="actualLang ? 'Cancel' : 'Annuler'" :type="false" class="btnn" @click="pop"/>
                     </div>
                 </form>
@@ -90,7 +95,7 @@
     import { ref, onMounted, onUnmounted, defineProps, defineEmits, reactive } from "vue";
     import waterButton from "@/components/WaterButtonComponent.vue";
     import { useActivityStore } from "@/stores/activity";
-    import { formatDateApi } from "@/JS/GlobalFunctions";
+    import { formatDateApi, formatDateEventEndDate } from "@/JS/GlobalFunctions";
     import { useAuthStore } from "@/stores/auth";
     import MapComponent from "@/components/MapComponent.vue";
 
@@ -101,7 +106,8 @@
 
     const inputRefDate = ref(null);
     const inputRefTime = ref(null);
-    const result = ref(null);
+    const inputRefDurationHours = ref(null);
+
     const selectedFile = ref(null)
     const errorMessage = ref(null);
     const  validationErrors  = ref(null);
@@ -111,7 +117,7 @@
     const formDataEvent= reactive({
             titre: "",
             date_debut: "",
-            date_fin: "2025-09-30 21:00:00",
+            date_fin: "",
             description: "",
             statut_journee : "",
             lieu : "",
@@ -142,9 +148,12 @@
 const testInput = async(event) => {
     const dateValue = inputRefDate.value.value;
     const timeValue = inputRefTime.value.value;
+    const hoursDurationValue =inputRefDurationHours.value.value;
 
-    const formattedDateTime = formatDateApi(dateValue, timeValue);
-    formDataEvent.date_debut = formattedDateTime; 
+    const formattedStartDateTime = formatDateApi(dateValue, timeValue);
+    const formattedEndDateTime = formatDateEventEndDate(formattedStartDateTime, hoursDurationValue);
+    formDataEvent.date_debut = formattedStartDateTime;
+    formDataEvent.date_fin = formattedEndDateTime;
 
     const formData = new FormData();
     formData.append('titre', formDataEvent.titre);

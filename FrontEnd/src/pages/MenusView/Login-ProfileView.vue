@@ -10,7 +10,7 @@
     import SignIn_SignUp from "../../components/Login-SignUpComponents/Login-SignUpComponentButBetter.vue"
     import Profile from "../../components/ProfileComponents/ProfileComponent.vue"
     import LocalStorageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, watch} from "vue";
+    import { ref, onMounted, onUnmounted} from "vue";
     import { useAuthStore } from "@/stores/auth";
 
     const authStore = useAuthStore();
