@@ -1,9 +1,9 @@
 .light {
     #carouselGrand {
         .list > .item > .content > .desc p{
-            color: var(--light-text);
+            color: var(--light);
         }
-        .titlee {
+        .content .titlee {
             color: var(--light);
         }
         .thumbnail .title {
@@ -48,10 +48,10 @@
 .dark {
     #carouselGrand {
         .list > .item > .content > .desc p, .thumbnail .title {
-            color: var(--graphite);
+                color: var(--light-text);
         }
         .content .title {
-            color: var(--graphite);
+            color: var(--light-text);
             z-index: 100;
             animation: neonGlow 0.5s ease-in-out infinite alternate;
         }

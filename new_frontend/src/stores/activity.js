@@ -262,25 +262,23 @@ export const useActivityStore = defineStore("activitiesStore", {
     },
 
     async getCategories() {
-      const token = localStorage.getItem("token");
+      //const token = localStorage.getItem("token");
 
-      if (token) {
-        const res = await fetch("/api/categories", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await res.json();
+      const res = await fetch("/api/categories", {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
 
-        if (res.ok) {
-          this.categories = data;
-          console.log(this.categories);
-          return this.categories;
-        } else if (data.errors) {
-          this.errors = data.errors;
-          console.log(data.errors);
-        }
+      if (res.ok) {
+        this.categories = data;
+        console.log(this.categories);
+        return this.categories;
+      } else if (data.errors) {
+        this.errors = data.errors;
+        console.log(data.errors);
       }
     },
 
