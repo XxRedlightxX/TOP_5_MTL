@@ -3,8 +3,8 @@
     <CarousellComponent />
     <div class="homeContent">
       <IntroText />
-      <!-- <NewEvent /> -->
-      <!-- <Contact /> -->
+      <NewEvent />
+      <Contact />
     </div>
   </div>
 </template>

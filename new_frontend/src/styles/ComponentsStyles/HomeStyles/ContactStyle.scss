@@ -18,7 +18,6 @@
 
         .left {
             flex: 1;
-
             div {
 
                 .iconContainer {
@@ -87,7 +86,7 @@
             .left {
                 display: flex;
                 flex-direction: column;
-                justify-content: space-around;
+                justify-content: flex-start;
                 padding-left: 10%;
     
                 div {
@@ -95,6 +94,7 @@
                     display: flex;
                     flex-direction: row;
                     align-items: center;
+                    margin-top: 7%;
     
                     h4 {
                         display: none;

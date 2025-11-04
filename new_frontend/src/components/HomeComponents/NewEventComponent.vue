@@ -1,5 +1,5 @@
 <template>
-  <div id="newEventComponent">
+  <div v-if="newEvents.length > 0" id="newEventComponent">
     <swiper
       ref="swiperRef"
       :autoplay="{ delay: 5000, disableOnInteraction: false }"
@@ -10,7 +10,7 @@
       @slideChange="onSlideChange"
     >
       <swiper-slide
-        v-for="(item, index) in newEvent"
+        v-for="(item, index) in newEvents"
         :key="index"
       >
         <img alt="#" :src="item.image2">
@@ -19,20 +19,20 @@
 
     <div class="contentt">
       <div class="top">
-        <!-- <h2>{{ newEvent[indexSlide].title }}  </h2> -->
-        <router-link class="link" :title="actualLang ? 'Go to the event Page' : 'Allez a la page de l\'evenement'" to="/Event" @click="setEvent(newEvent[indexSlide])">
+        <h2>{{ newEvents[indexSlide].title }}  </h2>
+        <router-link class="link" :title="actualLang ? 'Go to the event Page' : 'Allez a la page de l\'evenement'" to="/Event" @click="setEvent(newEvents[indexSlide])">
           <v-icon class="icon glow" icon="mdi-arrow-top-right-thin" />
         </router-link>
 
       </div>
-      <p>{{ newEvent[indexSlide].desc }}</p>
-      <Ratings :Rate="false" :rating="newEvent[indexSlide].rating" />
+      <p>{{ newEvents[indexSlide].desc }}</p>
+      <Ratings :Rate="false" :rating="newEvents[indexSlide].rating" />
     </div>
   </div>
 </template>
 
 <script setup>
-  import { ref, watch } from 'vue';
+  import { ref, onMounted } from 'vue';
 
   import Ratings from '../StaticComponents/RatingComponent.vue'
   
@@ -53,19 +53,16 @@
 
   let actualMode = Setup.modeSetup();
   let actualLang = Setup.languageSetup();
-  //let newEvents = SetupEvent.newEventsSetup();
+  let newEvents = ref([]);
 
-  // to be deleted
-  const events = FakeDataBase.getNewEvents();
-  let newEvent = ref([]);
-  // Correction du watcher
-  watch(actualMode, (newVal, oldVal) => {
-    newEvent.value = newVal ? events.eventJour : events.eventNuit;
+  onMounted(async () => {
+    newEvents.value = await SetupEvent.newEventsSetup();
+    console.log('eventsss :', newEvents.value);
   });
-  ///
 
   // Fonction pour mettre à jour l'index du slide actif
   const onSlideChange = (swiper) => {
+    console.log('swiper index: ' , swiper.activeIndex);
     indexSlide.value = swiper.activeIndex;
   };
 
@@ -73,8 +70,6 @@
     LocalStorageManager.setEvent(value);
     console.log("event value : ", value);
   };
-
-  //console.log('events : ' + newEvents)
 </script>
 
 <style src="../../styles/ComponentsStyles/HomeStyles/NewEventStyle.scss"></style>

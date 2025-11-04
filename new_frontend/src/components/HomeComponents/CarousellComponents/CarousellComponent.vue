@@ -6,7 +6,6 @@
 </template>
 
 <script setup>
-  //import defaultImage from 'https://picsum.photos/1895/795'
   import { onMounted, ref } from 'vue'
   import SetupEvent from '@/JS/SetupEvents'
 
@@ -17,7 +16,7 @@
 
   onMounted(async () => {
     hightRatedActivities.value = await SetupEvent.higherRateEventsSetup();
-    console.log('events : ', hightRatedActivities);
+    //console.log('events : ', hightRatedActivities);
   });
 
 </script>

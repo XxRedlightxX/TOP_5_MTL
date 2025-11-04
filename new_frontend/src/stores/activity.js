@@ -97,6 +97,27 @@ export const useActivityStore = defineStore("activitiesStore", {
       }
     },
 
+        async getNewestEvent() {
+      //const token = localStorage.getItem("token");
+
+      const res = await fetch("/api/likedActivities", {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        this.activities = data;
+
+        return this.activities;
+      } else if (data.errors) {
+        this.errors = data.errors;
+        console.log(data.errors);
+      }
+    },
+
     async getUpcomingEvents() {
       const token = localStorage.getItem("token");
 

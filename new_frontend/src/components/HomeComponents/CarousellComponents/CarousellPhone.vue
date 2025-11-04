@@ -41,7 +41,7 @@
 
     // ✅ Mettre à jour l'événement affiché
     eventInfo.value = newEvent.value[i.value]
-    console.log('infooo :', eventInfo)
+    //console.log('infooo :', eventInfo)
   }
 
   const setEvent = () => {

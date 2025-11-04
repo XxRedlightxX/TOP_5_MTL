@@ -1,13 +1,25 @@
 <template>
   <div id="introTextComponent">
-    <p>{{ text }}</p>
+    <p>{{ actualLang ? textEng : textFr }}</p>
     <hr>
   </div>
 </template>
 
 <script setup>
-  import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase';
-  const text = FakeDataBase.getIntroText();
+  import Setup from '@/JS/Setup';
+
+  const textFr = 'Montréal’s Drop est un site web dédié à la découverte des événements qui'
+    + 'animent la ville de Montréal. En mode clair, il met en lumière les activités et festivals'
+    + 'de jour, tandis qu’en mode sombre, il dévoile l’ambiance vibrante des soirées et sorties '
+    + 'nocturnes. Une façon simple et élégante de suivre le rythme unique de Montréal, du lever'
+    + ' au coucher du soleil.';
+
+  const textEng = 'Montréal’s Drop is a website dedicated to showcasing the events happening'
+    + 'across Montreal. In light mode, it highlights daytime activities and festivals, while'
+    + 'in dark mode, it reveals the city’s vibrant nightlife. A simple and elegant way to'
+    + 'experience Montreal’s unique rhythm from sunrise to sunset.';
+
+  let actualLang = Setup.languageSetup();
 </script>
 
 <style lang="scss">
@@ -23,6 +35,8 @@
                 15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
             p {
                 color: var(--graphite06);
+                width: 78%;
+                margin: auto;
             }
             hr {
                 display: none;

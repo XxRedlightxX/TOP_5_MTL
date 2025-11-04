@@ -163,7 +163,7 @@ const SetupEvents = {
     return await SetupEvents.eventsSetupGeneric(
       "NewEvent",
       "NewEvent-changed",
-      useActivityStore().getNewEvent,
+      useActivityStore().getNewestEvent,
       LocalStorageManager.setNewEvents,
       LocalStorageManager.getNewEvents
     );
