@@ -4,13 +4,13 @@
       <EventDetail :activityDesc="event.desc" :activityImg="event.image" :activityTitle="event.title" />
       <div class="suite">
         <div class="sub">
-          <EventOverview :Rating="event.rating" :hostName="Didier" :place="'Normandie, France'" />
+          <EventOverview :event="event" />
           <EventCommentSelf />
         </div>
         <EventComment />
       </div>
     </div>
-    <EventMap />
+    <EventMap :map="event.lieu" />
   </div>
 </template>
 

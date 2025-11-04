@@ -190,7 +190,7 @@ const SetupEvents = {
     return await SetupEvents.eventsSetupGeneric(
       "UpcomingEvent",
       "UpcomingEvent-changed",
-      useActivityStore().getUpcomingEvent,
+      useActivityStore().getUpcomingEvents,
       LocalStorageManager.setUpcomingEvents,
       LocalStorageManager.getUpcomingEvents
     );

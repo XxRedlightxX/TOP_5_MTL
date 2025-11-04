@@ -1,5 +1,5 @@
 <template>
-  <div class="upComingEvent" ref="wrapper">
+  <div v-if="eventsss.length > 0" class="upComingEvent" ref="wrapper">
     <span id="left" @click="scroll('left')"><</span>
     <ul class="carousel" ref="carousel">
       <router-link to="/Event" v-for="(event, index) in  eventsss" :key="index" class="card"  @click="setEvent(event)">
@@ -26,10 +26,13 @@
 <script setup>
   import { ref, onMounted, onBeforeUnmount, onUnmounted, watch } from 'vue';
   import Setup from '@/JS/Setup';
+  import SetupEvent from '@/JS/SetupEvents'
   import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase';
+  import LocalStorageManager from '@/JS/LocalStorageManager';
 
   const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
-  const events = FakeDataBase.getNewEvents();
+  //const events = FakeDataBase.getNewEvents();
+  //const events = ref([]);
 
   const actualMode = Setup.modeSetup();
   const eventsss = ref([]);
@@ -42,14 +45,14 @@
   const timeoutId = ref(null);
   const isAutoPlay = ref(true);
 
-  // Correction du watcher
-  watch(actualMode, () => {
-    setEvents();
-  });
+  // // Correction du watcher
+  // watch(actualMode, () => {
+  //   setEvents();
+  // });
 
-  const setEvents = () => {
-    eventsss.value = actualMode.value ? events.eventJour : events.eventNuit;
-  };
+  // const setEvents = () => {
+  //   eventsss.value = actualMode.value ? events.eventJour : events.eventNuit;
+  // };
 
   const initializeCarousel = () => {
     const firstCardWidth = carousel.value.querySelector('.card').offsetWidth;
@@ -129,9 +132,9 @@
     document.removeEventListener('mouseup', dragStop);
     carousel.value.removeEventListener('scroll', infiniteScroll);
   });
-  // Add event listener for mode changes
   onMounted(async () => {
-    await setEvents(); // Assure que les events sont chargés
+    eventsss.value = await SetupEvent.upcomingEventSetup();
+    //console.log('events : ', events);
     initializeCarousel();
   });
 </script>

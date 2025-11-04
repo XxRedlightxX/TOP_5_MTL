@@ -97,7 +97,7 @@ export const useActivityStore = defineStore("activitiesStore", {
       }
     },
 
-        async getNewestEvent() {
+    async getNewestEvent() {
       //const token = localStorage.getItem("token");
 
       const res = await fetch("/api/likedActivities", {
@@ -119,33 +119,23 @@ export const useActivityStore = defineStore("activitiesStore", {
     },
 
     async getUpcomingEvents() {
-      const token = localStorage.getItem("token");
+      //const token = localStorage.getItem("token");
 
-      // if (!token) return;
+      const res = await fetch("/api/likedActivities", {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
 
-      try {
-        const res = await fetch("/api/activite/test", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+      if (res.ok) {
+        this.activities = data;
 
-        if (!res.ok) {
-          throw new Error(`Erreur API: ${res.status}`);
-        }
-
-        const data = await res.json();
-
-        this.activities = data || [];
-
-        console.log("Upcoming events:", this.activities);
-        this.errors = {};
         return this.activities;
-      } catch (error) {
-        console.error("getUpcomingEvents failed:", error);
-        this.errors = { upcoming: error.message };
-        return [];
+      } else if (data.errors) {
+        this.errors = data.errors;
+        console.log(data.errors);
       }
     },
 

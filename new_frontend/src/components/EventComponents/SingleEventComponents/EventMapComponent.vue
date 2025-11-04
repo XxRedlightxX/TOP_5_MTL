@@ -10,13 +10,16 @@
 </template>
 
 <script setup>
-  import { computed, ref } from 'vue'
+  import { computed, ref, defineProps  } from 'vue'
 
   const address = ref('la ronde, Montreal');//ref("333 Rue de la Commune O, Montréal, QC H2Y 2E2")
 
+  const props = defineProps ({
+    map: Object,
+  });
   // URL construite avec l’adresse
   const mapUrl = computed(() => {
-    return `https://maps.google.com/maps?q=${encodeURIComponent(address.value)}&z=15&output=embed`
+    return `https://maps.google.com/maps?q=${encodeURIComponent(props.map)}&z=15&output=embed`
   })
 </script>
 
