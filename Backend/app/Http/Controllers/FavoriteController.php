@@ -61,17 +61,23 @@ class FavoriteController extends Controller
     }
 
     public function deleteFavoriteActivity(Request $request, int $activityId) {
-         $user =  $request->user();
+        $user =  $request->user();
 
         $activite = Activite::find($activityId);
 
-        $this->userService->DeleteFavoriteActivityFromUser($user->id, $activite->id );
+        $result = $this->userService->DeleteFavoriteActivityFromUser($user->id, $activite->id );
+        if ($result) {
+            return response()->json([
+            "This activity has been deleted from favorite " , $result, $activite->id
+            
+            ], 204);
+        } else {
+             return response()->json([
+            "This activity has been deleted from favorite " , $result, $activite->id
+            
+            ]);
+        }
 
-         return response()->json([
-           "This activity has been deleted from favorite ", $activite->id
         
-        ], 204);
-
-
     }
 }

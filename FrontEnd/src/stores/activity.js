@@ -312,7 +312,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
             if (res.ok) {
                 this.categories = data;
                 console.log(this.categories);
-                return this.categories;
+                return data;
                 
             }else if(data.errors) {
                 this.errors= data.errors;
@@ -405,6 +405,42 @@ export const  useActivityStore = defineStore('activitiesStore', {
             const data = await res.json();
             console.log("Favorites data:", data);
             return data.favorited;
+            
+        } catch (error) {
+            this.errors = { 
+                message: error.message || "Failed to fetch favorites" 
+            };
+            console.error("Fetch error:", error);
+            return null;
+        } finally {
+            
+        }
+    },
+
+        async deleteFavoritesActivity(activity) {
+        const token = localStorage.getItem("token");
+        if (!token) return this.router.push({ name: "Profile" });
+        
+        this.errors = {};
+
+        try {
+            const res = await fetch(`/api/favorite/${activity.id}`, {
+                method : "delete",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+
+            });
+            
+            // Check if response is OK before parsing JSON
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            
+            const data = await res.json();
+            console.log("Favorites data:", data);
+            return data
             
         } catch (error) {
             this.errors = { 

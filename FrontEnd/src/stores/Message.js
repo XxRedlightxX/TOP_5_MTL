@@ -17,7 +17,7 @@ export const useMessageStore = defineStore('messageStore', {
 
          setUserFriend(user) {
             this.userFriend = user;
-            console.log("User set in store:", this.userFriend);
+            console.log("User set", this.userFriend);
         },
 
        addUser(user) {

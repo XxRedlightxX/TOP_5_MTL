@@ -4,7 +4,7 @@
         
         <ListcategorieEvent></ListcategorieEvent>
         <div>
-            <h3>{{ actualLang ? 'Up coming events' : 'Evenement en approche'}}</h3>
+            <h3>{{ actualLang ? 'Up coming events' : 'Événement en approche'}}</h3>
             <UpComingEvent  :list-event="upComingEvents" />
         </div>
       

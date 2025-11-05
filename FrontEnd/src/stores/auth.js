@@ -101,6 +101,7 @@ export const useAuthStore = defineStore('authStore', {
         this.errors = {};
         localStorage.removeItem("token");
         
+        
       }
     },
 

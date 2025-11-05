@@ -5,15 +5,15 @@
                 <span class="close" @click="pop">&times;</span>
                 <div id="profileUserStatut">
                     <ul class="sub-menu">
-                        <li @click="showStatus(0)" ref="Followers">Followers</li>
-                        <li  @click="showStatus(1)" ref="Followings">Followings</li>
-                        <li @click="showStatus(2)" ref="Favorites">{{  actualLang ? 'Favorites' : 'Vos Favoris' }}</li>
+                        <li @click="showStatus(0)"  ref="Followers"   :class="{ active: selectedItem === 0 }">Followers</li>
+                        <li  @click="showStatus(1)" ref="Followings"  :class="{ active: selectedItem === 1 }">Followings</li>
+                        <li @click="showStatus(2)" ref="Favorites"   :class="{ active: selectedItem === 2 }">{{  actualLang ? 'Favorites' : 'Vos Favoris' }}</li>
                     </ul>
                     
                     <div class="listUser">
-                        <ProfileUserFollowers :-is-show-followers="IsShowFollowers" :list-event="followersOrFollowings"/>
-                        <ProfileUserFollowings :-is-show-followings="IsShowFollowings" :list-event="followersOrFollowings"/>
-                        <ProfileUserFavoriteEvents :-is-show-favorites="IsShowFavorites" :list-favorites-events="favoriteEvents.favoris" />
+                        <ProfileUserFollowers :-is-show-followers="IsShowFollowers" :list-event="followers"/>
+                        <ProfileUserFollowings @delete-following="handleFollowingUser" :-is-show-followings="IsShowFollowings" :list-event="followings"/>
+                        <ProfileUserFavoriteEvents @favorite-event="handleFavoriteEvent" :-is-show-favorites="IsShowFavorites" :list-favorites-events="favoriteEvents" />
                     </div>
                 </div>
             </div>
@@ -27,15 +27,16 @@
 
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
+    import { ref, onMounted, onUnmounted, defineProps, defineEmits, watch } from "vue";
     import ProfileUserFollowers from "./ProfileGestionComponents/ProfileUserFollowersComponent.vue";
     import ProfileUserFollowings from "./ProfileGestionComponents/ProfileUserFollowingsComponent.vue";
     import ProfileUserFavoriteEvents from "./ProfileGestionComponents/ProfileUserFavoriteEventsComponent.vue";
     import { useFriendStore } from "@/stores/Friend";
     import { useActivityStore } from "@/stores/activity";
-
-
-    let followersOrFollowings = ref([]);
+    
+    let selectedItem = 0;
+    let followers = ref([]);
+    let followings = ref([]);
     let favoriteEvents = ref([]);
     const {getListUserFollowers} = useFriendStore();
     const { getListFavoritesActivities} =useActivityStore();
@@ -45,54 +46,66 @@
     let IsShowFavorites = ref(false);
 
     onMounted(async() => {
-        followersOrFollowings.value = await getListUserFollowers('followers');
-    })
+        followers.value = await getListUserFollowers('followers');
+        
+    });
+
+
+    const handleFollowingUser = async (pData) => {
+        if (pData.type === 'deleted') {
+            // Remove the deleted user from the local array
+            followings.value = followings.value.filter(user => user.id !== pData.userId);
+        } else if (pData.type === 'refetch') {
+            // Refetch the entire list if needed
+            followings.value = await getListUserFollowers('followings');
+        }
+}
+
+    const handleFavoriteEvent = async (eventData) => {
+        if (eventData.type === 'deleted') {
+            // Remove the deleted event from the local array
+            favoriteEvents.value = favoriteEvents.value.filter(event => event.id !== eventData.eventId);
+        
+        } else {
+            // Fallback: refetch the entire list
+            favoriteEvents.value = (await getListFavoritesActivities()).favoris;
+        }
+    }
+
+  
 
     
     const showStatus =  async (userInput) => {
         switch (userInput) {
             case 0:
+                selectedItem = userInput;
                 IsShowFollowings.value = false;
                 IsShowFavorites.value = false;
-                followersOrFollowings =await getListUserFollowers('followers');
+                followers =await getListUserFollowers('followers');
                 IsShowFollowers.value = !IsShowFollowers.value;
                 break;
             case 1:
+                selectedItem = userInput;
                 IsShowFollowers.value = false;
                 IsShowFavorites.value = false;
-                followersOrFollowings = await getListUserFollowers('followings');
+                followings.value = await getListUserFollowers('followings')
                 IsShowFollowings.value = !IsShowFollowings.value;
                 break;
              case 2:
+                selectedItem = userInput;
                 IsShowFollowers.value = false;
                 IsShowFollowings.value = false;
-                favoriteEvents =await getListFavoritesActivities();
+               favoriteEvents.value = (await getListFavoritesActivities()).favoris
                 IsShowFavorites.value = !IsShowFavorites.value;
                 break;
             
             default:
+                selectedItem = 0;
                 IsShowFollowers.value = true;
                 IsShowFollowings.value = false;
                 IsShowFavorites.value = false;
         }
     }
-
-
-
-
-    
-
-
-
-
-
-
-  
-
-   
-
-    
-
 
     const props = defineProps({
         user: Object,

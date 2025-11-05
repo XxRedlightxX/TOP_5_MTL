@@ -6,13 +6,14 @@
       <router-link :to="{ name: 'show', params: {id: event.id}}" v-for="(event, index) in listEvent" 
       :key="index" class="card" >
         <div class="img">
+          
           <img :src="getEventUrl(event.image)" alt="img" draggable="false" />
         </div>
         <h2>{{ event.title }}</h2>
         <div class="eventDescriptionInfos">
           <div class="d">
             <v-icon icon="mdi-map-marker " :class="['icon', {'justGlow' : !actualMode}]"/>
-            {{ event.lieu }}, {{ event.title }}
+            {{ event.lieu }}
           </div>
           <div class="d">
             <v-icon icon="mdi-clock-outline " :class="['icon', {'justGlow' : !actualMode}]"/>

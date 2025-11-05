@@ -29,7 +29,7 @@ class ActivityResource extends JsonResource
             // Activity creator
             'creator'    => [
                 'id'    => $this->User->id,
-                'name'  => $this->User->name,
+                'username'  => $this->User->username,
                 'avatar'  => $this->User->avatar,
                 'email' => $this->User->email,
             ],

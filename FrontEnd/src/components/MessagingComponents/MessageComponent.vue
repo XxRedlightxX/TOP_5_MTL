@@ -139,7 +139,7 @@ const processMessages = (messagesData, currentUserId) => {
             contenu: message.contenu ?? '',
             expediteur_id: message.expediteur_id,
             destinataire_id: message.destinataire_id,
-            timestamp: message.date || message.timestamp || new Date().toISOString(),
+            timestamp: message.date,
             isMine: message.expediteur_id === currentUserId,
             avatar: message.image_data,
             senderName: message.senderName || (message.expediteur_id === currentUserId ? "Me" : "Other User")

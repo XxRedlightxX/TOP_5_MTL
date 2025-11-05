@@ -105,12 +105,20 @@ export const useFriendStore = defineStore("friendStore", {
         this.followings.delete(userId);
       }
 
+    
+
       return data;
     } catch (err) {
       console.error("deleteUserFollowing error:", err);
       return { message: "Error", err };
     }
   },
+
+    getFollowingsAsArray() {
+      const myArray =[...this.followings];
+      console.log(myArray);
+      return myArray
+    },
 
   
     isFollowing(userId) {

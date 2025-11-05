@@ -1,7 +1,7 @@
 <template>
     <div id="profileListEventComponent">
       <div class="head">
-        <h4 v-if="props.himself">{{  actualLang ? 'List of event you add' : 'Les evenements que vous avez ajoute' }}</h4>
+        <h4 v-if="props.himself">{{  actualLang ? 'List of events you add' : 'Les événements que vous avez ajoutés' }}</h4>
         <h4 v-else>{{  actualLang ? 'List of event the organisator publish' : 'Les evenements que l\'organisateur a publier' }}</h4>
        
         <div @click="showAdd2()"  class="router"  v-show="props.himself">

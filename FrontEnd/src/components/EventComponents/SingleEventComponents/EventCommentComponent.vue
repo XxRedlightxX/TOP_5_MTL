@@ -65,33 +65,7 @@ if (avis.value) {
   console.log("Not Working")
 }*/
 
-const formatDate = (dateString, actualLang) => {
-  const safeString = dateString.replace(" ", "T");
-  const date = new Date(safeString);
-  const now = new Date();
 
-  const diffMs = now - date;
-  const diffSec = Math.round(diffMs / 1000);
-  const diffMin = Math.round(diffSec / 60);
-  const diffHours = Math.round(diffMin / 60);
-  const diffDays = Math.round(diffHours / 24);
-
-  if (diffDays >= 1) {
-    return actualLang 
-      ? `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
-      : `il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`;
-  } else if (diffHours >= 1) {
-    return actualLang
-      ? `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
-      : `il y a ${diffHours} heure${diffHours > 1 ? 's' : ''}`;
-  } else if (diffMin >= 1) {
-    return actualLang
-      ? `${diffMin} minute${diffMin > 1 ? 's' : ''} ago`
-      : `il y a ${diffMin} minute${diffMin > 1 ? 's' : ''}`;
-  } else {
-    return actualLang ? 'just now' : 'à l’instant';
-  }
-};
 
 
 

@@ -38,7 +38,9 @@
     
     let userListRecentMessage = ref([])
     onMounted(() => {
-        userListRecentMessage.value = LocalStorageManager.getUserList();
+        const storedList = LocalStorageManager.getUserList();
+
+         userListRecentMessage.value = Array.isArray(storedList) ? storedList : [];
     });
 
     const selectUser = (pUser) => {

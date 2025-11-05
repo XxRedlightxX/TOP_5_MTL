@@ -22,7 +22,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import '../../src/JS/config/echo';
-
+import { formatDateApi } from '@/JS/GlobalFunctions';
 
 const notifications = ref([]);
 const toasts = ref([]);
