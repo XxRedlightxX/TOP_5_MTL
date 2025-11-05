@@ -121,9 +121,11 @@
         .last {
             .icon {
                 color: var(--graphite06);
+                transition: all 0.3s ease;
             }
-            .icon:hover {
-                color: var(--graphite);
+            .icon:last-child:hover {
+                transform: scale(1.1);
+                color:#cc0000;
             }
         }
     }
