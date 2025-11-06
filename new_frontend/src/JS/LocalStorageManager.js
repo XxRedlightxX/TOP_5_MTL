@@ -78,10 +78,23 @@ const LocalStorageManager = {
     );
   },
 
-  /** Récupère l'événement affiché */
   getEvent() {
     const event = localStorage.getItem("event");
     return event ? JSON.parse(event) : null;
+  },
+
+  setTag(value) {
+    localStorage.setItem("tag", JSON.stringify(value));
+    window.dispatchEvent(
+      new CustomEvent("tag-changed", {
+        detail: { storage: localStorage.getItem("tag") },
+      })
+    );
+  },
+
+  getTag() {
+    const tag = localStorage.getItem("tag");
+    return tag ? JSON.parse(tag) : null;
   },
 
   /**

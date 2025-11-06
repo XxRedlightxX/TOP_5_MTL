@@ -23,6 +23,7 @@
         right: -3%;
     }
     .carousel {
+      flex: 1;
       display: grid;
       grid-auto-flow: column;
       grid-auto-columns: calc((100% / 6) - 12px);
@@ -34,6 +35,7 @@
       scrollbar-width: none;
       height: 100%;
       overflow-y: hidden;
+      overflow-x: scroll;
       padding-top: 2%;
   
       .card {
@@ -81,24 +83,40 @@ cursor: grab;
 }
 
 @media screen and (min-width: 1025.1px){
-    .eventFilter .carousel {
-        grid-auto-columns: calc((100% / 6) - 12px);
+    .eventFilter {
+        min-width: 75%;
+    
+        .carousel {
+            grid-auto-columns: calc((100% / 6) - 12px);
+        }
     }
 }
 @media screen and (max-width: 1025px){
-    .eventFilter .carousel {
-        grid-auto-columns: calc((100% / 4) - 9px);
+    .eventFilter {
+        min-width: 90%;
+    
+        .carousel {
+            grid-auto-columns: calc((100% / 4) - 9px);
+        }
     }
 }
 @media screen and (max-width: 900px) {
-    .eventFilter .carousel {
-        grid-auto-columns: calc((100% / 3) - 9px);
+    .eventFilter {
+        min-width: 90%;
+    
+        .carousel {
+            grid-auto-columns: calc((100% / 3) - 9px);
+        }
     }
 }
 
 @media screen and (max-width: 600px) {
-    .eventFilter .carousel {
-        grid-auto-columns: calc((100% / 2) - 9px);
-}
+    .eventFilter {
+        min-width: 90%;
+    
+        .carousel {
+            grid-auto-columns: calc((100% / 2) - 9px);
+        }
+    }
 }
   

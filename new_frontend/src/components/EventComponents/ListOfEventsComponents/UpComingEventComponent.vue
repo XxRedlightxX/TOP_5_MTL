@@ -1,41 +1,52 @@
 <template>
-  <div v-if="eventsss.length > 0" class="upComingEvent" ref="wrapper">
-    <span id="left" @click="scroll('left')"><</span>
+  <div v-if="events.length" class="upComingEvent" ref="wrapper">
+    <button id="left" @click="scroll('left')"><</button>
+
     <ul class="carousel" ref="carousel">
-      <router-link to="/Event" v-for="(event, index) in  eventsss" :key="index" class="card"  @click="setEvent(event)">
+      <router-link
+        v-for="(event, index) in events"
+        :key="event.id || index"
+        class="card"
+        to="/Event"
+        @click="setEvent(event)"
+      >
         <div class="img">
-          <img :src="event.image" alt="img" draggable="false" />
+          <img :src="event.image" alt="event image" draggable="false" />
         </div>
+
         <h2>{{ event.title }}</h2>
+
         <div class="eventDescriptionInfos">
           <div class="d">
-            <v-icon icon="mdi-map-marker " :class="['icon', {'justGlow' : !actualMode}]"/>
-            montreal, {{ event.title }}
+            <v-icon
+              icon="mdi-map-marker"
+              :class="['icon', { justGlow: !actualMode }]"
+            />
+            Montréal, {{ event.title }}
           </div>
           <div class="d">
-            <v-icon icon="mdi-clock-outline " :class="['icon', {'justGlow' : !actualMode}]"/>
+            <v-icon
+              icon="mdi-clock-outline"
+              :class="['icon', { justGlow: !actualMode }]"
+            />
             12 h
           </div>
         </div>
       </router-link>
     </ul>
-    <span id="right" @click="scroll('right')">></span>
+
+    <button id="right" @click="scroll('right')">></button>
   </div>
 </template>
 
 <script setup>
-  import { ref, onMounted, onBeforeUnmount, onUnmounted, watch } from 'vue';
-  import Setup from '@/JS/Setup';
-  import SetupEvent from '@/JS/SetupEvents'
-  import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase';
-  import LocalStorageManager from '@/JS/LocalStorageManager';
-
-  const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
-  //const events = FakeDataBase.getNewEvents();
-  //const events = ref([]);
+  import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
+  import Setup from "@/JS/Setup";
+  import SetupEvent from "@/JS/SetupEvents";
+  import LocalStorageManager from "@/JS/LocalStorageManager";
 
   const actualMode = Setup.modeSetup();
-  const eventsss = ref([]);
+  const events = ref([]);
 
   const wrapper = ref(null);
   const carousel = ref(null);
@@ -45,97 +56,109 @@
   const timeoutId = ref(null);
   const isAutoPlay = ref(true);
 
-  // // Correction du watcher
-  // watch(actualMode, () => {
-  //   setEvents();
-  // });
-
-  // const setEvents = () => {
-  //   eventsss.value = actualMode.value ? events.eventJour : events.eventNuit;
-  // };
-
-  const initializeCarousel = () => {
-    const firstCardWidth = carousel.value.querySelector('.card').offsetWidth;
-    const cardPerView = Math.round(carousel.value.offsetWidth / firstCardWidth);
-
-    const children = Array.from(carousel.value.children);
-    children.slice(-cardPerView).reverse().forEach(card => {
-      carousel.value.insertAdjacentHTML('afterbegin', card.outerHTML);
-    });
-    children.slice(0, cardPerView).forEach(card => {
-      carousel.value.insertAdjacentHTML('beforeend', card.outerHTML);
-    });
-
-    carousel.value.scrollLeft = carousel.value.offsetWidth;
-
-    carousel.value.addEventListener('mousedown', dragStart);
-    carousel.value.addEventListener('mousemove', dragging);
-    document.addEventListener('mouseup', dragStop);
-    carousel.value.addEventListener('scroll', infiniteScroll);
-    wrapper.value.addEventListener('mouseenter', () => clearTimeout(timeoutId.value));
-    wrapper.value.addEventListener('mouseleave', autoPlay);
-
-    autoPlay();
-  };
-
   const scroll = (direction) => {
-    const firstCardWidth = carousel.value.querySelector('.card').offsetWidth;
-    carousel.value.scrollLeft += direction === 'left' ? -firstCardWidth : firstCardWidth;
+    const firstCard = carousel.value?.querySelector(".card");
+    if (!firstCard) return;
+    const step = firstCard.offsetWidth;
+    carousel.value.scrollLeft += direction === "left" ? -step : step;
   };
 
   const dragStart = (e) => {
+    if (!carousel.value) return;
     isDragging.value = true;
-    carousel.value.classList.add('dragging');
+    carousel.value.classList.add("dragging");
     startX.value = e.pageX;
     startScrollLeft.value = carousel.value.scrollLeft;
+    e.preventDefault();
   };
 
   const dragging = (e) => {
-    if (!isDragging.value) return;
+    if (!isDragging.value || !carousel.value) return;
+    e.preventDefault();
     carousel.value.scrollLeft = startScrollLeft.value - (e.pageX - startX.value);
   };
 
   const dragStop = () => {
     isDragging.value = false;
-    carousel.value.classList.remove('dragging');
+    carousel.value?.classList.remove("dragging");
   };
 
   const infiniteScroll = () => {
-    if (carousel.value.scrollLeft === 0) {
-      carousel.value.classList.add('no-transition');
-      carousel.value.scrollLeft = carousel.value.scrollWidth - 2 * carousel.value.offsetWidth;
-      carousel.value.classList.remove('no-transition');
-    } else if (Math.ceil(carousel.value.scrollLeft) === carousel.value.scrollWidth - carousel.value.offsetWidth) {
-      carousel.value.classList.add('no-transition');
-      carousel.value.scrollLeft = carousel.value.offsetWidth;
-      carousel.value.classList.remove('no-transition');
+    const el = carousel.value;
+    if (!el) return;
+
+    if (el.scrollLeft === 0) {
+      el.classList.add("no-transition");
+      el.scrollLeft = el.scrollWidth - 2 * el.offsetWidth;
+      el.classList.remove("no-transition");
+    } else if (Math.ceil(el.scrollLeft) >= el.scrollWidth - el.offsetWidth) {
+      el.classList.add("no-transition");
+      el.scrollLeft = el.offsetWidth;
+      el.classList.remove("no-transition");
     }
+
     clearTimeout(timeoutId.value);
-    if (!wrapper.value.matches(':hover')) autoPlay();
+    if (!wrapper.value?.matches(":hover")) autoPlay();
   };
 
   const autoPlay = () => {
-    const firstCardWidth = carousel.value.querySelector('.card').offsetWidth;
-    if (window.innerWidth < 800 || !isAutoPlay.value) return;
+    const firstCard = carousel.value?.querySelector(".card");
+    if (!firstCard || window.innerWidth < 800 || !isAutoPlay.value) return;
     timeoutId.value = setTimeout(() => {
-      carousel.value.scrollLeft += firstCardWidth;
+      carousel.value.scrollLeft += firstCard.offsetWidth;
     }, 2500);
   };
-  const setEvent = (value) => {
-    LocalStorageManager.setEvent(value);
-    console.log("Event value: ", value);
-  }
+
+  const initializeCarousel = async () => {
+    await nextTick(); // s'assurer que le DOM est prêt
+    const el = carousel.value;
+    if (!el) return;
+
+    const firstCard = el.querySelector(".card");
+    if (!firstCard) return;
+
+    const cardWidth = firstCard.offsetWidth;
+    const cardsPerView = Math.round(el.offsetWidth / cardWidth);
+    const children = Array.from(el.children);
+
+    // Clone virtuellement au lieu d’injecter du HTML (évite bugs Vue)
+    for (let i = 0; i < cardsPerView; i++) {
+      const firstClone = children[i].cloneNode(true);
+      const lastClone = children[children.length - 1 - i].cloneNode(true);
+      el.appendChild(firstClone);
+      el.insertBefore(lastClone, el.firstChild);
+    }
+
+    el.scrollLeft = el.offsetWidth;
+
+    // Événements
+    el.addEventListener("mousedown", dragStart);
+    el.addEventListener("mousemove", dragging);
+    window.addEventListener("mouseup", dragStop);
+    el.addEventListener("scroll", infiniteScroll);
+    wrapper.value.addEventListener("mouseenter", () => clearTimeout(timeoutId.value));
+    wrapper.value.addEventListener("mouseleave", autoPlay);
+
+    autoPlay();
+  };
+
+  const setEvent = (event) => {
+    LocalStorageManager.setEvent(event);
+    console.log("Event selected:", event);
+  };
+
+  onMounted(async () => {
+    events.value = await SetupEvent.upcomingEventSetup();
+    if (events.value.length) initializeCarousel();
+  });
 
   onBeforeUnmount(() => {
-    carousel.value.removeEventListener('mousedown', dragStart);
-    carousel.value.removeEventListener('mousemove', dragging);
-    document.removeEventListener('mouseup', dragStop);
-    carousel.value.removeEventListener('scroll', infiniteScroll);
-  });
-  onMounted(async () => {
-    eventsss.value = await SetupEvent.upcomingEventSetup();
-    //console.log('events : ', events);
-    initializeCarousel();
+    const el = carousel.value;
+    if (!el) return;
+    el.removeEventListener("mousedown", dragStart);
+    el.removeEventListener("mousemove", dragging);
+    window.removeEventListener("mouseup", dragStop);
+    el.removeEventListener("scroll", infiniteScroll);
   });
 </script>
 
