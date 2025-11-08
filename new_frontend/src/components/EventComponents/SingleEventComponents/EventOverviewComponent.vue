@@ -11,7 +11,7 @@
         <Ratings :Rate="false" :rating="props.event.rating" />
       </div>
       <h3><strong>{{ actualLang ? 'Location : ': 'Emplacement : ' }}</strong> {{ props.event.lieu }}</h3>
-      <h3><strong>{{ actualLang ? 'Open from : ': 'Ouvert de : ' }}</strong> 9h - 19h, {{ actualLang ? 'everydays': 'tous les jours' }}</h3>
+      <h3><strong>{{ actualLang ? 'Open from : ': 'Ouvert de : ' }}</strong>{{ heureDebut + " - " + heureFin }}</h3>
     </div>
   </div>
 
@@ -26,6 +26,17 @@
     event: Object,
 
   });
+  let dateDebut = new Date(props.event.date_debut);
+  let heuresDebut = dateDebut.getHours().toString().padStart(2, '0');
+  let minutesDebut = dateDebut.getMinutes().toString().padStart(2, '0');
+  let heureDebut = `${heuresDebut}:${minutesDebut}`;
+
+  let dateFin = new Date(props.event.date_fin);
+  let heuresFin = dateDebut.getHours().toString().padStart(2, '0');
+  let minutesFin = dateDebut.getMinutes().toString().padStart(2, '0');
+  let heureFin = `${heuresFin}:${minutesFin}`;
+
+
   let actualLang = Setup.languageSetup();
 </script>
 
