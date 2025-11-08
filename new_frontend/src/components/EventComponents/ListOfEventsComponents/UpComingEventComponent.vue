@@ -1,5 +1,5 @@
 <template>
-  <div v-if="events.length" class="upComingEvent" ref="wrapper">
+  <div v-if="events.length > 0" class="upComingEvent" ref="wrapper">
     <button id="left" @click="scroll('left')"><</button>
 
     <ul class="carousel" ref="carousel">
@@ -37,6 +37,46 @@
 
     <button id="right" @click="scroll('right')">></button>
   </div>
+
+  <div v-else class="upComingEvent" ref="wrapper">
+    <button id="left" @click="scroll('left')"><</button>
+
+    <ul class="carousel" ref="carousel">
+      <router-link
+        v-for="(event, index) in fakeData"
+        :key="event.id || index"
+        class="card"
+        to="/Event"
+        @click="setEvent(event)"
+      >
+        <div class="img">
+          <img :src="event.image" alt="event image" draggable="false" />
+        </div>
+
+        <h2>{{ event.title }}</h2>
+
+        <div class="eventDescriptionInfos">
+          <div class="d">
+            <v-icon
+              icon="mdi-map-marker"
+              :class="['icon', { justGlow: !actualMode }]"
+            />
+            City, {{ event.title }}
+          </div>
+          <div class="d">
+            <v-icon
+              icon="mdi-clock-outline"
+              :class="['icon', { justGlow: !actualMode }]"
+            />
+            Hours
+          </div>
+        </div>
+      </router-link>
+    </ul>
+
+    <button id="right" @click="scroll('right')">></button>
+    <LoadingComponent :size="150"/>
+  </div>
 </template>
 
 <script setup>
@@ -44,9 +84,12 @@
   import Setup from "@/JS/Setup";
   import SetupEvent from "@/JS/SetupEvents";
   import LocalStorageManager from "@/JS/LocalStorageManager";
+  import AsyncData from "@/JS/AsyncData";
+  import LoadingComponent from "@/components/StaticComponents/LoadingComponent.vue";
 
   const actualMode = Setup.modeSetup();
   const events = ref([]);
+  const fakeData = AsyncData.getEvents(3);
 
   const wrapper = ref(null);
   const carousel = ref(null);

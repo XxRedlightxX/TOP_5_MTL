@@ -32,6 +32,7 @@ declare module 'vue' {
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     IntroTextComponent: typeof import('./src/components/HomeComponents/IntroTextComponent.vue')['default']
     LanguageComponent: typeof import('./src/components/StaticComponents/LanguageComponent.vue')['default']
+    LoadingComponent: typeof import('./src/components/StaticComponents/LoadingComponent.vue')['default']
     LogoComponent: typeof import('./src/components/LogoComponent/LogoComponent.vue')['default']
     MenuComponent: typeof import('./src/components/StaticComponents/MenuComponent.vue')['default']
     NewEventComponent: typeof import('./src/components/HomeComponents/NewEventComponent.vue')['default']

@@ -1,4 +1,5 @@
 #newEventComponent {
+    position: relative;
     .swiper {
         .swiper-slide {
           display: flex;
@@ -48,7 +49,7 @@
     #newEventComponent {
         width: 75%;
         //height: 400px;
-        margin: auto;
+        margin: 5% auto 0% auto;
         display: flex;
         flex-direction: row;
         justify-content: space-between;

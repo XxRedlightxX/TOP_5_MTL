@@ -9,6 +9,19 @@
     </ul>
     <span id="right" @click="scroll('right')" :class="[{'glow' : !actualMode}]">></span>
   </div>
+
+  <div v-else class="eventFilter" ref="wrapper">
+    <span id="left" :class="[{'glow' : !actualMode}]"><</span>
+    <ul class="carousel" ref="carousel">
+      <li v-for="(tag, index) in fakeTags" :key="index" class="card">
+        <v-icon :icon="tag.image_data" :class="['icon', {'glow' : !actualMode}]"/>
+        <h4>{{ tag.nom }}</h4>
+      </li>
+    </ul>
+    <span id="right" :class="[{'glow' : !actualMode}]">></span>
+    <LoadingComponent />
+  </div>
+
 </template>
 
 <script setup>
@@ -16,10 +29,13 @@
   import Setup from "@/JS/Setup";
   import { useActivityStore } from "@/stores/activity"
   import LocalStorageManager from "@/JS/LocalStorageManager";
+  import AsyncData from "@/JS/AsyncData";
+  import LoadingComponent from "@/components/StaticComponents/LoadingComponent.vue";
 
   const actualMode = Setup.modeSetup();
   const activitiesStore = useActivityStore()
   const tagFilters = ref([]);
+  const fakeTags = AsyncData.getEventsTag();
 
   const wrapper = ref(null);
   const carousel = ref(null);
