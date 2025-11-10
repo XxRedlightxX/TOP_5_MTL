@@ -75,19 +75,17 @@ class ActiviteDAOImpl implements ActiviteDAO {
      */
     public function getActivityBySeason(string $nomSaison) {
 
-        return  Activite::whereHas('saison', function ($query) 
+        return Activite::whereHas('saison', function ($query) 
         use ($nomSaison) {
             $query->where('statut', $nomSaison);
         })->get();  
     }
 
-  
-    
 
     public function getUpcomingActivityByRecent() {
-          return Activite::whereDate('date_debut', '>=', now())
+        return Activite::whereDate('date_debut', '>=', now())
         ->orderBy('date_debut', 'asc')
-        ->take(6) 
+        ->take(12) 
         ->get();
     }
 
@@ -98,9 +96,9 @@ class ActiviteDAOImpl implements ActiviteDAO {
         })->get();
     }
 
-     public function getActivityByDayOrNight(string $activiteyDaytime) {
+    public function getActivityByDayOrNight(string $activiteyDaytime) {
         return Activite::where('statut_journee', $activiteyDaytime)->get();
-     }
+    }
 
     /**
      * @inheritDoc
@@ -180,7 +178,26 @@ class ActiviteDAOImpl implements ActiviteDAO {
     }
 
     public function getActivityFromCategoryType(string $typeName) {
-        return  Type::where('nom', $typeName)->first();
+        return Type::where('nom', $typeName)->first();
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getDaysandNightsActivities( $activitiesData)
+    {
+        $collection = collect($activitiesData);
+
+        return [
+            'days' => $collection
+                ->where('statut_journee', 'jour')
+                ->values(),
+
+            'nights' => $collection
+                ->where('statut_journee', 'nuit')
+                ->values(),
+        ];
     }
 
 }

@@ -5,7 +5,22 @@
         <div class="homeContent">
             <IntroText/>
             <NewEvent :list-event="eventsList"/><!---->
-            
+             <button 
+        @click="activitiesStore.toggleMode('days')" 
+        :class="{ active: mode === 'days' }"
+        
+      >
+       Days Events
+       
+      </button>
+      <button 
+        @click="activitiesStore.toggleMode('nights')" 
+        :class="{ active: mode === 'nights' }"
+      >
+        Night Events 
+      </button>
+
+    
             <Contact/>
         </div>
     </div>
@@ -18,11 +33,10 @@
     import IntroText from "../../components/HomeComponents/IntroTextComponent.vue"
     import NewEvent from "../../components/HomeComponents/NewEventComponent.vue"
     import Contact from "../../components/HomeComponents/ContactComponent.vue"
-    import MapComponent from "@/components/MapComponent.vue"
-    import { ref, onMounted, onUnmounted, watch} from "vue";
+    import { ref, onMounted, computed} from "vue";
     import { useActivityStore } from '@/stores/activity';
 
-    let eventsList = ref(null);
+    //let eventsList = ref(null);
     const text ="dada"
 
     const activitiesStore = useActivityStore();
@@ -38,21 +52,22 @@
     ]
 
 
-     onMounted(async () => {
-      await activitiesStore.getUpcomingEvents();
-
-      eventsList.value = activitiesStore.activities.map(activity => ({
-        id : activity.id,
+  const eventsList = computed(() => {
+    
+    return activitiesStore.upcomingactivities.map(activity => ({
+        id: activity.id,
         image: activity.image_data || "https://picsum.photos/1895/795",
         title: activity.titre,
-        desc: activity.description || descText,
-        rating: activity.nombre_likes || 2,
+        desc: activity.description || "No description available",
+        rating: parseFloat(activity.nombre_likes) || 0,
         lieu: activity.lieu,
-        date: activity.date,
-      }));
-  });
+        date: activity.date_debut,
+    }));
+});
 
-   eventsList.value =  newEventJours;
+onMounted(async () => {
+    await activitiesStore.getUpcomingEvents();
+});
    
 
   

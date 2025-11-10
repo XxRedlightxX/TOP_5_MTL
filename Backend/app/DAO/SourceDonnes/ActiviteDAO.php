@@ -11,6 +11,8 @@ interface ActiviteDAO extends InterfaceDAO {
      public function addActivity(int $userId, array $activityData);
     public function getAllCategories();
 
+    public function getDaysandNightsActivities($activitiesData);
+
     public function getActivityByName(string $actvityName);
 
     public function getActivityByType(string $activityType);

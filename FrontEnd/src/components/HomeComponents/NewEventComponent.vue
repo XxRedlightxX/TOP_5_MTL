@@ -19,14 +19,14 @@
 
     <div class="contentt">
       <div class="top">
-        <h2>{{ listEvent[indexSlide].title }}  </h2>
+        <h2>{{ listEvent[indexSlide]?.title }}  </h2>
         <router-link to="/Event" class="link" title="Go to the event Page" @click="setEvent(newEvent[indexSlide])">
           <v-icon icon="mdi-arrow-top-right-thin" class="icon glow"/>
         </router-link>
 
       </div>
-      <p>{{ listEvent[indexSlide].desc }}</p>
-      <Ratings :rating="listEvent[indexSlide].rating" :Rate="false"/>
+      <p>{{ listEvent[indexSlide]?.desc }}</p>
+      <Ratings :rating="listEvent[indexSlide]?.rating" :Rate="false"/>
     </div>
   </div>
 </template>

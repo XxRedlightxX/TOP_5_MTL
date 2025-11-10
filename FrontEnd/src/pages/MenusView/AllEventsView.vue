@@ -41,23 +41,27 @@ image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating
     {id :null,image : "https://picsum.photos/1895/795", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
   ];
 
-    onMounted(async () => {
-      await activitiesStore.getUpcomingEvents();
 
-      upComingEvents.value = activitiesStore.activities.map(activity => ({
-        id : activity.id,
-        image: activity.image_data ,
+
+    upComingEvents = computed(() => {
+    return activitiesStore.upcomingactivities.map(activity => ({
+        id: activity.id,
+        image: activity.image_data || "https://picsum.photos/1895/795",
         title: activity.titre,
-        desc: activity.description || descText,
-        rating: activity.rating || 0,
+        desc: activity.description || "No description available",
+        rating: parseFloat(activity.nombre_likes) || 0,
         lieu: activity.lieu,
         date: activity.date_debut,
-      }));
-  });
+    }));
+});
+
+
+
   eventsList.value = actualMode.value ? newEventJours : newEventNuit;
 
   onMounted(async () => {
     await activitiesStore.getActivities();
+     await activitiesStore.getUpcomingEvents();
   });
 
   eventsList = computed(() => {

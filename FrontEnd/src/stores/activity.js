@@ -1,13 +1,23 @@
 import {defineStore} from "pinia";
 import { useAuthStore } from "./auth";
+import StorageManager from "@/JS/LocalStaorageManager";
 
 
 export const  useActivityStore = defineStore('activitiesStore', {
     state: () => {
         return {
             activities: [],
-             user : null,
+            carouselactivities : [],
+            upcomingactivities : [],
+            user : null,
             activity: null,
+            days: [],
+            nights: [],
+            carouseldays: [],
+            carouselnights: [],
+            upcomingdays: [],
+            upcomingnights: [],
+            mode:  StorageManager.getMode() || 'days',
             categories : [],
             isLoading : false,
             filters: {
@@ -20,11 +30,57 @@ export const  useActivityStore = defineStore('activitiesStore', {
            
         }
     },
-
     getters : {
+   
        
     },
     actions : {
+
+        /*toggleMode() {
+            this.mode = this.mode === 'day' ? 'nights' : 'days'
+            localStorage.setItem('activityMode', this.mode)
+        },*/
+
+         toggleMode() {
+            // Toggle between 'days' and 'nights'
+            this.mode = this.mode === 'days' ? 'nights' : 'days';
+            StorageManager.setMode(this.mode);
+            
+            // Update derived data
+            this.activities = this.mode === 'days' ? this.days : this.nights;
+            this.carouselactivities = this.mode === 'days' ? this.carouseldays : this.carouselnights;
+            this.upcomingactivities = this.mode === 'days' ? this.upcomingdays : this.upcomingnights;
+        },
+    
+
+    async getUpcomingEvents() {
+        try {
+            const res = await fetch("/api/activite/test", {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            });
+
+            if (!res.ok) {
+                throw new Error(`Erreur API: ${res.status}`);
+            }
+
+            const data = await res.json();
+            this.upcomingnights = data.nights || []
+            this.upcomingdays = data.days || []
+         
+            this.upcomingactivities = this.mode === 'days' ? this.upcomingdays : this.upcomingdays;
+            
+            
+            this.errors = {};
+           // return this.activities;
+             
+        } catch (err) {
+            console.error("getUpcomingEvents failed:", err);
+            this.errors = { upcoming: err.message };
+            return [];
+        }
+        },
 
         async getActivities() {
             this.isLoading = true; // Start loading
@@ -94,33 +150,43 @@ export const  useActivityStore = defineStore('activitiesStore', {
         }
     },
 
-        async getHigherRateEvent() {
+       async getHigherRateEvent() {
+        try {
+            this.isLoading = true;
+            const res = await fetch("/api/likedActivities", {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            
+            const data = await res.json();
+            
+            if (res.ok) {
+                this.carouselnights= data.nights || [];
+                this.carouseldays = data.days || [];
+                this.carouselactivities = this.mode === 'days' ? this.carouseldays : this.carouselnights;
                 
-                try {
-                    this.isLoading=true;
-                    const res = await fetch("/api/likedActivities", {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        
-                    },
-                    });
-                        const data = await res.json();
-                    if (res.ok) {
-                        this.activities = data;
-                        return this.activities;
-                        
-                    }else if(data.errors) {
-                        this.errors= data.errors;
-                        console.log(data.errors);
-                    }
-                } catch ($error) {
-                    return $error;
-                } finally {
-                    this.isLoading=false;
-                }
-
-        },
-
+                console.log("Days:", this.carouseldays[0]);
+                console.log("Nights:", this.carouselnights[0]);
+                console.log("Activities to display:",this.carouselactivities);
+                
+                this.errors = {}; // Clear errors on success
+                //return data
+            } else if (data.errors) {
+                this.errors = data.errors;
+                console.log("API errors:", data.errors);
+                throw new Error(data.errors.message || "API returned errors");
+            }
+            
+        } catch (error) {
+            console.error("getHigherRateEvent failed:", error);
+            this.errors = { higherRate: error.message };
+            // Don't return the error, just let it be handled by the store
+            
+        } finally {
+            this.isLoading = false;
+        }
+    },
 
 
 
@@ -273,32 +339,7 @@ export const  useActivityStore = defineStore('activitiesStore', {
            
         },
 
-   async getUpcomingEvents() {
-        try {
-            const res = await fetch("/api/activite/test", {
-            headers: {
-               
-                'Content-Type': 'application/json',
-            },
-            });
-
-            if (!res.ok) {
-                throw new Error(`Erreur API: ${res.status}`);
-            }
-
-            const data = await res.json();
-            this.activities = data || [];
-
-            console.log("Upcoming events:", this.activities);
-            this.errors = {};
-            return this.activities;
-
-        } catch (err) {
-            console.error("getUpcomingEvents failed:", err);
-            this.errors = { upcoming: err.message };
-            return [];
-        }
-        },
+   
 
         async getCategories() {
             const res = await fetch("/api/categories", {
