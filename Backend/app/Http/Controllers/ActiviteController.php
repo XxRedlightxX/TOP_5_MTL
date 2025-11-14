@@ -84,7 +84,7 @@ class ActiviteController extends Controller
         try {
         
             $activite = Activite::findOrFail($activiteId);
-            //$this->authorize('update', $activite);
+            $this->authorize('update', $activite);
         
             $validatedInputActivity = $request->validate([
                 'titre' => 'nullable|string|max:255',
@@ -114,15 +114,15 @@ class ActiviteController extends Controller
    public function deleteActivityById(int $activiteId)
     {
         try {
-
             $activite = Activite::findOrFail($activiteId);
-            Gate::authorize('delete', $activite);     
+            Gate::authorize('delete', $activite);
+
             $this->userService->deleteActivity($activiteId);
             return response()->json(['message' => 'Deleted successfully']);
         } catch (ModelNotFoundException $e) {
-        return response()->json(['error' => "Activity $activiteId not found"], 404);
+            return response()->json(['error' => "Activity $activiteId not found"], 404);
         } catch (\Exception $e) {
-        return response()->json($e->getMessage(),500);
+            return response()->json($e->getMessage(),500);
         }
     }
 
@@ -160,9 +160,7 @@ class ActiviteController extends Controller
     }
 
     public function getUpcomingActivities() {
-        $upComingactivities=$this->userService->getActivitiesByUpcoming();
-
-        return $this->userService->getDaysandNightsActivities($upComingactivities);
+        return $this->userService->getActivitiesByUpcoming();
     }
 
     public function getAvgRatingActiviy($activityId) {
@@ -178,13 +176,10 @@ class ActiviteController extends Controller
     }
 
     public function getActivitiesMostLiked() {
-        $mostLikedActivities = $this->userService->getActivitiesMostLiked();
-        return $this->userService->getDaysandNightsActivities($mostLikedActivities);
+        return $this->userService->getActivitiesMostLiked();
     }
 
     public function getActivityWithComments(int $activityId) {
-
-        //$activity = Activite::findOrFail($activityId);
         $activity = Activite::with([
                 'User',
                 'avis.User'
@@ -194,7 +189,6 @@ class ActiviteController extends Controller
         return response()->json(
             (new ActivityResource($activity))
         );
-
     }
 
 
@@ -208,12 +202,15 @@ class ActiviteController extends Controller
         ]);
 
         $activities = $this->userService->getActivitiesFiltered($validated);
-
         return response()->json($activities);
     }
 
     public function getActivitiesCategories() {
         return $this->userService->getAllCategoriesActivities();
+    }
+
+    public function getNewestActivitiesbyCreationDate() {
+        return $this->userService->getNewestActivitiesbyCreationDate();
     }
 
 

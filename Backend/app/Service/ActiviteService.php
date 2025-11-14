@@ -114,5 +114,10 @@ class ActiviteService {
         return $this->activiteDAO->getDaysandNightsActivities($aListActivitiesData);
     }
 
+    public function getNewestActivitiesbyCreationDate() {
+        return $this->activiteDAO->getNewestActivitiesbyCreationDate();
+    }
+
+ 
 
 }
