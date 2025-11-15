@@ -26,12 +26,12 @@ composer update
 
 php artisan sanctum:install ou composer require laravel/sanctum
 
-php artisan migrate
+
 composer require laravel/reverb
 php artisan install:broadcasting
 php artisan reverb:install /// et choisis l'option reverb
 
-
+php artisan migrate
 php artisan reverb:start
 
 php artisan queue:work

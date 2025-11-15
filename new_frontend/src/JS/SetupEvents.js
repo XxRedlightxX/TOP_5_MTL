@@ -59,6 +59,7 @@ const SetupEvents = {
         ? SetupEvents.setListOfEvents(apiData)
         : apiData;
       setFunction(storedData.value);
+      console.log("dataa :", storedData);
     }
 
     /**
@@ -77,10 +78,9 @@ const SetupEvents = {
       window.removeEventListener(eventName, handleStorageChange);
     });
 
-    // return isThereActual
-    //   ? SetupEvents.actualEventsSetupGeneric(storedData)
-    //   : storedData.value;
-    return storedData.value;
+    return isThereActual
+      ? SetupEvents.actualEventsSetupGeneric(storedData)
+      : storedData.value;
   },
 
   /**
@@ -122,7 +122,8 @@ const SetupEvents = {
       window.removeEventListener("mode-changed", handleModeChange);
     });
 
-    return actualEvents;
+    console.log("actual events : ", actualEvents);
+    return actualEvents.value;
   },
 
   /**
@@ -231,52 +232,38 @@ const SetupEvents = {
    * SECTION : OUTILS
    * ----------------------------------------------------------
    */
-
   setListOfEvents(data) {
-    const organizedData = ref([]);
+    console.log("data recu : ", data);
+    const organizedDataDays = this.setEventDataFormat(data.days);
+    const organizedDataNight = this.setEventDataFormat(data.nights);
+
+    const organizedData = {
+      eventsJour: organizedDataDays,
+      eventsNuit: organizedDataNight,
+    };
+    return organizedData;
+  },
+
+  setEventDataFormat(data) {
+    console.log("data send : ", data);
     const descriptionText = "Description not found";
-    const defaultImage = "https://picsum.photos/640/480"; // Fallback image
+    const defaultImage = "https://picsum.photos/640/480";
 
-    if (Array.isArray(data)) {
-      // ✅ Cas : l’API retourne un tableau d’événements (ton cas actuel)
-      organizedData.value = data.map((activity) => ({
-        id: activity.id,
-        image: activity.image_data || defaultImage,
-        image2: activity.image_data2 || defaultImage,
-        title: activity.titre,
-        desc: activity.description || descriptionText,
-        rating: Number.parseFloat(activity.nombre_likes) || 0,
-        lieu: activity.lieu,
-        date_debut: activity.date_debut,
-        date_fin: activity.date_fin,
-        statut_journee: activity.statut_journee,
-        utilisateur_id: activity.utilisateur_id,
-        type_id: activity.type_id,
-        saison_id: activity.saison_id,
-      }));
-    } else if (data && Array.isArray(data.activities)) {
-      // ⚙️ Cas ancien format : { activities: [...] }
-      organizedData.value = data.activities.map((activity) => ({
-        id: activity.id,
-        image: activity.image_data || defaultImage,
-        image2: activity.image_data2 || defaultImage,
-        title: activity.titre,
-        desc: activity.description || descriptionText,
-        rating: Number.parseFloat(activity.nombre_likes) || 0,
-        lieu: activity.lieu,
-        date_debut: activity.date_debut,
-        date_fin: activity.date_fin,
-        statut_journee: activity.statut_journee,
-        utilisateur_id: activity.utilisateur_id,
-        type_id: activity.type_id,
-        saison_id: activity.saison_id,
-      }));
-    } else {
-      console.warn("⚠️ Données inattendues dans setListOfEvents :", data);
-    }
-
-    // console.log("✅ organised value :", organizedData.value);
-    return organizedData.value;
+    return data.map((activity) => ({
+      id: activity.id,
+      image: activity.image_data || defaultImage,
+      image2: activity.image_data2 || defaultImage,
+      title: activity.titre,
+      desc: activity.description || descriptionText,
+      rating: Number.parseFloat(activity.nombre_likes) || 0,
+      lieu: activity.lieu,
+      date_debut: activity.date_debut,
+      date_fin: activity.date_fin,
+      statut_journee: activity.statut_journee,
+      utilisateur_id: activity.utilisateur_id,
+      type_id: activity.type_id,
+      saison_id: activity.saison_id,
+    }));
   },
 };
 

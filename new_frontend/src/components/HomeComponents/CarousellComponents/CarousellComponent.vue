@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-  import { onMounted, ref } from 'vue'
+  import { onMounted, watch, ref } from 'vue'
   import SetupEvent from '@/JS/SetupEvents'
   import AsyncData from '@/JS/AsyncData'
 
@@ -22,8 +22,14 @@
   const hightRatedActivities = ref(null);
   let fakeData = AsyncData.getEvents(4)
 
+  const handleModeChange = (event) => {
+    hightRatedActivities.value = JSON.parse(event.detail.storage);
+    console.log('new events : ', hightRatedActivities);
+  };
+
   onMounted(async () => {
     hightRatedActivities.value = await SetupEvent.higherRateEventsSetup();
+    window.addEventListener('HightEvent-changed', handleModeChange);
     //console.log('events : ', hightRatedActivities);
   });
 
