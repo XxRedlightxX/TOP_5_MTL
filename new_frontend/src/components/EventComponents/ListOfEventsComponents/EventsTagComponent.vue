@@ -15,7 +15,7 @@
     <ul class="carousel" ref="carousel">
       <li v-for="(tag, index) in fakeTags" :key="index" class="card">
         <v-icon :icon="tag.image_data" :class="['icon', {'glow' : !actualMode}]"/>
-        <h4>{{ tag.nom }}</h4>
+        <h4 class="fakeTitle">{{ tag.nom }}</h4>
       </li>
     </ul>
     <span id="right" :class="[{'glow' : !actualMode}]">></span>
@@ -27,13 +27,14 @@
 <script setup>
   import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
   import Setup from "@/JS/Setup";
+  import SetupEvents from "@/JS/SetupEvents";
   import { useActivityStore } from "@/stores/activity"
   import LocalStorageManager from "@/JS/LocalStorageManager";
   import AsyncData from "@/JS/AsyncData";
   import LoadingComponent from "@/components/StaticComponents/LoadingComponent.vue";
 
   const actualMode = Setup.modeSetup();
-  const activitiesStore = useActivityStore()
+  //const activitiesStore = useActivityStore()
   const tagFilters = ref([]);
   const fakeTags = AsyncData.getEventsTag();
 
@@ -137,7 +138,8 @@
   };
 
   onMounted(async () => {
-    tagFilters.value = await activitiesStore.getCategories()
+    tagFilters.value = await SetupEvents.tagSetup();//activitiesStore.getCategories()
+    console.log('tags : ' , tagFilters)
     if (tagFilters.value.length) initializeTags();
   });
 

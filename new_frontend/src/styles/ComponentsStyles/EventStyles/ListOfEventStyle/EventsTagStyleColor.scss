@@ -8,16 +8,24 @@
         }
         .carousel {
 
-        .card {
-            .icon {
-                color: var(--graphite06);
-            }
-            .icon:hover {
-                color: var(--graphite);
-            }
-            h4 {
-                color: var(--graphite);
-            }
+            .card {
+                .icon {
+                    color: var(--graphite06);
+                }
+                .icon:hover {
+                    color: var(--graphite);
+                }
+                h4 {
+                    color: var(--graphite);
+                }
+                .fakeTitle{
+                    padding-top: 10%;
+                    color: rgba(255, 255, 255, 0);
+                    text-decoration: overline;
+                    text-decoration-color: var( --graphite015);
+                    text-decoration-thickness: 1em;
+                    text-decoration-skip-ink: none;
+                }
             }
         }
     }
@@ -42,7 +50,15 @@
                 h4 {
                     color: var(--light07);
                 }
+                .fakeTitle{
+                    padding-top: 10%;
+                    color: rgba(255, 255, 255, 0);
+                    text-decoration: overline;
+                    text-decoration-color: var(--light07);
+                    text-decoration-thickness: 1em;
+                    text-decoration-skip-ink: none;
                 }
+            }
                 
             .card:hover {
                 h4 {

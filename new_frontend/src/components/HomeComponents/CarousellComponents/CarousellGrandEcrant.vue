@@ -8,14 +8,14 @@
           <img :src="item.image">
         </div>
         <div class="content">
-          <div :class="index == 0 ? 'titlee' : 'lostTitle'">{{ item.title }}</div>
+          <div :class="[index == 0 ? 'titlee' : 'lostTitle', item.id == -1 ? 'fakeTitle' : '']"> {{ item.title }} </div>
 
           <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
             <router-link class="btn roundBorderSmall" to="/Event" @click="setEvent(item)">{{ textEvent }}</router-link>
             <router-link class="btn roundBorderSmall" to="/Event Organisator" @click="setOrganisator()">Découvrir les Organisateurs</router-link>
           </div>
           <div :class="index == 0 ? 'desc' : 'lostdesc'">
-            <p>{{ item.desc }}</p>
+            <p :class="item.id == -1 ? 'fakeDesc' : ''">{{ item.desc }}</p>
           </div>
         </div>
       </div>
@@ -25,7 +25,7 @@
       <div v-for="(item, index) in carouselItems" :key="index" class="item">
         <img class=" roundBorderSmall" :src="item.image2">
         <div class="content">
-          <div class="title">{{ item.title }}</div>
+          <div :class="['title', item.id == -1 ? 'fakeTitle' : '']">{{ item.title }}</div>
         </div>
       </div>
     </div>

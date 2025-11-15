@@ -43,6 +43,7 @@
       <swiper-slide
         v-for="(item, index) in fakeData"
         :key="index"
+        class="fakeImg"
       >
         <img alt="#" :src="item.image2">
       </swiper-slide>
@@ -50,13 +51,13 @@
 
     <div class="contentt">
       <div class="top">
-        <h2>{{ fakeData[indexSlide].title }}  </h2>
+        <h2 class="fakeTitle">{{ fakeData[indexSlide].title }}  </h2>
         <div class="link" :title="actualLang ? 'Go to the event Page' : 'Allez a la page de l\'evenement'" to="/Event" >
           <v-icon class="icon glow" icon="mdi-arrow-top-right-thin" />
         </div>
 
       </div>
-      <p>{{ fakeData[indexSlide].desc }}</p>
+      <p class="fakeText">{{ fakeData[indexSlide].desc }}</p>
       <Ratings :Rate="false" :rating="fakeData[indexSlide].rating" />
     </div>
     <LoadingComponent :size="130" />

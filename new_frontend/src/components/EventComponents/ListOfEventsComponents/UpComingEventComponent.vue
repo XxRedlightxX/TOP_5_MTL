@@ -53,21 +53,13 @@
           <img :src="event.image" alt="event image" draggable="false" />
         </div>
 
-        <h2>{{ event.title }}</h2>
+        <h2 class="fakeTitle">{{ event.title }}</h2>
 
         <div class="eventDescriptionInfos">
-          <div class="d">
-            <v-icon
-              icon="mdi-map-marker"
-              :class="['icon', { justGlow: !actualMode }]"
-            />
+          <div class="d fakeDesc">
             City, {{ event.title }}
           </div>
-          <div class="d">
-            <v-icon
-              icon="mdi-clock-outline"
-              :class="['icon', { justGlow: !actualMode }]"
-            />
+          <div class="d fakeDesc">
             Hours
           </div>
         </div>

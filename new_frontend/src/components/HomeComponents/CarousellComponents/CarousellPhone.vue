@@ -4,8 +4,8 @@
 
     <div class="reste">
       <div class="carousellPhoneSwipperInfos">
-        <h3>{{ eventInfo.title }}</h3>
-        <p>{{ eventInfo.desc }}</p>
+        <h3 :class="eventInfo.id == -1 ? 'fakeTitle' : ''">{{ eventInfo.title }}</h3>
+        <p :class="eventInfo.id == -1 ? 'fakeDesc' : ''">{{ eventInfo.desc }}</p>
       </div>
       <div class="carousellPhoneSwipperBtn">
         <router-link class="button" to="/Event" @click="setEvent()"> {{ actualLang ? "See the event" : "Voir l'evenement" }}</router-link>
@@ -117,12 +117,27 @@
         background: linear-gradient(to bottom, #ccc, #efefef);
         .reste {
             .carousellPhoneSwipperInfos{
-                h3 {
-                    color: var(--graphite);
-                }
-                p {
-                    color: var(--graphite06);
-                }
+              h3 {
+                  color: var(--graphite);
+              }
+              p {
+                  color: var(--graphite06);
+              }
+              .fakeTitle {
+                padding-top: 25%;
+                  color: rgba(255, 255, 255, 0);
+                  text-decoration: overline;
+                  text-decoration-color: var(--graphite015);
+                  text-decoration-thickness: 1em;
+                  text-decoration-skip-ink: none;
+              }
+              .fakeDesc {
+                color: rgba(255, 255, 255, 0);
+                text-decoration: overline;
+                text-decoration-color: var(--graphite015);
+                text-decoration-thickness: 1em;
+                text-decoration-skip-ink: none;
+              }
 
             }
             .carousellPhoneSwipperBtn {
@@ -151,12 +166,27 @@
 
         .reste {
             .carousellPhoneSwipperInfos{
-                h3 {
-                    color: var(--light-text);
-                }
-                p {
-                    color: var(--light-trans-2Shine);
-                }
+              h3 {
+                  color: var(--light-text);
+              }
+              p {
+                  color: var(--light-trans-2Shine);
+              }
+              .fakeTitle {
+                padding-top: 25%;
+                  color: rgba(255, 255, 255, 0);
+                  text-decoration: overline;
+                  text-decoration-color: var(--light07);
+                  text-decoration-thickness: 1em;
+                  text-decoration-skip-ink: none;
+              }
+              .fakeDesc {
+                color: rgba(255, 255, 255, 0);
+                text-decoration: overline;
+                text-decoration-color: var(--light07);
+                text-decoration-thickness: 1em;
+                text-decoration-skip-ink: none;
+              }
 
             }
             .carousellPhoneSwipperBtn {

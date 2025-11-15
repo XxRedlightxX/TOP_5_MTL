@@ -22,8 +22,8 @@ export const useActivityStore = defineStore("activitiesStore", {
 
   getters: {},
   actions: {
-    async getActivities() {
-      const params = new URLSearchParams();
+    async getActivities() { // getActivities(parametres) => parametres = 'daytime=jour&&debut=0&&fin=27&&tag=nature'
+      const params = new URLSearchParams(); //const params = parametres;
 
       const token = localStorage.getItem("token");
       for (const [key, value] of Object.entries(this.filters)) {
@@ -53,28 +53,28 @@ export const useActivityStore = defineStore("activitiesStore", {
       }
     },
 
-    async getUserActivities() {
-      const token = localStorage.getItem("token");
+    // async getUserActivities() {
+    //   const token = localStorage.getItem("token");
 
-      if (token) {
-        const res = await fetch("/api/user/activite", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await res.json();
+    //   if (token) {
+    //     const res = await fetch("/api/user/activite", {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     });
+    //     const data = await res.json();
 
-        if (res.ok) {
-          this.user = data;
-          console.log(this.user);
-          return this.user;
-        } else if (data.errors) {
-          this.errors = data.errors;
-          console.log(data.errors);
-        }
-      }
-    },
+    //     if (res.ok) {
+    //       this.user = data;
+    //       console.log(this.user);
+    //       return this.user;
+    //     } else if (data.errors) {
+    //       this.errors = data.errors;
+    //       console.log(data.errors);
+    //     }
+    //   }
+    // },
 
     async getHigherRateEvent() {
       //const token = localStorage.getItem("token");

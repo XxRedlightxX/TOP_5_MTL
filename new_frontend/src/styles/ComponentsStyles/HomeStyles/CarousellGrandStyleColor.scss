@@ -1,10 +1,31 @@
 .light {
     #carouselGrand {
-        .list > .item > .content > .desc p{
+        .content > .desc p{
             color: var(--light);
         }
         .content .titlee {
             color: var(--light);
+        }
+        .content .fakeTitle, .thumbnail .item .content .fakeTitle {
+            color: rgba(255, 255, 255, 0);
+            text-decoration: overline;
+            text-decoration-color: var( --graphite06);
+            text-decoration-thickness: 1em;
+            text-decoration-skip-ink: none;
+        }
+        .content .fakeTitle {
+            padding-top: 25%;
+        }
+        .thumbnail .item .content .fakeTitle {
+            padding-top: 7%;
+        }
+        .content .desc .fakeDesc {
+            padding-top: 10%;
+            color: rgba(255, 255, 255, 0);
+            text-decoration: overline;
+            text-decoration-color: var( --graphite06);
+            text-decoration-thickness: 1em;
+            text-decoration-skip-ink: none;
         }
         .thumbnail .title {
             color: var(--graphite06);
@@ -47,13 +68,34 @@
 }
 .dark {
     #carouselGrand {
-        .list > .item > .content > .desc p, .thumbnail .title {
+        content > .desc p, .thumbnail .title {
                 color: var(--light-text);
         }
         .content .title {
             color: var(--light-text);
             z-index: 100;
             animation: neonGlow 0.5s ease-in-out infinite alternate;
+        }
+        .content .fakeTitle, .thumbnail .item .content .fakeTitle {
+            color: rgba(255, 255, 255, 0);
+            text-decoration: overline;
+            text-decoration-color: var(--light07);
+            text-decoration-thickness: 1em;
+            text-decoration-skip-ink: none;
+        }
+        .content .fakeTitle {
+            padding-top: 25%;
+        }
+        .thumbnail .item .content .fakeTitle {
+            padding-top: 7%;
+        }
+        .content .desc .fakeDesc {
+            padding-top: 10%;
+            color: rgba(255, 255, 255, 0);
+            text-decoration: overline;
+            text-decoration-color: var(--light07);
+            text-decoration-thickness: 1em;
+            text-decoration-skip-ink: none;
         }
         .overlayGrad {
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(153,153,152, 0.3) 60%,  #ccc 95%);

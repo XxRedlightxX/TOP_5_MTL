@@ -46,7 +46,8 @@ const SetupEvents = {
     eventName,
     fetchFunction,
     setFunction,
-    getFunction
+    getFunction,
+    isThereActual
   ) {
     const storedData = ref(getFunction());
 
@@ -54,7 +55,9 @@ const SetupEvents = {
     if (storedData.value == null) {
       const activitiesStore = useActivityStore();
       const apiData = await fetchFunction.call(activitiesStore);
-      storedData.value = SetupEvents.setListOfEvents(apiData);
+      storedData.value = isThereActual
+        ? SetupEvents.setListOfEvents(apiData)
+        : apiData;
       setFunction(storedData.value);
     }
 
@@ -74,7 +77,10 @@ const SetupEvents = {
       window.removeEventListener(eventName, handleStorageChange);
     });
 
-    return storedData.value; // SetupEvents.actualEventsSetupGeneric(storedData);
+    // return isThereActual
+    //   ? SetupEvents.actualEventsSetupGeneric(storedData)
+    //   : storedData.value;
+    return storedData.value;
   },
 
   /**
@@ -138,7 +144,8 @@ const SetupEvents = {
       "HightEvent-changed",
       useActivityStore().getHigherRateEvent,
       LocalStorageManager.setHightRateEvents,
-      LocalStorageManager.getHightRateEvents
+      LocalStorageManager.getHightRateEvents,
+      true
     );
   },
 
@@ -165,7 +172,8 @@ const SetupEvents = {
       "NewEvent-changed",
       useActivityStore().getNewestEvent,
       LocalStorageManager.setNewEvents,
-      LocalStorageManager.getNewEvents
+      LocalStorageManager.getNewEvents,
+      true
     );
   },
 
@@ -192,7 +200,19 @@ const SetupEvents = {
       "UpcomingEvent-changed",
       useActivityStore().getUpcomingEvents,
       LocalStorageManager.setUpcomingEvents,
-      LocalStorageManager.getUpcomingEvents
+      LocalStorageManager.getUpcomingEvents,
+      true
+    );
+  },
+
+  async tagSetup() {
+    return await SetupEvents.eventsSetupGeneric(
+      "tag",
+      "tag-changed",
+      useActivityStore().getCategories,
+      LocalStorageManager.setTag,
+      LocalStorageManager.getTag,
+      false
     );
   },
 
@@ -255,7 +275,7 @@ const SetupEvents = {
       console.warn("⚠️ Données inattendues dans setListOfEvents :", data);
     }
 
-    //console.log("✅ organised value :", organizedData.value);
+    // console.log("✅ organised value :", organizedData.value);
     return organizedData.value;
   },
 };
