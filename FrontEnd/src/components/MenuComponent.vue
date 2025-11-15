@@ -41,7 +41,9 @@
     import storageManager from "../JS/LocalStaorageManager.js"
     import Logo from "../components/Logos/Logo3Component.vue"
     import { ref, onMounted, onUnmounted, watch } from 'vue'
+     import { useActivityStore } from "@/stores/activity.js";
 
+    const activitiesStore = useActivityStore();
     let actualMode = ref(storageManager.getMode());
     let actualLang = ref(storageManager.getLang());
     var lastScrollTop = 0;
@@ -77,10 +79,8 @@
         actualLang.value = storageManager.getLang();
     }
 
-    const changeMode = () => {
-        console.log("new val = " + !actualMode.value)
-        storageManager.setMode(!actualMode.value);
-        actualMode.value = !actualMode.value
+   const changeMode = () => {
+        activitiesStore.toggleMode();
     }
 
     const changeSeeBurgermenu = () => {
@@ -92,7 +92,7 @@
     }
 
         // Function to handle mode change event
-        const handleLangChange = (event) => {
+    const handleLangChange = (event) => {
         actualLang.value = JSON.parse(event.detail.storage);
     };
 

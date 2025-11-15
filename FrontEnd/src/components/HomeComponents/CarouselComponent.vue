@@ -41,6 +41,7 @@
 </template>
 
 <script src="../../JS/HomeCarousellScript.js" >
+    import LoadingCarouselComponent from '../LoadingCarouselComponent.vue';
 </script>
 
 

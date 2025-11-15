@@ -81,20 +81,14 @@
             align-items: center;
             margin-top: 0%;
 
-            .router {
-                width: 100%;
-                height: 40%;
-                padding: 0%;
-                .iconHead {
-                    width: 100%;
-                    height: 100%;
-                    font-size: 3.3rem;
-                }
-            }
+          
+              
+            
             .iconHead {
                 width: 100%;
                 height: 40%;
                 color: var(--graphite06);
+                
                 //background-color: grey;
                 font-size: 2.8rem;
                 //border-style:groove;
@@ -184,7 +178,7 @@
             }
         }
 
-        .last {
+        .last, .fourth {
             .iconHead {
                 color: var(--graphite06);
                 background: transparent;
@@ -207,7 +201,7 @@
             }
         }
 
-        .last {
+        .last, .fourth {
             .iconHead {
                 color: var(--light-trans-text);
                 background: transparent;

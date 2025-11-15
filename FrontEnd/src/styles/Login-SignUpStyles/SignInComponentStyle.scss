@@ -11,10 +11,16 @@
       max-height: 65px;
       overflow: hidden;
 
+
       &:focus {
         outline: none;
       }
     }
+    .error {
+      color : red;
+      //display: none;
+    }
+
     .sub {
         width: 100%;
         display: flex;
@@ -34,7 +40,7 @@
 
     button {
       border-radius: 5px;
-      //border: 1px solid #009345;
+     
       background: linear-gradient(to bottom, var(--graphite015), var(--graphite));
       color: #fff;
       font-size: 1rem;

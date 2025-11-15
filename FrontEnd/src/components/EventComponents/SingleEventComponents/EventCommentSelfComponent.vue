@@ -11,7 +11,7 @@
                    
                     />
                     <waterButton :text="actualLang ? 'Send' : 'Envoyer'" :type="true" @click="sendComment" />
-                    <LoadingComponent v-if="loading"></LoadingComponent>
+                   
                 </div>
             </form>
         </div>
@@ -28,9 +28,10 @@
     import LoadingComponent from "@/components/LoadingComponent.vue";
 
     const {addCommentToEvent} = useActivityStore();
+    const activitiesStore = useActivityStore();
     const emit = defineEmits(['comment-added']);
     
-    const loading = ref(false);
+    const loading = ref(activitiesStore.isLoading);
     const formCommentUser = reactive({
         contenu : "",
         etoiles : null,

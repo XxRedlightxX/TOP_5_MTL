@@ -9,6 +9,7 @@ use App\Models\Saison;
 use App\Models\Type;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 
 class ActiviteDAOImpl implements ActiviteDAO {
@@ -75,20 +76,31 @@ class ActiviteDAOImpl implements ActiviteDAO {
      */
     public function getActivityBySeason(string $nomSaison) {
 
-        return  Activite::whereHas('saison', function ($query) 
+        return Activite::whereHas('saison', function ($query) 
         use ($nomSaison) {
             $query->where('statut', $nomSaison);
         })->get();  
     }
 
-  
-    
 
     public function getUpcomingActivityByRecent() {
-          return Activite::whereDate('date_debut', '>=', now())
-        ->orderBy('date_debut', 'asc')
-        ->take(6) 
-        ->get();
+        $days = Activite::whereDate('date_debut', '>=', now())
+            ->where('statut_journee', 'jour')
+            ->orderBy('date_debut', 'asc')
+            ->take(12)
+            ->get();
+
+        $nights = Activite::whereDate('date_debut', '>=', now())
+            ->where('statut_journee', 'nuit')
+            ->orderBy('date_debut', 'asc')
+            ->take(12)
+            ->get();
+
+        return [
+            'days' => $days,
+            'nights' => $nights,
+        ];
+
     }
 
     public function getActivityByType(string $activiteType) {
@@ -98,9 +110,9 @@ class ActiviteDAOImpl implements ActiviteDAO {
         })->get();
     }
 
-     public function getActivityByDayOrNight(string $activiteyDaytime) {
+    public function getActivityByDayOrNight(string $activiteyDaytime) {
         return Activite::where('statut_journee', $activiteyDaytime)->get();
-     }
+    }
 
     /**
      * @inheritDoc
@@ -144,7 +156,23 @@ class ActiviteDAOImpl implements ActiviteDAO {
     }
 
    public function getActivitiesMostLiked() {
-        return Activite::orderByDesc('nombre_likes')->take(4)->get();
+
+        //return Activite::orderByDesc('nombre_likes')->take(4)->get();
+
+        $days = Activite::where('statut_journee', 'jour')
+            ->orderByDesc('nombre_likes')
+            ->take(4)
+            ->get();
+
+        $nights = Activite::where('statut_journee', 'nuit')
+           ->orderByDesc('nombre_likes')
+            ->take(4)
+            ->get();
+        
+        return [
+        'days' => $days,
+        'nights' => $nights
+    ];
     }
 
     public function getFilteredActivities(array $filters)
@@ -180,7 +208,34 @@ class ActiviteDAOImpl implements ActiviteDAO {
     }
 
     public function getActivityFromCategoryType(string $typeName) {
-        return  Type::where('nom', $typeName)->first();
+        return Type::where('nom', $typeName)->first();
     }
 
+
+ 
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getNewestActivitiesbyCreationDate() {
+        //return Activite::orderBy("created_at");
+        
+        $daysNewestActivities = Activite::where('statut_journee', 'jour')
+            ->orderBy('created_at')
+            ->take(6)
+            ->get();
+
+
+        $nightsNewestActivities = Activite::where('statut_journee', 'jour')
+            ->orderBy('created_at')
+            ->take(6)
+            ->get();
+
+          return [
+            'days' =>  $daysNewestActivities,
+            'nights' =>  $nightsNewestActivities
+          ];
+
+    }
 }

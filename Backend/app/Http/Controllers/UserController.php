@@ -18,11 +18,11 @@ class UserController extends Controller
     protected $userService;
     protected $followService;
 
-      public function __construct(UserService $userService, FollowService $followService)
+    public function __construct(UserService $userService, FollowService $followService)
     {
         $this->userService = $userService;
         $this->followService = $followService;
-         $this->middleware('auth:sanctum');
+        $this->middleware('auth:sanctum');
 
       
     }

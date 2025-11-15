@@ -1,21 +1,30 @@
 <template>
-    <div id="waterButtonComponent"  >
-        <div :class="['water-drop', props.type ? 'type1' : 'type2']">
-            {{props.text}}
-        </div>
+    <div id="waterButtonComponent" @click.stop> <!-- ← Ajoutez .stop -->
+        <button :type="buttonType" :class="['water-drop', props.type ? 'type1' : 'type2']" @click="handleClick">
+            {{ props.text }}
+        </button>
     </div>
-
-
 </template>
 
 <script setup>
-    import { defineProps } from "vue";
+import { defineProps, defineEmits } from "vue";
 
-    const props = defineProps({
-        text: String,
-        type: Boolean,
-    });</script>
+const props = defineProps({
+    text: String,
+    type: Boolean,
+    buttonType: {
+        type: String,
+        default: 'button'
+    }
+});
 
+const emit = defineEmits(['click']);
+
+const handleClick = (event) => {
+    event.stopPropagation(); // ← Empêche la propagation
+    emit('click');
+};
+</script>
 <style lang="scss">
     #waterButtonComponent {
         height: 75px;

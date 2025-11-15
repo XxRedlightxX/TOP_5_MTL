@@ -5,7 +5,7 @@
         </div>
         
         <div class="middle">
-            {{ props.event.id }}
+           
             <h2>{{ props.event.title }}</h2>
 
             <p>{{ props.event.desc }}</p>

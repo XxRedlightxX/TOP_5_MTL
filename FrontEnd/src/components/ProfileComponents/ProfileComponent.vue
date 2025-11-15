@@ -7,13 +7,13 @@
             <ProfileOther v-show="props.himself" :user="organisator"></ProfileOther>
             
         </div>
-        <ProfileList :himself="props.himself" :user="organisator"></ProfileList>
+        <ProfileList v-if="authStore.user.type_utilisateur === 'organisateur'" :himself="props.himself" :user="organisator"></ProfileList>
     </div>
   </template>
   
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref,computed, onMounted, onUnmounted,watch, defineProps} from "vue";
+    import { ref, onMounted, onUnmounted,watch, defineProps} from "vue";
     import ProfileHead from "./ProfileHeaderComponent.vue";
     import ProfileOther from "./ProfileOtherComponent.vue"
     import ProfileList from "./ProfileListEventComponent.vue"
@@ -21,7 +21,6 @@
     import { useActivityStore } from "@/stores/activity";
     import { storeToRefs } from "pinia";
     
-
     const listEvent = ref([]);
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());

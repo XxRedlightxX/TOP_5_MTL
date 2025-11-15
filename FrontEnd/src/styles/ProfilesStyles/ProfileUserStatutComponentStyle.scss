@@ -8,13 +8,23 @@
 
         li {
             list-style-type: none;
-            padding : 30px;
+            padding : 17px;
             font-weight: bold;
         }
 
         li:hover {
-            border-bottom: solid;
+            
             cursor: pointer;
+        }
+
+        .active {
+              background: rgba(128, 128, 128, 0.15);
+    background: rgba(128, 128, 128, 0.15);
+    border: 1.5px solid rgba(128, 128, 128, 0.5);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transform: scale(1.02);
+    z-index: 2;
+    border-radius: 20px;
         }
     }
 

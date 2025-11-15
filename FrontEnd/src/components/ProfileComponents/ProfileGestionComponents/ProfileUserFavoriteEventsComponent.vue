@@ -9,7 +9,7 @@
                         <img
                             alt="John"
                             :src="getAvatarUrl(value.image_data)"
-                            :key="authStore?.user.image_data"
+                            
                         />
                     </div>
                     <div class="test">
@@ -19,17 +19,15 @@
                         </div>
                     </div>
                     <div class="test">
-                        <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Remove' : 'Supprimer'"  @click="showDel()"/>
+                        <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Remove' : 'Supprimer'"  @click="deleteEvent(value)"/>
                     </div>
 
                 </div>
-
-            
             </div>
         </div>
         <div v-else>
         
-        <p>{{ actualLang ? 'No Favorite yet' : 'Aucun Favoris' }}</p>
+        <p>{{ actualLang ? 'No Favorites yet' : 'Aucun Favoris' }}</p>
     </div>
      </div>
    
@@ -40,13 +38,31 @@
     import WaterButton from "@/components/WaterButtonComponent.vue";
     import storageManager from "@/JS/LocalStaorageManager";
     import { getAvatarUrl } from "@/JS/GlobalFunctions";
-    
+    import { useActivityStore } from "@/stores/activity";
+
+
+   const emit = defineEmits(['favoriteEvent']);
+
+   
+
+
+    const {deleteFavoritesActivity, getListFavoritesActivities} = useActivityStore();
     let actualMode = ref(storageManager.getMode());
     let actualLang = ref(storageManager.getLang());
     const props =defineProps({
         listFavoritesEvents: Array,
         IsShowFavorites: Boolean
     });
+
+     const deleteEvent = async(pEvent) => {
+        const test= await deleteFavoritesActivity(pEvent);
+        console.log(test);
+        const updatedFavorites = await getListFavoritesActivities();
+        emit("favoriteEvent", { type: 'updated', favorites: updatedFavorites.favoris });
+       
+
+    }
+    
     
     console.log(props.IsShowFollowers +"Statut");
 

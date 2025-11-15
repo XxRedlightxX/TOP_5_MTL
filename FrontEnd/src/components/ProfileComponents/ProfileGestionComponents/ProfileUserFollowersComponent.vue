@@ -7,9 +7,9 @@
                 <div class="rangee">
                     <div class="test">
                         <img
-                            alt="John"
                             :src="getAvatarUrl(value.image_data)"
-                            :key="authStore?.user.image_data"
+                            :alt="John"
+                            
                         />
                     </div>
                     <div class="test">
@@ -23,8 +23,6 @@
                     </div>
 
                 </div>
-
-            
             </div>
         </div>
         <div v-else>
@@ -47,9 +45,8 @@
         IsShowFollowers: Boolean
     });
     
-    console.log(props.IsShowFollowers +"Statut");
 
-     const handleLangChange = (event) => {
+    const handleLangChange = (event) => {
     actualLang.value = JSON.parse(event.detail.storage);
     };
 

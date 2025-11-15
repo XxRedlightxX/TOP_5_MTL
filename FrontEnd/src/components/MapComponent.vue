@@ -17,8 +17,6 @@ const coords = ref(null);
 const emit = defineEmits(['event-coords']);
 
 onMounted(async () => {
-  
-
   map.value = L.map(mapContainer.value).setView([45.5019, -73.5674], 13);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {

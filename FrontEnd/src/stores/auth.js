@@ -1,8 +1,4 @@
 import {defineStore} from "pinia";
-
-
-
-
 export const useAuthStore = defineStore('authStore', {
     state: () => {
         return {
@@ -29,11 +25,8 @@ export const useAuthStore = defineStore('authStore', {
             if (res.ok) {
                 this.user = data;
             }
-        }
+         }
         },
-
-        
-        
 
 
         //Register
@@ -44,7 +37,7 @@ export const useAuthStore = defineStore('authStore', {
             body: JSON.stringify(formData),
             headers: {
                     'Content-Type': 'application/json',
-  }         ,
+            },
         });
 
         const data = await res.json();
@@ -107,6 +100,7 @@ export const useAuthStore = defineStore('authStore', {
         this.user = null;
         this.errors = {};
         localStorage.removeItem("token");
+        
         
       }
     },

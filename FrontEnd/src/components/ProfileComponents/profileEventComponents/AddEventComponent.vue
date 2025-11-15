@@ -3,57 +3,59 @@
         <div class="modal-content" @click.self="pop">
             <div class="event-create-form">
                 <span class="close" @click="pop">&times;</span>
-                <h2>Create Event</h2>
+                <h2>{{ actualLang ? 'Create an Event' : 'Créer un événement' }}</h2>
                 <form @submit.prevent="testInput">
                     <div class="form-group">
-                        <label for="event-name">Event Name</label>
-                        <input type="text" v-model="formDataEvent.titre" id="event-name" placeholder="Enter event name" required>
+                        <label for="event-name">{{ actualLang ? "Name of Event" : "Nom de evenement" }}</label>
+                        <input type="text" v-model="formDataEvent.titre" id="event-name"  :placeholder='actualLang ? "Enter event name" : "Entrez le nom évenement"' required>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="event-date">Date</label>
+                            <label for="event-date">{{ actualLang ? "Start Date" : "Date de début" }}</label>
                             <input type="date" ref="inputRefDate" id="event-date" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="event-time">Time</label>
+                            <label for="event-time">{{ actualLang ? "Start Hour" : "Heure de début" }}</label>
                             <input type="time" ref="inputRefTime" id="event-time" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="event-duration">Duration (hours)</label>
-                            <input type="number" v-model="durationHours" id="event-duration" placeholder="e.g., 2" min="1" required>
+                            <label for="event-duration">{{ actualLang ? "Duration" : "Durée" }}</label>
+                            <input type="number" ref="inputRefDurationHours" id="event-duration" placeholder="e.g., 2" min="1" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="event-location">Location</label>
-                        <input type="text" v-model="formDataEvent.lieu" id="event-location" placeholder="Enter location" required>
+                        <label for="event-location">{{ actualLang ? "Location" : "Emplacement" }}</label>
+                        <input type="text" v-model="formDataEvent.lieu" id="event-location"  :placeholder="actualLang ? 'Enter Location' : 'Entrez un emplacement'" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="event-description">Description</label>
-                        <input type="text" v-model="formDataEvent.description" id="event-description" placeholder="Enter description" required>
+                        <label for="event-description">{{ actualLang ? "Description" : "Description" }}</label>
+                        <input type="text" v-model="formDataEvent.description" id="event-description"  :placeholder="actualLang ? 'Enter description' : 'Entrez une description'" required>
                     </div>
 
                     <div class="form-row">
                        <div class="form-group">
-                            <label for="event-type">Daytime</label>
+                            <label for="event-type">{{ actualLang ? "Daytime" : "Journée" }}</label>
                             <select id="event-type" v-model="formDataEvent.statut_journee" required>
-                                <option value="JOUR">Day</option>
-                                <option value="NUIT">Night</option>
+                                <option disabled value="">{{ actualLang ? "Select Daytime" : "Sélectionner la journée" }}</option>
+                                <option value="JOUR">{{ actualLang ? "Day" : "Jour" }}</option>
+                                <option value="NUIT">{{ actualLang ? "Night" : "Nuit" }}</option>
                             </select>
                         </div>
 
 
                          <div class="form-group">
-                            <label for="event-type">Season</label>
+                            <label for="event-type">{{ actualLang ? "Season" : "Saison" }}</label>
                             <select id="event-type" v-model="formDataEvent.saison_name" required>
-                                <option value="été">Summer</option>
-                                <option value="hiver">Winter</option>
-                                <option value="printemps">Spring</option>
-                                <option value="automne">Automn</option>
+                                <option disabled value="">{{ actualLang ? "Select  a Season" : "Sélectionner une Saison" }}</option>
+                                <option value="été" selected>{{ actualLang ? "Summer" : "Été" }}</option>
+                                <option value="hiver">{{ actualLang ? "Winter" : "Hiver" }}</option>
+                                <option value="printemps">{{ actualLang ? "Spring" : "Printemps" }}</option>
+                                <option value="automne">{{ actualLang ? "Autumn" : "Automne" }}</option>
                               
                             </select>
                         </div>
@@ -61,8 +63,9 @@
                         
 
                         <div class="form-group">
-                            <label for="event-type">Type</label>
+                            <label for="event-type">{{ actualLang ? "Category" : "Catégorie" }}</label>
                             <select id="event-type" v-model="formDataEvent.type_name" required>
+                                <option disabled value="">{{ actualLang ? "Day" : "Jour" }}</option>
                                 <option  v-for="category in listCategories" key="category.id" :value="category.nom"> {{ category.nom }}</option>
                             </select>
                         </div>
@@ -74,7 +77,9 @@
                     <MapComponent @event-coords="handleEventCoords"></MapComponent>
                     
                     <div class="form-actions">
-                        <button type="submit">{{ actualLang ? 'Create Event' : 'Créer Événement' }}</button>
+                        
+                        <waterButton :text="actualLang ? 'Create Event' : 'Créer Événement'"  :type="false" 
+                        buttonType="submit" class="btnn" @click="pop"/>
                         <waterButton :text="actualLang ? 'Cancel' : 'Annuler'" :type="false" class="btnn" @click="pop"/>
                     </div>
                 </form>
@@ -90,18 +95,21 @@
     import { ref, onMounted, onUnmounted, defineProps, defineEmits, reactive } from "vue";
     import waterButton from "@/components/WaterButtonComponent.vue";
     import { useActivityStore } from "@/stores/activity";
-    import { formatDateApi } from "@/JS/GlobalFunctions";
+    import { formatDateApi, formatDateEventEndDate } from "@/JS/GlobalFunctions";
     import { useAuthStore } from "@/stores/auth";
     import MapComponent from "@/components/MapComponent.vue";
 
+    
+
+    
     const {addEvent} = useActivityStore();
     const activitiesStore = useActivityStore();
-
     const authStore = useAuthStore();
 
     const inputRefDate = ref(null);
     const inputRefTime = ref(null);
-    const result = ref(null);
+    const inputRefDurationHours = ref(null);
+
     const selectedFile = ref(null)
     const errorMessage = ref(null);
     const  validationErrors  = ref(null);
@@ -111,7 +119,7 @@
     const formDataEvent= reactive({
             titre: "",
             date_debut: "",
-            date_fin: "2025-09-30 21:00:00",
+            date_fin: "",
             description: "",
             statut_journee : "",
             lieu : "",
@@ -142,9 +150,12 @@
 const testInput = async(event) => {
     const dateValue = inputRefDate.value.value;
     const timeValue = inputRefTime.value.value;
+    const hoursDurationValue =inputRefDurationHours.value.value;
 
-    const formattedDateTime = formatDateApi(dateValue, timeValue);
-    formDataEvent.date_debut = formattedDateTime; 
+    const formattedStartDateTime = formatDateApi(dateValue, timeValue);
+    const formattedEndDateTime = formatDateEventEndDate(formattedStartDateTime, hoursDurationValue);
+    formDataEvent.date_debut = formattedStartDateTime;
+    formDataEvent.date_fin = formattedEndDateTime;
 
     const formData = new FormData();
     formData.append('titre', formDataEvent.titre);
@@ -182,16 +193,13 @@ const testInput = async(event) => {
         }
     };
 
-   const handleEventCoords = (coords) => {
-        console.log("Received coordinates:", coords);
-        console.log("Latitude:", coords.lat);
-        console.log("Longitude:", coords.lng);
-        formDataEvent.latitude = coords.lat;
-        formDataEvent.longitude = coords.lng;
-    };
-
-    
-
+    const handleEventCoords = (coords) => {
+            console.log("Received coordinates:", coords);
+            console.log("Latitude:", coords.lat);
+            console.log("Longitude:", coords.lng);
+            formDataEvent.latitude = coords.lat;
+            formDataEvent.longitude = coords.lng;
+        };
 
     const props = defineProps({
         user: Object

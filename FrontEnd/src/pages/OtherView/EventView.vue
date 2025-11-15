@@ -7,7 +7,7 @@
             
             <div class="suite">
                 <div class="sub">
-                    <PageDescription :host-name="activity.creator.name"
+                    <PageDescription :host-name="activity.creator.username"
                     :place="activity.lieu" :-rating=activity.nombre_likes 
                     :start-date="activity.date_debut"
                     :end-date="activity.date_fin"/>

@@ -8,7 +8,7 @@
 
             <section class="overview">
                 <div class="overview__image">
-                    <img :src="getAvatarUrl(props.activityImage)" alt="Mont Saint-Michel" />
+                    <img :src="getEventUrl(props.activityImage)" alt="Mont Saint-Michel" />
                 </div>
                 <div class="overview__details">
                     <h3 class="overview__description">{{props.activityDesc}}</h3>
@@ -23,7 +23,7 @@
     import LocalStorageManager from "@/JS/LocalStaorageManager";
     import { useActivityStore } from '@/stores/activity';
     import { useRoute } from 'vue-router';
-    import { getAvatarUrl } from '@/JS/GlobalFunctions';
+    import { getEventUrl } from '@/JS/GlobalFunctions';
 
     //const activity = ref(null);
 

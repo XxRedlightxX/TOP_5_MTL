@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useAuthStore } from "./auth";
+
 
 export const useFriendStore = defineStore("friendStore", {
   state: () => ({
@@ -16,6 +16,7 @@ export const useFriendStore = defineStore("friendStore", {
   },
 
   actions: {
+
     // ✅ Fetch followers or followings
     async getListUserFollowers(apiRoute = "followers") {
       const token = localStorage.getItem("token");
@@ -23,24 +24,24 @@ export const useFriendStore = defineStore("friendStore", {
 
       this.isLoading = true;
       try {
-        const res = await fetch(`/api/${apiRoute}`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+          const res = await fetch(`/api/${apiRoute}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-        const data = await res.json();
+          const data = await res.json();
 
-        if (!res.ok) throw new Error(data.message || "Failed to fetch");
+          if (!res.ok) throw new Error(data.message || "Failed to fetch");
 
-        // if apiRoute === "followers", store followers
-        if (apiRoute.includes("followers")) this.followers = data;
-        // if apiRoute === "followings", store followings
-        if (apiRoute.includes("followings"))
-          this.followings = new Set(data.map((u) => u.id));
+          // if apiRoute === "followers", store followers
+          if (apiRoute.includes("followers")) this.followers = data;
+          // if apiRoute === "followings", store followings
+          if (apiRoute.includes("followings"))
+            this.followings = new Set(data.map((u) => u.id));
 
-        return data;
+          return data;
       } catch (err) {
         console.error("Fetch error:", err);
         this.errors = { message: err.message };
@@ -85,30 +86,38 @@ export const useFriendStore = defineStore("friendStore", {
   },
 
     // Unfollow User
-    async deleteUserFollowing(userId) {
-      const token = localStorage.getItem("token");
-      if (!token) return { message: "No token" };
+  async deleteUserFollowing(userId) {
+    const token = localStorage.getItem("token");
+    if (!token) return { message: "No token" };
 
-      try {
-        const res = await fetch(`/api/follow/${userId}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    try {
+      const res = await fetch(`/api/follow/${userId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        const data = await res.json();
+      const data = await res.json();
 
-        if (res.ok) {
-          this.followings.delete(userId);
-        }
-
-        return data;
-      } catch (err) {
-        console.error("deleteUserFollowing error:", err);
-        return { message: "Error", err };
+      if (res.ok) {
+        this.followings.delete(userId);
       }
+
+    
+
+      return data;
+    } catch (err) {
+      console.error("deleteUserFollowing error:", err);
+      return { message: "Error", err };
+    }
+  },
+
+    getFollowingsAsArray() {
+      const myArray =[...this.followings];
+      console.log(myArray);
+      return myArray
     },
 
   

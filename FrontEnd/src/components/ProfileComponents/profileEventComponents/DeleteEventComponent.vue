@@ -8,7 +8,7 @@
                     <waterButton :text="actualLang ? 'Yes' : 'Oui'" :type="true" class="btnn" @click="deleteEventByWindow(activity)"/>
                     <waterButton :text="actualLang ? 'No' : 'Non'" :type="false" class="btnn"  @click="popDelete"/>
                 </div>
-                {{ props.eventId }}
+              
             </form>
         </div>
     </div>

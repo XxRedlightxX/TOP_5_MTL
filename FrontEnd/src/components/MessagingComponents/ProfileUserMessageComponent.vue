@@ -17,14 +17,7 @@
                     <div class="label">Phone</div>
                     <div class="value">{{ userFriendProfile.num_tel }}</div>
                 </div>
-                <div class="column-info">
-                    <div class="label">Location</div>
-                    <div class="value">Montreal, Canada</div>
-                </div>
-                <div class="column-info">
-                    <div class="label">Member since</div>
-                    <div class="value">January 2024</div>
-                </div>
+               
             </div>
         </div>
          <div v-else class="no-profile">

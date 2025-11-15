@@ -59,6 +59,20 @@ class FavoriteService {
     }
 
     public function DeleteFavoriteActivityFromUser(int $userId, Int $activityId) {
-        $this->favoriteDAO->deleteActivityToFavorite($userId, $activityId);
+        $existUser = $this->userDAO->findById($userId);
+        $existActivity = $this->activiteDAO->getById($activityId);
+        
+        $isExisting = $this->IsFavoriteActivityFromUser($existUser->id, $existActivity->id);
+
+          if (!$existUser || !$existActivity) {
+            throw new \Exception('User or activity not found');
+        }
+
+        if ($isExisting) {
+            $this->favoriteDAO->deleteActivityToFavorite($existUser->id, $existActivity->id);
+            $favorited = false;
+        }
+
+        return $favorited;
     }
 }

@@ -16,7 +16,7 @@ class LikeController extends Controller
     public function __construct(LikeService $likeService)
     {
         $this->likeService = $likeService;
-         $this->middleware('auth:sanctum');
+        $this->middleware('auth:sanctum');
     }
 
 

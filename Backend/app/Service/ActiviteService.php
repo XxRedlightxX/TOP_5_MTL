@@ -110,5 +110,14 @@ class ActiviteService {
         return $this->activiteDAO->getActivityFromCategoryType($aTypeCategory);
     }
 
+    public function getDaysandNightsActivities($aListActivitiesData) {
+        return $this->activiteDAO->getDaysandNightsActivities($aListActivitiesData);
+    }
+
+    public function getNewestActivitiesbyCreationDate() {
+        return $this->activiteDAO->getNewestActivitiesbyCreationDate();
+    }
+
+ 
 
 }

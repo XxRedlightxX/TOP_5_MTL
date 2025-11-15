@@ -1,8 +1,9 @@
 <template>
   <v-app>
     <v-main :class="actualMode ? 'light' : 'dark'">
-      <Menu />
 
+      <Menu />
+      <Notification/>
       <router-view class="view"/>
       <Language/>
       <Footer />
@@ -17,7 +18,8 @@
   import LocalStorageManager from "@/JS/LocalStaorageManager"
   import { ref, onMounted, onUnmounted} from "vue";
   import { useAuthStore } from "./stores/auth";
-  import MapComponent from "./components/MapComponent.vue";
+  import Notification from "./components/NotificationComponent.vue";
+
 
 
 
