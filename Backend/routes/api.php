@@ -13,14 +13,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Service\FollowService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Broadcast; 
+use Illuminate\Support\Facades\Broadcast;
 
 // User m
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get("/users",[UserController::class, 'getUserList']);
+Route::get("/users", [UserController::class, 'getUserList']);
 
 Route::get('/user/search', [UserController::class, 'getUserByEmail']);
 
@@ -30,9 +30,9 @@ Route::get('/utilisateur/{user}/activites', [UserController::class, 'index']);
 
 Route::get('/user/search', [UserController::class, 'getUserBySearchUser']);
 
-Route::post("/user",[UserController::class, 'addUser']);
+Route::post("/user", [UserController::class, 'addUser']);
 
-Route::delete("/user/{userId}",[UserController::class, 'deleteUser']);
+Route::delete("/user/{userId}", [UserController::class, 'deleteUser']);
 
 Route::put('/user/{userId}', [UserController::class, 'modifyUser']);
 
@@ -56,6 +56,8 @@ Route::get('/activite/{activityId}', [ActiviteController::class, 'getAvgRatingAc
 Route::get('/likedActivities', [ActiviteController::class, 'getActivitiesMostLiked']);
 
 Route::get('/categories', [ActiviteController::class, 'getActivitiesCategories']);
+
+Route::get('/user/activite/{activityId}', [ActiviteController::class, 'getUserActivitiesbyId']);
 
 // Multi-filtrage fonctionnel
 Route::get('/activite/filtrer', [ActiviteController::class, 'getActivityFilters']);
@@ -115,26 +117,28 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');;
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+;
 
 
 
-Route::get('/messages/{friend}', function (User $friend,  Request $request) {
-    return  Conversation::query()
+Route::get('/messages/{friend}', function (User $friend, Request $request) {
+    return Conversation::query()
         ->where(function ($query) use ($friend, $request) {
             $user = $request->user();
             $query->where('expediteur_id', $user->id)
                 ->where('destinataire_id', $friend->id);
         })
-        ->orWhere(function ($query) use ($friend ,$request) {
+        ->orWhere(function ($query) use ($friend, $request) {
             $user = $request->user();
             $query->where('expediteur_id', $friend->id)
                 ->where('destinataire_id', $user->id);
         })
-       ->with(['expediteur', 'destinataire'])
-       ->orderBy('id', 'asc')
-       ->get();
-})->middleware('auth:sanctum');;
+        ->with(['expediteur', 'destinataire'])
+        ->orderBy('id', 'asc')
+        ->get();
+})->middleware('auth:sanctum');
+;
 
 Route::post('/messages/{friend}', function (User $friend, Request $request) {
     $message = Conversation::create([
@@ -146,8 +150,6 @@ Route::post('/messages/{friend}', function (User $friend, Request $request) {
 
     broadcast(new MessageSent($message));
 
-    return  $message;
-})->middleware('auth:sanctum');;
-
-
-
+    return $message;
+})->middleware('auth:sanctum');
+;

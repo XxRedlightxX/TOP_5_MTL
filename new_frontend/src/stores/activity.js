@@ -219,6 +219,43 @@ export const useActivityStore = defineStore("activitiesStore", {
       }
     },
 
+    async getEventUserInfo(eventId) {
+      try {
+        this.isLoading = true;
+        const res = await fetch(`api/user/activite/${eventId}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          // this.carouselnights = data.nights || [];
+          // this.carouseldays = data.days || [];
+          // this.carouselactivities =
+          //   this.mode === "days" ? this.carouseldays : this.carouselnights;
+
+          // console.log("Days:", this.carouseldays);
+          // console.log("Nights:", this.carouselnights);
+          // console.log("Activities to display:", this.carouselactivities);
+
+          this.errors = {}; // Clear errors on success
+          return data;
+        } else if (data.errors) {
+          this.errors = data.errors;
+          console.log("API errors:", data.errors);
+          throw new Error(data.errors.message || "API returned errors");
+        }
+      } catch (error) {
+        console.error("getHigherRateEvent failed:", error);
+        this.errors = { higherRate: error.message };
+        // Don't return the error, just let it be handled by the store
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
     async getActivityById(activityId) {
       try {
         this.isLoading = true;
@@ -277,21 +314,6 @@ export const useActivityStore = defineStore("activitiesStore", {
         this.isLoading = false;
       }
     },
-
-    async deleteEvent(activity) {
-      const token = localStorage.getItem("token");
-      const authStore = useAuthStore();
-      if (authStore.user.id === this.activity.creator.id) {
-        const res = await fetch(`/api/activite/${activity.id}`, {
-          method: "delete",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
-    },
-
-    //const data = await res.json();
 
     async addEvent(formData) {
       const token = localStorage.getItem("token");
@@ -531,34 +553,5 @@ export const useActivityStore = defineStore("activitiesStore", {
         console.error("Error checking favorite:", err);
       }
     },
-
-    /*async getActivitiesFilter(dayTime) {
-
-        let query = new URLSearchParams(this.filters).toString();
-        const filter = `/filter?${query}`
-        const token = localStorage.getItem("token")
-        const res = await fetch(`/api/activite${filter}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        });
-        const data = await res.json();
-        console.log()
-        if (res.ok) {
-            this.activities = data;
-            return this.activities;
-            
-        }else if(data.errors) {
-            this.errors= data.errors;
-            console.log(data.errors);
-        }        
-
-        else {
-            console.log("NOPE")
-        }
-      },*/
-
-    //Register
   },
 });

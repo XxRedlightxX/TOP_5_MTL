@@ -96,13 +96,13 @@ class ActiviteDAOImpl implements ActiviteDAO
     {
         $days = Activite::whereDate('date_debut', '>=', now())
             ->where('statut_journee', 'jour')
-            ->orderBy('date_debut')
+            ->orderBy('date_debut', 'asc')
             ->take(9)
             ->get();
 
         $nights = Activite::whereDate('date_debut', '>=', now())
             ->where('statut_journee', 'nuit')
-            ->orderBy('date_debut')
+            ->orderBy('date_debut', 'asc')
             ->take(9)
             ->get();
 
