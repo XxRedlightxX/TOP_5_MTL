@@ -66,7 +66,6 @@
     }
   });
 
-
   // État réactif du carrousel
   const carouselItems = ref([]);
   const textEvent = ref(actualLang.value ? text1a : text1b);

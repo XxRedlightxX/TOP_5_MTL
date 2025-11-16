@@ -157,10 +157,10 @@ export const useActivityStore = defineStore("activitiesStore", {
         const data = await res.json();
 
         if (res.ok) {
-          this.carouselnights = data.nights || [];
-          this.carouseldays = data.days || [];
-          this.carouselactivities =
-            this.mode === "days" ? this.carouseldays : this.carouselnights;
+          // this.carouselnights = data.nights || [];
+          // this.carouseldays = data.days || [];
+          // this.carouselactivities =
+          //   this.mode === "days" ? this.carouseldays : this.carouselnights;
 
           // console.log("Days:", this.carouseldays);
           // console.log("Nights:", this.carouselnights);
@@ -185,7 +185,7 @@ export const useActivityStore = defineStore("activitiesStore", {
     async getNewestEvent() {
       try {
         this.isLoading = true;
-        const res = await fetch("/api/likedActivities", {
+        const res = await fetch("/api/activite/latest", {
           headers: {
             "Content-Type": "application/json",
           },

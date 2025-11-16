@@ -12,37 +12,43 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 
-class ActiviteDAOImpl implements ActiviteDAO {
+class ActiviteDAOImpl implements ActiviteDAO
+{
 
     /**
      * @inheritDoc
      */
-    public function delete(int $id) {
+    public function delete(int $id)
+    {
         return Activite::findOrFail($id)->Delete();
     }
 
     /**
      * @inheritDoc
      */
-    public function getAll() {
+    public function getAll()
+    {
         return Activite::all();
     }
 
-    public function getAllCategories() {
+    public function getAllCategories()
+    {
         return Type::all();
     }
 
     /**
      * @inheritDoc
      */
-    public function getById(int $id) {
+    public function getById(int $id)
+    {
         return Activite::findOrFail($id);
     }
 
     /**
      * @inheritDoc
      */
-    public function save(array $activiteData) {
+    public function save(array $activiteData)
+    {
 
         return Activite::create($activiteData);
     }
@@ -50,50 +56,54 @@ class ActiviteDAOImpl implements ActiviteDAO {
     /**
      * @inheritDoc
      */
-    public function update(int $idActivite, array $data): ?Activite {
+    public function update(int $idActivite, array $data): ?Activite
+    {
         $activiteExist = Activite::find($idActivite);
-        if (!$activiteExist) return null;
+        if (!$activiteExist)
+            return null;
 
-       $activiteExist->update($data);
+        $activiteExist->update($data);
         return $activiteExist;
 
     }
 
-    public function addActivity(int $userId, array $activityData) {
-        
+    public function addActivity(int $userId, array $activityData)
+    {
+
         $user = User::findOrFail($userId);
 
         $activityData['utilisateur_id'] = $user->id;
 
-        $activity =$this->save($activityData);
+        $activity = $this->save($activityData);
 
         return $activity;
-    
-     }
+
+    }
 
     /**
      * @inheritDoc
      */
-    public function getActivityBySeason(string $nomSaison) {
+    public function getActivityBySeason(string $nomSaison)
+    {
 
-        return Activite::whereHas('saison', function ($query) 
-        use ($nomSaison) {
+        return Activite::whereHas('saison', function ($query) use ($nomSaison) {
             $query->where('statut', $nomSaison);
-        })->get();  
+        })->get();
     }
 
 
-    public function getUpcomingActivityByRecent() {
+    public function getUpcomingActivityByRecent()
+    {
         $days = Activite::whereDate('date_debut', '>=', now())
             ->where('statut_journee', 'jour')
-            ->orderBy('date_debut', 'asc')
-            ->take(12)
+            ->orderBy('date_debut')
+            ->take(9)
             ->get();
 
         $nights = Activite::whereDate('date_debut', '>=', now())
             ->where('statut_journee', 'nuit')
-            ->orderBy('date_debut', 'asc')
-            ->take(12)
+            ->orderBy('date_debut')
+            ->take(9)
             ->get();
 
         return [
@@ -103,28 +113,31 @@ class ActiviteDAOImpl implements ActiviteDAO {
 
     }
 
-    public function getActivityByType(string $activiteType) {
-        return Activite::whereHas('type', function ($query) 
-        use ($activiteType) {
+    public function getActivityByType(string $activiteType)
+    {
+        return Activite::whereHas('type', function ($query) use ($activiteType) {
             $query->where('nom', '=', $activiteType);
         })->get();
     }
 
-    public function getActivityByDayOrNight(string $activiteyDaytime) {
+    public function getActivityByDayOrNight(string $activiteyDaytime)
+    {
         return Activite::where('statut_journee', $activiteyDaytime)->get();
     }
 
     /**
      * @inheritDoc
      */
-    public function getActivityByName(string $activityName) {
-         return Activite::where('titre','LIKE' ,"%{$activityName}%")->get();
+    public function getActivityByName(string $activityName)
+    {
+        return Activite::where('titre', 'LIKE', "%{$activityName}%")->get();
     }
 
-    public function addCommentToActivity(int $userId, int $activityId, string $contenu, int $nbEtoiles) {
+    public function addCommentToActivity(int $userId, int $activityId, string $contenu, int $nbEtoiles)
+    {
         $userExist = User::findOrFail($userId);
         $actvityExist = Activite::findOrFail($activityId);
-        
+
         return Avis::create([
             "utilisateur_id" => $userExist->id,
             "activite_id" => $actvityExist->id,
@@ -134,28 +147,30 @@ class ActiviteDAOImpl implements ActiviteDAO {
         ]);
     }
 
-    
 
-   public function updateActivityByUser(int $activityId, array $activityData) {
+
+    public function updateActivityByUser(int $activityId, array $activityData)
+    {
         $activite = Activite::findOrFail($activityId);
 
-        $activite->update($activityData); 
+        $activite->update($activityData);
 
         return $activite;
-   }
+    }
 
     public function getEventAverageRating($eventId)
     {
-        $activityRating= Avis::where('activite_id', $eventId)->avg('etoiles');
+        $activityRating = Avis::where('activite_id', $eventId)->avg('etoiles');
         $activity = Activite::findOrFail($eventId);
 
-        $activity->nombre_likes=$activityRating;
+        $activity->nombre_likes = $activityRating;
         $activity->update();
 
         return $activity;
     }
 
-   public function getActivitiesMostLiked() {
+    public function getActivitiesMostLiked()
+    {
 
         //return Activite::orderByDesc('nombre_likes')->take(4)->get();
 
@@ -165,14 +180,14 @@ class ActiviteDAOImpl implements ActiviteDAO {
             ->get();
 
         $nights = Activite::where('statut_journee', 'nuit')
-           ->orderByDesc('nombre_likes')
+            ->orderByDesc('nombre_likes')
             ->take(4)
             ->get();
-        
+
         return [
-        'days' => $days,
-        'nights' => $nights
-    ];
+            'days' => $days,
+            'nights' => $nights
+        ];
     }
 
     public function getFilteredActivities(array $filters)
@@ -203,39 +218,42 @@ class ActiviteDAOImpl implements ActiviteDAO {
     }
 
 
-    public function getActivityFromSeason(string $seasonName) {
+    public function getActivityFromSeason(string $seasonName)
+    {
         return Saison::where('statut', $seasonName)->first();
     }
 
-    public function getActivityFromCategoryType(string $typeName) {
+    public function getActivityFromCategoryType(string $typeName)
+    {
         return Type::where('nom', $typeName)->first();
     }
 
 
- 
+
 
 
     /**
      * @inheritDoc
      */
-    public function getNewestActivitiesbyCreationDate() {
+    public function getNewestActivitiesbyCreationDate()
+    {
         //return Activite::orderBy("created_at");
-        
+
         $daysNewestActivities = Activite::where('statut_journee', 'jour')
             ->orderBy('created_at')
             ->take(6)
             ->get();
 
 
-        $nightsNewestActivities = Activite::where('statut_journee', 'jour')
+        $nightsNewestActivities = Activite::where('statut_journee', 'nuit')
             ->orderBy('created_at')
             ->take(6)
             ->get();
 
-          return [
-            'days' =>  $daysNewestActivities,
-            'nights' =>  $nightsNewestActivities
-          ];
+        return [
+            'days' => $daysNewestActivities,
+            'nights' => $nightsNewestActivities
+        ];
 
     }
 }
