@@ -1,5 +1,6 @@
 <template>
-  <div id="AllEventComponent">
+  <div id="AllEventComponent" style="margin-top: 30px;">
+     
     <FilterComponent/>
       <LoadingEvents v-if="isLoading"  :eventCount="eventsPerPage" />
       
@@ -61,9 +62,10 @@ import FilterComponent from './FilterComponent.vue';
 import { useActivityStore } from '@/stores/activity';
 import { formatDateSpecial } from "@/JS/GlobalFunctions";
 import { getEventUrl } from '@/JS/GlobalFunctions';
+import { useAuthStore } from '@/stores/auth';
 import LoadingEvents from '@/components/LoadingEventsComponents.vue';
 
-
+const authStore = useAuthStore()
 const activityStore = useActivityStore();
 const isLoading = computed(() => activityStore.isLoading)
 const favorites = ref(new Set());

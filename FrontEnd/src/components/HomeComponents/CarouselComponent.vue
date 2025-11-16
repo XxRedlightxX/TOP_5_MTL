@@ -12,7 +12,7 @@
 
                     <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
                         <router-link :to="{ name: 'show', params: {id: item.id}}" class="btn roundBorderSmall" @click="setEvent(item)">{{ textEvent }}</router-link>
-                        <router-link to="/Event Organisator" class="btn roundBorderSmall" @click="setEvent(item)">Découvrir les Organisateurs</router-link>
+                        <router-link :to="{name : 'Event Organisator' , params: {id: item.id}}" class="btn roundBorderSmall" @click="setEvent(item)">Découvrir les Organisateurs</router-link>
                     </div>
                     <div :class="index == 0 ? 'desc' : 'lostdesc'">
                         <p>{{ item.desc }}</p>
@@ -41,7 +41,7 @@
 </template>
 
 <script src="../../JS/HomeCarousellScript.js" >
-    import LoadingCarouselComponent from '../LoadingCarouselComponent.vue';
+
 </script>
 
 

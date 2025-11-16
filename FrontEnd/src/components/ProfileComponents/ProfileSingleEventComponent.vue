@@ -6,9 +6,9 @@
         
         <div class="middle">
            
-            <h2>{{ props.event.title }}</h2>
+            <h2>{{ props.event.titre }}</h2>
 
-            <p>{{ props.event.desc }}</p>
+            <p>{{ props.event.description }}</p>
 
             
 

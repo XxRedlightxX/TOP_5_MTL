@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-    import { onMounted, ref, defineProps } from 'vue';
+    import { onMounted, ref } from 'vue';
     import PageDetail from "../../components/EventComponents/SingleEventComponents/SingleEventComponent.vue"
     import PageDescription from "../../components/EventComponents/SingleEventComponents/EventOverview.vue"
     import PageCommentaire from "../../components/EventComponents/SingleEventComponents/EventCommentComponent.vue"
@@ -34,7 +34,7 @@
     import CommentSelf from "../../components/EventComponents/SingleEventComponents/EventCommentSelfComponent.vue"
     import { useActivityStore } from '@/stores/activity';
     import { useRoute } from 'vue-router';
-    import MapComponent from '@/components/MapComponent.vue';
+    
 
 
     const activity = ref(null);

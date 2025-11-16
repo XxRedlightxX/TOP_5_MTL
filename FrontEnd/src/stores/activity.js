@@ -150,6 +150,24 @@ export const  useActivityStore = defineStore('activitiesStore', {
         }
     },
 
+    async getActivityUserbyId($activityid) {
+       
+        const res = await fetch(`/api/activite/user/${$activityid}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await res.json();
+    
+        if (res.ok) {
+            return data.user;
+            
+        }else if(data.errors) {
+            this.errors= data.errors;
+            console.log(data.errors);
+        }       
+    },
+
        async getHigherRateEvent() {
         try {
             this.isLoading = true;
@@ -207,6 +225,35 @@ export const  useActivityStore = defineStore('activitiesStore', {
                     this.activity = data;
                     console.log(this.activity);
                     return data;
+                }
+                else if(data.errors) {
+                    this.errors= data.errors;
+                    console.log(data.errors);
+                   
+                }
+            } catch ($error) {
+                return $error;
+            } finally {
+                this.isLoading=false;
+            }
+        },
+
+        async getActivitiesByOtherUserId(activityId) {
+           
+            try {
+                this.isLoading=true;
+                const res = await fetch(`/api/user/activite/${activityId}`,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                const data = await res.json();
+
+                if (res.ok) {
+                    console.log(data , "test")
+                    return data;
+                    
                 }
                 else if(data.errors) {
                     this.errors= data.errors;

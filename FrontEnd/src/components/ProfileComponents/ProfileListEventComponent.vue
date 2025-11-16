@@ -1,5 +1,6 @@
 <template>
     <div id="profileListEventComponent">
+    
       <div class="head">
         <h4 v-if="props.himself">{{  actualLang ? 'List of events you add' : 'Les événements que vous avez ajoutés' }}</h4>
         <h4 v-else>{{  actualLang ? 'List of event the organisator publish' : 'Les evenements que l\'organisateur a publier' }}</h4>
@@ -10,9 +11,15 @@
 
       </div>
   
-      <div class="body">
-        <ProfileSingleEvent v-for="(item, index) in props.user.listEvent" :key="index" :event="item"  :himself="props.himself" @popUpdate="showUp2(item.id)" @popDelete="showDel2(item.id)"/>
+      <div class="body" >
+        <ProfileSingleEvent v-for="(item, index) in props.user.listEvent" :key="item.id" :event="item" 
+         :himself="props.himself" @popUpdate="showUp2(item.id)" @popDelete="showDel2(item.id)"/>
+
+         <ProfileSingleEvent v-show="!props.himself" v-for="(item, index) in props.user" :key="item.id" :event="item" 
+          :himself="!props.himself" @popUpdate="showUp2(item.id)" @popDelete="showDel2(item.id)"/>
       </div>
+
+        
       <AddEvent ref="addEventRef" @pop="showAdd2()" v-show="isShowAdd2"/>
       <UpdateEvent :eventId="selectedEventId" @popUpdate="showUp2()" v-show="isShowUp2"/>
       <DeleteEvent :eventId="selectedEventId"  @popDelete="showDel2()" v-show="isShowDel2"/>
@@ -26,7 +33,9 @@
   import AddEvent from "./profileEventComponents/AddEventComponent.vue"
   import UpdateEvent from "./profileEventComponents/UpdateEventComponent.vue"
   import DeleteEvent from "./profileEventComponents/DeleteEventComponent.vue"
- 
+  import { useAuthStore } from "@/stores/auth";
+
+  const authStore = useAuthStore()
   const props = defineProps({
         himself: Boolean, // Boolean type prop
         user: Object

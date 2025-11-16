@@ -75,17 +75,53 @@ export const formatDateEventStartandEnd = (aStartDateEvent, aEndDate) => {
 }
 
 export const getAvatarUrl = (imagePath) => {
-  const img= "/src/assets/UnknowUser.jpg";
-    if (!imagePath) return img;
+  const defaultImage= "/src/assets/UnknowUser.jpg";
+    
+  if (!isValidImagePath(imagePath)) {
+        return defaultImage;
+    }
+    
+    if (isFullUrl(imagePath)) {
+        return imagePath;
+    }
     return `${import.meta.env.VITE_API_BASE_URL}${imagePath}` ;
 
 }
 
 export const getEventUrl = (imagePath) => {
-  const img= "/src/assets/Curtain.jpg";
-    if (!imagePath) return img;
-    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}` ;
+  const defaultImage = "/src/assets/Curtain.jpg";
+    
+    if (!isValidImagePath(imagePath)) {
+        return defaultImage;
+    }
+    
+    if (isFullUrl(imagePath)) {
+        return imagePath;
+    }
+    
+    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
 
+}
+
+const isValidImagePath = (path) => {
+    if (!path || typeof path !== 'string') return false;
+    if (path.trim() === '') return false;
+    if (path === 'null' || path === 'undefined') return false;
+    
+    // Check for common image extensions
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+    const hasImageExtension = imageExtensions.some(ext => 
+        path.toLowerCase().includes(ext)
+    );
+    
+    return hasImageExtension;
+}
+
+const isFullUrl = (path) => {
+    return path.startsWith('http') || 
+           path.startsWith('data:') || 
+           path.startsWith('blob:') || 
+           path.startsWith('/');
 }
 
 export const formatDateEventEndDate = (startDateTime, hours) => {

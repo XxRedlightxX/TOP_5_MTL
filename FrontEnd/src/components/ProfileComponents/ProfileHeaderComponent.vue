@@ -1,45 +1,73 @@
 <template>
     <div id="profileHeaderComponent">
-        <div :class="['first', { 'middleAvatar': !props.himself }]">
+
+        <div v-if="!himself" :class="['first', { 'middleAvatar': !himself }]">
             <v-avatar size="180">
-                <img
-                    alt="John"
-                    :src="props.user.avatar"
-                />
+                <img alt="John" :src="userAvatar" />
             </v-avatar>
         </div>
-        <div class="middle">
-            <h2>{{ props.user.username }}</h2>
 
-            <p>{{ props.user.description }}</p>
+        <div v-else :class="['first', { 'middleAvatar': !himself }]">
+            <v-avatar size="180">
+                <img alt="Meeee" :src="user?.avatar" />
+            </v-avatar>
         </div>
 
-        <div class="last"  v-show="props.himself" >
-            <router-link to="/GestionProfile" class="router">
-                <v-icon icon="mdi-account-edit" class="iconHead" :title="actualLang ? 'Manage your account' : 'Gerer votre compte'"/>
-            </router-link>
-            <v-icon icon="mdi-logout" class="iconHead" @click="Logout()" :title="actualLang ? 'Logout' : 'Se deconnecter'"/>
-           
-        </div>
-        <div class="fourth" @click="showWindow()">
-             <v-icon icon="mdi-account-group"  class="iconHead"  :title="actualLang ? 'Social' : 'Se deconnecter'"></v-icon>
-             
-        </div>
-        <ProfileUserStatutComponent @pop="showWindow()"  v-show="isShowAdd2" />
+       
         
+
+        <div class="middle" v-if="!himself">
+            <h2>{{ user?.username }}</h2>
+            <p>{{ user?.description }}</p>
+        </div>
+
+        <div class="middle" v-if="himself">
+            <h2>{{ user?.username }}</h2>
+            <p>{{ user?.description }}</p>
+        </div>
+
+        <div class="last" v-show="himself">
+            <router-link to="/GestionProfile" class="router">
+                <v-icon
+                    icon="mdi-account-edit"
+                    class="iconHead"
+                    :title="actualLang ? 'Manage your account' : 'Gerer votre compte'"
+                />
+            </router-link>
+
+            <v-icon 
+                icon="mdi-logout"
+                class="iconHead"
+                @click="Logout()"
+                :title="actualLang ? 'Logout' : 'Se deconnecter'"
+            />
+        </div>
+
+        <div class="fourth" @click="showWindow()">
+             <v-icon icon="mdi-account-group" class="iconHead" :title="actualLang ? 'Social' : 'Se deconnecter'" />
+        </div>
+
+        <ProfileUserStatutComponent v-show="isShowAdd2" @pop="showWindow()" />
+
     </div>
-  </template>
+</template>
+
   
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, defineProps} from "vue";
+    import { ref, onMounted, onUnmounted, defineProps, computed} from "vue";
     import { useAuthStore } from "@/stores/auth";
+    import { getAvatarUrl } from "@/JS/GlobalFunctions";
     import ProfileUserStatutComponent from "./ProfileUserStatutComponent.vue";
 
     const props = defineProps({
         himself: Boolean, 
         user: Object
     });
+
+    const userAvatar = computed(() => {
+    return getAvatarUrl(props.user?.avatar);
+});
 
     let isShowAdd2 = ref(false);
 

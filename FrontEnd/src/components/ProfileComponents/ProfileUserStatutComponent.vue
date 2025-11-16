@@ -140,11 +140,7 @@
     isLogged.value = JSON.parse(event.detail.storage);
     };
 
-     onMounted(async () => {
-        listCategories.value =await activitiesStore.getCategories();
-        console.log(listCategories)
      
-     });
 
 
 

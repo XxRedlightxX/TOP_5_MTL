@@ -149,6 +149,13 @@ class ActiviteController extends Controller
    
     }
 
+     public function getUserActivitiesbyId(int $activityId) {
+         return Activite::with([
+        'User.activites' 
+    ])->findOrFail($activityId);
+    }
+
+
     public function getUserActivities(Request $request) {
         $authUser = $request->user();
 

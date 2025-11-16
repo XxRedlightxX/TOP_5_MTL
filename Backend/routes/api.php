@@ -47,6 +47,8 @@ Route::get('/activite/latest', [ActiviteController::class, 'getNewestActivitiesb
 
 Route::get('/activite', [ActiviteController::class, 'getAllActivities']);
 
+Route::get('/user/activite/{activityId}', [ActiviteController::class, 'getUserActivitiesbyId']);
+
 Route::get('/user/activite', [ActiviteController::class, 'getUserActivities']);
 
 Route::get('/activite/test', [ActiviteController::class, 'getUpcomingActivities']);

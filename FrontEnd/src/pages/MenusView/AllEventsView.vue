@@ -7,8 +7,6 @@
             <h3>{{ actualLang ? 'Up coming events' : 'Événement en approche'}}</h3>
             <UpComingEvent  :list-event="upComingEvents" />
         </div>
-      
-
         <AlListEvent :list-event="eventsList"/>
     </div>
 </template>
@@ -20,7 +18,6 @@
     import LocalStorageManager from "@/JS/LocalStaorageManager"
     import { ref, onMounted, onUnmounted, watch, computed} from "vue";
     import { useActivityStore } from '@/stores/activity';
-    import Notification from "@/components/NotificationComponent.vue";
 
 
     const actualMode = ref(LocalStorageManager.getMode());
@@ -34,7 +31,7 @@
     
     const newEventJours = [
     { id: null,
-image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date_debut:null }
+    image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3,lieu: null, date_debut:null }
   ];
 
   const newEventNuit = [

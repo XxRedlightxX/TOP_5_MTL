@@ -134,9 +134,9 @@
     const actualMode = ref(storageManager.getMode());
     const actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
-    let theUser = ref(null);
+    let theUser = ref(authStore.user);
 
-    theUser=authStore.user;
+ 
 
 
 
@@ -159,7 +159,7 @@
     }
 
     if(theUser.value === null) {
-        theUser.value = user
+        console.log(theUser , "No User");
     }
     // Function to handle mode change event
     const handleLangChange = (event) => {

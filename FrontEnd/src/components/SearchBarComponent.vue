@@ -23,7 +23,7 @@
       >
         <div class="user-avatar">
           <img
-            :src="user.image_data || '/default-avatar.png'"
+            :src="getAvatarUrl(user.image_data)"
             :alt="user.username"
           />
         </div>
@@ -59,6 +59,7 @@ import { ref ,onMounted} from "vue";
 import { useUserStore } from "@/stores/user";
 import { useFriendStore } from "@/stores/Friend";
 import { useMessageStore } from "@/stores/Message";
+import { getAvatarUrl } from "@/JS/GlobalFunctions";
 
 const messageStore = useMessageStore();
 const userStore = useUserStore();

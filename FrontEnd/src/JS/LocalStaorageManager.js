@@ -92,7 +92,17 @@ const StorageManager = {
   },
   getLogUser() {
     const logUser = localStorage.getItem("logUserr");
-    return logUser ? JSON.parse(logUser) : null;
+
+    if (!logUser || logUser === "undefined" || logUser === "null") {
+        return null;
+    }
+
+    try {
+        return JSON.parse(logUser);
+    } catch (e) {
+        console.error("Corrupted logUser value:", logUser);
+        return null;
+    }
   },
 
   // gere l'organisateur a afficher

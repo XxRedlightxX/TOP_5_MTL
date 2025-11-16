@@ -1,5 +1,6 @@
 import LocalStorageManager from "@/JS/LocalStaorageManager";
 import { useActivityStore } from "@/stores/activity";
+import { getEventUrl } from "./GlobalFunctions";
 
 const text =
   "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
@@ -93,7 +94,7 @@ export default {
       if (Array.isArray(storeActivities) && storeActivities.length) {
         const mapped = storeActivities.map((act) => ({
           id: act.id,
-          image: act.image_data || "/images/default-avatar.png",
+          image: act.image_data || "/src/assets/Curtain.jpg",
           title: act.titre,
           desc: act.description || "No description available",
           rating: act.note ?? 0,
@@ -114,10 +115,10 @@ export default {
     processedActivities: {
       immediate: true,
       handler(newActivities) {
-        console.log('👀 Watch triggered - new activities:', newActivities);
+        console.log(' Watch triggered - new activities:', newActivities);
         if (JSON.stringify(this.carouselItems) !== JSON.stringify(newActivities)) {
           this.carouselItems = [...newActivities];
-          console.log('✅ carouselItems updated:', this.carouselItems);
+          console.log(' carouselItems updated:', this.carouselItems);
         }
       }
     },
@@ -151,11 +152,46 @@ export default {
       this.$router.push({ name: "Event" });
     },
 
-    getAvatarUrl(imagePath) {
-      const img = "/images/default-avatar.png";
-      if (!imagePath) return img;
-      return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
+    
+    isValidImagePath (path){
+        if (!path || typeof path !== 'string') return false;
+        if (path.trim() === '') return false;
+        if (path === 'null' || path === 'undefined') return false;
+        
+        // Check for common image extensions
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+        const hasImageExtension = imageExtensions.some(ext => 
+            path.toLowerCase().includes(ext)
+        );
+        
+        return hasImageExtension;
     },
+
+    isFullUrl (path)  {
+    return path.startsWith('http') || 
+           path.startsWith('data:') || 
+           path.startsWith('blob:') || 
+           path.startsWith('/');
+    },
+
+   getAvatarUrl(imagePath) {
+    const img = "/src/assets/Curtain.jpg";
+
+    if (!this.isValidImagePath(imagePath)) {
+      return img;
+    }
+
+    if (this.isFullUrl(imagePath)) {
+      return imagePath;
+    }
+
+    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
+},
+
+
+
+
+    
 
     // --- CAROUSEL LOGIC ---
     showSlider(direction) {
