@@ -44,6 +44,13 @@
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
 
+   
+    
+    const messagePop = actualLang.value
+      ? "Login successfully!" 
+      : "connecter avec succès"
+    
+
     const {errors} = storeToRefs(useAuthStore());
     const {authenticate}= useAuthStore();
 
@@ -65,6 +72,7 @@
             console.log(success +" state")
             storageManager.setLogin(true);
             isLogged.value = storageManager.getLogin();
+            window.$toast(messagePop);
         } else {
             console.log("Not Connect");
              storageManager.setLogin(false);

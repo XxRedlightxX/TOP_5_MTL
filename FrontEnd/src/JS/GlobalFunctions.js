@@ -25,6 +25,24 @@ export const formatDateApi = (dateInput, timeInput) => {
 
 }
 
+
+export const formatDate = (dateString) => {
+  if (!dateString) return "";
+
+  // Convert "YYYY-MM-DD HH:MM:SS" → ISO
+  const iso = dateString.replace(" ", "T");
+  const date = new Date(iso);
+
+  if (isNaN(date)) return dateString;
+
+  const month = date.toLocaleString("en-US", { month: "long" });
+  const day = date.getDate();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return `${month} ${day} · ${hours}:${minutes}`;
+};
+
 export const formatDateComment = (dateString, actualLang) => {
   const safeString = dateString.replace(" ", "T");
   const date = new Date(safeString);

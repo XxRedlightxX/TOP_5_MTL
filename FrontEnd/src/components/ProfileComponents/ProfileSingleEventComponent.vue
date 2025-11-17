@@ -1,23 +1,26 @@
 <template>
     <div id="profileSingleEventComponent" class="glass">
+        <div style="display: none;">{{ console.log('himself value:', props.himself) }}</div>
         <div class="first">
-            <img :src="getEventUrl(props.event.image)" alt="#">
+            <img :src="getEventUrl(props.event?.image)" alt="#">
         </div>
         
         <div class="middle">
            
-            <h2>{{ props.event.titre }}</h2>
+            <h2>{{ props.event?.titre }}</h2>
 
-            <p>{{ props.event.description }}</p>
+            <p>{{ props.event?.description }}</p>
 
             
 
         </div>
 
-        <div class="last"  v-show="props.himself">
+        <div class="last" v-show="props.himself">
             <v-icon icon="mdi-folder-edit" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Edit this Event' : 'Modifier cet evenement'" @click="showUp()"/>
             <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Delette this Event' : 'Supprimer cet evenement'"  @click="showDel()"/>
         </div>
+
+        
 
     </div>
   </template>
@@ -33,6 +36,7 @@
     let activityId = ref(null);
 
     //const emit = defineEmits(['popUpdate', 'popDelete'])
+    
 
     
     //var isShowUp = ref(false);
@@ -40,7 +44,7 @@
         event: Object, // Boolean type prop
         himself: Boolean, // Boolean type prop
     });
-    activityId.value =props.event.id
+    activityId.value =props.event?.id
    
 
     // Définir les événements émis par ce composant

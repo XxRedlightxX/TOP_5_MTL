@@ -135,10 +135,7 @@ export default {
 
   methods: {
     async loadActivities() {
-      console.log('🔄 Starting loadActivities...');
       await this.activitiesStore.getHigherRateEvent();
-      console.log('✅ loadActivities completed');
-      console.log('📊 Store carouselactivities after load:', this.activitiesStore.carouselactivities);
     },
 
     setEvent(value) {

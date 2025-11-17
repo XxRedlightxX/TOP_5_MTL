@@ -1,9 +1,10 @@
 <template>
   <v-app>
     <v-main :class="actualMode ? 'light' : 'dark'">
-
+      
       <Menu />
       <Notification/>
+      <PopUp :is-show="toast.show" :message="toast.message"/>
       <router-view class="view"/>
       <Language/>
       <Footer />
@@ -16,24 +17,27 @@
   import Footer from "./components/FooterComponent.vue";
   import Language from "./components/LanguageSetterComponent.vue";
   import LocalStorageManager from "@/JS/LocalStaorageManager"
-  import { ref, onMounted, onUnmounted} from "vue";
-  import { useAuthStore } from "./stores/auth";
+  import { ref, onMounted, onUnmounted, reactive} from "vue";
   import Notification from "./components/NotificationComponent.vue";
-
-
-
-
-  // Register the component globally
-  const isMultiSelection = ref(true);
-  const dateValue = ref(new Date("08/18/2022"));
-  const minDate = ref(new Date("08/08/2022"));
-  const maxDate = ref(new Date("08/26/2022"));
+  import PopUp from "./components/PopUpComponent.vue";
 
   let actualMode = ref(LocalStorageManager.getMode());
 
   if (actualMode.value === null) {
     LocalStorageManager.setMode(true);
     actualMode.value = LocalStorageManager.getMode();
+  }
+
+  const toast = reactive({
+    show: false,
+    message: ''
+  })
+
+// make function available for all components
+  window.$toast = (msg) => {
+    toast.message = msg
+    toast.show = true
+    setTimeout(() => toast.show = false, 2500)
   }
 
   // Function to handle mode change event

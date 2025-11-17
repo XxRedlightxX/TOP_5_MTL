@@ -3,9 +3,11 @@
         <div class="header">
             <h3> {{ actualLang ? 'Contact Us' : 'Contacter nous' }} </h3>
             
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta facilis enim quas laboriosam consequuntur 
-                itaque veritatis, officiis consequatur, quidem illum, ad saepe quos. Nobis, repudiandae molestiae! Obcaecati 
-                nihil beatae veritatis?</p>
+            <p>{{
+    actualLang
+      ? "We’re here to help you make every event unforgettable. Whether you have questions, need assistance, or want to collaborate, our team is ready to support you. Reach out to us anytime — we’ll get back to you as soon as possible. Have questions about creating or hosting an event? Our team is here to support you with anything you need — from platform guidance to partnership inquiries. Send us a message and we’ll be happy to assist you."
+      : "Nous sommes là pour vous aider à rendre chaque événement inoubliable. Que vous ayez des questions, besoin d’assistance ou envie de collaborer, notre équipe est là pour vous accompagner. Contactez-nous à tout moment — nous vous répondrons dès que possible. Vous avez des questions sur la création ou l’organisation d’un événement ? Notre équipe est prête à vous soutenir, que ce soit pour des conseils ou des partenariats. Envoyez-nous un message et nous serons ravis de vous aider."
+  }}</p>
         </div>
 
         <div class="content">

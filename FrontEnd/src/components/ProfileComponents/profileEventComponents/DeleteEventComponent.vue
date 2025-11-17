@@ -21,9 +21,13 @@
     import { useActivityStore } from "@/stores/activity";
     import { useAuthStore } from "@/stores/auth";
     
+    let actualLang = ref(storageManager.getLang());
+    let isLogged = ref(storageManager.getLogin());
     const authStore = useAuthStore();
     const activity = ref(null);
-
+    const messagePop = actualLang.value
+      ? "Event deleted successfully!" // English
+      : "Événement supprimé avec succès !" // French
     const {deleteEvent, getActivityById} = useActivityStore();
 
 
@@ -49,8 +53,7 @@
     }, { immediate: true })
 
 
-    let actualLang = ref(storageManager.getLang());
-    let isLogged = ref(storageManager.getLogin());
+    
 
     const Logout = () => {
         storageManager.setLogin(false);
@@ -61,6 +64,8 @@
         const IsSuccess = await deleteEvent(activity.value);
          if (IsSuccess) {
             popDelete();
+            
+            window.$toast(messagePop)
             await authStore.getUser();
             
         } 

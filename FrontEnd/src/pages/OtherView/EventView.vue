@@ -26,7 +26,8 @@
 </template>
 
 <script setup>
-    import { onMounted, ref } from 'vue';
+    import { onMounted, ref,  onUnmounted  } from 'vue';
+    import storageManager from "@/JS/LocalStaorageManager";
     import PageDetail from "../../components/EventComponents/SingleEventComponents/SingleEventComponent.vue"
     import PageDescription from "../../components/EventComponents/SingleEventComponents/EventOverview.vue"
     import PageCommentaire from "../../components/EventComponents/SingleEventComponents/EventCommentComponent.vue"
@@ -35,7 +36,11 @@
     import { useActivityStore } from '@/stores/activity';
     import { useRoute } from 'vue-router';
     
-
+    
+    let actualLang = ref(storageManager.getLang());
+    const messagePop = actualLang.value
+      ? "Comment added successfully!" // English
+      : "Commentaire ajouté avec succès !" // Frenc
 
     const activity = ref(null);
     const route = useRoute();
@@ -45,6 +50,11 @@
         await fetchActivity();
     });
 
+    if (actualLang.value === null) {
+    storageManager.setLang(true);
+    actualLang.value = storageManager.getLang();
+    }
+
     const fetchActivity = async () => {
         activity.value = await getActivityById(route.params.id);
     };
@@ -52,8 +62,31 @@
     const handleCommentAdded = async (result) => {
         if (result) {
             await fetchActivity();
+            window.$toast(messagePop)
+
         }
     };
+
+    const handleLangChange = (event) => {
+    actualLang.value = JSON.parse(event.detail.storage);
+    };
+
+     const handleLoginChange = (event) => {
+    isLogged.value = JSON.parse(event.detail.storage);
+    };
+
+    // Add event listener for mode changes
+    onMounted(() => {
+    window.addEventListener('lang-changed', handleLangChange);
+    window.addEventListener('login-changed', handleLoginChange);
+    });
+
+    // Remove event listener when component is unmounted
+    onUnmounted(() => {
+    window.removeEventListener('lang-changed', handleLangChange);
+    window.removeEventListener('login-changed', handleLoginChange);
+    });
+
    
     
 

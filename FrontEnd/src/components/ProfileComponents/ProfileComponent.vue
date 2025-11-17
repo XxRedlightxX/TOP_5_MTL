@@ -2,7 +2,7 @@
     <div id="profileComponent">
         
         <!-- If current user is viewing his own profile -->
-        <div class="top" v-show="himself">
+        <div class="top" v-if="himself">
             <ProfileHead :himself="himself" :user="organisator" />
             <ProfileOther :user="organisator" />
         </div>
@@ -32,7 +32,7 @@
 </template>
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted,watch, defineProps} from "vue";
+    import { ref, onMounted, onUnmounted,watch, defineProps, computed} from "vue";
     import ProfileHead from "./ProfileHeaderComponent.vue";
     import ProfileOther from "./ProfileOtherComponent.vue"
     import ProfileList from "./ProfileListEventComponent.vue"
@@ -45,6 +45,8 @@
     let isLogged = ref(storageManager.getLogin());
     let actualMode = ref(storageManager.getMode());
     let theOrganisator = ref(null);
+
+
 
     const props = defineProps({
         himself: Boolean,
@@ -84,6 +86,7 @@
         listEvent.value = events;
         
         organisator.value = {
+            id : newUser?.id,
             avatar: newUser?.image_data
                 ? `${import.meta.env.VITE_API_BASE_URL}${newUser.image_data}`
                 : "/src/assets/UnknowUser.jpg",

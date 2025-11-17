@@ -1,6 +1,6 @@
 <template>
     <div id="profileHeaderComponent">
-
+        
         <div v-if="!himself" :class="['first', { 'middleAvatar': !himself }]">
             <v-avatar size="180">
                 <img alt="John" :src="userAvatar" />
@@ -12,9 +12,6 @@
                 <img alt="Meeee" :src="user?.avatar" />
             </v-avatar>
         </div>
-
-       
-        
 
         <div class="middle" v-if="!himself">
             <h2>{{ user?.username }}</h2>
@@ -60,6 +57,12 @@
     import { getAvatarUrl } from "@/JS/GlobalFunctions";
     import ProfileUserStatutComponent from "./ProfileUserStatutComponent.vue";
 
+    let actualLang = ref(storageManager.getLang());
+    
+    const messagePop = actualLang.value
+      ? "Logout successfully!" 
+      : "Déconnection avec succès !"
+    
     const props = defineProps({
         himself: Boolean, 
         user: Object
@@ -81,7 +84,7 @@
     const {logout} = useAuthStore();
 
     storageManager.setLogUser(props.user);
-    let actualLang = ref(storageManager.getLang());
+ 
     let isLogged = ref(storageManager.getLogin());
     
 
@@ -89,6 +92,7 @@
     const Logout = () => {
         logout();
         storageManager.setLogin(false);
+        window.$toast(messagePop);
         //localStorage.removeItem('logUser');
         isLogged.value = storageManager.getLogin();
     }

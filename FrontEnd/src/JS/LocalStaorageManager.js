@@ -1,17 +1,18 @@
 const StorageManager = {
   // gere le mode dark-light
- setMode(value) {
-    const modeValue = value === true || value === 'days' ? 'days' : 'nights';
-    localStorage.setItem("mode", modeValue);
+   setMode(value) {
+    localStorage.setItem("mode", JSON.stringify(value));
     window.dispatchEvent(
       new CustomEvent("mode-changed", {
-        detail: { storage: modeValue }, // This is a string
+        detail: {
+          storage: localStorage.getItem("mode"),
+        },
       })
     );
   },
   
   getMode() {
-    return localStorage.getItem("mode") || 'days'; // Return string directly
+    return localStorage.getItem("mode") || true; // Return string directly
   },
 
 

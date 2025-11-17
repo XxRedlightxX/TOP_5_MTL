@@ -66,15 +66,15 @@
     import { useAuthStore } from '@/stores/auth';
     
     
-    const { user } = storeToRefs(useActivityStore());
-
 
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
     let activity = ref(null);
 
     const selectedFile = ref(null);
-
+    const messagePop = actualLang.value
+      ? "Event modified successfully!" 
+      : "Événement modifié avec succès !" 
     const inputRefDate = ref(null);
     const inputRefTime = ref(null);
     const inputRefImage = ref(null);
@@ -107,7 +107,6 @@
             return;
         }
         selectedFile.value = file;
-    
     };
 
 
@@ -118,14 +117,9 @@
         
         try {
             activity.value = await getActivityById(newEventId);
-           
 
             if(activity.value) {
-              formDataEvent.titre = activity.value.titre;
-
-           
-            
-                
+                formDataEvent.titre = activity.value.titre;
             } 
         
         } catch (error) {
@@ -139,51 +133,52 @@
     }*/
 
 
-        const handleSubmit = async () => {
-             const dateValue = inputRefDate.value?.value;
-            const timeValue = inputRefTime.value?.value;
-            
-                if (!activity.value  || !activity.value.id)  {
-                    console.error("Activity not loaded.");
-                    return;
-                }
-                 const formData = new FormData();
-                const formattedDate = formatDateApi(dateValue, timeValue);
-               
-
-                formData.append("titre", formDataEvent.titre);
-                formData.append("lieu", formDataEvent.lieu);
-                formData.append("date_debut", formattedDate);
-                
-                const imageFile = inputRefImage.value?.files[0];
-                if (imageFile) {
-                    formData.append("image_data", imageFile); 
-                }
-                
-               
-                for (let [key, value] of formData.entries()) {
-                    console.log(key, value);
-               }
-            
-                try {
-                    const updated= await updateEvent(activity.value,  formData);
-                       console.log("Updated activity:", updated);
-
-                        if (updated) {
-                         
-                        activity.value = updated;
-                        await authStore.getUser();
-                        console.log(updated)
-                        }
-                } catch (error) {
-                    errorMessage.value = error.message;
-                    console.error("Upload failed:", error);
-                }
-                
-            
-        };
+    const handleSubmit = async () => {
+        const dateValue = inputRefDate.value?.value;
+        const timeValue = inputRefTime.value?.value;
     
+        if (!activity.value  || !activity.value.id)  {
+            console.error("Activity not loaded.");
+            return;
+        }
+            const formData = new FormData();
+        const formattedDate = formatDateApi(dateValue, timeValue);
+        
+
+        formData.append("titre", formDataEvent.titre);
+        formData.append("lieu", formDataEvent.lieu);
+        formData.append("date_debut", formattedDate);
+        
+        const imageFile = inputRefImage.value?.files[0];
+        if (imageFile) {
+            formData.append("image_data", imageFile); 
+        }
+        
+        
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
     
+        try {
+            const updated= await updateEvent(activity.value,  formData);
+                console.log("Updated activity:", updated);
+
+                if (updated) {
+                    
+                    activity.value = updated;
+                    
+                    await authStore.getUser();
+                    window.$toast(messagePop);
+                    
+                }
+        } catch (error) {
+            errorMessage.value = error.message;
+            console.error("Upload failed:", error);
+        }
+
+    };
+
+
 
     const Logout = () => {
         storageManager.setLogin(false);

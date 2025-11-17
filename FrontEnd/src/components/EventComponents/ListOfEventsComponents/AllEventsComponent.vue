@@ -2,8 +2,7 @@
   <div id="AllEventComponent" style="margin-top: 30px;">
      
     <FilterComponent/>
-      <LoadingEvents v-if="isLoading"  :eventCount="eventsPerPage" />
-      
+    <LoadingEvents v-if="isLoading"  :eventCount="eventsPerPage" /> 
     <div class="events" >
       <router-link 
         v-if="paginatedEvents.length" 
@@ -75,6 +74,11 @@ const currentPage = ref(0);
 const props = defineProps({
   listEvent: Array
 });
+
+
+function successPop() {
+  window.$toast("Saved successfully!")
+}
 
 
 const isFavorite = (id) => {

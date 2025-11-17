@@ -57,6 +57,8 @@
             formCommentUser.contenu = "";
             formCommentUser.etoiles = null;
 
+            
+
            
         } catch (error) {
             console.error('Failed to add comment:', error);

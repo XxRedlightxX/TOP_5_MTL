@@ -60,8 +60,6 @@
                             </select>
                         </div>
 
-                        
-
                         <div class="form-group">
                             <label for="event-type">{{ actualLang ? "Category" : "Catégorie" }}</label>
                             <select id="event-type" v-model="formDataEvent.type_name" required>
@@ -99,9 +97,7 @@
     import { useAuthStore } from "@/stores/auth";
     import MapComponent from "@/components/MapComponent.vue";
 
-    
 
-    
     const {addEvent} = useActivityStore();
     const activitiesStore = useActivityStore();
     const authStore = useAuthStore();
@@ -182,9 +178,9 @@ const testInput = async(event) => {
             const eventUrl = await addEvent(formData);
             if (eventUrl) {
                 console.log(eventUrl);
-
+                window.$toast("Saved successfully!")
                 await authStore.getUser();
-                pop();
+               
                 
             }
         } catch (error) {
