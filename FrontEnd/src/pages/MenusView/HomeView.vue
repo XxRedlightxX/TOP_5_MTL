@@ -4,23 +4,7 @@
         <CarousellPhone/>
         <div class="homeContent">
             <IntroText/>
-            <NewEvent :list-event="eventsList"/><!---->
-             <button 
-        @click="activitiesStore.toggleMode('days')" 
-        :class="{ active: mode === 'days' }"
-        
-      >
-       Days Events
-       
-      </button>
-      <button 
-        @click="activitiesStore.toggleMode('nights')" 
-        :class="{ active: mode === 'nights' }"
-      >
-        Night Events 
-      </button>
-
-    
+            <NewEvent :list-event="eventsList"/>
             <Contact/>
         </div>
     </div>
@@ -33,10 +17,9 @@
     import IntroText from "../../components/HomeComponents/IntroTextComponent.vue"
     import NewEvent from "../../components/HomeComponents/NewEventComponent.vue"
     import Contact from "../../components/HomeComponents/ContactComponent.vue"
-    import { ref, onMounted, computed} from "vue";
+    import {  onMounted, computed} from "vue";
     import { useActivityStore } from '@/stores/activity';
 
-    //let eventsList = ref(null);
     const text ="dada"
 
     const activitiesStore = useActivityStore();
