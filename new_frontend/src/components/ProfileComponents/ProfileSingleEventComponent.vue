@@ -1,14 +1,14 @@
 <template>
   <div id="profileSingleEventComponent" class="glass">
     <div class="first">
-      <img alt="#" :src="props.event.image">
+      <img alt="#" :src="props.event.image_data">
     </div>
 
     <div class="middle">
 
-      <h2>{{ props.event.title }}</h2>
+      <h2>{{ props.event.titre }}</h2>
 
-      <p>{{ props.event.desc }}</p>
+      <p>{{ props.event.description }}</p>
 
     </div>
 

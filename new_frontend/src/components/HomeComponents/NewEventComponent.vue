@@ -20,9 +20,9 @@
     <div class="contentt">
       <div class="top">
         <h2>{{ newEvents[indexSlide].title }}  </h2>
-        <router-link class="link" :title="actualLang ? 'Go to the event Page' : 'Allez a la page de l\'evenement'" to="/Event" @click="setEvent(newEvents[indexSlide])">
+        <button class="link" :title="actualLang ? 'Go to the event Page' : 'Allez a la page de l\'evenement'" @click="goToEvent(newEvents[indexSlide].id)">
           <v-icon class="icon glow" icon="mdi-arrow-top-right-thin" />
-        </router-link>
+        </button>
 
       </div>
       <p>{{ newEvents[indexSlide].desc }}</p>
@@ -52,7 +52,7 @@
     <div class="contentt">
       <div class="top">
         <h2 class="fakeTitle">{{ fakeData[indexSlide].title }}  </h2>
-        <div class="link" :title="actualLang ? 'Go to the event Page' : 'Allez a la page de l\'evenement'" to="/Event" >
+        <div class="link" :title="actualLang ? 'Go to the event Page' : 'Allez a la page de l\'evenement'"  to="/Event" >
           <v-icon class="icon glow" icon="mdi-arrow-top-right-thin" />
         </div>
 
@@ -66,6 +66,7 @@
 
 <script setup>
   import { ref, onMounted } from 'vue';
+  import { useRouter } from "vue-router";
 
   import Ratings from '../StaticComponents/RatingComponent.vue'
   
@@ -76,7 +77,7 @@
   import 'swiper/css/autoplay';
 
   import Setup from '@/JS/Setup';
-  import SetupEvent from '@/JS/SetupEvents'
+  import SetupEvents from '@/JS/SetupEvents'
   import LocalStorageManager from '@/JS/LocalStorageManager';
   import AsyncData from '@/JS/AsyncData';
   import LoadingComponent from '../StaticComponents/LoadingComponent.vue';
@@ -89,10 +90,11 @@
   let actualLang = Setup.languageSetup();
   let newEvents = ref([]);
   let fakeData = AsyncData.getEvents(6)
+  const router = useRouter();
 
   onMounted(async () => {
-    newEvents.value = await SetupEvent.newEventsSetup();
-    console.log('eventsss :', newEvents.value);
+    newEvents.value = await SetupEvents.newEventsSetup();
+    //console.log('eventsss :', newEvents.value);
   });
 
   // Fonction pour mettre à jour l'index du slide actif
@@ -101,10 +103,15 @@
     indexSlide.value = swiper.activeIndex;
   };
 
-  const setEvent = (value) => {
-    LocalStorageManager.setEvent(value);
-    console.log("event value : ", value);
-  };
+  // Méthodes
+  async function goToEvent(id) {
+    await setEvent(id);   // 1) stocker l’event
+    router.push("/Event"); // 2) naviguer ensuite
+  }
+
+  async function setEvent(id) {
+    const event = await SetupEvents.singleEventSetup(id)
+  }
 </script>
 
 <style src="../../styles/ComponentsStyles/HomeStyles/NewEventStyle.scss"></style>

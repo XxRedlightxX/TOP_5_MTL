@@ -70,6 +70,7 @@ const LocalStorageManager = {
    * @param {object} value objet événement
    */
   setEvent(value) {
+    console.log("event get storage : ", value);
     localStorage.setItem("event", JSON.stringify(value));
     window.dispatchEvent(
       new CustomEvent("event-changed", {

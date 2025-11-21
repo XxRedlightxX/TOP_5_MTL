@@ -4,14 +4,14 @@
       <v-avatar size="180">
         <img
           alt="John"
-          :src="props.user.avatar"
+          :src="props.user.image_data"
         />
       </v-avatar>
     </div>
     <div class="middle">
       <h2>{{ props.user.username }}</h2>
 
-      <p>{{ props.user.desc }}</p>
+      <p>{{ props.user.description }}</p>
     </div>
 
     <div class="last"  v-show="props.himself">

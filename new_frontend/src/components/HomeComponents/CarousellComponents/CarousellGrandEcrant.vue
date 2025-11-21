@@ -11,8 +11,11 @@
           <div :class="[index == 0 ? 'titlee' : 'lostTitle', item.id == -1 ? 'fakeTitle' : '']"> {{ item.title }} </div>
 
           <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
-            <router-link class="btn roundBorderSmall" to="/Event" @click="setEvent(item)">{{ textEvent }}</router-link>
-            <router-link class="btn roundBorderSmall" to="/Event Organisator" @click="setOrganisator()">Découvrir les Organisateurs</router-link>
+            <button class="btn roundBorderSmall" @click="goToEvent(item.id)"> {{ textEvent }} {{ item.id }} </button>
+
+            <button class="btn roundBorderSmall" @click="goToOrganisator(item.id)"> {{ textOrganisator }} {{ item.id }} </button>
+            <!-- <router-link class="btn roundBorderSmall" to="/Event" @click="setEvent(item.id)">{{ textEvent }} {{ item.id }}</router-link> -->
+            <!-- <router-link class="btn roundBorderSmall" to="/Event Organisator" @click="setOrganisator()">Découvrir les Organisateurs</router-link> -->
           </div>
           <div :class="index == 0 ? 'desc' : 'lostdesc'">
             <p :class="item.id == -1 ? 'fakeDesc' : ''">{{ item.desc }}</p>
@@ -44,6 +47,7 @@
   import { useRouter } from "vue-router";
   import LocalStorageManager from "../../../JS/LocalStorageManager";
   import Setup from "../../../JS/Setup";
+  import SetupEvents from "@/JS/SetupEvents";
   import FakeDataBase from "../../../JS/ToBeDeleted/FakeDataBase";
 
   // Constantes de texte
@@ -77,14 +81,22 @@
   let runNextAuto = null;
 
   // Méthodes
-  function setEvent(value) {
-    LocalStorageManager.setEvent(value);
-    console.log("Event value: ", value);
+  async function goToEvent(id) {
+    await setEvent(id);   // 1) stocker l’event
+    router.push("/Event"); // 2) naviguer ensuite
   }
 
-  function setOrganisator() {
-    let user = FakeDataBase.getUser();
-    LocalStorageManager.setOrganisator(user);
+  async function setEvent(id) {
+    const event = await SetupEvents.singleEventSetup(id)
+  }
+
+  async function goToOrganisator(id) {
+    await setOrganisator(id);   // 1) stocker l’event
+    router.push("/Event Organisator"); // 2) naviguer ensuite
+  }
+
+  async function setOrganisator(id) {
+    const event = await SetupEvents.organisatortSetup(id)
   }
 
   function handleClick(event, item) {

@@ -8,7 +8,7 @@
         <p :class="eventInfo.id == -1 ? 'fakeDesc' : ''">{{ eventInfo.desc }}</p>
       </div>
       <div class="carousellPhoneSwipperBtn">
-        <router-link class="button" to="/Event" @click="setEvent()"> {{ actualLang ? "See the event" : "Voir l'evenement" }}</router-link>
+        <button class="button" @click="goToEvent(eventInfo.id)"> {{ actualLang ? "See the event" : "Voir l'evenement" }} {{ eventInfo.id }} </button>
         <router-link class="button" to="/Event Organisator" @click="setEvent()">{{ actualLang ? "Organisator" : "Découvrir les Organisateurs" }}</router-link>
       </div>
     </div>
@@ -16,8 +16,9 @@
 </template>
 <script setup>
   import { defineProps, onMounted, ref, watch } from 'vue'
+  import { useRouter } from "vue-router";
   import Setup from '@/JS/Setup'
-  import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase'
+  import SetupEvents from '@/JS/SetupEvents'
   import CarouselSwipper from './CarousellPhoneSwipper.vue'
 
   let actualMode = Setup.modeSetup()
@@ -30,7 +31,7 @@
   })
 
   let newEvent = ref([])
-
+  const router = useRouter();
   let i = ref(0)
   const eventInfo = ref(null)
 
@@ -44,8 +45,13 @@
     //console.log('infooo :', eventInfo)
   }
 
-  const setEvent = () => {
-    LocalStorageManager.setEvent(eventInfo.value)
+  async function goToEvent(id) {
+    await setEvent(id);   // 1) stocker l’event
+    router.push("/Event"); // 2) naviguer ensuite
+  }
+
+  async function setEvent(id) {
+    const event = await SetupEvents.singleEventSetup(id)
   }
 
   onMounted(() => {

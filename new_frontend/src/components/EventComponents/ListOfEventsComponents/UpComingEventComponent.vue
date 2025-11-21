@@ -3,12 +3,11 @@
     <button id="left" @click="scroll('left')"><</button>
 
     <ul class="carousel" ref="carousel">
-      <router-link
+      <div
         v-for="(event, index) in events"
         :key="event.id || index"
         class="card"
-        to="/Event"
-        @click="setEvent(event)"
+        @click="goToEvent(event.id)"
       >
         <div class="img">
           <img :src="event.image" alt="event image" draggable="false" />
@@ -32,7 +31,7 @@
             12 h
           </div>
         </div>
-      </router-link>
+      </div>
     </ul>
 
     <button id="right" @click="scroll('right')">></button>
@@ -73,6 +72,7 @@
 
 <script setup>
   import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
+  import { useRouter } from "vue-router";
   import Setup from "@/JS/Setup";
   import SetupEvent from "@/JS/SetupEvents";
   import LocalStorageManager from "@/JS/LocalStorageManager";
@@ -82,6 +82,7 @@
   const actualMode = Setup.modeSetup();
   const events = ref([]);
   const fakeData = AsyncData.getEvents(3);
+  const router = useRouter();
 
   const wrapper = ref(null);
   const carousel = ref(null);
@@ -177,10 +178,14 @@
     autoPlay();
   };
 
-  const setEvent = (event) => {
-    LocalStorageManager.setEvent(event);
-    console.log("Event selected:", event);
-  };
+  async function goToEvent(id) {
+    await setEvent(id);   // 1) stocker l’event
+    router.push("/Event"); // 2) naviguer ensuite
+  }
+
+  async function setEvent(id) {
+    const event = await SetupEvent.singleEventSetup(id)
+  }
 
   onMounted(async () => {
     events.value = await SetupEvent.upcomingEventSetup();

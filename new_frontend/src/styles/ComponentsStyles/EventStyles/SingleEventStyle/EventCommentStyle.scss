@@ -6,6 +6,14 @@
     justify-content: flex-start;
     gap: 20px;
     
+    .noComment {
+        margin-top: 5%;
+        width: 100%;
+        height: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
     .comments-list {
         display: flex;
         flex-direction: column;

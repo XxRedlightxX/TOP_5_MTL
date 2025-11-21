@@ -1,13 +1,13 @@
 <template>
-  <div id="event">
+  <div v-if="event != null" id="event">
     <div class="viewContent">
-      <EventDetail :activityDesc="event.desc" :activityImg="event.image" :activityTitle="event.title" />
+      <EventDetail :activityDesc="event.description" :activityImg="event.image_data" :activityTitle="event.titre" />
       <div class="suite">
         <div class="sub">
           <EventOverview :event="event" />
           <EventCommentSelf />
         </div>
-        <EventComment />
+        <EventComment :event="event"/>
       </div>
     </div>
     <EventMap :map="event.lieu" />
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import EventComment from '@/components/EventComponents/SingleEventComponents/EventCommentComponent.vue';
   import EventCommentSelf from '@/components/EventComponents/SingleEventComponents/EventCommentSelfComponent.vue';
@@ -23,19 +23,23 @@
   import EventMap from '@/components/EventComponents/SingleEventComponents/EventMapComponent.vue';
   import EventOverview from '@/components/EventComponents/SingleEventComponents/EventOverviewComponent.vue';
   import LocalStorageManager from '@/JS/LocalStorageManager';
-  import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase';
 
-  const event = ref(LocalStorageManager.getEvent());
-  if (event.value == null) {
-    event.value = FakeDataBase.getOneEvent();
-  }
+  const event = ref(null);
 
   const router = useRouter();
 
   // rediriger vers home si l'event est null
   const redirect = () => {
-    router.push({ name: 'Home' });
+    if(event.value == null) {
+      router.push({ name: 'Home' });
+    }
   };
+
+  onMounted(async () => {
+    event.value = LocalStorageManager.getEvent();
+    console.log('event : ', event);
+    redirect();
+  });
 </script>
 
 

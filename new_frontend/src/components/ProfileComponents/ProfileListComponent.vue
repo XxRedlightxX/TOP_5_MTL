@@ -10,8 +10,13 @@
 
     </div>
 
-    <div class="body">
-      <ProfileSingleEvent v-for="(item, index) in props.user.listEvent" :key="index" :event="item" :himself="props.himself" @popDelete="showDel2()" @popUpdate="showUp2()"/>
+    <div v-if="props.user.activites.length > 0" class="body">
+      <ProfileSingleEvent v-for="(item, index) in props.user.activites" :key="index" :event="item" :himself="props.himself" @popDelete="showDel2()" @popUpdate="showUp2()"/>
+    </div>
+    <div v-else class="body">
+      <div class="noEvents">
+        <h1>{{ actualLang ? 'No Event added for now' : 'Aucun evenement Rajouter pour l\'instant' }}</h1>
+      </div>
     </div>
     <AddEvent v-show="isShowAdd2" @pop="showAdd2()" />
     <UpdateEvent v-show="isShowUp2" @popUpdate="showUp2()" />
@@ -34,7 +39,7 @@
   const props = defineProps({
     himself: Boolean, // Boolean type prop
     user: Object,
-  })
+  });
 
   let actualLang = Setup.languageSetup()
   let isLogged = Setup.loginSetup()
@@ -60,7 +65,7 @@
   const showDel2 = () => {
     isShowDel2.value = !isShowDel2.value
   }
-  console.log('liste event : ' + props.user)
+  console.log('liste event : ', props.user.activites)
 </script>
 
 <style src="../../styles/ComponentsStyles/ProfileStyles/ProfileListStyle.scss"></style>

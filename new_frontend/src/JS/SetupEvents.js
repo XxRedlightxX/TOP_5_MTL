@@ -47,18 +47,23 @@ const SetupEvents = {
     fetchFunction,
     setFunction,
     getFunction,
-    isThereActual
+    isThereActual,
+    fetchArgs = []
   ) {
-    const storedData = ref(getFunction());
+    let storedData = ref(null);
+    if (fetchArgs.length == 0) {
+      storedData = ref(getFunction());
+    }
 
+    console.log("dataa before :", storedData);
     // Si aucun événement n'est enregistré, récupération depuis l'API
     if (storedData.value == null) {
       const activitiesStore = useActivityStore();
-      const apiData = await fetchFunction.call(activitiesStore);
+      const apiData = await fetchFunction.call(activitiesStore, ...fetchArgs);
       storedData.value = isThereActual
         ? SetupEvents.setListOfEvents(apiData)
         : apiData;
-      setFunction(storedData.value);
+      await setFunction(storedData.value);
       console.log("dataa :", storedData);
     }
 
@@ -122,7 +127,7 @@ const SetupEvents = {
       window.removeEventListener("mode-changed", handleModeChange);
     });
 
-    console.log("actual events : ", actualEvents);
+    //console.log("actual events : ", actualEvents);
     return actualEvents.value;
   },
 
@@ -146,7 +151,8 @@ const SetupEvents = {
       useActivityStore().getHigherRateEvent,
       LocalStorageManager.setHightRateEvents,
       LocalStorageManager.getHightRateEvents,
-      true
+      true,
+      []
     );
   },
 
@@ -174,7 +180,8 @@ const SetupEvents = {
       useActivityStore().getNewestEvent,
       LocalStorageManager.setNewEvents,
       LocalStorageManager.getNewEvents,
-      true
+      true,
+      []
     );
   },
 
@@ -202,7 +209,8 @@ const SetupEvents = {
       useActivityStore().getUpcomingEvents,
       LocalStorageManager.setUpcomingEvents,
       LocalStorageManager.getUpcomingEvents,
-      true
+      true,
+      []
     );
   },
 
@@ -213,7 +221,32 @@ const SetupEvents = {
       useActivityStore().getCategories,
       LocalStorageManager.setTag,
       LocalStorageManager.getTag,
-      false
+      false,
+      []
+    );
+  },
+
+  async singleEventSetup(id) {
+    return await SetupEvents.eventsSetupGeneric(
+      "event",
+      "event-changed",
+      useActivityStore().getActivityById,
+      LocalStorageManager.setEvent,
+      LocalStorageManager.getEvent,
+      false,
+      [id] // paramètres envoyés au fetch
+    );
+  },
+
+  async organisatortSetup(id) {
+    return await SetupEvents.eventsSetupGeneric(
+      "organisator",
+      "organisator-changed",
+      useActivityStore().getEventUserInfo,
+      LocalStorageManager.setOrganisator,
+      LocalStorageManager.getOrganisator,
+      false,
+      [id] // paramètres envoyés au fetch
     );
   },
 

@@ -2,6 +2,18 @@
     #EventComment {
         background-color: transparent;
 
+        .noComment {
+            //border: 2px solid red;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            border: 1px solid rgba(255, 255, 255, 0);
+
+            h1 {
+                //border: 2px solid red;
+                color: var(--graphite);
+            }
+        }
         h1 {
             color: var(--graphite);
         }
@@ -42,6 +54,18 @@
 .dark {
     #EventComment {
         background-color: transparent;
+        
+        .noComment {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            border: 1px solid rgba(255, 255, 255, 0);
+
+            h1 {
+                color: var(--light);
+            }
+        }
+
         h1 {
             color: var(--light);
         }

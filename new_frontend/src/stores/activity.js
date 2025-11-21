@@ -34,18 +34,18 @@ export const useActivityStore = defineStore("activitiesStore", {
         this.mode = this.mode === 'day' ? 'nights' : 'days'
         localStorage.setItem('activityMode', this.mode)
     },*/
-    toggleMode() {
-      // Toggle between 'days' and 'nights'
-      this.mode = this.mode === "days" ? "nights" : "days";
-      StorageManager.setMode(this.mode);
+    // toggleMode() {
+    //   // Toggle between 'days' and 'nights'
+    //   this.mode = this.mode === "days" ? "nights" : "days";
+    //   StorageManager.setMode(this.mode);
 
-      // Update derived data
-      this.activities = this.mode === "days" ? this.days : this.nights;
-      this.carouselactivities =
-        this.mode === "days" ? this.carouseldays : this.carouselnights;
-      this.upcomingactivities =
-        this.mode === "days" ? this.upcomingdays : this.upcomingnights;
-    },
+    //   // Update derived data
+    //   this.activities = this.mode === "days" ? this.days : this.nights;
+    //   this.carouselactivities =
+    //     this.mode === "days" ? this.carouseldays : this.carouselnights;
+    //   this.upcomingactivities =
+    //     this.mode === "days" ? this.upcomingdays : this.upcomingnights;
+    // },
 
     async getUpcomingEvents() {
       try {
@@ -257,6 +257,7 @@ export const useActivityStore = defineStore("activitiesStore", {
     },
 
     async getActivityById(activityId) {
+      console.log("id set3 : ", activityId);
       try {
         this.isLoading = true;
         const res = await fetch(`/api/activity/${activityId}/comments`, {

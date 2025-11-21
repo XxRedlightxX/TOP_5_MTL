@@ -17,6 +17,16 @@
         width: 90%;
         padding: 0% 10%;
 
+        .lol {
+            p {
+                strong {
+                    cursor: pointer;
+                }
+                strong:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
         img {
             max-width: 50px;
             border-radius: 13px;

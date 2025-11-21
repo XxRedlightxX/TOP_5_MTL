@@ -4,7 +4,7 @@
 
     <div class="info">
       <div class="lol">
-        <p>{{ actualLang ? 'Hosted by ': 'Mise en Ligne par ' }}Didier </p>
+        <p>{{ actualLang ? 'Hosted by ': 'Mise en Ligne par ' }} <strong @click="goToOrganisator(props.event.id)">{{ props.event.creator.username }}</strong> </p>
       </div>
 
       <div class="ratings">
@@ -19,13 +19,17 @@
 
 <script setup>
   import { defineProps } from 'vue';
+  import { useRouter } from "vue-router";
   import Ratings from "../../StaticComponents/RatingComponent.vue"
   import Setup from '@/JS/Setup';
+  import SetupEvent from '@/JS/SetupEvents';
 
   const props = defineProps ({
     event: Object,
 
   });
+  const router = useRouter();
+
   let dateDebut = new Date(props.event.date_debut);
   let heuresDebut = dateDebut.getHours().toString().padStart(2, '0');
   let minutesDebut = dateDebut.getMinutes().toString().padStart(2, '0');
@@ -38,6 +42,15 @@
 
 
   let actualLang = Setup.languageSetup();
+
+  async function goToOrganisator(id) {
+    await setOrganisator(id);   // 1) stocker l’event
+    router.push("/Event Organisator"); // 2) naviguer ensuite
+  }
+
+  async function setOrganisator(id) {
+    const event = await SetupEvent.organisatortSetup(id)
+  }
 </script>
 
 <style src="../../../styles/ComponentsStyles/EventStyles/SingleEventStyle/EventOverviewStyle.scss"> </style>
