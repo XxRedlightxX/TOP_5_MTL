@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hightRatedActivities != null" id="carousellComponent">
+  <div v-if="hightRatedActivities.length > 0" id="carousellComponent">
     <CarousellGrandEcrant :events="hightRatedActivities" />
     <CarousellPhone :events="hightRatedActivities" />
   </div>
@@ -14,25 +14,24 @@
   import { onMounted, watch, ref } from 'vue'
   import SetupEvent from '@/JS/SetupEvents'
   import AsyncData from '@/JS/AsyncData'
+  import LocalStorageManager from '@/JS/LocalStorageManager'
 
   import CarousellGrandEcrant from './CarousellGrandEcrant.vue'
   import CarousellPhone from './CarousellPhone.vue'
   import LoadingComponent from '@/components/StaticComponents/LoadingComponent.vue'
 
-  const hightRatedActivities = ref(null);
+  let hightRatedActivities = ref([]);
   let fakeData = AsyncData.getEvents(4)
 
   const handleModeChange = (event) => {
-    hightRatedActivities.value = JSON.parse(event.detail.storage);
-    console.log('new events : ', hightRatedActivities);
+    SetupEvent.actualEventModeManagerGeneric(LocalStorageManager.getHightRateEvents, hightRatedActivities)
   };
 
   onMounted(async () => {
-    hightRatedActivities.value = await SetupEvent.higherRateEventsSetup();
-    window.addEventListener('HightEvent-changed', handleModeChange);
-    //console.log('events : ', hightRatedActivities);
+    const reactiveList = await SetupEvent.higherRateEventsSetup();
+    hightRatedActivities.value = reactiveList.value;
+    window.addEventListener('mode-changed', handleModeChange);
   });
-
 </script>
 
 <style lang="scss">

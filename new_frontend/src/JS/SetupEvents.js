@@ -47,6 +47,7 @@ const SetupEvents = {
     fetchFunction,
     setFunction,
     getFunction,
+    actualSetFunction,
     isThereActual,
     fetchArgs = []
   ) {
@@ -84,8 +85,8 @@ const SetupEvents = {
     });
 
     return isThereActual
-      ? SetupEvents.actualEventsSetupGeneric(storedData)
-      : storedData.value;
+      ? SetupEvents.actualEventsSetupGeneric(storedData, actualSetFunction)
+      : storedData;
   },
 
   /**
@@ -95,7 +96,7 @@ const SetupEvents = {
    * @param {Ref<Object>} eventsData - Données brutes réactives des événements
    * @returns {Ref<Array>} Liste réactive d’événements adaptés au mode actuel
    */
-  actualEventsSetupGeneric(eventsData) {
+  async actualEventsSetupGeneric(eventsData, actualSetFunction) {
     const actualMode = ref(LocalStorageManager.getMode());
     const actualEvents = ref([]);
 
@@ -104,10 +105,11 @@ const SetupEvents = {
      * - true : mode jour → eventsJour
      * - false : mode nuit → eventsNuit
      */
-    const updateEventsByMode = () => {
+    const updateEventsByMode = async () => {
       actualEvents.value = actualMode.value
         ? eventsData.value.eventsJour
         : eventsData.value.eventsNuit;
+      await actualSetFunction(actualEvents.value);
     };
 
     // Initialisation
@@ -128,9 +130,16 @@ const SetupEvents = {
     });
 
     //console.log("actual events : ", actualEvents);
-    return actualEvents.value;
+    return actualEvents;
   },
 
+  actualEventModeManagerGeneric(getFunction, data) {
+    console.log("calledd");
+    let mode = LocalStorageManager.getMode();
+    let events = getFunction();
+    data.value = mode ? events.eventsJour : events.eventsNuit;
+    return data;
+  },
   /**
    * ----------------------------------------------------------
    * SECTION : MÉTHODES SPÉCIFIQUES
@@ -151,6 +160,7 @@ const SetupEvents = {
       useActivityStore().getHigherRateEvent,
       LocalStorageManager.setHightRateEvents,
       LocalStorageManager.getHightRateEvents,
+      LocalStorageManager.setActualHightRateEvents,
       true,
       []
     );
@@ -180,6 +190,7 @@ const SetupEvents = {
       useActivityStore().getNewestEvent,
       LocalStorageManager.setNewEvents,
       LocalStorageManager.getNewEvents,
+      LocalStorageManager.setActualNewEvents,
       true,
       []
     );
@@ -209,6 +220,7 @@ const SetupEvents = {
       useActivityStore().getUpcomingEvents,
       LocalStorageManager.setUpcomingEvents,
       LocalStorageManager.getUpcomingEvents,
+      LocalStorageManager.setActualUpcomingEvents,
       true,
       []
     );
@@ -221,6 +233,7 @@ const SetupEvents = {
       useActivityStore().getCategories,
       LocalStorageManager.setTag,
       LocalStorageManager.getTag,
+      null,
       false,
       []
     );
@@ -233,6 +246,7 @@ const SetupEvents = {
       useActivityStore().getActivityById,
       LocalStorageManager.setEvent,
       LocalStorageManager.getEvent,
+      null,
       false,
       [id] // paramètres envoyés au fetch
     );
@@ -245,6 +259,7 @@ const SetupEvents = {
       useActivityStore().getEventUserInfo,
       LocalStorageManager.setOrganisator,
       LocalStorageManager.getOrganisator,
+      null,
       false,
       [id] // paramètres envoyés au fetch
     );

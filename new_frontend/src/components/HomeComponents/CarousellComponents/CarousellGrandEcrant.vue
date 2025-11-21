@@ -1,8 +1,8 @@
 <template>
-  <div v-if="carouselItems.length > 0" id="carouselGrand">
+  <div v-if="props.events.length > 0" id="carouselGrand">
     <!-- list item -->
     <div class="list">
-      <div v-for="(item, index) in carouselItems" :key="index" class="item">
+      <div v-for="(item, index) in props.events" :key="index" class="item">
         <div class="imgContainer">
           <div class="overlayGrad"></div>
           <img :src="item.image">
@@ -25,7 +25,7 @@
     </div>
     <!-- list thumbnail -->
     <div class="thumbnail">
-      <div v-for="(item, index) in carouselItems" :key="index" class="item">
+      <div v-for="(item, index) in props.events" :key="index" class="item">
         <img class=" roundBorderSmall" :src="item.image2">
         <div class="content">
           <div :class="['title', item.id == -1 ? 'fakeTitle' : '']">{{ item.title }}</div>
@@ -71,7 +71,7 @@
   });
 
   // État réactif du carrousel
-  const carouselItems = ref([]);
+  //const props.events = ref([]);
   const textEvent = ref(actualLang.value ? text1a : text1b);
   const textOrganisator = ref(actualLang.value ? text2a : text2b);
 
@@ -107,15 +107,15 @@
 
   //Lifecycle
   onMounted(() => {
-    carouselItems.value = props.events;
+    //props.events.value = props.events;
     setNextAuto();
   });
 
   function showSlider(direction) {
     if (direction === "next") {
-      carouselItems.value.push(carouselItems.value.shift());
+      props.events.value.push(props.events.value.shift());
     } else {
-      carouselItems.value.unshift(carouselItems.value.pop());
+      props.events.value.unshift(props.events.value.pop());
     }
     resetSlider();
   }

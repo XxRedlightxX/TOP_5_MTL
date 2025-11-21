@@ -92,11 +92,6 @@
   let fakeData = AsyncData.getEvents(6)
   const router = useRouter();
 
-  onMounted(async () => {
-    newEvents.value = await SetupEvents.newEventsSetup();
-    //console.log('eventsss :', newEvents.value);
-  });
-
   // Fonction pour mettre à jour l'index du slide actif
   const onSlideChange = (swiper) => {
     console.log('swiper index: ' , swiper.activeIndex);
@@ -110,8 +105,20 @@
   }
 
   async function setEvent(id) {
-    const event = await SetupEvents.singleEventSetup(id)
+    newEvents.value = await SetupEvents.singleEventSetup(id)
   }
+
+  const handleModeChange = (event) => {
+    console.log('newEvent before : ', newEvents.value);
+    SetupEvents.actualEventModeManagerGeneric(LocalStorageManager.getNewEvents, newEvents)
+    console.log('newEvent after : ', newEvents.value);
+  };
+
+  onMounted(async () => {
+    const reactiveList = await SetupEvents.newEventsSetup();
+    newEvents.value = reactiveList.value;
+    window.addEventListener('mode-changed', handleModeChange);
+  });
 </script>
 
 <style src="../../styles/ComponentsStyles/HomeStyles/NewEventStyle.scss"></style>

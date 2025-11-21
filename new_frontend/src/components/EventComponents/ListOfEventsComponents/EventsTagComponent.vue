@@ -138,7 +138,8 @@
   };
 
   onMounted(async () => {
-    tagFilters.value = await SetupEvents.tagSetup();//activitiesStore.getCategories()
+    const reactiveList = await SetupEvents.tagSetup();
+    tagFilters.value = reactiveList.value;
     console.log('tags : ' , tagFilters)
     if (tagFilters.value.length) initializeTags();
   });

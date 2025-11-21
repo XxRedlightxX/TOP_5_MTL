@@ -1,6 +1,6 @@
 <template>
-  <div v-if="newEvent.length > 0 && eventInfo != null" id="carousellPhoneComponent">
-    <CarouselSwipper :events="newEvent" @phone-event-swiped="changeInfos" />
+  <div v-if="props.events.length > 0 && eventInfo != null" id="carousellPhoneComponent">
+    <CarouselSwipper :events="props.events" @phone-event-swiped="changeInfos" />
 
     <div class="reste">
       <div class="carousellPhoneSwipperInfos">
@@ -30,7 +30,6 @@
     },
   })
 
-  let newEvent = ref([])
   const router = useRouter();
   let i = ref(0)
   const eventInfo = ref(null)
@@ -41,7 +40,7 @@
     i.value = currentIndex
 
     // ✅ Mettre à jour l'événement affiché
-    eventInfo.value = newEvent.value[i.value]
+    eventInfo.value = props.events[i.value]
     //console.log('infooo :', eventInfo)
   }
 
@@ -55,8 +54,8 @@
   }
 
   onMounted(() => {
-    newEvent.value = props.events
-    eventInfo.value = newEvent.value[0]
+    //props.events.value = props.events
+    eventInfo.value = props.events[0]
   })
 </script>
 

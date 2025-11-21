@@ -117,6 +117,21 @@ const LocalStorageManager = {
     return hightEvent ? JSON.parse(hightEvent) : null;
   },
 
+  setActualHightRateEvents(value) {
+    localStorage.setItem("ActualHightEvent", JSON.stringify(value));
+    window.dispatchEvent(
+      new CustomEvent("ActualHightEvent-changed", {
+        detail: { storage: localStorage.getItem("ActualHightEvent") },
+      })
+    );
+  },
+
+  /** Récupère les événements les mieux notés */
+  getActualHightRateEvents() {
+    const hightEvent = localStorage.getItem("ActualHightEvent");
+    return hightEvent ? JSON.parse(hightEvent) : null;
+  },
+
   /**
    * Définit les nouveaux événements
    * @param {Array} value liste d’événements récents
@@ -136,6 +151,21 @@ const LocalStorageManager = {
     return newEvent ? JSON.parse(newEvent) : null;
   },
 
+  setActualNewEvents(value) {
+    localStorage.setItem("ActualNewEvent", JSON.stringify(value));
+    window.dispatchEvent(
+      new CustomEvent("ActualNewEvent-changed", {
+        detail: { storage: localStorage.getItem("ActualNewEvent") },
+      })
+    );
+  },
+
+  /** Récupère les nouveaux événements */
+  getActualNewEvents() {
+    const newEvent = localStorage.getItem("ActualNewEvent");
+    return newEvent ? JSON.parse(newEvent) : null;
+  },
+
   /**
    * Définit les événements à venir
    * @param {Array} value liste d’événements à venir
@@ -152,6 +182,21 @@ const LocalStorageManager = {
   /** Récupère les événements à venir */
   getUpcomingEvents() {
     const upcomingEvent = localStorage.getItem("UpcomingEvent");
+    return upcomingEvent ? JSON.parse(upcomingEvent) : null;
+  },
+
+  setActualUpcomingEvents(value) {
+    localStorage.setItem("ActualUpcomingEvent", JSON.stringify(value));
+    window.dispatchEvent(
+      new CustomEvent("ActualUpcomingEvent-changed", {
+        detail: { storage: localStorage.getItem("ActualUpcomingEvent") },
+      })
+    );
+  },
+
+  /** Récupère les événements à venir */
+  getActualUpcomingEvents() {
+    const upcomingEvent = localStorage.getItem("ActualUpcomingEvent");
     return upcomingEvent ? JSON.parse(upcomingEvent) : null;
   },
 

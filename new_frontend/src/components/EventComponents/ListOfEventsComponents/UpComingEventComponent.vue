@@ -187,9 +187,15 @@
     const event = await SetupEvent.singleEventSetup(id)
   }
 
+  const handleModeChange = (event) => {
+    SetupEvent.actualEventModeManagerGeneric(LocalStorageManager.getUpcomingEvents, events)
+  };
+
   onMounted(async () => {
-    events.value = await SetupEvent.upcomingEventSetup();
+    const reactiveList = await SetupEvent.upcomingEventSetup();
+    events.value = reactiveList.value;
     if (events.value.length) initializeCarousel();
+    window.addEventListener('mode-changed', handleModeChange);
   });
 
   onBeforeUnmount(() => {
