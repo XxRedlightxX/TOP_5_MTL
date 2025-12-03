@@ -287,6 +287,119 @@ const LocalStorageManager = {
   },
 
   /** --------------------------
+   * SECTION : PAGINATION
+   * -------------------------- */
+
+  /**
+   * Définit la page de pagination actuellement affichée.
+   * Stockée avec expiration afin d’éviter la persistance inutile.
+   * @param {Number} value - Numéro de la page actuelle
+   */
+  setActualPaginationNumber(value) {
+    LocalStorageManager.setWithExpiry(
+      "ActualPaginationNumber",
+      value,
+      LocalStorageManager.t2
+    );
+  },
+
+  /**
+   * Récupère le numéro de la page actuelle.
+   * @returns {Number|null} Numéro de page ou null si expiré / absent
+   */
+  getActualPaginationNumber() {
+    return LocalStorageManager.getWithExpiry("ActualPaginationNumber");
+  },
+
+  /**
+   * Définit le numéro de la page suivante dans la pagination.
+   * @param {Number} value - Numéro de la page suivante
+   */
+  setNextPaginationNumber(value) {
+    LocalStorageManager.setWithExpiry(
+      "NextPaginationNumber",
+      value,
+      LocalStorageManager.t2
+    );
+  },
+
+  /**
+   * Récupère le numéro de la page suivante.
+   * @returns {Number|null}
+   */
+  getNextPaginationNumber() {
+    return LocalStorageManager.getWithExpiry("NextPaginationNumber");
+  },
+
+  /**
+   * Définit le numéro de la page précédente dans la pagination.
+   * @param {Number} value - Numéro de la page précédente
+   */
+  setPrevPaginationNumber(value) {
+    LocalStorageManager.setWithExpiry(
+      "PrevPaginationNumber",
+      value,
+      LocalStorageManager.t2
+    );
+  },
+
+  /**
+   * Récupère le numéro de la page précédente.
+   * @returns {Number|null}
+   */
+  getPrevPaginationNumber() {
+    return LocalStorageManager.getWithExpiry("PrevPaginationNumber");
+  },
+
+  /**
+   * Définit la prochaine page en partant de la fin.
+   * Exemple :
+   *  - Si la page actuelle = 10 (dernière)
+   *  - Prev = 9
+   *  - NextFromLast = 8
+   * @param {Number} value - Numéro de la page suivante depuis la fin
+   */
+  setNextPaginationNumberFromLast(value) {
+    LocalStorageManager.setWithExpiry(
+      "NextPaginationNumberFromLast",
+      value,
+      LocalStorageManager.t2
+    );
+  },
+
+  /**
+   * Récupère la prochaine page depuis la fin.
+   * @returns {Number|null}
+   */
+  getNextPaginationNumberFromLast() {
+    return LocalStorageManager.getWithExpiry("NextPaginationNumberFromLast");
+  },
+
+  /**
+   * Définit la page précédente à partir du tout début.
+   * Exemple :
+   *  - Si la page actuelle = 1
+   *  - Next = 2
+   *  - PrevFromFirst = 3
+   * @param {Number} value - Numéro de la page précédente depuis la première page
+   */
+  setPrevPaginationNumberFromFisrt(value) {
+    LocalStorageManager.setWithExpiry(
+      "PrevPaginationNumberFromFisrt",
+      value,
+      LocalStorageManager.t2
+    );
+  },
+
+  /**
+   * Récupère la page précédente à partir du début.
+   * @returns {Number|null}
+   */
+  getPrevPaginationNumberFromFisrt() {
+    return LocalStorageManager.getWithExpiry("PrevPaginationNumberFromFisrt");
+  },
+
+  /** --------------------------
    * SECTION : AUTHENTIFICATION
    * -------------------------- */
 
