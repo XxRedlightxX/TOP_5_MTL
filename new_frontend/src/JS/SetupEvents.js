@@ -65,7 +65,7 @@ const SetupEvents = {
         ? SetupEvents.setListOfEvents(apiData)
         : apiData;
       await setFunction(storedData.value);
-      console.log("dataa :", storedData);
+      console.log("dataa after :", storedData);
     }
 
     /**
