@@ -1,15 +1,95 @@
 const LocalStorageManager = {
   t1: 60 * 30 * 1000, // 1h
   t2: 10 * 1000, // 30 min
+  t3: 60 * 60 * 24 * 1000, // 1h
 
   /** --------------------------
-  *
-  * SECTION : CONFIGURATION GLOBALE
-  *
-  * Gestion du mode (jour/nuit) et de la langue active.
-  * Chaque changement déclenche un événement personnalisé
-  * pour permettre une synchronisation réactive dans l'application.
-  * -------------------------- */
+   * SECTION : Generic
+   * --------------------------
+   */
+
+  /**
+   * Stocke une valeur simple dans localStorage sans expiration.
+   * @param {String} key - Nom de la clé à utiliser dans localStorage
+   * @param {*} value - Valeur à stocker (sera automatiquement convertie en JSON)
+   */
+  setGeneric(key, value) {
+    // Stockage brut au format JSON
+    localStorage.setItem(key, JSON.stringify(value));
+
+    // Émission d’un événement global pour permettre à l'application de réagir
+    window.dispatchEvent(
+      new CustomEvent(key + "-changed", {
+        detail: { storage: localStorage.getItem(key) },
+      })
+    );
+  },
+
+  /**
+   * Récupère une donnée simple depuis localStorage.
+   * @param {String} key - Nom de la clé à lire
+   * @returns {*} Valeur JSON décodée ou null si inexistante
+   */
+  getGeneric(key) {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  },
+
+  /**
+   * Stocke une valeur dans localStorage avec une durée d’expiration.
+   * @param {String} key - Nom de la clé à stocker
+   * @param {*} value - Valeur à sauvegarder
+   * @param {Number} duration - Durée de validité en millisecondes
+   */
+  setWithExpiry(key, value, duration) {
+    const now = Date.now();
+
+    const payload = {
+      data: value, // Donnée réelle
+      expiresAt: now + duration, // Timestamp d’expiration
+    };
+
+    // Sauvegarde structurée
+    localStorage.setItem(key, JSON.stringify(payload));
+
+    // Notification globale pour synchroniser le changement
+    window.dispatchEvent(
+      new CustomEvent(key + "-changed", {
+        detail: { storage: payload },
+      })
+    );
+  },
+
+  /**
+   * Récupère une donnée avec expiration automatique.
+   * @param {String} key - Nom de la clé à lire
+   * @returns {*} La donnée stockée ou null si expirée / absente
+   */
+  getWithExpiry(key) {
+    const raw = localStorage.getItem(key);
+    if (!raw) {
+      return null;
+    }
+
+    const payload = JSON.parse(raw);
+
+    // Teste si la donnée est expirée
+    if (Date.now() > payload.expiresAt) {
+      localStorage.removeItem(key); // Nettoyage automatique
+      return null;
+    }
+
+    return payload.data;
+  },
+
+  /** --------------------------
+   *
+   * SECTION : CONFIGURATION GLOBALE
+   *
+   * Gestion du mode (jour/nuit) et de la langue active.
+   * Chaque changement déclenche un événement personnalisé
+   * pour permettre une synchronisation réactive dans l'application.
+   * -------------------------- */
 
   /**
    * Définit le mode (ex : "day" ou "night") et le stocke dans localStorage.
@@ -17,16 +97,8 @@ const LocalStorageManager = {
    *
    * @param {string} value - Le mode sélectionné par l'utilisateur.
    */
-  setMode (value) {
-  // Stockage brut au format JSON
-    localStorage.setItem('mode', JSON.stringify(value))
-
-    // Notification globale pour écouter ce changement ailleurs
-    window.dispatchEvent(
-      new CustomEvent('mode-changed', {
-        detail: { storage: localStorage.getItem('mode') },
-      }),
-    )
+  setMode(value) {
+    LocalStorageManager.setGeneric("mode", value);
   },
 
   /**
@@ -34,9 +106,8 @@ const LocalStorageManager = {
    *
    * @returns {string|null} - Le mode enregistré ou null si absent.
    */
-  getMode () {
-    const mode = localStorage.getItem('mode')
-    return mode ? JSON.parse(mode) : null
+  getMode() {
+    return LocalStorageManager.getGeneric("mode");
   },
 
   /**
@@ -45,16 +116,8 @@ const LocalStorageManager = {
    *
    * @param {string} value - Le code de langue sélectionné.
    */
-  setLanguage (value) {
-  // Stockage brut au format JSON
-    localStorage.setItem('lang', JSON.stringify(value))
-
-    // Notification globale envoyée à l'application
-    window.dispatchEvent(
-      new CustomEvent('lang-changed', {
-        detail: { storage: localStorage.getItem('lang') },
-      }),
-    )
+  setLanguage(value) {
+    LocalStorageManager.setGeneric("lang", value);
   },
 
   /**
@@ -62,9 +125,8 @@ const LocalStorageManager = {
    *
    * @returns {string|null} - Le code langue enregistré ou null.
    */
-  getLanguage () {
-    const lang = localStorage.getItem('lang')
-    return lang ? JSON.parse(lang) : null
+  getLanguage() {
+    return LocalStorageManager.getGeneric("lang");
   },
 
   /** --------------------------
@@ -81,23 +143,8 @@ const LocalStorageManager = {
    *
    * @param {any} value - Donnée événement à sauvegarder.
    */
-  setEvent (value) {
-    const now = Date.now()
-
-    const payload = {
-      data: value,
-      expiresAt: now + LocalStorageManager.t1, // Durée de validité
-    }
-
-    // Sauvegarde en localStorage
-    localStorage.setItem('event', JSON.stringify(payload))
-
-    // Notifie l'application d'un changement
-    window.dispatchEvent(
-      new CustomEvent('event-changed', {
-        detail: { storage: payload },
-      }),
-    )
+  setEvent(value) {
+    LocalStorageManager.setWithExpiry("event", value, LocalStorageManager.t1);
   },
 
   /**
@@ -105,21 +152,8 @@ const LocalStorageManager = {
    *
    * @returns {any|null} - Les données ou null si expirées / inexistantes.
    */
-  getEvent () {
-    const raw = localStorage.getItem('event')
-    if (!raw) {
-      return null
-    }
-
-    const payload = JSON.parse(raw)
-
-    // Vérifie l'expiration
-    if (Date.now() > payload.expiresAt) {
-      localStorage.removeItem('event')
-      return null
-    }
-
-    return payload.data
+  getEvent() {
+    return LocalStorageManager.getWithExpiry("event");
   },
 
   /**
@@ -127,21 +161,8 @@ const LocalStorageManager = {
    *
    * @param {any} value - Tag à enregistrer.
    */
-  setTag (value) {
-    const now = Date.now()
-
-    const payload = {
-      data: value,
-      expiresAt: now + LocalStorageManager.t1,
-    }
-
-    localStorage.setItem('tag', JSON.stringify(payload))
-
-    window.dispatchEvent(
-      new CustomEvent('tag-changed', {
-        detail: { storage: payload },
-      }),
-    )
+  setTag(value) {
+    LocalStorageManager.setWithExpiry("tag", value, LocalStorageManager.t1);
   },
 
   /**
@@ -149,20 +170,8 @@ const LocalStorageManager = {
    *
    * @returns {any|null} - Le tag ou null si expiré.
    */
-  getTag () {
-    const raw = localStorage.getItem('tag')
-    if (!raw) {
-      return null
-    }
-
-    const payload = JSON.parse(raw)
-
-    if (Date.now() > payload.expiresAt) {
-      localStorage.removeItem('tag')
-      return null
-    }
-
-    return payload.data
+  getTag() {
+    return LocalStorageManager.getWithExpiry("tag");
   },
 
   /**
@@ -170,21 +179,12 @@ const LocalStorageManager = {
    *
    * @param {any} value - Données d'événements.
    */
-  setHightRateEvents (value) {
-    const now = Date.now()
-
-    const payload = {
-      data: value,
-      expiresAt: now + LocalStorageManager.t1,
-    }
-
-    localStorage.setItem('HightEvent', JSON.stringify(payload))
-
-    window.dispatchEvent(
-      new CustomEvent('HightEvent-changed', {
-        detail: { storage: payload },
-      }),
-    )
+  setHightRateEvents(value) {
+    LocalStorageManager.setWithExpiry(
+      "HightEvent",
+      value,
+      LocalStorageManager.t1
+    );
   },
 
   /**
@@ -192,215 +192,98 @@ const LocalStorageManager = {
    *
    * @returns {any|null}
    */
-  getHightRateEvents () {
-    const raw = localStorage.getItem('HightEvent')
-    if (!raw) {
-      return null
-    }
-
-    const payload = JSON.parse(raw)
-
-    if (Date.now() > payload.expiresAt) {
-      localStorage.removeItem('HightEvent')
-      return null
-    }
-
-    return payload.data
+  getHightRateEvents() {
+    return LocalStorageManager.getWithExpiry("HightEvent");
   },
 
   /**
    * Stocke les événements les mieux notés (version actuelle).
    */
-  setActualHightRateEvents (value) {
-    const now = Date.now()
-
-    const payload = {
-      data: value,
-      expiresAt: now + LocalStorageManager.t1,
-    }
-
-    localStorage.setItem('ActualHightEvent', JSON.stringify(payload))
-
-    window.dispatchEvent(
-      new CustomEvent('ActualHightEvent-changed', {
-        detail: { storage: payload },
-      }),
-    )
+  setActualHightRateEvents(value) {
+    LocalStorageManager.setWithExpiry(
+      "ActualHightEvent",
+      value,
+      LocalStorageManager.t1
+    );
   },
 
   /**
    * Récupère les événements "meilleur taux" actuels.
    */
-  getActualHightRateEvents () {
-    const raw = localStorage.getItem('ActualHightEvent')
-    if (!raw) {
-      return null
-    }
-
-    const payload = JSON.parse(raw)
-
-    if (Date.now() > payload.expiresAt) {
-      localStorage.removeItem('ActualHightEvent')
-      return null
-    }
-
-    return payload.data
+  getActualHightRateEvents() {
+    return LocalStorageManager.getWithExpiry("ActualHightEvent");
   },
 
   /**
    * Stocke les nouveaux événements.
    */
-  setNewEvents (value) {
-    const now = Date.now()
-
-    const payload = {
-      data: value,
-      expiresAt: now + LocalStorageManager.t1,
-    }
-
-    localStorage.setItem('NewEvent', JSON.stringify(payload))
-
-    window.dispatchEvent(
-      new CustomEvent('NewEvent-changed', {
-        detail: { storage: payload },
-      }),
-    )
+  setNewEvents(value) {
+    LocalStorageManager.setWithExpiry(
+      "NewEvent",
+      value,
+      LocalStorageManager.t1
+    );
   },
 
   /**
    * Récupère les nouveaux événements.
    */
-  getNewEvents () {
-    const raw = localStorage.getItem('NewEvent')
-    if (!raw) {
-      return null
-    }
-
-    const payload = JSON.parse(raw)
-
-    if (Date.now() > payload.expiresAt) {
-      localStorage.removeItem('NewEvent')
-      return null
-    }
-
-    return payload.data
+  getNewEvents() {
+    return LocalStorageManager.getWithExpiry("NewEvent");
   },
 
   /**
    * Stocke les nouveaux événements actuels.
    */
-  setActualNewEvents (value) {
-    const now = Date.now()
-
-    const payload = {
-      data: value,
-      expiresAt: now + LocalStorageManager.t1,
-    }
-
-    localStorage.setItem('ActualNewEvent', JSON.stringify(payload))
-
-    window.dispatchEvent(
-      new CustomEvent('ActualNewEvent-changed', {
-        detail: { storage: payload },
-      }),
-    )
+  setActualNewEvents(value) {
+    LocalStorageManager.setWithExpiry(
+      "ActualNewEvent",
+      value,
+      LocalStorageManager.t1
+    );
   },
 
   /**
    * Récupère les nouveaux événements actuels.
    */
-  getActualNewEvents () {
-    const raw = localStorage.getItem('ActualNewEvent')
-    if (!raw) {
-      return null
-    }
-
-    const payload = JSON.parse(raw)
-
-    if (Date.now() > payload.expiresAt) {
-      localStorage.removeItem('ActualNewEvent')
-      return null
-    }
-
-    return payload.data
+  getActualNewEvents() {
+    return LocalStorageManager.getWithExpiry("ActualNewEvent");
   },
 
   /**
    * Stocke les événements à venir.
    */
-  setUpcomingEvents (value) {
-    const now = Date.now()
-
-    const payload = {
-      data: value,
-      expiresAt: now + LocalStorageManager.t1,
-    }
-
-    localStorage.setItem('UpcomingEvent', JSON.stringify(payload))
-
-    window.dispatchEvent(
-      new CustomEvent('UpcomingEvent-changed', {
-        detail: { storage: payload },
-      }),
-    )
+  setUpcomingEvents(value) {
+    LocalStorageManager.setWithExpiry(
+      "UpcomingEvent",
+      value,
+      LocalStorageManager.t1
+    );
   },
 
   /**
    * Récupère les événements à venir.
    */
-  getUpcomingEvents () {
-    const raw = localStorage.getItem('UpcomingEvent')
-    if (!raw) {
-      return null
-    }
-
-    const payload = JSON.parse(raw)
-
-    if (Date.now() > payload.expiresAt) {
-      localStorage.removeItem('UpcomingEvent')
-      return null
-    }
-
-    return payload.data
+  getUpcomingEvents() {
+    return LocalStorageManager.getWithExpiry("UpcomingEvent");
   },
 
   /**
    * Stocke les événements à venir actuels.
    */
-  setActualUpcomingEvents (value) {
-    const now = Date.now()
-
-    const payload = {
-      data: value,
-      expiresAt: now + LocalStorageManager.t1,
-    }
-
-    localStorage.setItem('ActualUpcomingEvent', JSON.stringify(payload))
-
-    window.dispatchEvent(
-      new CustomEvent('ActualUpcomingEvent-changed', {
-        detail: { storage: payload },
-      }),
-    )
+  setActualUpcomingEvents(value) {
+    LocalStorageManager.setWithExpiry(
+      "ActualUpcomingEvent",
+      value,
+      LocalStorageManager.t1
+    );
   },
 
   /**
    * Récupère les événements à venir actuels.
    */
-  getActualUpcomingEvents () {
-    const raw = localStorage.getItem('ActualUpcomingEvent')
-    if (!raw) {
-      return null
-    }
-
-    const payload = JSON.parse(raw)
-
-    if (Date.now() > payload.expiresAt) {
-      localStorage.removeItem('ActualUpcomingEvent')
-      return null
-    }
-
-    return payload.data
+  getActualUpcomingEvents() {
+    return LocalStorageManager.getWithExpiry("ActualUpcomingEvent");
   },
 
   /** --------------------------
@@ -411,85 +294,36 @@ const LocalStorageManager = {
    * Stocke l'état de connexion "login" avec expiration automatique.
    * @param {Boolean} value - Valeur du login (true = connecté, false = déconnecté)
    */
-  setlogin (value) {
-    const now = Date.now()
-
-    const payload = {
-      data: value,
-      expiresAt: now + LocalStorageManager.t3, // Durée de validité
-    }
-
-    localStorage.setItem('login', JSON.stringify(payload))
-
-    // Notifie toute l’app que le login a changé
-    window.dispatchEvent(
-      new CustomEvent('login-changed', {
-        detail: { storage: payload },
-      }),
-    )
+  setlogin(value) {
+    LocalStorageManager.setWithExpiry("login", value, LocalStorageManager.t3);
   },
 
   /**
    * Récupère l'état de connexion (login).
    * Retourne null si la donnée est expirée ou absente.
    */
-  getlogin () {
-    const raw = localStorage.getItem('login')
-    if (!raw) {
-      return null
-    }
-
-    const payload = JSON.parse(raw)
-
-    // Si expiré → suppression automatique
-    if (Date.now() > payload.expiresAt) {
-      localStorage.removeItem('login')
-      return null
-    }
-
-    return payload.data
+  getlogin() {
+    return LocalStorageManager.getWithExpiry("login");
   },
 
   /**
    * Stocke les données de l'utilisateur connecté (logUser).
    * @param {*} value - Toute donnée utile sur l’utilisateur (token, profil…)
    */
-  setLogUser (value) {
-    const now = Date.now()
-
-    const payload = {
-      data: value,
-      expiresAt: now + LocalStorageManager.t3,
-    }
-
-    localStorage.setItem('logUserr', JSON.stringify(payload))
-
-    // Émission d’un événement de synchronisation
-    window.dispatchEvent(
-      new CustomEvent('logUserr-changed', {
-        detail: { storage: payload },
-      }),
-    )
+  setLogUser(value) {
+    LocalStorageManager.setWithExpiry(
+      "logUserr",
+      value,
+      LocalStorageManager.t3
+    );
   },
 
   /**
    * Récupère les données utilisateur (logUser).
    * Retourne null si expiré ou absent.
    */
-  getLogUser () {
-    const raw = localStorage.getItem('logUserr')
-    if (!raw) {
-      return null
-    }
-
-    const payload = JSON.parse(raw)
-
-    if (Date.now() > payload.expiresAt) {
-      localStorage.removeItem('logUserr')
-      return null
-    }
-
-    return payload.data
+  getLogUser() {
+    return LocalStorageManager.getWithExpiry("logUserr");
   },
 
   /** --------------------------
@@ -499,41 +333,20 @@ const LocalStorageManager = {
   /**
    * Stocke les données de l'organisateur avec expiration automatique.
    */
-  setOrganisator (value) {
-    const now = Date.now()
-
-    const payload = {
-      data: value,
-      expiresAt: now + LocalStorageManager.t3,
-    }
-
-    localStorage.setItem('organisator', JSON.stringify(payload))
-
-    window.dispatchEvent(
-      new CustomEvent('organisator-changed', {
-        detail: { storage: payload },
-      }),
-    )
+  setOrganisator(value) {
+    LocalStorageManager.setWithExpiry(
+      "organisator",
+      value,
+      LocalStorageManager.t3
+    );
   },
 
   /**
    * Récupère les données de l’organisateur.
    * Supprime la donnée si expirée.
    */
-  getOrganisator () {
-    const raw = localStorage.getItem('organisator')
-    if (!raw) {
-      return null
-    }
-
-    const payload = JSON.parse(raw)
-
-    if (Date.now() > payload.expiresAt) {
-      localStorage.removeItem('organisator')
-      return null
-    }
-
-    return payload.data
+  getOrganisator() {
+    return LocalStorageManager.getWithExpiry("organisator");
   },
 
   /** --------------------------
@@ -545,12 +358,12 @@ const LocalStorageManager = {
    * @param {Boolean} [value] - Nouvelle valeur du mode
    * @returns {Boolean} - Mode final appliqué
    */
-  changeMode (value) {
-    const actualMode
-    = typeof value === 'boolean' ? value : !LocalStorageManager.getMode()
+  changeMode(value) {
+    const actualMode =
+      typeof value === "boolean" ? value : !LocalStorageManager.getMode();
 
-    LocalStorageManager.setMode(actualMode)
-    return actualMode
+    LocalStorageManager.setMode(actualMode);
+    return actualMode;
   },
 
   /**
@@ -558,12 +371,12 @@ const LocalStorageManager = {
    * @param {Boolean} [value] - Nouvelle valeur du langage
    * @returns {Boolean} - Langue finale appliquée
    */
-  changeLanguage (value) {
-    const actualLang
-    = typeof value === 'boolean' ? value : !LocalStorageManager.getLanguage()
+  changeLanguage(value) {
+    const actualLang =
+      typeof value === "boolean" ? value : !LocalStorageManager.getLanguage();
 
-    LocalStorageManager.setLanguage(actualLang)
-    return actualLang
+    LocalStorageManager.setLanguage(actualLang);
+    return actualLang;
   },
 
   /**
@@ -571,10 +384,10 @@ const LocalStorageManager = {
    * - login = false
    * - données user = null
    */
-  logout () {
-    LocalStorageManager.setLogin(false)
-    LocalStorageManager.setLogUser(null)
-    return LocalStorageManager.getLogin()
+  logout() {
+    LocalStorageManager.setLogin(false);
+    LocalStorageManager.setLogUser(null);
+    return LocalStorageManager.getLogin();
   },
 
   /**
@@ -582,12 +395,11 @@ const LocalStorageManager = {
    * - logUser (profil utilisateur)
    * - login = true
    */
-  login (user) {
-    LocalStorageManager.setLogUser(user)
-    LocalStorageManager.setLogin(true)
-    return LocalStorageManager.getLogin()
+  login(user) {
+    LocalStorageManager.setLogUser(user);
+    LocalStorageManager.setLogin(true);
+    return LocalStorageManager.getLogin();
   },
+};
 
-}
-
-export default LocalStorageManager
+export default LocalStorageManager;
