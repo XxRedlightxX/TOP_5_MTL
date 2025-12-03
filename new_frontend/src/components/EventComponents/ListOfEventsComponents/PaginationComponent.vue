@@ -1,15 +1,15 @@
 <template>
-  <div class="paginationComponent">
+  <div v-if="pages != null && pages.length > 0" class="paginationComponent">
     <ul class="pagination">
       <li @click="prevPage" :class="['pageText', currentPage > 0 ? 'glowPJ' : '']">
         {{ actualLang ? "Prev" : "Precedent"}}
       </li>
 
       <li
-        v-for="(page, index) in pages"
-        :key="index"
-        @click="changePage(index)"
-        :class="{ active: currentPage === index }"
+        v-for="page in pages"
+        :key="page"
+        @click="changePage(page)"
+        :class="{ active: currentPage === page }"
       >
         {{ page }}
       </li>
@@ -22,29 +22,49 @@
 </template>
 
 <script setup >
-  import { ref } from 'vue';
+  import { ref, defineProps, defineEmits, onMounted } from 'vue';
   import Setup from '@/JS/Setup';
 
-  const pages = [1, 2, 3, 4, 5];
-  const currentPage = ref(0);
+  const props = defineProps({
+    lenght: {
+      type: Number,
+    },
+  })
 
+  const emit = defineEmits(['paginationChanged'])
+
+  const pages = ref([]);
+  const currentPage = ref(1);
+
+const createPagination = () => {
+  pages.value = []; // reset pour éviter doublons
+  for (let i = 1; i <= props.lenght; i++) {
+    pages.value.push(i);
+  }
+}
 
   const changePage = (index) => {
     currentPage.value = index;
+    emit('paginationChanged', index)
   };
 
   const prevPage = () => {
     if (currentPage.value > 0) {
       currentPage.value--;
+      emit('paginationChanged', currentPage.value);
     }
   };
 
   const nextPage = () => {
     if (currentPage.value < pages.length - 1) {
       currentPage.value++;
+      emit('paginationChanged', currentPage.value);
     }
   };
 
+  onMounted(async () => {
+    await createPagination()
+  })
   let actualLang = Setup.languageSetup();
  </script>
 

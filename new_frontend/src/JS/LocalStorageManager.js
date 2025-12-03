@@ -1,6 +1,6 @@
 const LocalStorageManager = {
   t1: 60 * 30 * 1000, // 1h
-  t2: 10 * 1000, // 30 min
+  t2: 60 * 30 * 1000, // 30 min
   t3: 60 * 60 * 24 * 1000, // 1h
 
   /** --------------------------
@@ -289,6 +289,27 @@ const LocalStorageManager = {
   /** --------------------------
    * SECTION : PAGINATION
    * -------------------------- */
+
+  /**
+   * Définit le nombre page total de la pagination.
+   * Stockée avec expiration afin d’éviter la persistance inutile.
+   * @param {Number} value - Nombre page total de la pagination.
+   */
+  setPaginationTotalNumber(value) {
+    LocalStorageManager.setWithExpiry(
+      "PaginationTotalNumber",
+      value,
+      LocalStorageManager.t2
+    );
+  },
+
+  /**
+   * Récupère le numéro de la page total de la pagination.
+   * @returns {Number|null} Numéro de page ou null si expiré / absent
+   */
+  getPaginationTotalNumber() {
+    return LocalStorageManager.getWithExpiry("PaginationTotalNumber");
+  },
 
   /**
    * Définit la page de pagination actuellement affichée.

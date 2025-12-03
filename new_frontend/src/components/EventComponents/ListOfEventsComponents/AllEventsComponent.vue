@@ -1,5 +1,5 @@
 <template>
-  <div id="AllEventComponent">
+  <div v-if="paginationLenght != null" id="AllEventComponent">
     <FilterComponent/>
     <div class="events">
 
@@ -22,7 +22,7 @@
         </div>
       </router-link>
     </div>
-    <PaginationComponent/>
+    <PaginationComponent :lenght="paginationLenght" @paginationChanged="paginationUpdate"/>
   </div>
 </template>
 
@@ -34,41 +34,19 @@
   import FilterComponent from './FilterComponent.vue';
   import PaginationComponent from './PaginationComponent.vue';
   import FakeDataBase from '@/JS/ToBeDeleted/FakeDataBase';
+  import PaginationManager from '@/JS/PaginationManager';
 
-  // import { useActivityStore } from '@/stores/activity';
-  // import { formatDateSpecial } from "@/JS/GlobalFunctions";
-
-  // const listActivities = ref([]);
-  // const activitiesStore = useActivityStore();
-
-  // const getAvatarUrl = (imagePath) => {
-  //   if (!imagePath) return img;
-  //   return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
-  // };
-
-  // onMounted(async () => {
-  //   await activitiesStore.getActivities();
-
-  //   newEvent.value = activitiesStore.activities.map(activity => ({
-  //     id: activity.id,
-  //     image: activity.image || "https://picsum.photos/1895/795",
-  //     title: activity.titre,
-  //     desc: activity.description || descText,
-  //     rating: activity.rating || 0,
-  //     lieu: activity.lieu,
-  //     date: activity.date,
-  //   }));
-  // });
   const actualMode = Setup.modeSetup();
   const events = FakeDataBase.getNewEvents();
 
+  const paginationLenght = ref(null)
+
+  const paginationUpdate = (index) => {
+    PaginationManager.getPaginationEvents(index)
+  }
+
   let newEvent = ref(null);
   newEvent.value = actualMode.value ? events.eventJour : events.eventNuit;
-
-  // Fonction pour mettre à jour l'index du slide actif
-  // const onSlideChange = (swiper) => {
-  //   indexSlide.value = swiper.activeIndex;
-  // };
 
   const setEvent = (value) => {
     LocalStorageManager.setEvent(value);
@@ -79,6 +57,11 @@
   watch(actualMode, (newVal, oldVal) => {
     newEvent.value = newVal ? events.eventJour : events.eventNuit;
   });
+
+  onMounted(async () => {
+    paginationLenght.value = await PaginationManager.paginationSetup()
+    PaginationManager.paginationStatus()
+  })
 </script>
 
 <style src="../../../styles/ComponentsStyles/EventStyles/ListOfEventStyle/AllEventsStyle.scss"></style>
