@@ -79,6 +79,10 @@ const PaginationManager = {
 
   gestionPaginationNumber(value) {
     const paginationLenght = LocalStorageManager.getPaginationTotalNumber();
+    if (paginationLenght == null) {
+      PaginationManager.paginationLenghtSetup();
+      paginationLenght = LocalStorageManager.getPaginationTotalNumber();
+    }
     LocalStorageManager.setActualPaginationNumber(value);
 
     if (value == paginationLenght) {
