@@ -428,7 +428,7 @@ const LocalStorageManager = {
    * Stocke l'état de connexion "login" avec expiration automatique.
    * @param {Boolean} value - Valeur du login (true = connecté, false = déconnecté)
    */
-  setlogin(value) {
+  setLogin(value) {
     LocalStorageManager.setWithExpiry("login", value, LocalStorageManager.t3);
   },
 
@@ -436,7 +436,7 @@ const LocalStorageManager = {
    * Récupère l'état de connexion (login).
    * Retourne null si la donnée est expirée ou absente.
    */
-  getlogin() {
+  getLogin() {
     return LocalStorageManager.getWithExpiry("login");
   },
 

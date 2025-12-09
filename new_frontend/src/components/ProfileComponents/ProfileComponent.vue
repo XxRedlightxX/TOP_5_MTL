@@ -38,7 +38,7 @@
   }
 
   onMounted(async () => {
-    theOrganisator.value = await props.himself ? LocalStorageManager.getOrganisator() : LocalStorageManager.getOrganisator();
+    theOrganisator.value = await props.himself ? LocalStorageManager.getLogUser() : LocalStorageManager.getOrganisator();
   });
 </script>
 

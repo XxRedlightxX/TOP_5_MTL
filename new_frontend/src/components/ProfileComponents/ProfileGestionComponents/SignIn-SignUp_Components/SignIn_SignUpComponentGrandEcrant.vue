@@ -47,8 +47,8 @@
   // Toggle between Sign Up and Sign In
   const toggleSignUp = () => {
     signUp.value = !signUp.value;
-    //let user = FakeDataBase.getUser();
-    //LocalStorageManager.setLogUser(user)
+    let user = FakeDataBase.getUser();
+    LocalStorageManager.setLogUser(user)
   };
 
   let actualLang = Setup.languageSetup();

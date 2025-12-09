@@ -11,9 +11,9 @@
           <div :class="[index == 0 ? 'titlee' : 'lostTitle', item.id == -1 ? 'fakeTitle' : '']"> {{ item.title }} </div>
 
           <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
-            <button class="btn roundBorderSmall" @click="goToEvent(item.id)"> {{ textEvent }} {{ item.id }} </button>
+            <button class="btn roundBorderSmall" @click="goToEvent(item.id)"> {{actualLang.value ? "See the event" : "Voir l'evenement" }}</button>
 
-            <button class="btn roundBorderSmall" @click="goToOrganisator(item.id)"> {{ textOrganisator }} {{ item.id }} </button>
+            <button class="btn roundBorderSmall" @click="goToOrganisator(item.id)"> {{ actualLang.value ? "Organisator" : "Découvrir les Organisateurs"  }}</button>
             <!-- <router-link class="btn roundBorderSmall" to="/Event" @click="setEvent(item.id)">{{ textEvent }} {{ item.id }}</router-link> -->
             <!-- <router-link class="btn roundBorderSmall" to="/Event Organisator" @click="setOrganisator()">Découvrir les Organisateurs</router-link> -->
           </div>
@@ -50,12 +50,6 @@
   import SetupEvents from "@/JS/SetupEvents";
   import FakeDataBase from "../../../JS/ToBeDeleted/FakeDataBase";
 
-  // Constantes de texte
-  const text1a = "See the event";
-  const text1b = "Voir l'evenement";
-  const text2a = "Organisator";
-  const text2b = "Découvrir les Organisateurs";
-
   // router
   const router = useRouter();
 
@@ -70,10 +64,6 @@
     }
   });
 
-  // État réactif du carrousel
-  //const props.events = ref([]);
-  const textEvent = ref(actualLang.value ? text1a : text1b);
-  const textOrganisator = ref(actualLang.value ? text2a : text2b);
 
   const timeRunning = 3000;
   const timeAutoNext = 5000;

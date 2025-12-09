@@ -8,7 +8,7 @@
         <p :class="eventInfo.id == -1 ? 'fakeDesc' : ''">{{ eventInfo.desc }}</p>
       </div>
       <div class="carousellPhoneSwipperBtn">
-        <button class="button" @click="goToEvent(eventInfo.id)"> {{ actualLang ? "See the event" : "Voir l'evenement" }} {{ eventInfo.id }} </button>
+        <button class="button" @click="goToEvent(eventInfo.id)"> {{ actualLang ? "See the event" : "Voir l'evenement" }}</button>
         <router-link class="button" to="/Event Organisator" @click="setEvent()">{{ actualLang ? "Organisator" : "Découvrir les Organisateurs" }}</router-link>
       </div>
     </div>
