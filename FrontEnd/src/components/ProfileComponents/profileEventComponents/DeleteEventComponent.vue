@@ -49,7 +49,7 @@
     watch(() => props.eventId, async (renderActivityId) => {
         if (!renderActivityId) return
         activity.value = await getActivityById(renderActivityId)
-    console.log("Fetched on change:", activity.value)
+        console.log("Fetched on change:", activity.value)
     }, { immediate: true })
 
 

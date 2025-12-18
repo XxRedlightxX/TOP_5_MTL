@@ -63,7 +63,7 @@
                         <div class="form-group">
                             <label for="event-type">{{ actualLang ? "Category" : "Catégorie" }}</label>
                             <select id="event-type" v-model="formDataEvent.type_name" required>
-                                <option disabled value="">{{ actualLang ? "Day" : "Jour" }}</option>
+                                <option disabled value="">{{ actualLang ? "Select a Category" : "Sélectionner un Catégorie" }}</option>
                                 <option  v-for="category in listCategories" key="category.id" :value="category.nom"> {{ category.nom }}</option>
                             </select>
                         </div>
@@ -231,7 +231,7 @@ const testInput = async(event) => {
 
      onMounted(async () => {
         listCategories.value =await activitiesStore.getCategories();
-        console.log(listCategories)
+        console.log(listCategories, "liste Categories")
      
      });
 

@@ -69,7 +69,10 @@
     });
 
     const userAvatar = computed(() => {
-    return getAvatarUrl(props.user?.avatar);
+    return props.user?.avatar
+         ? getAvatarUrl(props.user.avatar)
+        : getAvatarUrl(props.user?.image_data);
+    ;
 });
 
     let isShowAdd2 = ref(false);

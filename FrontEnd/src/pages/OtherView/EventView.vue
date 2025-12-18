@@ -16,7 +16,6 @@
                 </div>
                 <PageCommentaire :comments="activity?.avis"  />
                 
-        
             </div>
         </div>
      

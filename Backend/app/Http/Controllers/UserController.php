@@ -106,6 +106,29 @@ class UserController extends Controller
             return response()->json($e->getMessage(),500);
         }
     }
+
+        public function modifyByIdUser(int $userId, Request $request) {
+        try {
+            $validatedInputUser = $request->validate([
+                'name' =>  'required|string|max:255',
+                'username' =>  'required|string|max:255',
+                'num_tel' =>  'required|string|max:255',
+                'email' => 'nullable|string|max:255',
+                'description' => 'nullable|string|max:255',
+                'type_utilisateur' => 'nullable|in:organisateur,particulier', 
+                'password' => 'nullable|string|max:255'
+            ]);
+            $user2 = User::findOrFail($userId);
+            $currentUser = $request->user();
+
+            //$this->authorize('update', $user2,  $currentUser);
+
+            $userValidated = $this->userService->updateUser( $user2->id, $validatedInputUser);
+            return response()->json($userValidated, 202);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(),500);
+        }
+    }
     
 
    public function deleteUser(int $userId, Request $request)
@@ -123,12 +146,6 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
-
-
-
-
-
 
     public function index(User $user) {
         try {
@@ -155,6 +172,50 @@ class UserController extends Controller
         $user = $request->user();
         $user->image_data = $path;
         $user->update();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile picture updated successfully',
+            'avatar_url' => url('storage/'.$path),
+            'path' => $path // Optional: for debugging
+        ], 200);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Handle validation errors
+        return response()->json([
+            'success' => false,
+            'message' => 'Validation failed',
+            'errors' => $e->errors()
+        ], 422);
+        
+    } catch (\Exception $e) {
+        // Handle all other exceptions
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to update profile picture',
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ], 500);
+    }
+}
+
+  public function updateProfileByidPicture(Request $request, int $userId)
+{
+    try {
+        // Validate the incoming request
+        $validated = $request->validate([
+            'image_data' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        // Store the uploaded file
+        $path = $request->file('image_data')->store('avatars', 'public');
+        
+        // Update user profile picture
+         $user2 = User::findOrFail($userId);
+        
+         $user2->image_data = $path;
+        $user2->update();
 
         return response()->json([
             'success' => true,

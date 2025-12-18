@@ -12,10 +12,11 @@
       </div>
   
       <div class="body" >
-        <ProfileSingleEvent v-for="(item, index) in props.user.listEvent" :key="item.id" :event="item" 
+        <LoadingUserEvents v-if="isLoading" /> 
+        <ProfileSingleEvent v-if="!isLoading" v-for="(item, index) in props.user.listEvent" :key="item.id" :event="item" 
          :himself="props.himself" @popUpdate="showUp2(item.id)" @popDelete="showDel2(item.id)"/>
 
-         <ProfileSingleEvent v-show="!props.himself" v-for="(item, index) in props.user" :key="index" :event="item" 
+         <ProfileSingleEvent v-if="!isLoading" v-show="!props.himself" v-for="(item, index) in props.user" :key="index" :event="item" 
           :himself="false" @popUpdate="showUp2(item.id)" @popDelete="showDel2(item.id)"/>
       </div>
 
@@ -28,14 +29,17 @@
   
 <script setup>
   import storageManager from "@/JS/LocalStaorageManager";
-  import { ref, onMounted, onUnmounted, defineProps, nextTick } from "vue";
+  import { ref, onMounted, onUnmounted, defineProps, nextTick, computed } from "vue";
   import ProfileSingleEvent from "./ProfileSingleEventComponent.vue";
   import AddEvent from "./profileEventComponents/AddEventComponent.vue"
   import UpdateEvent from "./profileEventComponents/UpdateEventComponent.vue"
   import DeleteEvent from "./profileEventComponents/DeleteEventComponent.vue"
-  import { useAuthStore } from "@/stores/auth";
+  import LoadingUserEvents from "../LoadingUserEvents.vue";
+  import { useActivityStore } from "@/stores/activity";
 
-  const authStore = useAuthStore()
+  const activityStore = useActivityStore();
+
+  const isLoading = computed(() => activityStore.isLoading)
   const props = defineProps({
         himself: Boolean, // Boolean type prop
         user: Object

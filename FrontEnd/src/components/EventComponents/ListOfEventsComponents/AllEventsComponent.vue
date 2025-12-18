@@ -32,7 +32,7 @@
           </div>
           <div class="d2">
             <v-icon icon="mdi-clock-outline" :class="['icon', {'justGlow': !actualMode}]"/>
-            {{ formatDateSpecial(item.date) }}
+            {{ formatDateSpecial(item.date,actualLang ) }}
           </div>
         </div>
       </router-link>
@@ -53,7 +53,6 @@
 </template>
 
 <script setup >
-
 import { onMounted, ref, watch, onUnmounted , computed,} from 'vue'; 
 import LocalStorageManager from "@/JS/LocalStaorageManager"
 import PaginationComponent from './PaginationComponent.vue';
@@ -61,15 +60,22 @@ import FilterComponent from './FilterComponent.vue';
 import { useActivityStore } from '@/stores/activity';
 import { formatDateSpecial } from "@/JS/GlobalFunctions";
 import { getEventUrl } from '@/JS/GlobalFunctions';
-import { useAuthStore } from '@/stores/auth';
 import LoadingEvents from '@/components/LoadingEventsComponents.vue';
+import storageManager from '@/JS/LocalStaorageManager';
 
-const authStore = useAuthStore()
 const activityStore = useActivityStore();
 const isLoading = computed(() => activityStore.isLoading)
 const favorites = ref(new Set());
 const eventsPerPage = 9;
 const currentPage = ref(0);
+
+
+const actualLang = ref(storageManager.getLang());
+if (actualLang.value == null) {
+  storageManager.setLang(true);
+  actualLang.value = storageManager.getLang();
+}
+
 
 const props = defineProps({
   listEvent: Array
@@ -154,6 +160,10 @@ onMounted(() => {
 })
 
 
+  const handleLangChange = (event) => {
+        actualLang.value = JSON.parse(event.detail.storage);
+  };
+
 
 if (actualMode.value == null){
       LocalStorageManager.setMode(true);
@@ -170,12 +180,13 @@ if (actualMode.value == null){
     // Add event listener for mode changes
   onMounted(() => {
       window.addEventListener('mode-changed', handleModeChange);
-    
+      window.addEventListener('lang-changed', handleLangChange);
   });
 
   // Remove event listener when component is unmounted
   onUnmounted(() => {
       window.removeEventListener('mode-changed', handleModeChange);
+      window.addEventListener('lang-changed', handleLangChange);
   });
 
 </script>

@@ -5,7 +5,7 @@
         <ListcategorieEvent></ListcategorieEvent>
         <div>
             <h3>{{ actualLang ? 'Up coming events' : 'Événement en approche'}}</h3>
-            <UpComingEvent  :list-event="upComingEvents" />
+            <UpComingEvent :list-event="upComingEvents" />
         </div>
         <AlListEvent :list-event="eventsList"/>
     </div>
@@ -23,8 +23,8 @@
     const actualMode = ref(LocalStorageManager.getMode());
     let actualLang = ref(LocalStorageManager.getLang());
     const activitiesStore = useActivityStore();
-    let eventsList = ref(null);
-    let upComingEvents = ref([]);
+    
+    //let upComingEvents = ref([]);
 
    
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
@@ -40,8 +40,8 @@
 
 
 
-    upComingEvents = computed(() => {
-    return activitiesStore.upcomingactivities.map(activity => ({
+    const upComingEvents = computed(() => {
+    return activitiesStore.upcomingItems.map(activity => ({
         id: activity.id,
         image: activity.image_data || "https://picsum.photos/1895/795",
         title: activity.titre,
@@ -54,14 +54,14 @@
 
 
 
-  eventsList.value = actualMode.value ? newEventJours : newEventNuit;
+  //eventsList.value = actualMode.value ? newEventJours : newEventNuit;
 
   onMounted(async () => {
     await activitiesStore.getActivities();
-     await activitiesStore.getUpcomingEvents();
+    await activitiesStore.getUpcomingEvents();
   });
 
-  eventsList = computed(() => {
+   let eventsList = computed(() => {
   return activitiesStore.activities.map(activity => ({
     id: activity.id,
     image: activity.image_data,
@@ -96,6 +96,7 @@
   // Add event listener for Lang changes
   onMounted(() => {
     window.addEventListener('lang-changed', handleLangChange);
+    
   });
 
   // Remove event listener when component is unmounted

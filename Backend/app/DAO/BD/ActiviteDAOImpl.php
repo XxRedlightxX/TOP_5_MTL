@@ -26,6 +26,11 @@ class ActiviteDAOImpl implements ActiviteDAO {
      */
     public function getAll() {
         return Activite::all();
+
+         /*$perPage = $request->get('per_page', 15);
+    $page = $request->get('page', 1);
+    
+    return Activite::paginate($perPage, ['*'], 'page', $page);*/
     }
 
     public function getAllCategories() {

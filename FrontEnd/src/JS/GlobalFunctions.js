@@ -1,14 +1,30 @@
-
-
-export const formatDateSpecial  = (dateString) => {
+export const formatDateSpecial = (dateString, actualLang) => {
   const date = new Date(dateString);
-  const mois = [
+
+  const monthsEN = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const monthsFR = [
     'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
     'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
   ];
-  
-  return `${mois[date.getMonth()]} ${date.getDate()} - ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}${date.getHours() >= 12 ? 'pm' : 'am'}`;
-}
+
+  const hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+
+  if (actualLang) {
+    // ENGLISH (12-hour format with AM/PM)
+    const hour12 = hours % 12 || 12;
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    return `${monthsEN[date.getMonth()]} ${date.getDate()} - ${hour12}:${minutes}${ampm}`;
+  } else {
+    // FRENCH (24-hour format)
+    const hourFR = hours.toString().padStart(2, '0');
+    return `${monthsFR[date.getMonth()]} ${date.getDate()} - ${hourFR}:${minutes}`;
+  }
+};
 
 export const formatDateApi = (dateInput, timeInput) => {
     if (!dateInput || !timeInput) return null;
@@ -116,9 +132,7 @@ export const getEventUrl = (imagePath) => {
     if (isFullUrl(imagePath)) {
         return imagePath;
     }
-    
     return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
-
 }
 
 const isValidImagePath = (path) => {

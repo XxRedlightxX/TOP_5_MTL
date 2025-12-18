@@ -37,7 +37,7 @@
 
   const eventsList = computed(() => {
     
-    return activitiesStore.upcomingactivities.map(activity => ({
+    return activitiesStore.upcomingItems.map(activity => ({
         id: activity.id,
         image: activity.image_data || "https://picsum.photos/1895/795",
         title: activity.titre,
@@ -46,6 +46,8 @@
         lieu: activity.lieu,
         date: activity.date_debut,
     }));
+    
+
 });
 
 onMounted(async () => {

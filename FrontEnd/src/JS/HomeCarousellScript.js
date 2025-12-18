@@ -1,13 +1,13 @@
 import LocalStorageManager from "@/JS/LocalStaorageManager";
 import { useActivityStore } from "@/stores/activity";
-import { getEventUrl } from "./GlobalFunctions";
+
 
 const text =
   "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
 
 const text1a = "See the event";
 const text1b = "Voir l'evenement";
-const text2a = "Organisator";
+const text2a = "Discover our Organizer";
 const text2b = "Découvrir les Organisateurs";
 
 const currentSlider = [
@@ -86,7 +86,7 @@ export default {
     },
 
     processedActivities() {
-      const storeActivities = this.activitiesStore.carouselactivities || [];
+      const storeActivities = this.activitiesStore.carouselItems || [];
       
       console.log('🔄 processedActivities - carouselactivities:', storeActivities);
       console.log('🔄 processedActivities - store mode:', this.activitiesStore.mode);
@@ -126,7 +126,7 @@ export default {
     actualMode: {
       handler(newMode) {
         console.log('👀 Mode changed to:', newMode);
-        if (!this.activitiesStore.carouselactivities || this.activitiesStore.carouselactivities.length === 0) {
+        if (!this.activitiesStore.carouselItems || this.activitiesStore.carouselItems.length === 0) {
           this.carouselItems = newMode ? [...currentSlider] : [...currentSliderNuit];
         }
       }
