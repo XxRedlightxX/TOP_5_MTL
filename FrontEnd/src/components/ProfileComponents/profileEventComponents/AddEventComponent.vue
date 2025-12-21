@@ -98,7 +98,7 @@
     import MapComponent from "@/components/MapComponent.vue";
 
 
-    const {addEvent} = useActivityStore();
+    const {addEvent,} = useActivityStore();
     const activitiesStore = useActivityStore();
     const authStore = useAuthStore();
 
@@ -177,12 +177,15 @@ const testInput = async(event) => {
         try {
             const eventUrl = await addEvent(formData);
             if (eventUrl) {
-                console.log(eventUrl);
+                console.log(eventUrl, "test2");
                 window.$toast("Saved successfully!")
                 await authStore.getUser();
+                //await authStore.getUpcomingEvents()
+                
                
                 
             }
+             console.log(eventUrl, "test2");
         } catch (error) {
             errorMessage.value = error.message;
             console.error("Upload failed:", error);

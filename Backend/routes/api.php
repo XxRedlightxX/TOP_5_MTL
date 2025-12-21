@@ -26,6 +26,8 @@ Route::get('/user/search', [UserController::class, 'getUserByEmail']);
 
 Route::post('/user/profile-picture', [UserController::class, 'updateProfilePicture']);
 
+Route::post('/user/{userId}/profile-picture', [UserController::class, 'updateProfileByidPicture']);
+
 Route::get('/utilisateur/{user}/activites', [UserController::class, 'index']);
 
 Route::get('/user/search', [UserController::class, 'getUserBySearchUser']);
