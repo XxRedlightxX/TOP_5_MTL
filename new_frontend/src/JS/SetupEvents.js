@@ -167,16 +167,6 @@ const SetupEvents = {
   },
 
   /**
-   * Gère la version actualisée du getter HigherRate (selon le mode)
-   *
-   * @param {Ref<Object>} higherRateEvents - Données d’événements "Higher Rate"
-   * @returns {Ref<Array>} Liste d’événements adaptés au mode actuel
-   */
-  // actualHigherRateEventsSetup(higherRateEvents) {
-  //   return Setup.actualEventsSetupGeneric(higherRateEvents);
-  // },
-
-  /**
    * Initialise la configuration des nouveaux événements (New Events)
    * et assure leur mise à jour automatique selon le mode.
    *
@@ -195,16 +185,6 @@ const SetupEvents = {
       []
     );
   },
-
-  /**
-   * Gère la version actualisée des nouveaux événements selon le mode jour/nuit.
-   *
-   * @param {Ref<Object>} newEvents - Données réactives des nouveaux événements
-   * @returns {Ref<Array>} Liste d’événements filtrés selon le mode
-   */
-  // actualnewEventsSetup(newEvents) {
-  //   return Setup.actualEventsSetupGeneric(newEvents);
-  // },
 
   /**
    * Initialise la configuration des événements à venir (Upcoming Events)
@@ -266,29 +246,24 @@ const SetupEvents = {
   },
 
   /**
-   * Gère la version actualisée des événements à venir selon le mode jour/nuit.
-   *
-   * @param {Ref<Object>} upcomingEvents - Données réactives des événements à venir
-   * @returns {Ref<Array>} Liste d’événements filtrés selon le mode
-   */
-  // actualupcomingEventSetup(upcomingEvents) {
-  //   return Setup.actualEventsSetupGeneric(upcomingEvents);
-  // },
-
-  /**
    * ----------------------------------------------------------
    * SECTION : OUTILS
    * ----------------------------------------------------------
    */
   setListOfEvents(data) {
     console.log("data recu : ", data);
-    const organizedDataDays = this.setEventDataFormat(data.days);
-    const organizedDataNight = this.setEventDataFormat(data.nights);
+    let organizedData = null;
+    if (data != null) {
+      const organizedDataDays = this.setEventDataFormat(data.days);
+      const organizedDataNight = this.setEventDataFormat(data.nights);
+      organizedData = {
+        eventsJour: organizedDataDays,
+        eventsNuit: organizedDataNight,
+      };
+    } else {
+      console.log("data est null");
+    }
 
-    const organizedData = {
-      eventsJour: organizedDataDays,
-      eventsNuit: organizedDataNight,
-    };
     return organizedData;
   },
 
