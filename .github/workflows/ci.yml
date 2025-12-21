@@ -1,6 +1,5 @@
 name: Laravel + Vue CI
 
-# Trigger on push or pull request to any branch
 on:
   push:
     branches: ["*"]
@@ -28,11 +27,15 @@ jobs:
       REDIS_PORT: ${{ secrets.REDIS_PORT }}
 
     steps:
-      # 1️⃣ Checkout the repository
+      # 1️⃣ Checkout repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2️⃣ Setup PHP
+      # 2️⃣ List repo structure for debugging
+      - name: List files
+        run: ls -R
+
+      # 3️⃣ Setup PHP
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -40,12 +43,12 @@ jobs:
           extensions: mbstring, bcmath, mysql, redis
           ini-values: post_max_size=256M, upload_max_filesize=256M
 
-      # 3️⃣ Install Composer dependencies (Laravel backend)
+      # 4️⃣ Install Composer dependencies
       - name: Install Composer dependencies
         working-directory: backend
         run: composer install --no-progress --prefer-dist
 
-      # 4️⃣ Prepare Laravel environment
+      # 5️⃣ Prepare Laravel environment
       - name: Prepare .env and cache config
         working-directory: backend
         run: |
@@ -67,33 +70,28 @@ jobs:
           php artisan key:generate
           php artisan config:cache
 
-      # 5️⃣ Run migrations
-      - name: Run database migrations
+      # 6️⃣ Run Laravel migrations
+      - name: Run migrations
         working-directory: backend
         run: php artisan migrate --force
 
-      # 6️⃣ Run Laravel backend tests
+      # 7️⃣ Run Laravel tests
       - name: Run backend tests
         working-directory: backend
         run: php artisan test --no-interaction --env=testing
 
-      # 7️⃣ Setup Node.js for Vue frontend
+      # 8️⃣ Setup Node.js for Vue frontend
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      # 8️⃣ Install frontend dependencies (Vue)
+      # 9️⃣ Install frontend dependencies
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
 
-      # 9️⃣ Build frontend assets
+      # 🔟 Build frontend
       - name: Build frontend
         working-directory: frontend
         run: npm run build
-
-      # 🔟 Optional: run frontend tests if you have them
-      # - name: Run frontend tests
-      #   working-directory: frontend
-      #   run: npm run test
