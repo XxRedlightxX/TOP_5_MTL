@@ -1,5 +1,6 @@
 name: Laravel + Vue CI
 
+# Trigger on push or pull request to any branch
 on:
   push:
     branches: ["*"]
@@ -9,6 +10,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.DB_DATABASE }}
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     env:
       APP_NAME: ${{ secrets.APP_NAME }}
@@ -27,46 +42,65 @@ jobs:
       REDIS_PORT: ${{ secrets.REDIS_PORT }}
 
     steps:
+      # 1️⃣ Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2️⃣ Setup PHP
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           extensions: mbstring, bcmath, mysql, redis
+          ini-values: post_max_size=256M, upload_max_filesize=256M
 
-      - name: Setup MySQL
-        run: |
-          sudo apt-get install mysql-client mysql-server -y
-          sudo service mysql start
-          mysql -e "CREATE DATABASE IF NOT EXISTS ${DB_DATABASE};"
-          mysql -e "CREATE USER IF NOT EXISTS '${DB_USERNAME}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
-          mysql -e "GRANT ALL PRIVILEGES ON ${DB_DATABASE}.* TO '${DB_USERNAME}'@'localhost';"
-          mysql -e "FLUSH PRIVILEGES;"
-
+      # 3️⃣ Install Composer dependencies
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist
 
-      - name: Prepare Laravel environment
+      # 4️⃣ Prepare Laravel environment
+      - name: Prepare .env and cache config
         run: |
           cp .env.example .env
+          echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
+          echo "APP_ENV=${{ secrets.APP_ENV }}" >> .env
+          echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
+          echo "APP_DEBUG=${{ secrets.APP_DEBUG }}" >> .env
+          echo "APP_URL=${{ secrets.APP_URL }}" >> .env
+          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "CACHE_DRIVER=${{ secrets.CACHE_DRIVER }}" >> .env
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
           php artisan key:generate
           php artisan config:cache
 
-      - name: Run migrations
+      # 5️⃣ Run migrations
+      - name: Run database migrations
         run: php artisan migrate --force
 
-      - name: Run Laravel tests
+      # 6️⃣ Run Laravel tests
+      - name: Run backend tests
         run: php artisan test --no-interaction --env=testing
 
+      # 7️⃣ Setup Node.js for Vue frontend
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
+      # 8️⃣ Install frontend dependencies
       - name: Install frontend dependencies
         run: npm ci
 
+      # 9️⃣ Build frontend assets
       - name: Build frontend
         run: npm run build
+
+      # 1️⃣0️⃣ Optional: run frontend tests if you have them
+      # - name: Run frontend tests
+      #   run: npm run test
