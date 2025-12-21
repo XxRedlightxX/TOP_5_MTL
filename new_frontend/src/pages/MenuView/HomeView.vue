@@ -1,11 +1,11 @@
 <template>
   <div id="homeView">
     <CarousellComponent />
-    <div class="homeContent">
+    <!-- <div class="homeContent">
       <IntroText />
       <NewEvent />
       <Contact />
-    </div>
+    </div> -->
   </div>
 </template>
 
