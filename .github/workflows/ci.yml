@@ -73,7 +73,7 @@ jobs:
       # -------------------------
       - name: Run backend tests
         working-directory: Backend
-        run: php artisan test --no-interaction
+        run: php artisan test 
 
       # -------------------------
       # 7️⃣ Setup Node.js
