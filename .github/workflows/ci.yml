@@ -45,12 +45,12 @@ jobs:
 
       # 4️⃣ Install Composer dependencies
       - name: Install Composer dependencies
-        working-directory: backend
+        working-directory: Backend
         run: composer install --no-progress --prefer-dist
 
       # 5️⃣ Prepare Laravel environment
       - name: Prepare .env and cache config
-        working-directory: backend
+        working-directory: Backend
         run: |
           cp .env.example .env
           echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
@@ -72,12 +72,12 @@ jobs:
 
       # 6️⃣ Run Laravel migrations
       - name: Run migrations
-        working-directory: backend
+        working-directory: Backend
         run: php artisan migrate --force
 
       # 7️⃣ Run Laravel tests
       - name: Run backend tests
-        working-directory: backend
+        working-directory: Backend
         run: php artisan test --no-interaction --env=testing
 
       # 8️⃣ Setup Node.js for Vue frontend
@@ -88,10 +88,10 @@ jobs:
 
       # 9️⃣ Install frontend dependencies
       - name: Install frontend dependencies
-        working-directory: frontend
+        working-directory: Frontend
         run: npm ci
 
       # 🔟 Build frontend
       - name: Build frontend
-        working-directory: frontend
+        working-directory: Frontend
         run: npm run build
