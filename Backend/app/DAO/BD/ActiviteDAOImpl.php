@@ -10,7 +10,7 @@ use App\Models\Type;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-
+//
 
 class ActiviteDAOImpl implements ActiviteDAO {
 

@@ -1,0 +1,1 @@
+import{_ as r,c as o,a as t,o as s}from"./index-_L-oGXL_.js";const n={},c={id:"errorView"};function a(i,e){return s(),o("div",c,e[0]||(e[0]=[t("h1",null," Error View",-1)]))}const d=r(n,[["render",a]]);export{d as default};
