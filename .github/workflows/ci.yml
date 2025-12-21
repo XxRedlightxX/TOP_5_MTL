@@ -31,14 +31,14 @@ jobs:
       # 3️⃣ Install backend deps
       # -------------------------
       - name: Install Composer dependencies
-        working-directory: backend
+        working-directory: Backend
         run: composer install --prefer-dist --no-interaction --no-progress
 
       # -------------------------
       # 4️⃣ Setup Laravel (.env)
       # -------------------------
       - name: Prepare Laravel environment (SQLite)
-        working-directory: backend
+        working-directory: Backend
         run: |
           cp .env.example .env
 
@@ -89,12 +89,12 @@ jobs:
       # 8️⃣ Install frontend deps
       # -------------------------
       - name: Install frontend dependencies
-        working-directory: frontend
+        working-directory: Frontend
         run: npm ci
 
       # -------------------------
       # 9️⃣ Build Vue frontend
       # -------------------------
       - name: Build frontend
-        working-directory: frontend
+        working-directory: Frontend
         run: npm run build
