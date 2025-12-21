@@ -65,14 +65,14 @@ jobs:
       # 5️⃣ Run migrations
       # -------------------------
       - name: Run database migrations
-        working-directory: backend
+        working-directory: Backend
         run: php artisan migrate --force
 
       # -------------------------
       # 6️⃣ Run Laravel tests
       # -------------------------
       - name: Run backend tests
-        working-directory: backend
+        working-directory: Backend
         run: php artisan test --no-interaction
 
       # -------------------------
