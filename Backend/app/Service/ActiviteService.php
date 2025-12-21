@@ -16,8 +16,8 @@ class ActiviteService {
         $this->activiteDAO = $activiteDAO;
     }
 
-    public function getActivitiesList() {
-        return $this->activiteDAO->getAll();
+    public function getActivitiesList(int $perPage, int $page) {
+        return $this->activiteDAO->getAll($perPage, $page);
     }
 
     public function updateActiviy(int $activityId, $activity) {

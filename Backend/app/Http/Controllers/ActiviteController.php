@@ -32,8 +32,11 @@ class ActiviteController extends Controller
     ]);
     }
 
-    public function getAllActivities() {
-        return $this->userService->getActivitiesList();
+    public function getAllActivities(Request $request) {
+        return $this->userService-> getActivitiesList(
+            $request->get('per_page', 9),
+            $request->get('page', 1)
+        );
     }
 
     public function addActivityUser(Request $request)

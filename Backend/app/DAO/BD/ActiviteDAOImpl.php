@@ -27,16 +27,25 @@ class ActiviteDAOImpl implements ActiviteDAO {
     /**
      * @inheritDoc
      */
-public function getAll() {
-    $key = 'activities:all';
+public function getAll(int $perPage = 2,  int $page = 1) {
+    $cacheKey = 'activities:paginate:' . md5(json_encode([
+        'page' => $page,
+        'perPage' => $perPage,
+        'order' => 'date_debut',
+    ]));
 
-    logger(Cache::tags('activities')->has($key) ? 'CACHE HIT' : 'CACHE MISS');
+    logger(
+        Cache::tags('activities')->has($cacheKey)
+            ? 'CACHE HIT'
+            : 'CACHE MISS'
+    );
 
     return Cache::tags('activities')->remember(
-        $key,
+        $cacheKey,
         self::CACHE_TTL,
-        fn () => Activite::all()
+        fn () => Activite::orderBy('date_debut')->paginate($perPage, ['*'], 'page', $page)
     );
+
     //return Activite::all();
 }
     public function getAllCategories() {
