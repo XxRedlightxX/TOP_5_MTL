@@ -30,4 +30,4 @@ const handleLangChange = (event) => {
 
 </script>
 
-<style src="../../styles/HomesStyles/IntrotextComponentStyle.scss"></style>
+<style src="../../styles/HomesStyles/IntroTextComponentStyle.scss"></style>
