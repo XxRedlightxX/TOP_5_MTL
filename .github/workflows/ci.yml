@@ -11,8 +11,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-   
-
     env:
       APP_NAME: ${{ secrets.APP_NAME }}
       APP_ENV: ${{ secrets.APP_ENV }}
@@ -42,12 +40,14 @@ jobs:
           extensions: mbstring, bcmath, mysql, redis
           ini-values: post_max_size=256M, upload_max_filesize=256M
 
-      # 3️⃣ Install Composer dependencies
+      # 3️⃣ Install Composer dependencies (Laravel backend)
       - name: Install Composer dependencies
-        run: composer install --no-progress --no-suggest --prefer-dist
+        working-directory: backend
+        run: composer install --no-progress --prefer-dist
 
       # 4️⃣ Prepare Laravel environment
       - name: Prepare .env and cache config
+        working-directory: backend
         run: |
           cp .env.example .env
           echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
@@ -69,10 +69,12 @@ jobs:
 
       # 5️⃣ Run migrations
       - name: Run database migrations
+        working-directory: backend
         run: php artisan migrate --force
 
-      # 6️⃣ Run Laravel tests
+      # 6️⃣ Run Laravel backend tests
       - name: Run backend tests
+        working-directory: backend
         run: php artisan test --no-interaction --env=testing
 
       # 7️⃣ Setup Node.js for Vue frontend
@@ -81,14 +83,17 @@ jobs:
         with:
           node-version: 20
 
-      # 8️⃣ Install frontend dependencies
+      # 8️⃣ Install frontend dependencies (Vue)
       - name: Install frontend dependencies
+        working-directory: frontend
         run: npm ci
 
       # 9️⃣ Build frontend assets
       - name: Build frontend
+        working-directory: frontend
         run: npm run build
 
-      # 1️⃣0️⃣ Optional: run frontend tests if you have them
+      # 🔟 Optional: run frontend tests if you have them
       # - name: Run frontend tests
+      #   working-directory: frontend
       #   run: npm run test
