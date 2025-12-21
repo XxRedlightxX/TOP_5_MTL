@@ -64,7 +64,7 @@ class UserDAOImpl implements UserDAO {
     /**
      * @inheritDoc
      */
-    public function getAll() {
+    public function getAll(int $perPage, int $page) {
 
         return User::all();
     }

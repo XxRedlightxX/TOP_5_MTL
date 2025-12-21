@@ -20,8 +20,8 @@ class UserService {
         $this->daoUser = $daoUser;
     }
 
-    public function getUserList() {
-        return $this->daoUser->getAll();
+    public function getUserList(int $perPage, int $page) {
+        return $this->daoUser->getAll($perPage, $page);
     }
 
     public function creatUser(  $user) {

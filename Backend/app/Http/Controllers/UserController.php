@@ -26,10 +26,10 @@ class UserController extends Controller
 
       
     }
-    public function getUserList()
+    public function getUserList(int $perPage, int $page)
     {
         try {
-            $users = $this->userService->getUserList();
+            $users = $this->userService->getUserList($perPage , $page);
             return response()->json($users, 200);
         } catch (\Exception $e) {
             return response()->json($e);
