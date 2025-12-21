@@ -236,7 +236,7 @@ const SetupEvents = {
     return await SetupEvents.eventsSetupGeneric(
       "organisator",
       "organisator-changed",
-      useActivityStore().getEventUserInfo,
+      useActivityStore().getActivitiesByOtherUserId,
       LocalStorageManager.setOrganisator,
       LocalStorageManager.getOrganisator,
       null,

@@ -35,5 +35,5 @@ php artisan migrate
 php artisan reverb:start
 
 php artisan queue:work
-
+composer require predis/predis
 php artisan serve

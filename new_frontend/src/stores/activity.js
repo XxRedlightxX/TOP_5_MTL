@@ -75,7 +75,7 @@ export const useActivityStore = defineStore("activitiesStore", {
     // -----------------------------------
     async getEventGeneric(apiUrl) {
       try {
-        this.isLoading = true; // A quoi ca sert ???
+        //this.isLoading = true; // A quoi ca sert ???
         const res = await fetch(apiUrl, {
           headers: {
             "Content-Type": "application/json",
@@ -96,7 +96,9 @@ export const useActivityStore = defineStore("activitiesStore", {
       } catch (error) {
         console.error("getHigherRateEvent failed:", error);
         this.errors = { higherRate: error.message };
-      } finally { this.isLoading = false; }
+      } finally {
+        this.isLoading = false;
+      }
     },
 
     // -----------------------------------
@@ -228,12 +230,20 @@ export const useActivityStore = defineStore("activitiesStore", {
     // CATEGORIES
     // -----------------------------------
     async getCategories() {
-      try {
-        if (this.categories.length) return;
-        const data = await apiRequest("/api/categories");
+      const res = await fetch("/api/categories", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+
+      if (res.ok) {
         this.categories = data;
-      } catch (err) {
-        this.errors = err;
+        console.log(this.categories);
+        return data;
+      } else if (data.errors) {
+        this.errors = data.errors;
+        console.log(data.errors);
       }
     },
 
