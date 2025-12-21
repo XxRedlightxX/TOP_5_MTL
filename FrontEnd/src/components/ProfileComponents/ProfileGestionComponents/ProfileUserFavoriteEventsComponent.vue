@@ -46,7 +46,7 @@
    
 
 
-    const {deleteFavoritesActivity, getListFavoritesActivities} = useActivityStore();
+    const {deleteFavoritesActivity, getFavoritesActivities} = useActivityStore();
     let actualMode = ref(storageManager.getMode());
     let actualLang = ref(storageManager.getLang());
     const props =defineProps({
@@ -57,7 +57,7 @@
      const deleteEvent = async(pEvent) => {
         const test= await deleteFavoritesActivity(pEvent);
         console.log(test);
-        const updatedFavorites = await getListFavoritesActivities();
+        const updatedFavorites = await getFavoritesActivities();
         emit("favoriteEvent", { type: 'updated', favorites: updatedFavorites.favoris });
        
 

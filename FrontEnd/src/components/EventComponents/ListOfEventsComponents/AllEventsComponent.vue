@@ -1,8 +1,8 @@
 <template>
-  <div id="AllEventComponent">
+  <div id="AllEventComponent" style="margin-top: 30px;">
+     
     <FilterComponent/>
-      <LoadingEvents v-if="isLoading"  :eventCount="eventsPerPage" />
-      
+    <LoadingEvents v-if="isLoading"  :eventCount="eventsPerPage" /> 
     <div class="events" >
       <router-link 
         v-if="paginatedEvents.length" 
@@ -32,7 +32,7 @@
           </div>
           <div class="d2">
             <v-icon icon="mdi-clock-outline" :class="['icon', {'justGlow': !actualMode}]"/>
-            {{ formatDateSpecial(item.date) }}
+            {{ formatDateSpecial(item.date,actualLang ) }}
           </div>
         </div>
       </router-link>
@@ -53,7 +53,6 @@
 </template>
 
 <script setup >
-
 import { onMounted, ref, watch, onUnmounted , computed,} from 'vue'; 
 import LocalStorageManager from "@/JS/LocalStaorageManager"
 import PaginationComponent from './PaginationComponent.vue';
@@ -62,7 +61,7 @@ import { useActivityStore } from '@/stores/activity';
 import { formatDateSpecial } from "@/JS/GlobalFunctions";
 import { getEventUrl } from '@/JS/GlobalFunctions';
 import LoadingEvents from '@/components/LoadingEventsComponents.vue';
-
+import storageManager from '@/JS/LocalStaorageManager';
 
 const activityStore = useActivityStore();
 const isLoading = computed(() => activityStore.isLoading)
@@ -70,9 +69,22 @@ const favorites = ref(new Set());
 const eventsPerPage = 9;
 const currentPage = ref(0);
 
+
+const actualLang = ref(storageManager.getLang());
+if (actualLang.value == null) {
+  storageManager.setLang(true);
+  actualLang.value = storageManager.getLang();
+}
+
+
 const props = defineProps({
   listEvent: Array
 });
+
+
+function successPop() {
+  window.$toast("Saved successfully!")
+}
 
 
 const isFavorite = (id) => {
@@ -148,6 +160,10 @@ onMounted(() => {
 })
 
 
+  const handleLangChange = (event) => {
+        actualLang.value = JSON.parse(event.detail.storage);
+  };
+
 
 if (actualMode.value == null){
       LocalStorageManager.setMode(true);
@@ -155,7 +171,7 @@ if (actualMode.value == null){
   }
   // Correction du watcher
   watch(actualMode, (newVal, oldVal) => {
-    newEvent.value = newVal ? newEventJours : newEventNuit;
+    //newEvent.value = newVal ? newEventJours : newEventNuit;
   });
   
   const handleModeChange = (event) => {
@@ -164,12 +180,13 @@ if (actualMode.value == null){
     // Add event listener for mode changes
   onMounted(() => {
       window.addEventListener('mode-changed', handleModeChange);
-    
+      window.addEventListener('lang-changed', handleLangChange);
   });
 
   // Remove event listener when component is unmounted
   onUnmounted(() => {
       window.removeEventListener('mode-changed', handleModeChange);
+      window.addEventListener('lang-changed', handleLangChange);
   });
 
 </script>

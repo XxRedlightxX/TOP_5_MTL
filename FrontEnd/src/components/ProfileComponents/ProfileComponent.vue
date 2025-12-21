@@ -1,19 +1,38 @@
 <template>
     <div id="profileComponent">
-
-        <div class="top">
-            
-            <ProfileHead :himself="props.himself" :user="organisator"></ProfileHead>
-            <ProfileOther v-show="props.himself" :user="organisator"></ProfileOther>
-            
+        
+        <!-- If current user is viewing his own profile -->
+        <div class="top" v-if="himself">
+            <ProfileHead :himself="himself" :user="organisator" />
+            <ProfileOther :user="organisator" />
         </div>
-        <ProfileList v-if="authStore.user.type_utilisateur === 'organisateur'" :himself="props.himself" :user="organisator"></ProfileList>
+
+        <!-- If viewing someone ELSE -->
+        <div class="top" v-show="!himself">
+            <ProfileHead :himself="false" :user="creatorUser" />
+            <ProfileOther :user="creatorUser" />
+        </div>
+
+        <!-- Organizer list for himself -->
+        <ProfileList
+            v-if="authStore.user.type_utilisateur === 'organisateur' && himself"
+            :himself="himself"
+            :user="organisator"
+        />
+
+        <!-- Organizer list for other user -->
+        <div v-if="!himself && creatorUser && creatorUser.activites">
+            <ProfileList
+                :himself="false"
+                :user="creatorUser.activites"
+            />
+        </div>
+
     </div>
-  </template>
-  
+</template>
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted,watch, defineProps} from "vue";
+    import { ref, onMounted, onUnmounted,watch, defineProps, computed} from "vue";
     import ProfileHead from "./ProfileHeaderComponent.vue";
     import ProfileOther from "./ProfileOtherComponent.vue"
     import ProfileList from "./ProfileListEventComponent.vue"
@@ -27,8 +46,11 @@
     let actualMode = ref(storageManager.getMode());
     let theOrganisator = ref(null);
 
+
+
     const props = defineProps({
-        himself: Boolean, // Boolean type prop
+        himself: Boolean,
+        creatorUser : Object,
     });
     
    
@@ -55,8 +77,8 @@
         const events = newUser?.activites?.map((act) => ({
             id: act.id,
             image: act.image_data,
-            title: act.titre,
-            desc: act.description || "Aucune description",
+            titre: act.titre,
+            description: act.description || "Aucune description",
             lieu: act.lieu,
             rating: 3
         })) || [];
@@ -64,6 +86,7 @@
         listEvent.value = events;
         
         organisator.value = {
+            id : newUser?.id,
             avatar: newUser?.image_data
                 ? `${import.meta.env.VITE_API_BASE_URL}${newUser.image_data}`
                 : "/src/assets/UnknowUser.jpg",
@@ -83,12 +106,12 @@
     });
     
 
-    if (props.himself){
-        theOrganisator.value = storageManager.getLogUser();
+    /*if (props.himself){
+        organisator.value = storageManager.getLogUser();
     }
     else {
-        theOrganisator= ref(storageManager.getOrganisator());
-    }
+        theOrganisator.value= storageManager.getOrganisator();
+    }*/
     
     const Logout = () => {
         

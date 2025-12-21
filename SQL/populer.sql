@@ -1,3 +1,4 @@
+
 -- USE the correct database V3
 USE `backend`;
 
@@ -25,13 +26,13 @@ VALUES
 ('Concert', 'mdi-music', NOW(), NOW()),
 ('Festival', 'mdi-party-popper', NOW(), NOW()),
 ('Sport', 'mdi-soccer', NOW(), NOW()),
-('Exposition', 'mdi-image-frame', NOW(), NOW()),
-('Atelier', 'mdi-hammer-wrench', NOW(), NOW()),
-('Conférence', 'mdi-podium', NOW(), NOW()),
-('Spectacle', 'mdi-drama-masks', NOW(), NOW()),
-('Balade', 'mdi-walk', NOW(), NOW()),
-('Visite guidée', 'mdi-map-marker', NOW(), NOW()),
-('Cinéma', 'mdi-movie', NOW(), NOW());
+('Exhibition', 'mdi-image-frame', NOW(), NOW()),
+('Workshop', 'mdi-hammer-wrench', NOW(), NOW()),
+('Conference', 'mdi-podium', NOW(), NOW()),
+('Show', 'mdi-drama-masks', NOW(), NOW()),
+('Walk', 'mdi-walk', NOW(), NOW()),
+('Guided Tour', 'mdi-map-marker', NOW(), NOW()),
+('Cinema', 'mdi-movie', NOW(), NOW());
 
 -- -----------------------------------------------------
 -- SAISONS
@@ -42,7 +43,6 @@ VALUES
 ('AUTOMNE'),
 ('HIVER'),
 ('PRINTEMPS');
-
 
 -- -----------------------------------------------------
 -- HIGH RATED ACTIVITES 

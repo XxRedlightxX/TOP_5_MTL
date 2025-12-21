@@ -1,14 +1,30 @@
-
-
-export const formatDateSpecial  = (dateString) => {
+export const formatDateSpecial = (dateString, actualLang) => {
   const date = new Date(dateString);
-  const mois = [
+
+  const monthsEN = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const monthsFR = [
     'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
     'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
   ];
-  
-  return `${mois[date.getMonth()]} ${date.getDate()} - ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}${date.getHours() >= 12 ? 'pm' : 'am'}`;
-}
+
+  const hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+
+  if (actualLang) {
+    // ENGLISH (12-hour format with AM/PM)
+    const hour12 = hours % 12 || 12;
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    return `${monthsEN[date.getMonth()]} ${date.getDate()} - ${hour12}:${minutes}${ampm}`;
+  } else {
+    // FRENCH (24-hour format)
+    const hourFR = hours.toString().padStart(2, '0');
+    return `${monthsFR[date.getMonth()]} ${date.getDate()} - ${hourFR}:${minutes}`;
+  }
+};
 
 export const formatDateApi = (dateInput, timeInput) => {
     if (!dateInput || !timeInput) return null;
@@ -24,6 +40,24 @@ export const formatDateApi = (dateInput, timeInput) => {
     return `${year}-${month}-${day} ${time}`;
 
 }
+
+
+export const formatDate = (dateString) => {
+  if (!dateString) return "";
+
+  // Convert "YYYY-MM-DD HH:MM:SS" → ISO
+  const iso = dateString.replace(" ", "T");
+  const date = new Date(iso);
+
+  if (isNaN(date)) return dateString;
+
+  const month = date.toLocaleString("en-US", { month: "long" });
+  const day = date.getDate();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return `${month} ${day} · ${hours}:${minutes}`;
+};
 
 export const formatDateComment = (dateString, actualLang) => {
   const safeString = dateString.replace(" ", "T");
@@ -75,17 +109,51 @@ export const formatDateEventStartandEnd = (aStartDateEvent, aEndDate) => {
 }
 
 export const getAvatarUrl = (imagePath) => {
-  const img= "/src/assets/UnknowUser.jpg";
-    if (!imagePath) return img;
+  const defaultImage= "/src/assets/UnknowUser.jpg";
+    
+  if (!isValidImagePath(imagePath)) {
+        return defaultImage;
+    }
+    
+    if (isFullUrl(imagePath)) {
+        return imagePath;
+    }
     return `${import.meta.env.VITE_API_BASE_URL}${imagePath}` ;
 
 }
 
 export const getEventUrl = (imagePath) => {
-  const img= "/src/assets/Curtain.jpg";
-    if (!imagePath) return img;
-    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}` ;
+  const defaultImage = "/src/assets/Curtain.jpg";
+    
+    if (!isValidImagePath(imagePath)) {
+        return defaultImage;
+    }
+    
+    if (isFullUrl(imagePath)) {
+        return imagePath;
+    }
+    return `${import.meta.env.VITE_API_BASE_URL}${imagePath}`;
+}
 
+const isValidImagePath = (path) => {
+    if (!path || typeof path !== 'string') return false;
+    if (path.trim() === '') return false;
+    if (path === 'null' || path === 'undefined') return false;
+    
+    // Check for common image extensions
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+    const hasImageExtension = imageExtensions.some(ext => 
+        path.toLowerCase().includes(ext)
+    );
+    
+    return hasImageExtension;
+}
+
+const isFullUrl = (path) => {
+    return path.startsWith('http') || 
+           path.startsWith('data:') || 
+           path.startsWith('blob:') || 
+           path.startsWith('/');
 }
 
 export const formatDateEventEndDate = (startDateTime, hours) => {

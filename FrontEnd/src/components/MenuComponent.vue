@@ -81,6 +81,9 @@
 
    const changeMode = () => {
         activitiesStore.toggleMode();
+         console.log("new val = " + !actualMode.value)
+        storageManager.setMode(!actualMode.value);
+        actualMode.value = !actualMode.value
     }
 
     const changeSeeBurgermenu = () => {

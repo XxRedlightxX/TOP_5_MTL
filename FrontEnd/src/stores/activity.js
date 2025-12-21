@@ -1,85 +1,73 @@
 import { defineStore } from "pinia";
 import { useAuthStore } from "./auth";
+import { apiRequest, buildQueryString } from "../api/api";
 import StorageManager from "@/JS/LocalStaorageManager";
 
+/*export const useActivityStore = defineStore('activitiesStore', {
 
-export const  useActivityStore = defineStore('activitiesStore', {
-    state: () => {
-        return {
-            activities: [],
-            carouselactivities : [],
-            upcomingactivities : [],
-            user : null,
-            activity: null,
-            days: [],
-            nights: [],
-            carouseldays: [],
-            carouselnights: [],
-            upcomingdays: [],
-            upcomingnights: [],
-            mode:  StorageManager.getMode() || 'days',
-            categories : [],
-            isLoading : false,
-            filters: {
-                daytime: "" ?? null,
-                type: "",
-                season: "",
-                title: "",
-            },
-            errors: {},
-           
-        }
-    },
+    state: () => ({
+        mode: StorageManager.getMode(),
+        activities: [],
+        upcoming: { days: [], nights: [] },
+        carousel: { days: [], nights: [] },
+        user: null,
+        activity: null,
+        categories: [],
+        isLoading: false,
+        filters: {
+        daytime: null,
+        type: "",
+        season: "",
+        title: "",
+        },
+        errors: {},
+    }),
     getters : {
    
        
     },
     actions : {
 
-        /*toggleMode() {
-            this.mode = this.mode === 'day' ? 'nights' : 'days'
-            localStorage.setItem('activityMode', this.mode)
-        },*/
 
-         toggleMode() {
-            // Toggle between 'days' and 'nights'
-            this.mode = this.mode === 'days' ? 'nights' : 'days';
+        toggleMode() {
+        // Reverse: Toggle between 'nights' and 'days'
+            this.mode = this.mode === 'nights' ? 'days' : 'nights';
             StorageManager.setMode(this.mode);
             
-            // Update derived data
-            this.activities = this.mode === 'days' ? this.days : this.nights;
-            this.carouselactivities = this.mode === 'days' ? this.carouseldays : this.carouselnights;
-            this.upcomingactivities = this.mode === 'days' ? this.upcomingdays : this.upcomingnights;
+            // Update derived data (also reversed)
+            this.activities = this.mode === 'nights' ? this.nights : this.days;
+            this.carouselactivities = this.mode === 'nights' ? this.carouselnights : this.carouseldays;
+            this.upcomingactivities = this.mode === 'nights' ? this.upcomingnights : this.upcomingdays;
         },
     
 
-    async getUpcomingEvents() {
-        try {
-            const res = await fetch("/api/activite/test", {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            });
+        async getUpcomingEvents() {
+            try {
+                const res = await fetch("/api/activite/test", {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                });
 
-            if (!res.ok) {
-                throw new Error(`Erreur API: ${res.status}`);
+                if (!res.ok) {
+                    throw new Error(`Erreur API: ${res.status}`);
+                }
+
+                const data = await res.json();
+                this.upcomingnights = data.nights || []
+                this.upcomingdays = data.days || []
+            
+                this.upcomingactivities = this.mode === 'days' ? this.upcomingdays : this.upcomingdays;
+                
+                
+                this.errors = {};
+                //return this.upcomingactivities;
+                
+            } catch (err) {
+                console.error("getUpcomingEvents failed:", err);
+                this.errors = { upcoming: err.message };
+                return [];
             }
-
-            const data = await res.json();
-            this.upcomingnights = data.nights || []
-            this.upcomingdays = data.days || []
-         
-            this.upcomingactivities = this.mode === 'days' ? this.upcomingdays : this.upcomingdays;
-            
-            
-            this.errors = {};
-           // return this.activities;
-             
-        } catch (err) {
-            console.error("getUpcomingEvents failed:", err);
-            this.errors = { upcoming: err.message };
-            return [];
-        }
         },
 
         async getActivities() {
@@ -126,36 +114,53 @@ export const  useActivityStore = defineStore('activitiesStore', {
         },
 
         async getUserActivities() {
-            const token = localStorage.getItem("token");
-            
-            if (token) {
-                const res = await fetch("/api/user/activite", {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-            const data = await res.json();
-       
-            if (res.ok) {
-                this.user = data;
-                console.log(this.user);
-                return this.user;
+             try {
+                const token = localStorage.getItem("token");
+                 this.isLoading = true;
+                if (token) {
+                    const res = await fetch("/api/user/activite", {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                });
+                const data = await res.json();
+        
+                if (res.ok) {
+                    this.user = data;
+                    console.log(this.user);
+                    return this.user;
+                    
+                }else if(data.errors) {
+                    this.errors= data.errors;
+                    console.log(data.errors);
+                }}
+             } catch (error) {
+                console.error("ge failed:", error);
                 
-            }else if(data.errors) {
-                this.errors= data.errors;
-                console.log(data.errors);
-            }       
+            } finally {
+                this.isLoading = false;
+            }
+    },
 
+    async getActivityUserbyId($activityid) {
+       
+        const res = await fetch(`/api/activite/user/${$activityid}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await res.json();
+    
         if (res.ok) {
-          this.user = data;
-          console.log(this.user);
-          return this.user;
-        } else if (data.errors) {
-          this.errors = data.errors;
-          console.log(data.errors);
-        }
-      }
+            console.log(data.user, "Test")
+            return data.user;
+            
+            
+        }else if(data.errors) {
+            this.errors= data.errors;
+            console.log(data.errors);
+        }       
     },
 
        async getHigherRateEvent() {
@@ -215,6 +220,35 @@ export const  useActivityStore = defineStore('activitiesStore', {
                     this.activity = data;
                     console.log(this.activity);
                     return data;
+                }
+                else if(data.errors) {
+                    this.errors= data.errors;
+                    console.log(data.errors);
+                   
+                }
+            } catch ($error) {
+                return $error;
+            } finally {
+                this.isLoading=false;
+            }
+        },
+
+        async getActivitiesByOtherUserId(activityId) {
+           
+            try {
+                this.isLoading=true;
+                const res = await fetch(`/api/user/activite/${activityId}`,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                const data = await res.json();
+
+                if (res.ok) {
+                    console.log(data , "test")
+                    return data;
+                    
                 }
                 else if(data.errors) {
                     this.errors= data.errors;
@@ -529,36 +563,276 @@ export const  useActivityStore = defineStore('activitiesStore', {
 
 
 
-    /*async getActivitiesFilter(dayTime) {
+        
+        
 
-            let query = new URLSearchParams(this.filters).toString();
-            const filter = `/filter?${query}`
-            const token = localStorage.getItem("token")
-            const res = await fetch(`/api/activite${filter}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            });
-            const data = await res.json();
-            console.log()
-            if (res.ok) {
-                this.activities = data;
-                return this.activities;
-                
-            }else if(data.errors) {
-                this.errors= data.errors;
-                console.log(data.errors);
-            }        
 
-            else {
-                console.log("NOPE")
-            }
 
-            
-          
-        },*/
+   
+    },
+});*/
 
-    //Register
+export const useActivityStore = defineStore("activitiesStore", {
+  state: () => ({
+    mode: StorageManager.getMode(),
+    activities: [],
+    upcoming: { days: [], nights: [] },
+    carousel: { days: [], nights: [] },
+    user: null,
+    activity: null,
+    categories: [],
+    isLoading: false,
+
+    filters: {
+      daytime: null,
+      type: "",
+      season: "",
+      title: "",
+    },
+
+    errors: {},
+  }),
+
+  getters: {
+    upcomingItems(state) {
+      return state.mode === true ? state.upcoming.days : state.upcoming.nights;
+    },
+
+    carouselItems(state) {
+      return state.mode === true ? state.carousel.days : state.carousel.nights;
+    },
+
+    currentActivities(state) {
+      return state.activities;
+    },
+  },
+
+  actions: {
+    // -----------------------------------
+    // TOGGLE MODE (DAY ⇄ NIGHT)
+    // -----------------------------------
+    toggleMode() {
+      this.mode = !this.mode; // Just flip boolean
+      StorageManager.setMode(this.mode);
+    },
+
+    // -----------------------------------
+    // GET ACTIVITIES (FILTERS)
+    // -----------------------------------
+    async getActivities(parametres = null) {
+      this.isLoading = true;
+      this.errors = {};
+
+      let query = "";
+
+      if (typeof parametres === "string") {
+        query = parametres && `?${parametres}`;
+      } else if (parametres) {
+        query = buildQueryString(parametres);
+      } else {
+        query = buildQueryString(this.filters);
+      }
+
+      try {
+        const data = await apiRequest(`/api/activite/filtrer${query || ""}`);
+        this.activities = data;
+      } catch (err) {
+        this.errors = err.errors || { message: "Failed to load activities" };
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // -----------------------------------
+    // UP COMING EVENTS
+    // -----------------------------------
+    async getUpcomingEvents() {
+      try {
+        const data = await apiRequest("/api/activite/test");
+
+        this.upcoming.days = data.days || [];
+        this.upcoming.nights = data.nights || [];
+        console.log(this.upcoming.days, "list event");
+      } catch (err) {
+        this.errors = { upcoming: err.message };
+      }
+    },
+
+    // -----------------------------------
+    // CAROUSEL BEST RATED
+    // -----------------------------------
+    async getHigherRateEvent() {
+      this.isLoading = true;
+
+      try {
+        const data = await apiRequest("/api/likedActivities");
+
+        this.carousel.days = data.days || [];
+        this.carousel.nights = data.nights || [];
+      } catch (err) {
+        this.errors = { carousel: err.message };
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // -----------------------------------
+    // USER ACTIVITIES
+    // -----------------------------------
+    async getUserActivities() {
+      this.isLoading = true;
+      try {
+        this.user = await apiRequest("/api/user/activite");
+        return this.user;
+      } catch (err) {
+        this.errors = err;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // -----------------------------------
+    // ACTIVITY BY ID
+    // -----------------------------------
+    async getActivityById(id) {
+      this.isLoading = true;
+      try {
+        const data = await apiRequest(`/api/activity/${id}/comments`);
+        this.activity = data;
+        return data;
+      } catch (err) {
+        this.errors = err;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // -----------------------------------
+    // OTHER USER ACTIVITIES
+    // -----------------------------------
+    async getActivitiesByOtherUserId(id) {
+      try {
+        return await apiRequest(`/api/user/activite/${id}`);
+      } catch (err) {
+        this.errors = err;
+      }
+    },
+
+    // -----------------------------------
+    // ADD COMMENT
+    // -----------------------------------
+    async addCommentToEvent(formData, activityId) {
+      try {
+        return await apiRequest(`/api/activity/${activityId}/comments`, {
+          method: "POST",
+          body: JSON.stringify(formData),
+        });
+      } catch (err) {
+        this.errors = err;
+      }
+    },
+
+    // -----------------------------------
+    // ADD EVENT
+    // -----------------------------------
+    async addEvent(formData) {
+      console.log(formData, "test");
+      try {
+        return await apiRequest("http://127.0.0.1:8000/api/user/activite", {
+          method: "POST",
+          body: formData,
+        });
+      } catch (err) {
+        this.errors = err;
+      }
+    },
+
+    // -----------------------------------
+    // UPDATE EVENT
+    // -----------------------------------
+    async updateEvent(activity, formData) {
+      const auth = useAuthStore();
+      if (auth.user?.id !== this.activity?.creator?.id) return;
+
+      try {
+        return await apiRequest(`/api/activite/${activity.id}`, {
+          method: "POST",
+          body: formData,
+        });
+      } catch (err) {
+        this.errors = err;
+      }
+    },
+
+    // -----------------------------------
+    // DELETE EVENT
+    // -----------------------------------
+    async deleteEvent(activity) {
+      const auth = useAuthStore();
+      if (auth.user?.id !== this.activity?.creator?.id) return;
+
+      try {
+        return await apiRequest(`/api/activite/${activity.id}`, {
+          method: "DELETE",
+        });
+      } catch (err) {
+        this.errors = err;
+      }
+    },
+
+    // -----------------------------------
+    // CATEGORIES
+    // -----------------------------------
+    async getCategories() {
+      try {
+        if (this.categories.length) return;
+        const data = await apiRequest("/api/categories");
+        this.categories = data;
+      } catch (err) {
+        this.errors = err;
+      }
+    },
+
+    // -----------------------------------
+    // FAVORITES
+    // -----------------------------------
+    async getFavoritesActivities() {
+      try {
+        const data = await apiRequest("/api/favorite");
+        return data.favoris || [];
+      } catch {
+        return [];
+      }
+    },
+
+    async addFavoritesActivities(activityId) {
+      try {
+        const data = await apiRequest("/api/favorite", {
+          method: "POST",
+          body: JSON.stringify({ id: activityId }),
+        });
+        return data.favorited;
+      } catch (err) {
+        this.errors = err;
+      }
+    },
+
+    async deleteFavoritesActivity(activity) {
+      try {
+        return await apiRequest(`/api/favorite/${activity.id}`, {
+          method: "DELETE",
+        });
+      } catch (err) {
+        this.errors = err;
+      }
+    },
+
+    async checkIfFavorite(id) {
+      try {
+        return await apiRequest(`/api/isFavorite/${id}`);
+      } catch (err) {
+        this.errors = err;
+      }
+    },
   },
 });

@@ -60,12 +60,10 @@
                             </select>
                         </div>
 
-                        
-
                         <div class="form-group">
                             <label for="event-type">{{ actualLang ? "Category" : "Catégorie" }}</label>
                             <select id="event-type" v-model="formDataEvent.type_name" required>
-                                <option disabled value="">{{ actualLang ? "Day" : "Jour" }}</option>
+                                <option disabled value="">{{ actualLang ? "Select a Category" : "Sélectionner un Catégorie" }}</option>
                                 <option  v-for="category in listCategories" key="category.id" :value="category.nom"> {{ category.nom }}</option>
                             </select>
                         </div>
@@ -99,10 +97,8 @@
     import { useAuthStore } from "@/stores/auth";
     import MapComponent from "@/components/MapComponent.vue";
 
-    
 
-    
-    const {addEvent} = useActivityStore();
+    const {addEvent,} = useActivityStore();
     const activitiesStore = useActivityStore();
     const authStore = useAuthStore();
 
@@ -181,12 +177,15 @@ const testInput = async(event) => {
         try {
             const eventUrl = await addEvent(formData);
             if (eventUrl) {
-                console.log(eventUrl);
-
+                console.log(eventUrl, "test2");
+                window.$toast("Saved successfully!")
                 await authStore.getUser();
-                pop();
+                //await authStore.getUpcomingEvents()
+                
+               
                 
             }
+             console.log(eventUrl, "test2");
         } catch (error) {
             errorMessage.value = error.message;
             console.error("Upload failed:", error);
@@ -235,7 +234,7 @@ const testInput = async(event) => {
 
      onMounted(async () => {
         listCategories.value =await activitiesStore.getCategories();
-        console.log(listCategories)
+        console.log(listCategories, "liste Categories")
      
      });
 

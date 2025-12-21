@@ -59,7 +59,7 @@ const routes = [
         component: () => import("@/pages/OtherView/EventView.vue"),
       },
       {
-        path: "/Event Organisator",
+        path: "/Event_Organisator/:id?",
         name: "Event Organisator",
         // route level code-splitting
         // this generates a separate chunk (Home-[hash].js) for this route

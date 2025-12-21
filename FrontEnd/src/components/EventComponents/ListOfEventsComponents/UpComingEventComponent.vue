@@ -17,7 +17,7 @@
           </div>
           <div class="d">
             <v-icon icon="mdi-clock-outline " :class="['icon', {'justGlow' : !actualMode}]"/>
-           {{ formatDateSpecial(event.date) }}
+           {{ formatDateSpecial(event.date,true) }}
           </div>
         </div>
       </router-link>
@@ -37,19 +37,12 @@
 
   
   const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
-  const UpComingEvents = ref([
-    { id:null,image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3, lieu :null, date :null},
-    
-  ]);
 
-  const UpComingEventsNuit = ref([
-    {image : "https://picsum.photos/1895/795", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
-    
-  ]);
 
   const actualMode = ref(LocalStorageManager.getMode());
+  const actualLang = ref(LocalStorageManager.getLang())
   const eventsss = ref([]);
-
+  const initialized = ref(false); 
 
   const wrapper = ref(null);
   const carousel = ref(null);
@@ -62,25 +55,33 @@
   if (actualMode.value == null){
        LocalStorageManager.setMode(true);
        actualMode.value = LocalStorageManager.getMode();
-       setEvents();
+      
    }
    // Correction du watcher
-   watch(actualMode, () => {
-    setEvents();
-  });
-
+  
    
    const handleModeChange = (event) => {
        actualMode.value = JSON.parse(event.detail.storage);
        //setEvents();
    };
 
-   const setEvents = () => {
-      eventsss.value = actualMode.value ? UpComingEvents.value : UpComingEventsNuit.value;
+   const handleLangChange = (event) => {
+      actualLang.value = JSON.parse(event.detail.storage);
     };
 
 
+if (actualMode.value == null){
+      LocalStorageManager.setMode(true);
+      actualMode.value = LocalStorageManager.getMode();
+  }
+  
+
+   
+
+
   const initializeCarousel = () => {
+
+
     const firstCardWidth = carousel.value.querySelector('.card').offsetWidth;
     const cardPerView = Math.round(carousel.value.offsetWidth / firstCardWidth);
     
@@ -161,13 +162,18 @@
   });
     // Add event listener for mode changes
   onMounted(async () => {
-      await setEvents(); // Assure que les events sont chargés
+      //await setEvents(); // Assure que les events sont chargés
+      if (!initialized) {
       initializeCarousel();
+      initialized = true;
+    }
+        window.addEventListener('lang-changed', handleLangChange);
       window.addEventListener('mode-changed', handleModeChange);
   });
  
    // Remove event listener when component is unmounted
    onUnmounted(() => {
+      window.addEventListener('lang-changed', handleLangChange);
        window.removeEventListener('mode-changed', handleModeChange);
    });
 </script>

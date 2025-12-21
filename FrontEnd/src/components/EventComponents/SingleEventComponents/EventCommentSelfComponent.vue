@@ -25,7 +25,6 @@
     import Ratings from "../../RatingComponent.vue";
     import waterButton from "../../WaterButtonComponent.vue"
     import { useActivityStore } from "@/stores/activity";
-    import LoadingComponent from "@/components/LoadingComponent.vue";
 
     const {addCommentToEvent} = useActivityStore();
     const activitiesStore = useActivityStore();
@@ -37,9 +36,6 @@
         etoiles : null,
     });
 
-    
-
-    
     const props = defineProps({
         activityId: Number,
     });
@@ -56,7 +52,6 @@
 
             formCommentUser.contenu = "";
             formCommentUser.etoiles = null;
-
            
         } catch (error) {
             console.error('Failed to add comment:', error);

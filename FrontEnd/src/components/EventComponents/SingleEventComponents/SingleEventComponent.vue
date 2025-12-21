@@ -37,13 +37,6 @@
   
 
     const route = useRoute()
-    const {getActivityById} = useActivityStore();
-
-    /*onMounted (async ()  =>
-        activity.value = await getActivityById(route.params.id) 
-    );*/
-    
-
     const event = ref(LocalStorageManager.getEvent())
 
     const defaultEvent = { 

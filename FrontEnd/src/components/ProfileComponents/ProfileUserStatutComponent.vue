@@ -39,7 +39,7 @@
     let followings = ref([]);
     let favoriteEvents = ref([]);
     const {getListUserFollowers} = useFriendStore();
-    const { getListFavoritesActivities} =useActivityStore();
+    const {getFavoritesActivities} =useActivityStore();
 
     let IsShowFollowers = ref(true);
     let IsShowFollowings = ref(false);
@@ -68,7 +68,7 @@
         
         } else {
             // Fallback: refetch the entire list
-            favoriteEvents.value = (await getListFavoritesActivities()).favoris;
+            favoriteEvents.value = (await getFavoritesActivities()).favoris;
         }
     }
 
@@ -95,7 +95,7 @@
                 selectedItem = userInput;
                 IsShowFollowers.value = false;
                 IsShowFollowings.value = false;
-               favoriteEvents.value = (await getListFavoritesActivities()).favoris
+               favoriteEvents.value = (await getFavoritesActivities())
                 IsShowFavorites.value = !IsShowFavorites.value;
                 break;
             
@@ -140,11 +140,7 @@
     isLogged.value = JSON.parse(event.detail.storage);
     };
 
-     onMounted(async () => {
-        listCategories.value =await activitiesStore.getCategories();
-        console.log(listCategories)
      
-     });
 
 
 

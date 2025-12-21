@@ -112,6 +112,12 @@
     import { useUserStore } from '@/stores/user';
 
 
+   const actualMode = ref(storageManager.getMode());
+    const actualLang = ref(storageManager.getLang());
+
+     const messagePop = actualLang.value
+      ? "Profile modified successfully!" 
+      : "Profile modifié avec succès !" 
     const authStore = useAuthStore();
     const errorMessage = ref(null);
     const  validationErrors  = ref(null);
@@ -131,16 +137,9 @@
 
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
  
-    const actualMode = ref(storageManager.getMode());
-    const actualLang = ref(storageManager.getLang());
+ 
     let isLogged = ref(storageManager.getLogin());
-    let theUser = ref(null);
-
-    theUser=authStore.user;
-
-
-
-
+    let theUser = ref(authStore.user);
 
     if (actualLang.value === null) {
         storageManager.setLang(true);
@@ -159,7 +158,7 @@
     }
 
     if(theUser.value === null) {
-        theUser.value = user
+        console.log(theUser , "No User");
     }
     // Function to handle mode change event
     const handleLangChange = (event) => {
@@ -193,6 +192,7 @@
             const modifiedUser =await modifyUser(formDataUser);
             if (modifiedUser) {
                 await authStore.getUser();
+                window.$toast(messagePop);
             }
 
         } catch (error) {

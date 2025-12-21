@@ -32,9 +32,11 @@ class ActiviteController extends Controller
         ]);
     }
 
-    public function getAllActivities()
-    {
-        return $this->userService->getActivitiesList();
+    public function getAllActivities(Request $request) {
+        return $this->userService-> getActivitiesList(
+            $request->get('per_page', 9),
+            $request->get('page', 1)
+        );
     }
 
     public function addActivityUser(Request $request)
@@ -88,8 +90,8 @@ class ActiviteController extends Controller
         try {
 
             $activite = Activite::findOrFail($activiteId);
-            $this->authorize('update', $activite);
-
+            //$this->authorize('update', $activite);
+        
             $validatedInputActivity = $request->validate([
                 'titre' => 'nullable|string|max:255',
                 'description' => 'nullable|string',
@@ -157,8 +159,14 @@ class ActiviteController extends Controller
 
     }
 
-    public function getUserActivities(Request $request)
-    {
+    //  public function getUserActivitiesbyId(int $activityId) {
+    //      return Activite::with([
+    //     'User.activites' 
+    // ])->findOrFail($activityId);
+    // }
+
+
+    public function getUserActivities(Request $request) {
         $authUser = $request->user();
 
         return $authUser->load('activites');

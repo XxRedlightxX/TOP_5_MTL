@@ -1,17 +1,19 @@
 const StorageManager = {
   // gere le mode dark-light
- setMode(value) {
-    const modeValue = value === true || value === 'days' ? 'days' : 'nights';
-    localStorage.setItem("mode", modeValue);
+   setMode(value) {
+    localStorage.setItem("mode", JSON.stringify(value));
     window.dispatchEvent(
       new CustomEvent("mode-changed", {
-        detail: { storage: modeValue }, // This is a string
+        detail: {
+          storage: localStorage.getItem("mode"),
+        },
       })
     );
   },
   
   getMode() {
-    return localStorage.getItem("mode") || 'days'; // Return string directly
+     const stored = localStorage.getItem("mode");
+    return stored ? JSON.parse(stored) : true;
   },
 
 
@@ -92,7 +94,17 @@ const StorageManager = {
   },
   getLogUser() {
     const logUser = localStorage.getItem("logUserr");
-    return logUser ? JSON.parse(logUser) : null;
+
+    if (!logUser || logUser === "undefined" || logUser === "null") {
+        return null;
+    }
+
+    try {
+        return JSON.parse(logUser);
+    } catch (e) {
+        console.error("Corrupted logUser value:", logUser);
+        return null;
+    }
   },
 
   // gere l'organisateur a afficher

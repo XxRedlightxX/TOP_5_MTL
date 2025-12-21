@@ -26,6 +26,8 @@ Route::get('/user/search', [UserController::class, 'getUserByEmail']);
 
 Route::post('/user/profile-picture', [UserController::class, 'updateProfilePicture']);
 
+Route::post('/user/{userId}/profile-picture', [UserController::class, 'updateProfileByidPicture']);
+
 Route::get('/utilisateur/{user}/activites', [UserController::class, 'index']);
 
 Route::get('/user/search', [UserController::class, 'getUserBySearchUser']);
@@ -46,6 +48,8 @@ Route::post("/user/activite", [ActiviteController::class, 'addActivityUser']);
 Route::get('/activite/latest', [ActiviteController::class, 'getNewestActivitiesbyCreationDate']);
 
 Route::get('/activite', [ActiviteController::class, 'getAllActivities']);
+
+Route::get('/user/activite/{activityId}', [ActiviteController::class, 'getUserActivitiesbyId']);
 
 Route::get('/user/activite', [ActiviteController::class, 'getUserActivities']);
 

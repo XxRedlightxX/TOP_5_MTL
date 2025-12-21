@@ -12,7 +12,7 @@
             <img :src="getAvatarUrl(comment2.user?.image_data)" :alt="`Image of ${comment2.name}`">
             <div class="comment">
               <p>{{ comment2.user?.name  }}</p>
-              <p>{{ formatDateComment(comment2.date) }}{{   comment2.user?.date}}</p>
+              <p>{{ formatDateComment(comment2.date,actualLang) }}{{   comment2.user?.date}}</p>
             </div>
             
           </div>
@@ -25,7 +25,7 @@
       </div>
        
     </div>
-    
+  
      <div v-else>{{actualLang ? 'No comments' : "Aucun commentaires"}}</div>
 
    
@@ -38,11 +38,9 @@ import Ratings from "../../RatingComponent.vue";
 import storageManager from "@/JS/LocalStaorageManager"
 import { ref, onMounted , onBeforeUnmount, computed  } from 'vue';
 import { getAvatarUrl } from "@/JS/GlobalFunctions";
-import { useUserStore } from '@/stores/user';
 import { formatDateComment } from "@/JS/GlobalFunctions";
 import Loading from "@/components/LoadingComponent.vue";
 import { useActivityStore } from "@/stores/activity";
-import { isPlainObject } from "vuetify/lib/util/helpers.mjs";
 
 const activitiesStore = useActivityStore()
 const isLoading = computed(() => activitiesStore.isLoading);
