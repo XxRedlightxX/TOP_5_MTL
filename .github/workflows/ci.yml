@@ -97,4 +97,4 @@ jobs:
       # -------------------------
       - name: Build frontend
         working-directory: FrontEnd
-        run: npm run dev
+        run: npm run build
