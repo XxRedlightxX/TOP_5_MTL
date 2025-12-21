@@ -77,10 +77,16 @@
 
  
 
-   watch(actualMode, (newVal, oldVal) => {
+   /*watch(actualMode, (newVal, oldVal) => {
       eventsList.value = newVal ? newEventJours : newEventNuit;
       console.log( eventsList.value);
-   });
+   });*/
+
+   watch(() => activitiesStore.mode, (newMode) => {
+  console.log("Store mode changed:", newMode);
+  actualMode.value = newMode;
+});
+
    
 
     if (actualLang.value === null) {
@@ -92,16 +98,23 @@
     const handleLangChange = (event) => {
         actualLang.value = JSON.parse(event.detail.storage);
     };
+
+      const handleModeChange = (event) => {
+        actualMode.value = JSON.parse(event.detail.storage);
+
+    };
     
   // Add event listener for Lang changes
   onMounted(() => {
     window.addEventListener('lang-changed', handleLangChange);
+     window.addEventListener('mode-changed', handleModeChange);
     
   });
 
   // Remove event listener when component is unmounted
   onUnmounted(() => {
     window.removeEventListener('lang-changed', handleLangChange);
+     window.removeEventListener('mode-changed', handleModeChange);
   });
 </script>
 

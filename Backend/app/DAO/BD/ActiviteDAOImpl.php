@@ -14,41 +14,55 @@ use Illuminate\Support\Facades\Cache;
 
 class ActiviteDAOImpl implements ActiviteDAO {
 
+    private const CACHE_TTL = 600;
+
     /**
      * @inheritDoc
      */
     public function delete(int $id) {
+        Cache::tags('activities')->flush();
         return Activite::findOrFail($id)->Delete();
     }
 
     /**
      * @inheritDoc
      */
-    public function getAll() {
-        return Activite::all();
+public function getAll() {
+    $key = 'activities:all';
 
-         /*$perPage = $request->get('per_page', 15);
-    $page = $request->get('page', 1);
-    
-    return Activite::paginate($perPage, ['*'], 'page', $page);*/
-    }
+    logger(Cache::tags('activities')->has($key) ? 'CACHE HIT' : 'CACHE MISS');
 
+    return Cache::tags('activities')->remember(
+        $key,
+        self::CACHE_TTL,
+        fn () => Activite::all()
+    );
+    //return Activite::all();
+}
     public function getAllCategories() {
-        return Type::all();
+        return Cache::remember(
+            'categories:all',
+            self::CACHE_TTL,
+            fn () => Type::all()
+        );
     }
 
     /**
      * @inheritDoc
      */
     public function getById(int $id) {
-        return Activite::findOrFail($id);
+        return Cache::remember(
+        "activities:id:$id",
+        self::CACHE_TTL,
+        fn () => Activite::findOrFail($id)
+    );
     }
 
     /**
      * @inheritDoc
      */
     public function save(array $activiteData) {
-
+          Cache::tags('activities')->flush();
         return Activite::create($activiteData);
     }
 
@@ -56,6 +70,7 @@ class ActiviteDAOImpl implements ActiviteDAO {
      * @inheritDoc
      */
     public function update(int $idActivite, array $data): ?Activite {
+        Cache::tags('activities')->flush();
         $activiteExist = Activite::find($idActivite);
         if (!$activiteExist) return null;
 
@@ -65,7 +80,7 @@ class ActiviteDAOImpl implements ActiviteDAO {
     }
 
     public function addActivity(int $userId, array $activityData) {
-        
+        Cache::tags('activities')->flush();
         $user = User::findOrFail($userId);
 
         $activityData['utilisateur_id'] = $user->id;
@@ -81,38 +96,49 @@ class ActiviteDAOImpl implements ActiviteDAO {
      */
     public function getActivityBySeason(string $nomSaison) {
 
-        return Activite::whereHas('saison', function ($query) 
-        use ($nomSaison) {
-            $query->where('statut', $nomSaison);
-        })->get();  
+       return Cache::remember(
+        "activities:season:$nomSaison",
+        self::CACHE_TTL,
+        fn () =>
+            Activite::whereHas('saison', fn ($q) =>
+                $q->where('statut', $nomSaison)
+            )->get()
+    );
     }
 
 
     public function getUpcomingActivityByRecent() {
-        $days = Activite::whereDate('date_debut', '>=', now())
-            ->where('statut_journee', 'jour')
-            ->orderBy('date_debut', 'asc')
-            ->take(12)
-            ->get();
+       return Cache::tags('activities')->remember(
+        'activities:upcoming',
+        300, // 5 min (time-sensitive)
+        function () {
+            return [
+                'days' => Activite::whereDate('date_debut', '>=', now())
+                    ->where('statut_journee', 'jour')
+                    ->orderBy('date_debut')
+                    ->take(12)
+                    ->get(),
 
-        $nights = Activite::whereDate('date_debut', '>=', now())
-            ->where('statut_journee', 'nuit')
-            ->orderBy('date_debut', 'asc')
-            ->take(12)
-            ->get();
-
-        return [
-            'days' => $days,
-            'nights' => $nights,
-        ];
+                'nights' => Activite::whereDate('date_debut', '>=', now())
+                    ->where('statut_journee', 'nuit')
+                    ->orderBy('date_debut')
+                    ->take(12)
+                    ->get(),
+            ];
+        }
+    );
 
     }
 
     public function getActivityByType(string $activiteType) {
-        return Activite::whereHas('type', function ($query) 
-        use ($activiteType) {
-            $query->where('nom', '=', $activiteType);
-        })->get();
+        return Cache::remember(
+            "activities:type:$activiteType",
+            self::CACHE_TTL,
+            fn () =>
+                Activite::whereHas('type', fn ($q) =>
+                    $q->where('nom', $activiteType)
+                )->get()
+        );
     }
 
     public function getActivityByDayOrNight(string $activiteyDaytime) {
@@ -162,49 +188,61 @@ class ActiviteDAOImpl implements ActiviteDAO {
 
    public function getActivitiesMostLiked() {
 
-        //return Activite::orderByDesc('nombre_likes')->take(4)->get();
+        return Cache::tags('activities')->remember(
+        'activities:most_liked',
+        600, // 10 minutes TTL
+        function () {
+            $days = Activite::where('statut_journee', 'jour')
+                ->orderByDesc('nombre_likes')
+                ->take(4)
+                ->get();
 
-        $days = Activite::where('statut_journee', 'jour')
-            ->orderByDesc('nombre_likes')
-            ->take(4)
-            ->get();
+            $nights = Activite::where('statut_journee', 'nuit')
+                ->orderByDesc('nombre_likes')
+                ->take(4)
+                ->get();
 
-        $nights = Activite::where('statut_journee', 'nuit')
-           ->orderByDesc('nombre_likes')
-            ->take(4)
-            ->get();
-        
-        return [
-        'days' => $days,
-        'nights' => $nights
-    ];
+            return [
+                'days' => $days,
+                'nights' => $nights,
+            ];
+        }
+    );
     }
 
     public function getFilteredActivities(array $filters)
     {
-        $query = Activite::query();
+        $cacheKey = 'activities:filter:' . md5(json_encode($filters));
 
-        if (!empty($filters['daytime'])) {
-            $query->where('statut_journee', $filters['daytime']);
+    return Cache::remember(
+        $cacheKey,
+        self::CACHE_TTL,
+        function () use ($filters) {
+            $query = Activite::query();
+
+            if (!empty($filters['daytime'])) {
+                $query->where('statut_journee', $filters['daytime']);
+            }
+
+            if (!empty($filters['title'])) {
+                $query->where('titre', 'LIKE', "%{$filters['title']}%");
+            }
+
+            if (!empty($filters['season'])) {
+                $query->whereHas('saison', fn ($q) =>
+                    $q->where('statut', $filters['season'])
+                );
+            }
+
+            if (!empty($filters['type'])) {
+                $query->whereHas('type', fn ($q) =>
+                    $q->where('nom', $filters['type'])
+                );
+            }
+
+            return $query->get();
         }
-
-        if (!empty($filters['title'])) {
-            $query->where('titre', 'LIKE', "%{$filters['title']}%");
-        }
-
-        if (!empty($filters['season'])) {
-            $query->whereHas('saison', function ($q) use ($filters) {
-                $q->where('statut', $filters['season']);
-            });
-        }
-
-        if (!empty($filters['type'])) {
-            $query->whereHas('type', function ($q) use ($filters) {
-                $q->where('nom', $filters['type']);
-            });
-        }
-
-        return $query->get();
+        );
     }
 
 
@@ -224,23 +262,25 @@ class ActiviteDAOImpl implements ActiviteDAO {
      * @inheritDoc
      */
     public function getNewestActivitiesbyCreationDate() {
-        //return Activite::orderBy("created_at");
-        
-        $daysNewestActivities = Activite::where('statut_journee', 'jour')
-            ->orderBy('created_at')
-            ->take(6)
-            ->get();
+        return Cache::tags('activities')->remember(
+        'activities:newest_by_creation',
+        SELF::CACHE_TTL, // 10 minutes TTL
+        function () {
+            $daysNewestActivities = Activite::where('statut_journee', 'jour')
+                ->orderBy('created_at')
+                ->take(6)
+                ->get();
 
+            $nightsNewestActivities = Activite::where('statut_journee', 'nuit') // corrected 'nuit'
+                ->orderBy('created_at')
+                ->take(6)
+                ->get();
 
-        $nightsNewestActivities = Activite::where('statut_journee', 'jour')
-            ->orderBy('created_at')
-            ->take(6)
-            ->get();
-
-          return [
-            'days' =>  $daysNewestActivities,
-            'nights' =>  $nightsNewestActivities
-          ];
-
+            return [
+                'days' => $daysNewestActivities,
+                'nights' => $nightsNewestActivities,
+            ];
+        }
+    );
     }
 }

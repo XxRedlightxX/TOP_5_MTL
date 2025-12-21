@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import { useAuthStore } from "./auth";
-import { apiRequest } from "../api/api";
+import { apiRequest, buildQueryString  } from "../api/api";
 import StorageManager from "@/JS/LocalStaorageManager";
 
 
@@ -569,13 +569,13 @@ import StorageManager from "@/JS/LocalStaorageManager";
 export const useActivityStore = defineStore("activitiesStore", {
 
   state: () => ({
-    mode: StorageManager.getMode() || 'days',
+    mode: StorageManager.getMode(),
     activities: [],
     upcoming: { days: [], nights: [] },
     carousel: { days: [], nights: [] },
     user: null,
     activity: null,
-    
+    categories: [],
     isLoading: false,
 
     filters: {
@@ -590,13 +590,13 @@ export const useActivityStore = defineStore("activitiesStore", {
 
   getters: {
     upcomingItems(state) {
-      return state.mode === "days"
+      return state.mode === true
         ? state.upcoming.days
         : state.upcoming.nights;
     },
 
     carouselItems(state) {
-      return state.mode === "days"
+      return state.mode === true
         ? state.carousel.days
         : state.carousel.nights;
     },
@@ -611,23 +611,36 @@ export const useActivityStore = defineStore("activitiesStore", {
     // -----------------------------------
     // TOGGLE MODE (DAY ⇄ NIGHT)
     // -----------------------------------
-    toggleMode() {
-      this.mode = this.mode === "nights" ? "days" : "nights";
-      StorageManager.setMode(this.mode);
-    },
+     toggleMode() {
+    this.mode = !this.mode; // Just flip boolean
+    StorageManager.setMode(this.mode);
+  },
 
     // -----------------------------------
     // GET ACTIVITIES (FILTERS)
     // -----------------------------------
-    async getActivities() {
+    async getActivities(parametres = null) {
       this.isLoading = true;
       this.errors = {};
 
-      const params = new URLSearchParams();
-      Object.entries(this.filters).forEach(([k, v]) => v && params.append(k, v));
+      let query = '';
+  
+      
+      if (typeof parametres === 'string') {
+        query = parametres && `?${parametres}`;
+      }
+    
+      else if (parametres) {
+        query = buildQueryString(parametres);
+      }
+
+      else {
+        query = buildQueryString(this.filters);
+      }
+
 
       try {
-        const data = await apiRequest(`/api/activite/filtrer?${params}`);
+        const data = await apiRequest(`/api/activite/filtrer${query || ''}` );
         this.activities = data;
       } catch (err) {
         this.errors = err.errors || { message: "Failed to load activities" };
@@ -641,10 +654,11 @@ export const useActivityStore = defineStore("activitiesStore", {
     // -----------------------------------
     async getUpcomingEvents() {
       try {
-        const data = await apiRequest("/api/activite/test");
+        const data = await apiRequest("/api/activite/test",);
 
         this.upcoming.days = data.days || [];
         this.upcoming.nights = data.nights || [];
+        console.log(this.upcoming.days , "list event")
 
       } catch (err) {
         this.errors = { upcoming: err.message };
@@ -730,10 +744,12 @@ export const useActivityStore = defineStore("activitiesStore", {
     // ADD EVENT
     // -----------------------------------
     async addEvent(formData) {
+      console.log(formData, "test")
       try {
-        return await apiRequest("/api/user/activite", {
+        return await apiRequest("http://127.0.0.1:8000/api/user/activite", {
           method: "POST",
           body: formData,
+          
         });
       } catch (err) {
         this.errors = err;
@@ -778,8 +794,11 @@ export const useActivityStore = defineStore("activitiesStore", {
     // -----------------------------------
     async getCategories() {
       try {
-        this.categories = await apiRequest("/api/categories");
-        return this.categories
+        if (this.categories.length) return;
+       const data = await apiRequest('/api/categories');
+        this.categories = data;
+        
+        
       } catch (err) {
         this.errors = err;
       }

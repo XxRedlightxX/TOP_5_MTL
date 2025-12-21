@@ -171,7 +171,7 @@ if (actualMode.value == null){
   }
   // Correction du watcher
   watch(actualMode, (newVal, oldVal) => {
-    newEvent.value = newVal ? newEventJours : newEventNuit;
+    //newEvent.value = newVal ? newEventJours : newEventNuit;
   });
   
   const handleModeChange = (event) => {

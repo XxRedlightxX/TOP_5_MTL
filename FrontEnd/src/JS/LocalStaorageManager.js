@@ -12,7 +12,8 @@ const StorageManager = {
   },
   
   getMode() {
-    return localStorage.getItem("mode") || true; // Return string directly
+     const stored = localStorage.getItem("mode");
+    return stored ? JSON.parse(stored) : true;
   },
 
 
