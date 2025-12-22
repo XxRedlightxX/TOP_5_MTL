@@ -3,9 +3,9 @@ import { useActivityStore } from "@/stores/activity";
 import { onMounted, onUnmounted, ref } from "vue";
 
 const PaginationManager = {
-  async paginationSetup() {
+  async paginationSetup(value) {
     PaginationManager.paginationLenghtSetup();
-    PaginationManager.paginationNumberSetup();
+    PaginationManager.paginationNumberSetup(value);
 
     return LocalStorageManager.getPaginationTotalNumber();
   },
@@ -44,14 +44,14 @@ const PaginationManager = {
     });
   },
 
-  async paginationNumberSetup() {
+  async paginationNumberSetup(value) {
     let paginationNumber = ref(LocalStorageManager.getActualPaginationNumber());
-    console.log("storage pagination number : " + paginationNumber.value);
+    //console.log("storage pagination number : " + paginationNumber.value.number);
 
-    if (paginationNumber.value == null || paginationLenght.value <= 0) {
-      PaginationManager.gestionPaginationNumber(1);
-      paginationNumber.value = 1;
-      console.log("pagination number : " + paginationNumber.value);
+    if (paginationNumber.value == null) {
+      PaginationManager.gestionPaginationNumber(value);
+      //paginationNumber.value = 1; ///
+      //console.log("pagination number : " + paginationNumber.value);
     }
 
     /**
@@ -77,27 +77,83 @@ const PaginationManager = {
     });
   },
 
-  gestionPaginationNumber(value) {
+  async getPaginationsEvent(value) {
+    const activitiesStore = useActivityStore();
+    const data = await activitiesStore.getActivities(value);
+    console.log("data get : ", data);
+    return PaginationManager.setPaginationEventData(value, data);
+  },
+
+  setPaginationEventData(value, data) {
+    let page = PaginationManager.getActualPageNumber(value);
+    //let donnee = { number: page, days: data.days, nights: data.nights };
+    let donnee = { number: page, days: data, nights: data };
+    console.log("donnee get : ", donnee);
+    return donnee;
+  },
+
+  getActualPageNumber(value) {
+    const query = value;
+    const params = new URLSearchParams(query);
+    const page = Number(params.get("page"));
+    return page;
+  },
+
+  changePageNumber(value, newPageNumber) {
+    const params = new URLSearchParams(value);
+    // Met à jour (ou crée) le paramètre page
+    params.set("page", newPageNumber);
+    return params.toString();
+  },
+
+  async gestionPaginationNumber(value) {
     let paginationLenght = LocalStorageManager.getPaginationTotalNumber();
+    let page = PaginationManager.getActualPageNumber(value);
+    let parameter = value;
+
     if (paginationLenght == null) {
       PaginationManager.paginationLenghtSetup();
       paginationLenght = LocalStorageManager.getPaginationTotalNumber();
     }
-    LocalStorageManager.setActualPaginationNumber(value);
+    const actualPaginationEvent = await PaginationManager.getPaginationEvents(
+      value
+    );
 
-    if (value == paginationLenght) {
-      LocalStorageManager.setNextPaginationNumberFromLast(value - 2);
+    LocalStorageManager.setActualPaginationNumber(actualPaginationEvent);
+
+    if (page == paginationLenght) {
+      parameter = PaginationManager.changePageNumber(value, value - 2);
+      const nextPaginationFromLastEvent =
+        PaginationManager.getPaginationEvents(parameter);
+
+      LocalStorageManager.setNextPaginationNumberFromLast(
+        nextPaginationFromLastEvent
+      );
       LocalStorageManager.setNextPaginationNumber(null);
     } else {
-      LocalStorageManager.setNextPaginationNumber(value + 1);
+      parameter = PaginationManager.changePageNumber(value, value + 1);
+      const nextPaginationEvent =
+        PaginationManager.getPaginationEvents(parameter);
+
+      LocalStorageManager.setNextPaginationNumber(nextPaginationEvent);
       LocalStorageManager.setNextPaginationNumberFromLast(null);
     }
 
-    if (value == 1) {
-      LocalStorageManager.setPrevPaginationNumberFromFisrt(value + 2);
+    if (page == 1) {
+      parameter = PaginationManager.changePageNumber(value, value + 2);
+      const prevPaginationFromFirstEvent =
+        PaginationManager.getPaginationEvents(parameter);
+
+      LocalStorageManager.setPrevPaginationNumberFromFisrt(
+        prevPaginationFromFirstEvent
+      );
       LocalStorageManager.setPrevPaginationNumber(null);
     } else {
-      LocalStorageManager.setPrevPaginationNumber(value - 1);
+      parameter = PaginationManager.changePageNumber(value, value - 1);
+      const prevPaginationEvent =
+        PaginationManager.getPaginationEvents(parameter);
+
+      LocalStorageManager.setPrevPaginationNumber(prevPaginationEvent);
       LocalStorageManager.setPrevPaginationNumberFromFisrt(null);
     }
   },
@@ -114,12 +170,14 @@ const PaginationManager = {
 
     console.log("----------------");
     console.log("pagination lenght : " + paginationLenght);
-    console.log("actual pagination number : " + actualPagination);
-    console.log("next pagination number : " + nextPagination);
-    console.log("prev pagination number : " + prevPagination);
-    console.log("next from last pagination number : " + nextPaginationFromLast);
+    console.log("actual pagination number : " + actualPagination.number);
+    console.log("next pagination number : " + nextPagination.number);
+    console.log("prev pagination number : " + prevPagination.number);
     console.log(
-      "prev from first pagination number : " + prevPaginationFromFirst
+      "next from last pagination number : " + nextPaginationFromLast.number
+    );
+    console.log(
+      "prev from first pagination number : " + prevPaginationFromFirst.number
     );
     console.log("---------------\n");
   },
@@ -133,37 +191,37 @@ const PaginationManager = {
     const prevPaginationFromFirst =
       LocalStorageManager.getPrevPaginationNumberFromFisrt();
 
-    switch (value) {
-      case actualPagination:
-        console.log("actual pagination number, no change");
-        PaginationManager.paginationStatus();
-        break;
-      case nextPagination:
-        console.log("not actual pagination number, change");
-        PaginationManager.gestionPaginationNumber(value);
-        PaginationManager.paginationStatus();
+    // switch (value) {
+    //   case actualPagination.number:
+    //     console.log("actual pagination number, no change");
+    //     //PaginationManager.paginationStatus();
+    //     break;
+    //   case nextPagination.number:
+    //     console.log("not actual pagination number, change");
+    //     //PaginationManager.gestionPaginationNumber(value);
+    //     //PaginationManager.paginationStatus();
 
-        break;
-      case prevPagination:
-        console.log("not actual pagination number, change");
-        PaginationManager.gestionPaginationNumber(value);
-        PaginationManager.paginationStatus();
-        break;
-      case nextPaginationFromLast:
-        console.log("not actual pagination number, change");
-        PaginationManager.gestionPaginationNumber(value);
-        PaginationManager.paginationStatus();
-        break;
-      case prevPaginationFromFirst:
-        console.log("not actual pagination number, change");
-        PaginationManager.gestionPaginationNumber(value);
-        PaginationManager.paginationStatus();
-        break;
-      default:
-        console.log("not actual pagination number, change");
-        PaginationManager.gestionPaginationNumber(value);
-        PaginationManager.paginationStatus();
-    }
+    //     break;
+    //   case prevPagination.number:
+    //     console.log("not actual pagination number, change");
+    //     //PaginationManager.gestionPaginationNumber(value);
+    //     //PaginationManager.paginationStatus();
+    //     break;
+    //   case nextPaginationFromLast.number:
+    //     console.log("not actual pagination number, change");
+    //     //PaginationManager.gestionPaginationNumber(value);
+    //     //PaginationManager.paginationStatus();
+    //     break;
+    //   case prevPaginationFromFirst.number:
+    //     console.log("not actual pagination number, change");
+    //     //PaginationManager.gestionPaginationNumber(value);
+    //     //PaginationManager.paginationStatus();
+    //     break;
+    //   default:
+    //     console.log("not actual pagination number, change");
+    //   //PaginationManager.gestionPaginationNumber(value);
+    //   //PaginationManager.paginationStatus();
+    // }
   },
 };
 

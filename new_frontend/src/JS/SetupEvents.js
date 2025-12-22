@@ -56,7 +56,7 @@ const SetupEvents = {
       storedData = ref(getFunction());
     }
 
-    console.log("dataa before :", storedData);
+    //console.log("dataa before :", storedData);
     // Si aucun événement n'est enregistré, récupération depuis l'API
     if (storedData.value == null) {
       const activitiesStore = useActivityStore();
@@ -65,7 +65,7 @@ const SetupEvents = {
         ? SetupEvents.setListOfEvents(apiData)
         : apiData;
       await setFunction(storedData.value);
-      console.log("dataa after :", storedData);
+      //console.log("dataa after :", storedData);
     }
 
     /**
@@ -134,7 +134,7 @@ const SetupEvents = {
   },
 
   actualEventModeManagerGeneric(getFunction, data) {
-    console.log("calledd");
+    //console.log("calledd");
     let mode = LocalStorageManager.getMode();
     let events = getFunction();
     data.value = mode ? events.eventsJour : events.eventsNuit;
@@ -251,7 +251,7 @@ const SetupEvents = {
    * ----------------------------------------------------------
    */
   setListOfEvents(data) {
-    console.log("data recu : ", data);
+    //console.log("data recu : ", data);
     let organizedData = null;
     if (data != null) {
       const organizedDataDays = this.setEventDataFormat(data.days);
@@ -261,14 +261,14 @@ const SetupEvents = {
         eventsNuit: organizedDataNight,
       };
     } else {
-      console.log("data est null");
+      //console.log("data est null");
     }
 
     return organizedData;
   },
 
   setEventDataFormat(data) {
-    console.log("data send : ", data);
+    //console.log("data send : ", data);
     const descriptionText = "Description not found";
     const defaultImage = "https://picsum.photos/640/480";
 

@@ -140,7 +140,7 @@
   onMounted(async () => {
     const reactiveList = await SetupEvents.tagSetup();
     tagFilters.value = reactiveList.value;
-    console.log('tags : ' , tagFilters)
+    //console.log('tags : ' , tagFilters)
     if (tagFilters.value.length) initializeTags();
   });
 

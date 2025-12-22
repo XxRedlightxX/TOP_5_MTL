@@ -1,5 +1,5 @@
 <template>
-  <div v-if="paginationLenght != null" id="AllEventComponent">
+  <div v-if="pagination != null" id="AllEventComponent">
     <FilterComponent/>
     <div class="events">
 
@@ -22,12 +22,11 @@
         </div>
       </router-link>
     </div>
-    <PaginationComponent :lenght="paginationLenght" @paginationChanged="paginationUpdate"/>
+    <PaginationComponent :lenght="pagination" @paginationChanged="paginationUpdate"/>
   </div>
 </template>
 
 <script setup>
-
   import { onMounted, ref, watch, onUnmounted } from 'vue';
   import LocalStorageManager from '@/JS/LocalStorageManager';
   import Setup from '@/JS/Setup';
@@ -37,30 +36,33 @@
   import PaginationManager from '@/JS/PaginationManager';
 
   const actualMode = Setup.modeSetup();
-  const events = FakeDataBase.getNewEvents();
+  //const events = FakeDataBase.getNewEvents();
 
-  const paginationLenght = ref(null)
+  const pagination = ref(null)
+  const parameter = ref("per_page=9&page=2");
 
   const paginationUpdate = (index) => {
     PaginationManager.getPaginationEvents(index)
   }
 
   let newEvent = ref(null);
-  newEvent.value = actualMode.value ? events.eventJour : events.eventNuit;
+  //newEvent.value = actualMode.value ? events.eventJour : events.eventNuit;
 
   const setEvent = (value) => {
     LocalStorageManager.setEvent(value);
     console.log("event value : ", value);
   };
 
-  // Correction du watcher
-  watch(actualMode, (newVal, oldVal) => {
-    newEvent.value = newVal ? events.eventJour : events.eventNuit;
-  });
+  // // Correction du watcher
+  // watch(actualMode, (newVal, oldVal) => {
+  //   newEvent.value = newVal ? events.eventJour : events.eventNuit;
+  // });
 
   onMounted(async () => {
-    paginationLenght.value = await PaginationManager.paginationSetup()
-    PaginationManager.paginationStatus()
+    pagination.value = await PaginationManager.paginationSetup(parameter.value)
+    //PaginationManager.paginationStatus()
+    newEvent.value = LocalStorageManager.getActualPaginationNumber();
+    console.log('all events : ', newEvent)
   })
 </script>
 

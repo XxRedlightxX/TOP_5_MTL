@@ -36,12 +36,12 @@
   const pages = ref([]);
   const currentPage = ref(1);
 
-const createPagination = () => {
-  pages.value = []; // reset pour éviter doublons
-  for (let i = 1; i <= props.lenght; i++) {
-    pages.value.push(i);
+  const createPagination = () => {
+    pages.value = []; // reset pour éviter doublons
+    for (let i = 1; i <= props.lenght; i++) {
+      pages.value.push(i);
+    }
   }
-}
 
   const changePage = (index) => {
     currentPage.value = index;

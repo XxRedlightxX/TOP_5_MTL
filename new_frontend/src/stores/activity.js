@@ -62,12 +62,14 @@ export const useActivityStore = defineStore("activitiesStore", {
 
       try {
         const data = await apiRequest(`/api/activite/filtrer${query || ""}`);
-        this.activities = data;
+        //const data = await apiRequest(`/api/activite?${query || ""}`);
+        //this.activities = data;
+        console.log("data get : ", data);
+        return data;
       } catch (err) {
         this.errors = err.errors || { message: "Failed to load activities" };
-      } finally {
-        this.isLoading = false;
       }
+      //finally {this.isLoading = false;}
     },
 
     // -----------------------------------
@@ -86,7 +88,7 @@ export const useActivityStore = defineStore("activitiesStore", {
 
         if (res.ok) {
           this.errors = {}; // Clear errors on success
-          console.log("data :", data);
+          //console.log("data :", data);
           return data;
         } else if (data.errors) {
           this.errors = data.errors;
@@ -96,9 +98,8 @@ export const useActivityStore = defineStore("activitiesStore", {
       } catch (error) {
         console.error("getHigherRateEvent failed:", error);
         this.errors = { higherRate: error.message };
-      } finally {
-        this.isLoading = false;
       }
+      //finally {this.isLoading = false;}
     },
 
     // -----------------------------------
@@ -239,7 +240,7 @@ export const useActivityStore = defineStore("activitiesStore", {
 
       if (res.ok) {
         this.categories = data;
-        console.log(this.categories);
+        //console.log(this.categories);
         return data;
       } else if (data.errors) {
         this.errors = data.errors;
