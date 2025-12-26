@@ -10,7 +10,6 @@ class ActivityPolicy
 {
 
     const NOT_ALLOWED = "You dont own this activity";
-
     const NOT_ALLOWED_USER_TYPE_MESSAGE = "You're not organizor";
     const NOT_ALLOWED_CODE = 403;
     const USER_TYPE= "organisateur";
@@ -29,7 +28,7 @@ class ActivityPolicy
     {
         return false;
     }
-
+    
     /**
      * Determine whether the user can create models.
      */
