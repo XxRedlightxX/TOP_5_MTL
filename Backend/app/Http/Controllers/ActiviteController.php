@@ -205,15 +205,21 @@ class ActiviteController extends Controller
 
     public function getActivityFilters(Request $request)
     {
-        $validated = $request->validate([
-            'daytime' => 'nullable|string',
-            'type'    => 'nullable|string',
-            'season'  => 'nullable|string',
-            'title'   => 'nullable|string',
-        ]);
-
-        $activities = $this->userService->getActivitiesFiltered($validated);
-        return response()->json($activities);
+        $filters = [
+        'daytime' => $request->get('daytime'),
+        'title' => $request->get('title'),
+        'season' => $request->get('season'),
+        'type' => $request->get('type'),
+    ];
+    
+    $perPage = $request->get('per_page', 9);
+    $page = $request->get('page', 1);
+    
+    return $this->userService->getActivitiesFiltered(
+        array_filter($filters), // Retire les valeurs null
+        $perPage,
+        $page
+    );
     }
 
     public function getActivitiesCategories() {
