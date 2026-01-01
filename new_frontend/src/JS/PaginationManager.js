@@ -48,6 +48,8 @@ const PaginationManager = {
     let paginationNumber = ref(LocalStorageManager.getActualPaginationNumber());
     //console.log("storage pagination number : " + paginationNumber.value.number);
 
+    console.log("value send : ", value);
+    console.log("paginationNumber value : ", paginationNumber.value);
     if (paginationNumber.value == null) {
       PaginationManager.gestionPaginationNumber(value);
       //paginationNumber.value = 1; ///
@@ -79,6 +81,7 @@ const PaginationManager = {
 
   async getPaginationsEvent(value) {
     const activitiesStore = useActivityStore();
+    console.log("value send : ", value);
     const data = await activitiesStore.getActivities(value);
     console.log("data get : ", data);
     return PaginationManager.setPaginationEventData(value, data);
@@ -115,7 +118,8 @@ const PaginationManager = {
       PaginationManager.paginationLenghtSetup();
       paginationLenght = LocalStorageManager.getPaginationTotalNumber();
     }
-    const actualPaginationEvent = await PaginationManager.getPaginationEvents(
+
+    const actualPaginationEvent = await PaginationManager.getPaginationsEvent(
       value
     );
 

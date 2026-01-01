@@ -43,6 +43,11 @@ export const useActivityStore = defineStore("activitiesStore", {
       StorageManager.setMode(this.mode);
     },
 
+    async getPaginationLenght(){
+      ///
+      //return -> data { jour:[9]; nuit:[7] }
+    },
+    
     // -----------------------------------
     // GET ACTIVITIES (FILTERS)
     // -----------------------------------
@@ -53,21 +58,23 @@ export const useActivityStore = defineStore("activitiesStore", {
       let query = "";
 
       if (typeof parametres === "string") {
-        query = parametres && `?${parametres}`;
+        query = parametres; // && `?${parametres}`;
       } else if (parametres) {
         query = buildQueryString(parametres);
-      } else {
-        query = buildQueryString(this.filters);
       }
+      // else {
+      //   query = buildQueryString(this.filters);
+      // }
 
       try {
-        const data = await apiRequest(`/api/activite/filtrer${query || ""}`);
-        //const data = await apiRequest(`/api/activite?${query || ""}`);
+        //const data = await apiRequest(`/api/activite/filtrer${query || ""}`);
+        const data = await apiRequest(`/api/activite?${query || ""}`);
         //this.activities = data;
         console.log("data get : ", data);
-        return data;
+        return data.data;
       } catch (err) {
         this.errors = err.errors || { message: "Failed to load activities" };
+        console.log("error get : ", this.errors);
       }
       //finally {this.isLoading = false;}
     },
