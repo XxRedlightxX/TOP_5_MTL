@@ -34,6 +34,8 @@ interface ActiviteDAO extends InterfaceDAO {
 
     public function getFilteredActivities(array $filters);
 
+    public function getActivitiesPaginationLenght(array $eventList);
+
 
 
 }

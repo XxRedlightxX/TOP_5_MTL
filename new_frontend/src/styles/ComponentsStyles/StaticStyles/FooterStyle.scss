@@ -1,0 +1,62 @@
+#footerComponent {
+    display: block;
+    //border-radius: 16px;
+    backdrop-filter: blur(4.7px);
+    -webkit-backdrop-filter: blur(15px);
+    position: relative;
+
+    .links {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 5%;
+        z-index: 100;
+
+        a {
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: normal;
+        }
+        a:after {
+            text-decoration: none;
+        }
+    }
+
+    p {
+        font-size: 1rem;
+        padding: 1% 0%;
+        text-align: center;
+    }
+
+}
+
+@media screen and (min-width: 1026px) {
+    #footerComponent {
+        .links {
+            padding: 2% 0% 1% 0%;
+            width: 100%;
+            height: 15px;
+            justify-content: center;
+            a {
+                font-size: 1.2vw;
+            }
+        }
+    }
+
+}
+
+@media screen and (max-width: 1025px) {
+    #footerComponent {
+        .links {
+            padding: 10% 0% 1% 0%;
+            width: 100%;
+            height: 15px;
+            justify-content: space-around;
+
+            a {
+                font-size: 20px;
+            }
+        } 
+    }
+
+}

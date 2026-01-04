@@ -116,6 +116,10 @@ class ActiviteService {
 
     public function getNewestActivitiesbyCreationDate() {
         return $this->activiteDAO->getNewestActivitiesbyCreationDate();
+    
+    }
+    public function getActivitiesPaginationLength(array $filters) {
+        return $this->activiteDAO->getActivitiesPaginationLenght($filters);
     }
 
  

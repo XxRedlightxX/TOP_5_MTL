@@ -12,7 +12,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 //
 
-class ActiviteDAOImpl implements ActiviteDAO {
+class ActiviteDAOImpl implements ActiviteDAO
+{
 
     private const CACHE_TTL = 600;
 
@@ -68,6 +69,68 @@ class ActiviteDAOImpl implements ActiviteDAO {
         });
 
     }
+
+     public function getActivitiesPaginationLenght(array $filters, int $perPage = 9, int $page = 1 ) {
+          $cacheKey = 'activities:pagination:' . md5(json_encode(array_merge(
+        $filters,
+        ['per_page' => $perPage, 'page' => $page]
+    )));
+
+    return Cache::remember(
+        $cacheKey,
+        self::CACHE_TTL,
+        function () use ($filters, $perPage, $page) {
+            $query = Activite::query();
+
+            // Appliquer les filtres
+            if (!empty($filters['daytime'])) {
+                $query->where('statut_journee', $filters['daytime']);
+            }
+
+            if (!empty($filters['title'])) {
+                $query->where('titre', 'LIKE', "%{$filters['title']}%");
+            }
+
+            if (!empty($filters['season'])) {
+                $query->whereHas('saison', fn ($q) =>
+                    $q->where('statut', $filters['season'])
+                );
+            }
+
+            if (!empty($filters['type'])) {
+                $query->whereHas('type', fn ($q) =>
+                    $q->where('nom', $filters['type'])
+                );
+            }
+
+            // Paginer les résultats
+            $paginatedData = $query->paginate($perPage, ['*'], 'page', $page);
+            
+            // Calculer les nombres de pages pour jour et nuit
+            // BASÉ SUR LES FILTRES APPLIQUÉS
+            
+            // 1. Pour les événements de jour (statut_journee = 'jour')
+            $queryJour = clone $query;
+            $countJour = $queryJour->where('statut_journee', 'jour')->count();
+            
+            // 2. Pour les événements de nuit (statut_journee = 'nuit')
+            $queryNuit = clone $query;
+            $countNuit = $queryNuit->where('statut_journee', 'nuit')->count();
+            
+            // 3. Calculer le nombre de pages
+            $pagesJour = ceil($countJour / $perPage);
+            $pagesNuit = ceil($countNuit / $perPage);
+
+            return [
+                'nbPagination' => [
+                    'jour' => [$pagesJour],
+                    'nuit' => [$pagesNuit]
+                ]
+            ];
+        
+
+     });
+    }
     public function getAllCategories() {
         return Cache::remember(
             'categories:all',
@@ -91,7 +154,7 @@ class ActiviteDAOImpl implements ActiviteDAO {
      * @inheritDoc
      */
     public function save(array $activiteData) {
-          Cache::tags('activities')->flush();
+        Cache::tags('activities')->flush();
         return Activite::create($activiteData);
     }
 
@@ -101,9 +164,10 @@ class ActiviteDAOImpl implements ActiviteDAO {
     public function update(int $idActivite, array $data): ?Activite {
         Cache::tags('activities')->flush();
         $activiteExist = Activite::find($idActivite);
-        if (!$activiteExist) return null;
+        if (!$activiteExist)
+            return null;
 
-       $activiteExist->update($data);
+        $activiteExist->update($data);
         return $activiteExist;
 
     }
@@ -114,16 +178,17 @@ class ActiviteDAOImpl implements ActiviteDAO {
 
         $activityData['utilisateur_id'] = $user->id;
 
-        $activity =$this->save($activityData);
+        $activity = $this->save($activityData);
 
         return $activity;
-    
-     }
+
+    }
 
     /**
      * @inheritDoc
      */
-    public function getActivityBySeason(string $nomSaison) {
+    public function getActivityBySeason(string $nomSaison)
+    {
 
        return Cache::remember(
         "activities:season:$nomSaison",
@@ -170,21 +235,24 @@ class ActiviteDAOImpl implements ActiviteDAO {
         );
     }
 
-    public function getActivityByDayOrNight(string $activiteyDaytime) {
+    public function getActivityByDayOrNight(string $activiteyDaytime)
+    {
         return Activite::where('statut_journee', $activiteyDaytime)->get();
     }
 
     /**
      * @inheritDoc
      */
-    public function getActivityByName(string $activityName) {
-         return Activite::where('titre','LIKE' ,"%{$activityName}%")->get();
+    public function getActivityByName(string $activityName)
+    {
+        return Activite::where('titre', 'LIKE', "%{$activityName}%")->get();
     }
 
-    public function addCommentToActivity(int $userId, int $activityId, string $contenu, int $nbEtoiles) {
+    public function addCommentToActivity(int $userId, int $activityId, string $contenu, int $nbEtoiles)
+    {
         $userExist = User::findOrFail($userId);
         $actvityExist = Activite::findOrFail($activityId);
-        
+
         return Avis::create([
             "utilisateur_id" => $userExist->id,
             "activite_id" => $actvityExist->id,
@@ -194,28 +262,30 @@ class ActiviteDAOImpl implements ActiviteDAO {
         ]);
     }
 
-    
 
-   public function updateActivityByUser(int $activityId, array $activityData) {
+
+    public function updateActivityByUser(int $activityId, array $activityData)
+    {
         $activite = Activite::findOrFail($activityId);
 
-        $activite->update($activityData); 
+        $activite->update($activityData);
 
         return $activite;
-   }
+    }
 
     public function getEventAverageRating($eventId)
     {
-        $activityRating= Avis::where('activite_id', $eventId)->avg('etoiles');
+        $activityRating = Avis::where('activite_id', $eventId)->avg('etoiles');
         $activity = Activite::findOrFail($eventId);
 
-        $activity->nombre_likes=$activityRating;
+        $activity->nombre_likes = $activityRating;
         $activity->update();
 
         return $activity;
     }
 
-   public function getActivitiesMostLiked() {
+    public function getActivitiesMostLiked()
+    {
 
         return Cache::tags('activities')->remember(
         'activities:most_liked',
@@ -303,16 +373,18 @@ class ActiviteDAOImpl implements ActiviteDAO {
     );
 }
 
-    public function getActivityFromSeason(string $seasonName) {
+    public function getActivityFromSeason(string $seasonName)
+    {
         return Saison::where('statut', $seasonName)->first();
     }
 
-    public function getActivityFromCategoryType(string $typeName) {
+    public function getActivityFromCategoryType(string $typeName)
+    {
         return Type::where('nom', $typeName)->first();
     }
 
 
- 
+
 
 
     /**

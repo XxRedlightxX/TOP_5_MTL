@@ -1,0 +1,59 @@
+#languageSetter {
+    display: block;
+    width: 65px;
+    height: 65px;
+    text-align: center;
+    position: fixed;
+    bottom: 5%;
+    right: 2%;
+    z-index: 1000;
+    cursor: pointer;
+    background: transparent;
+    border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+    animation: anim 1s infinite alternate;
+
+    p {
+        width: 100%;
+        height: 100%;
+        align-content: center;
+        font-size: 2rem;
+        border-radius: 50%;
+        align-self: center;
+    }
+}
+
+#languageSetter:before {
+    content: "";
+    position: absolute;
+    bottom: 9%;
+    right: 2%;
+    width: 10px;
+    height: 10px;
+    border-radius: 42% 58% 37% 63% / 40% 43% 57% 60%;
+    background: #fff;
+}
+
+/* Visit https://democoding.in/ for more free css animation */
+#languageSetter:after {
+    content: "";
+    position: absolute;
+    bottom: 9%;
+    right: 2%;
+    width: 5px;
+    height: 5px;
+    border-radius: 42% 58% 37% 63% / 40% 43% 57% 60%;
+}
+
+@keyframes anim {
+    0% {
+        transform: translateY(0);
+        width: 65px;
+        height: 65px;
+    }
+
+    100% {
+        transform: translateY(10px);
+        width: 59px;
+        height: 69px;
+    }
+}

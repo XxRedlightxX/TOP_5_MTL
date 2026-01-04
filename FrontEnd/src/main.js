@@ -1,31 +1,58 @@
 /**
- * main.js
- *
- * Bootstraps Vuetify and other plugins then mounts the App`
- */
+ 
+main.js*
+Bootstraps Vuetify and other plugins then mounts the App`*/
 
 // Plugins
-import { registerPlugins } from '@/plugins'
+import { registerPlugins } from "@/plugins";
 
 // Components
 import App from './App.vue'
 import routeur from "./router"
 import { createPinia } from 'pinia'
 import 'vuetify/styles' // Add this line
-import 'leaflet/dist/leaflet.css'
+//import 'leaflet/dist/leaflet.css'
 // Composables
-import { createApp, markRaw } from 'vue'
+import { createApp, markRaw } from "vue";
 
-const app = createApp(App)
-const pinia = createPinia() 
+const app = createApp(App);
+const pinia = createPinia();
 
+registerPlugins(app);
 
-registerPlugins(app)
+pinia.use(({ store }) => {
+  store.router = markRaw(routeur);
+});
+app.use(pinia);
+//app.use(routeur);
+app.mount("#app");
+// /**
+//  * main.js
+//  *
+//  * Bootstraps Vuetify and other plugins then mounts the App`
+//  */
 
-pinia.use(({store}) =>{
-    store.router = markRaw(routeur)
+// // Plugins
+// import { registerPlugins } from '@/plugins'
 
-})
-app.use(pinia)
-app.use(routeur)
-app.mount('#app')
+// // Components
+// import App from './App.vue'
+// import routeur from "./router"
+// import { createPinia } from 'pinia'
+// import 'vuetify/styles' // Add this line
+
+// // Composables
+// import { createApp, markRaw } from 'vue'
+
+// const app = createApp(App)
+// const pinia = createPinia()
+
+// registerPlugins(app)
+
+// pinia.use(({store}) =>{
+//     store.router = markRaw(routeur)
+
+// })
+// app.use(pinia)
+// app.use(routeur)
+// app.mount('#app')

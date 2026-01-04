@@ -1,0 +1,27 @@
+
+/**
+ * main.js
+ *
+ * Bootstraps Vuetify and other plugins then mounts the App`
+ */
+// Plugins
+import { registerPlugins } from "@/plugins";
+import { createPinia } from "pinia";
+import { createApp, markRaw } from "vue";
+
+import App from "./App.vue";
+import routeur from "./router";
+import "vuetify/styles"; // Add this line
+//import "leaflet/dist/leaflet.css";
+
+const app = createApp(App);
+const pinia = createPinia();
+
+registerPlugins(app);
+
+pinia.use(({ store }) => {
+  store.router = markRaw(routeur);
+});
+app.use(pinia);
+app.use(routeur);
+app.mount("#app");

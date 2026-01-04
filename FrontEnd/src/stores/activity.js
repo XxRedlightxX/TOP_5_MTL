@@ -1,8 +1,7 @@
-import {defineStore} from "pinia";
+import { defineStore } from "pinia";
 import { useAuthStore } from "./auth";
-import { apiRequest, buildQueryString  } from "../api/api";
+import { apiRequest, buildQueryString } from "../api/api";
 import StorageManager from "@/JS/LocalStaorageManager";
-
 
 /*export const useActivityStore = defineStore('activitiesStore', {
 
@@ -297,9 +296,18 @@ import StorageManager from "@/JS/LocalStaorageManager";
                 this.isLoading =false
             }
 
-        },
+    async deleteEvent(activity) {
+      const token = localStorage.getItem("token");
+      const authStore = useAuthStore();
+      if (authStore.user.id === this.activity.creator.id) {
+        const res = await fetch(`/api/activite/${activity.id}`, {
+          method: "delete",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-       
+        const data = await res.json();
 
         async addEvent(formData) {
             const token = localStorage.getItem("token");
@@ -564,10 +572,7 @@ import StorageManager from "@/JS/LocalStaorageManager";
     },
 });*/
 
-
-
 export const useActivityStore = defineStore("activitiesStore", {
-
   state: () => ({
     mode: StorageManager.getMode(),
     activities: [],
@@ -590,15 +595,11 @@ export const useActivityStore = defineStore("activitiesStore", {
 
   getters: {
     upcomingItems(state) {
-      return state.mode === true
-        ? state.upcoming.days
-        : state.upcoming.nights;
+      return state.mode === true ? state.upcoming.days : state.upcoming.nights;
     },
 
     carouselItems(state) {
-      return state.mode === true
-        ? state.carousel.days
-        : state.carousel.nights;
+      return state.mode === true ? state.carousel.days : state.carousel.nights;
     },
 
     currentActivities(state) {
@@ -607,14 +608,13 @@ export const useActivityStore = defineStore("activitiesStore", {
   },
 
   actions: {
-
     // -----------------------------------
     // TOGGLE MODE (DAY ⇄ NIGHT)
     // -----------------------------------
-     toggleMode() {
-    this.mode = !this.mode; // Just flip boolean
-    StorageManager.setMode(this.mode);
-  },
+    toggleMode() {
+      this.mode = !this.mode; // Just flip boolean
+      StorageManager.setMode(this.mode);
+    },
 
     // -----------------------------------
     // GET ACTIVITIES (FILTERS)
@@ -623,24 +623,18 @@ export const useActivityStore = defineStore("activitiesStore", {
       this.isLoading = true;
       this.errors = {};
 
-      let query = '';
-  
-      
-      if (typeof parametres === 'string') {
-        query = parametres && `?${parametres}`;
-      }
-    
-      else if (parametres) {
-        query = buildQueryString(parametres);
-      }
+      let query = "";
 
-      else {
+      if (typeof parametres === "string") {
+        query = parametres && `?${parametres}`;
+      } else if (parametres) {
+        query = buildQueryString(parametres);
+      } else {
         query = buildQueryString(this.filters);
       }
 
-
       try {
-        const data = await apiRequest(`/api/activite/filtrer${query || ''}` );
+        const data = await apiRequest(`/api/activite/filtrer${query || ""}`);
         this.activities = data;
       } catch (err) {
         this.errors = err.errors || { message: "Failed to load activities" };
@@ -654,12 +648,11 @@ export const useActivityStore = defineStore("activitiesStore", {
     // -----------------------------------
     async getUpcomingEvents() {
       try {
-        const data = await apiRequest("/api/activite/test",);
+        const data = await apiRequest("/api/activite/test");
 
         this.upcoming.days = data.days || [];
         this.upcoming.nights = data.nights || [];
-        console.log(this.upcoming.days , "list event")
-
+        console.log(this.upcoming.days, "list event");
       } catch (err) {
         this.errors = { upcoming: err.message };
       }
@@ -676,7 +669,6 @@ export const useActivityStore = defineStore("activitiesStore", {
 
         this.carousel.days = data.days || [];
         this.carousel.nights = data.nights || [];
-
       } catch (err) {
         this.errors = { carousel: err.message };
       } finally {
@@ -744,12 +736,11 @@ export const useActivityStore = defineStore("activitiesStore", {
     // ADD EVENT
     // -----------------------------------
     async addEvent(formData) {
-      console.log(formData, "test")
+      console.log(formData, "test");
       try {
         return await apiRequest("http://127.0.0.1:8000/api/user/activite", {
           method: "POST",
           body: formData,
-          
         });
       } catch (err) {
         this.errors = err;
@@ -795,10 +786,8 @@ export const useActivityStore = defineStore("activitiesStore", {
     async getCategories() {
       try {
         if (this.categories.length) return;
-       const data = await apiRequest('/api/categories');
+        const data = await apiRequest("/api/categories");
         this.categories = data;
-        
-        
       } catch (err) {
         this.errors = err;
       }
@@ -845,6 +834,5 @@ export const useActivityStore = defineStore("activitiesStore", {
         this.errors = err;
       }
     },
-
   },
 });

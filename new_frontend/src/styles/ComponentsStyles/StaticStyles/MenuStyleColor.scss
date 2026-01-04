@@ -1,0 +1,163 @@
+@media screen and (min-width: 1025.1px) {
+    .light {
+        #menuComponent{
+            background: var(--graphite02);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            .allMenu {
+        
+                .links {
+            
+                    a {
+                        color: var(--light075);
+                    }
+                    a:hover, .router-link-exact-active {
+                        color: var(--light);
+                        background: transparent;                
+                        box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                                    15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+                    }
+                }
+
+                .icons {
+                    color: var(--light075);
+                    .profile {
+                        color: var(--light075);
+
+                    }
+                    .iconn:hover, .profile:hover, .router-link-exact-active {
+                        color: var(--light);
+                        background: transparent;                
+                        box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), 15px 25px 10px rgba(0, 0, 0, 0.1),
+                                    15px 20px 20px rgba(0, 0, 0, 0.05), inset -10px -10px 15px rgba(237, 237, 237, 0.9);
+                    }
+                }
+            }
+        }
+    }
+    .dark {
+        #menuComponent{
+            background: var(--graphite02);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            .allMenu {
+        
+                .links {
+            
+                    a {
+                        color: var(--light075);
+                    }
+                    a:hover, .router-link-exact-active {
+                        color: var(--light);       
+                        animation: neonGlow 0.5s ease-in-out infinite alternate;
+                        background: transparent;
+                        box-shadow: 5px 5px 10px #0008,
+                            10px 6px 15px #0008 inset,
+                            -5px -5px 8px #f5f5ff inset,
+                            10px 6px 15px #0004 inset;
+                    }
+                }
+
+                .icons {
+                    color: var(--light075);
+                    .profile {
+                        color: var(--light075);
+                    }
+                    .iconn:hover, .profile:hover, .router-link-exact-active {
+                        color: var(--light);       
+                        animation: neonGlow 0.5s ease-in-out infinite alternate;
+                        background: transparent;
+                        box-shadow: 5px 5px 10px #0008,
+                            10px 6px 15px #0008 inset,
+                            -5px -5px 8px #f5f5ff inset,
+                            10px 6px 15px #0004 inset;
+                    }
+                }
+            }
+        }
+    }
+   
+}
+@media screen and (max-width: 1025px){
+    .light {
+        .burgerLinks .smallMenu, .BurgerMenu {
+            /* From https://css.glass */
+            background: var(--graphite02);
+            //border-radius: 16px;
+            //box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(18.9px);
+            -webkit-backdrop-filter: blur(18.9px);
+        }
+        .burgerLinks {
+            .iconClose {
+                color: var(--light075); 
+            }
+            
+            .iconClose:hover {
+                color: var(--light);       
+            }
+            #logo3Component {
+                .drop, .drop:hover {
+                        color: var(--light075);        
+                    }
+                }
+        }
+    
+        .links {
+    
+            a {
+                color: var(--light075);
+            }
+            a:hover, .router-link-exact-active {
+                color: var(--light);
+            }
+        }
+        .icons {
+            .v-icon {
+                color: var(--light075);
+            }
+            .v-icon:hover, .router-link-exact-active {
+                color: var(--light);
+            }
+        }
+    }
+    .dark {    
+        .burgerLinks .smallMenu, .BurgerMenu {
+            /* From https://css.glass */
+            background-color: var(--graphite02);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10.6px);
+            //-webkit-backdrop-filter: blur(10.6px);
+        }
+        .burgerLinks {
+            .iconClose {
+                color: var(--light075); 
+            }
+            
+            .iconClose:hover {
+                color: var(--light);       
+            }
+            #logo3Component {
+                .drop, .drop:hover {
+                        color: var(--light075);        
+                    }
+                }
+        }
+    
+        .links {
+    
+            a {
+                color: var(--light075);
+            }
+            a:hover, .router-link-exact-active {
+                color: var(--light);
+            }
+        }
+        .icons {
+            .v-icon {
+                color: var(--light075);
+            }
+            .v-icon:hover, .router-link-exact-active {
+                color: var(--light);
+            }
+        }
+    }
+}
