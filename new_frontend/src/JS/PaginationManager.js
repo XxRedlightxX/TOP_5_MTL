@@ -48,7 +48,7 @@ const PaginationManager = {
     let paginationNumber = ref(LocalStorageManager.getActualPaginationNumber());
     //console.log("storage pagination number : " + paginationNumber.value.number);
 
-    //console.log("value send : ", value);
+    console.log("value send : ", value);
     //console.log("paginationNumber value : ", paginationNumber.value);
     if (paginationNumber.value == null) {
       PaginationManager.gestionPaginationNumber(value);

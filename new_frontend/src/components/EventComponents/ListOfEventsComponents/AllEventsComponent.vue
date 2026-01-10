@@ -68,18 +68,27 @@
 
   const pagination = ref(null)
   let page = ref(null)
-  let parameterPerPage = 9;
+  let parameterPerPage = ref(null);
   let parameterPage = ref(null);
   let parameter = ref(null);//ref("per_page=9&page=1");
+  let allEvent = ref(null);
+  let events = ref(null);
+  const width = ref(window.innerWidth);
+
+  if (width.value >= 1025) {
+    parameterPerPage.value = 9;
+  } else {
+    parameterPerPage.value = 6;
+  }
 
   const paginationUpdate = (index) => {
     parameter = 'per_page=' + parameterPerPage + '&page=' + index;
     PaginationManager.getPaginationEvents(parameter)
   }
 
-  let allEvent = ref(null);
-  let events = ref(null);
-  //newEvent.value = actualMode.value ? events.eventJour : events.eventNuit;
+  function updateDimensions() {
+    width.value = window.innerWidth;
+  }
 
   const setEvent = (value) => {
     LocalStorageManager.setEvent(value);
@@ -96,13 +105,36 @@
     const event = LocalStorageManager.getActualPaginationNumber()
     page = event != null ? event.number : 1
     console.log('page -> ' + page)
-    parameter = 'per_page=' + parameterPerPage + '&page=' + page;
+    parameter.value = 'per_page=' + parameterPerPage.value + '&page=' + page;
   };
 
   watch(actualMode, (newVal, oldVal) => {
     events.value = newVal ? allEvent.value.days : allEvent.value.nights;
   });
-  
+
+  watch(width, async (newVal, oldVal) => {
+    if (oldVal >= 1025 && newVal < 1025) {
+      parameterPerPage.value = 6;
+      parameter.value = 'per_page=' + parameterPerPage.value + '&page=' + page;
+      console.log('Retour petit ecrant :', newVal);
+      console.log('parameterPerPage -> ' + parameterPerPage.value + ' page -> ' + page)
+      LocalStorageManager.setActualPaginationNumber(null);
+      events.value = null;
+      console.log('parameter -> ' + parameter.value)
+      pagination.value = await PaginationManager.paginationSetup(parameter.value)
+    }
+    else if (oldVal < 1025 && newVal >= 1025) {
+      parameterPerPage.value = 9;
+      parameter.value = 'per_page=' + parameterPerPage.value + '&page=' + page;
+      console.log('Retour plein écran :', newVal);
+      console.log('parameterPerPage -> ' + parameterPerPage.value + ' page -> ' + page)
+      LocalStorageManager.setActualPaginationNumber(null);
+      events.value = null;
+      console.log('parameter -> ' + parameter.value)
+      pagination.value = await PaginationManager.paginationSetup(parameter.value)
+    }
+  });
+
   const handleStorageChange = (event) => {
     getEvents()
     
@@ -115,6 +147,8 @@
       "ActualPaginationNumber-changed",
       handleStorageChange
     );
+    
+    window.addEventListener('resize', updateDimensions);
     getEvents()
   })
 </script>
