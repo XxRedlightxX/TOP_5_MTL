@@ -72,18 +72,18 @@ class UserController extends Controller
 
     public function addUser(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|max:255',
-                'password' => 'required|string|max:255'
-            ]);
+      
+            $validated =$request->validate([
+            'username' => 'required|string|max:255',
+            'email' => 'required|unique:email|max:255',
+            'num_tel' => 'required|string|max:20|regex:/^[0-9\-\+\s\(\)]+$/',
+            'type_utilisateur' => 'required|in:organisateur,particulier', 
+            'password' => 'required|confirmed|max:255',
+        ]);
 
             $user = $this->userService->creatUser($validated);
             return response()->json($user, 201);
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage(), 500);
-        }
+    
     }
 
     public function modifyUser(int $userId, Request $request) {
@@ -139,9 +139,9 @@ class UserController extends Controller
             $user2 = User::findOrFail($userId);
             $currentUser = $request->user();
 
-            $this->authorize('delete', $user2,  $currentUser);
+            //$this->authorize('delete', $user2,  $currentUser);
             $this->userService->deleteUser($userId);
-            return response()->noContent(); 
+             return response()->json(['message' => 'Deleted successfully']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'User not found'], 404);
         } catch (\Exception $e) {

@@ -5,6 +5,7 @@ namespace App\Service;
 use App\DAO\SourceDonnes\FollowDAO;
 use App\Models\User;
 use App\DAO\SourceDonnes\UserDAO;
+use App\Exceptions\UserConflictException;
 use App\Models\Activite;
 use Exception;
 use Illuminate\Support\Facades\Hash;
@@ -24,15 +25,15 @@ class UserService {
         return $this->daoUser->getAll($perPage, $page);
     }
 
-    public function creatUser(  $user) {
+    public function creatUser($user) {
         $existUserEmail=$this->daoUser->getByEmail($user['email']);
         $existUsername=$this->daoUser->getByUsername($user['username']);
 
-        if ($existUserEmail->isNotEmpty() ) {
-            throw new Exception("There is already a user with email: {$user['email']}");
+        if ($existUserEmail->isNotEmpty()) {
+            throw new UserConflictException("There is already a user with email: {$user['email']}");
         }
-        if ($existUsername->isNotEmpty() ) {
-            throw new Exception("There is already a user with username: {$user['username']}");
+        if ($existUsername->isNotEmpty()) {
+            throw new UserConflictException("There is already a user with username: {$user['username']}");
         }
         return $this->daoUser->save($user);
     }

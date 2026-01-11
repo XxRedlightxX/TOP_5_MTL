@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-
+import { apiRequest, buildQueryString } from "../api/api";
 export const useAuthStore = defineStore('authStore', {
   state: () => {
     return {
@@ -11,7 +11,8 @@ export const useAuthStore = defineStore('authStore', {
   getters : {},
   actions : {
     async getUser() {
-      if (localStorage.getItem("token")) {
+
+      /*if (localStorage.getItem("token")) {
         const res = await fetch("/api/user/activite", {
           headers: {
             authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -21,12 +22,22 @@ export const useAuthStore = defineStore('authStore', {
         if (res.ok) {
           this.user = data;
         }
+      }*/
+     try {
+      if(localStorage.getItem("token")) {
+        this.user = await apiRequest("/api/user/activite");
+        
       }
+     } catch (err) {
+      this.errors = err;
+     }
+
+
     },
 
     //Register
     async authenticate(apiRoute, formData) {
-      const res = await fetch(`/api/${apiRoute}`, {
+      /*const res = await fetch(`/api/${apiRoute}`, {
         method: "post",
         body: JSON.stringify(formData),
         headers: {
@@ -44,11 +55,24 @@ export const useAuthStore = defineStore('authStore', {
         localStorage.setItem("token", data.token);
         this.user = data.user;
         return true;
+      }*/
+      try {
+        const data = await apiRequest(`/api/${apiRoute}`, {
+          method: "POST",
+          body: JSON.stringify(formData),
+        });
+        this.errors = {};
+        localStorage.setItem("token", data.token);
+        this.user = data.user;
+        return true;
+      } catch (err) {
+        this.errors = err;
       }
+
     },
 
     async getUserActivities() {
-      const token = localStorage.getItem("token")
+      /*const token = localStorage.getItem("token")
       if (token) {
         const res = await fetch("/api/user/activite", {
           headers: {
@@ -66,11 +90,33 @@ export const useAuthStore = defineStore('authStore', {
           this.errors= data.errors;
           console.log(data.errors);
         }
-      }
+      }*/
+      try {
+        const token = localStorage.getItem("token")
+        if(token) {
+          return this.user = await apiRequest(`/api/user/activite`);
+        }
+      } catch (err) {
+      this.errors = err;
+     }
+
     },
 
     async logout() {
-      const res = await fetch("/api/logout", {
+
+      try {
+        const data = await apiRequest(`/api/logout`, {
+          method: "POST",
+        });
+        this.errors = {};
+        localStorage.removeItem("token");
+        this.user = null;
+        return true;
+      } catch (err) {
+        this.errors = err;
+      }
+
+      /*const res = await fetch("/api/logout", {
         method: "post",
         headers: {
           authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -84,7 +130,9 @@ export const useAuthStore = defineStore('authStore', {
         this.user = null;
         this.errors = {};
         localStorage.removeItem("token");
-      }
+      }*/
+  
+
     },
   },
 });

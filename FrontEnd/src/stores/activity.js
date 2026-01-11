@@ -582,6 +582,12 @@ export const useActivityStore = defineStore("activitiesStore", {
     activity: null,
     categories: [],
     isLoading: false,
+    pagination: {
+      current_page: 1,
+      last_page: 1,
+      per_page: 9,
+      total: 0
+    },
 
     filters: {
       daytime: null,
@@ -634,8 +640,11 @@ export const useActivityStore = defineStore("activitiesStore", {
       }
 
       try {
-        const data = await apiRequest(`/api/activite/filtrer${query || ""}`);
-        this.activities = data;
+        const res = await apiRequest(`/api/activite/filtrer${query || ""}`);
+        this.activities = res.data.data || []; 
+       
+         
+        
       } catch (err) {
         this.errors = err.errors || { message: "Failed to load activities" };
       } finally {
