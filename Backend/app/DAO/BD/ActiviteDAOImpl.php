@@ -10,7 +10,7 @@ use App\Models\Type;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-
+//
 
 class ActiviteDAOImpl implements ActiviteDAO
 {
@@ -28,27 +28,109 @@ class ActiviteDAOImpl implements ActiviteDAO
     /**
      * @inheritDoc
      */
-public function getAll(int $perPage = 2,  int $page = 1) {
-    $cacheKey = 'activities:paginate:' . md5(json_encode([
-        'page' => $page,
-        'perPage' => $perPage,
-        'order' => 'date_debut',
-    ]));
+    public function getAll(int $perPage = 9, int $page = 1)
+    {
+        $cacheKey = 'activities:paginate:' . md5(json_encode([
+            'page' => $page,
+            'perPage' => $perPage,
+            'order' => 'date_debut',
+        ]));
 
-    logger(
-        Cache::tags('activities')->has($cacheKey)
-            ? 'CACHE HIT'
-            : 'CACHE MISS'
-    );
+        logger(
+            Cache::tags('activities')->has($cacheKey)
+                ? 'CACHE HIT'
+                : 'CACHE MISS'
+        );
 
-    return Cache::tags('activities')->remember(
+        return Cache::tags('activities')->remember(
         $cacheKey,
         self::CACHE_TTL,
-        fn () => Activite::orderBy('date_debut')->paginate($perPage, ['*'], 'page', $page)
-    );
+        function () use ($perPage, $page) {
 
-    //return Activite::all();
-}
+            $paginatedData = Activite::orderBy('date_debut')
+                ->paginate($perPage, ['*'], 'page', $page);
+
+            $countJour = Activite::where('statut_journee', 'jour')->count();
+            $countNuit = Activite::where('statut_journee', 'nuit')->count();
+
+            return [
+                'data' => $paginatedData->items(),
+                'pagination' => [
+                    'current_page' => $paginatedData->currentPage(),
+                    'last_page' => $paginatedData->lastPage(),
+                    'per_page' => $paginatedData->perPage(),
+                    'total' => $paginatedData->total(),
+                ],
+                'nbPagination' => [
+                    'jour' => ceil($countJour / $perPage),
+                    'nuit' => ceil($countNuit / $perPage),
+                ]
+            ];
+        });
+
+    }
+
+     public function getActivitiesPaginationLenght(array $filters, int $perPage = 9, int $page = 1 ) {
+          $cacheKey = 'activities:pagination:' . md5(json_encode(array_merge(
+        $filters,
+        ['per_page' => $perPage, 'page' => $page]
+    )));
+
+    return Cache::remember(
+        $cacheKey,
+        self::CACHE_TTL,
+        function () use ($filters, $perPage, $page) {
+            $query = Activite::query();
+
+            // Appliquer les filtres
+            if (!empty($filters['daytime'])) {
+                $query->where('statut_journee', $filters['daytime']);
+            }
+
+            if (!empty($filters['title'])) {
+                $query->where('titre', 'LIKE', "%{$filters['title']}%");
+            }
+
+            if (!empty($filters['season'])) {
+                $query->whereHas('saison', fn ($q) =>
+                    $q->where('statut', $filters['season'])
+                );
+            }
+
+            if (!empty($filters['type'])) {
+                $query->whereHas('type', fn ($q) =>
+                    $q->where('nom', $filters['type'])
+                );
+            }
+
+            // Paginer les résultats
+            $paginatedData = $query->paginate($perPage, ['*'], 'page', $page);
+            
+            // Calculer les nombres de pages pour jour et nuit
+            // BASÉ SUR LES FILTRES APPLIQUÉS
+            
+            // 1. Pour les événements de jour (statut_journee = 'jour')
+            $queryJour = clone $query;
+            $countJour = $queryJour->where('statut_journee', 'jour')->count();
+            
+            // 2. Pour les événements de nuit (statut_journee = 'nuit')
+            $queryNuit = clone $query;
+            $countNuit = $queryNuit->where('statut_journee', 'nuit')->count();
+            
+            // 3. Calculer le nombre de pages
+            $pagesJour = ceil($countJour / $perPage);
+            $pagesNuit = ceil($countNuit / $perPage);
+
+            return [
+                'nbPagination' => [
+                    'jour' => [$pagesJour],
+                    'nuit' => [$pagesNuit]
+                ]
+            ];
+        
+
+     });
+    }
     public function getAllCategories() {
         return Cache::remember(
             'categories:all',
@@ -72,7 +154,7 @@ public function getAll(int $perPage = 2,  int $page = 1) {
      * @inheritDoc
      */
     public function save(array $activiteData) {
-          Cache::tags('activities')->flush();
+        Cache::tags('activities')->flush();
         return Activite::create($activiteData);
     }
 
@@ -227,16 +309,21 @@ public function getAll(int $perPage = 2,  int $page = 1) {
     );
     }
 
-    public function getFilteredActivities(array $filters)
-    {
-        $cacheKey = 'activities:filter:' . md5(json_encode($filters));
+    public function getFilteredActivities(array $filters, $perPage = 9, $page = 1)
+{
+    // Créer une clé de cache unique incluant tous les paramètres
+    $cacheKey = 'activities:filter:' . md5(json_encode(array_merge(
+        $filters,
+        ['per_page' => $perPage, 'page' => $page]
+    )));
 
     return Cache::remember(
         $cacheKey,
         self::CACHE_TTL,
-        function () use ($filters) {
+        function () use ($filters, $perPage, $page) {
             $query = Activite::query();
 
+            // Appliquer les filtres
             if (!empty($filters['daytime'])) {
                 $query->where('statut_journee', $filters['daytime']);
             }
@@ -257,11 +344,34 @@ public function getAll(int $perPage = 2,  int $page = 1) {
                 );
             }
 
-            return $query->get();
-        }
-        );
-    }
+            // Paginer les résultats
+            $paginatedData = $query->paginate($perPage, ['*'], 'page', $page);
+            
+            // Calculer les nombres de pages pour jour et nuit
+            // BASÉ SUR LES FILTRES APPLIQUÉS
+            
+            // 1. Pour les événements de jour (statut_journee = 'jour')
+            $queryJour = clone $query;
+            $countJour = $queryJour->where('statut_journee', 'jour')->count();
+            
+            // 2. Pour les événements de nuit (statut_journee = 'nuit')
+            $queryNuit = clone $query;
+            $countNuit = $queryNuit->where('statut_journee', 'nuit')->count();
+            
+            // 3. Calculer le nombre de pages
+            $pagesJour = ceil($countJour / $perPage);
+            $pagesNuit = ceil($countNuit / $perPage);
 
+            return [
+                'data' => $paginatedData,
+                'nbPagination' => [
+                    'jour' => [$pagesJour],
+                    'nuit' => [$pagesNuit]
+                ]
+            ];
+        }
+    );
+}
 
     public function getActivityFromSeason(string $seasonName)
     {

@@ -115,4 +115,4 @@
     });
 </script>
 
-<style src="../../styles/ProfilesStyles/profileSingleEventComponentStyle.scss"></style>
+<style src="../../styles/ProfilesStyles/ProfileSingleEventComponentStyle.scss"></style>

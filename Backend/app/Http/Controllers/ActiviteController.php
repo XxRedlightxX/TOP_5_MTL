@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ActivityResource;
 use App\Models\Activite;
+use App\Models\Enum\EnumMode;
 use App\Models\User;
 use App\Notifications\NewEventNotification;
 use App\Service\ActiviteService;
@@ -50,7 +51,7 @@ class ActiviteController extends Controller
             'latitude' => 'required|string',
             'longitude' => 'required|string',
             'lieu' => 'required|string|max:255',
-            'statut_journee' => 'required|in:JOUR,NUIT',
+             'statut_journee' => 'required|in:' . implode(',', array_column(EnumMode::cases(), 'value')),
             'saison_name' => 'required|string|exists:saison,statut', // Change to name
             'type_name' => 'required|string|exists:type,nom',
             'image_data' => 'nullable|image|mimes:jpeg,png,jpg,gif'
@@ -216,15 +217,21 @@ class ActiviteController extends Controller
 
     public function getActivityFilters(Request $request)
     {
-        $validated = $request->validate([
-            'daytime' => 'nullable|string',
-            'type' => 'nullable|string',
-            'season' => 'nullable|string',
-            'title' => 'nullable|string',
-        ]);
-
-        $activities = $this->userService->getActivitiesFiltered($validated);
-        return response()->json($activities);
+        $filters = [
+        'daytime' => $request->get('daytime'),
+        'title' => $request->get('title'),
+        'season' => $request->get('season'),
+        'type' => $request->get('type'),
+    ];
+    
+    $perPage = $request->get('per_page', 9);
+    $page = $request->get('page', 1);
+    
+    return $this->userService->getActivitiesFiltered(
+        array_filter($filters), // Retire les valeurs null
+        $perPage,
+        $page
+    );
     }
 
     public function getActivitiesCategories()
@@ -244,4 +251,17 @@ class ActiviteController extends Controller
             'User.activites'
         ])->findOrFail($activityId);
     }
+
+     public function getActivitiesPaginationLength(Request $request)
+    {
+        $filters = [
+        'daytime' => $request->get('daytime'),
+        'title' => $request->get('title'),
+        'season' => $request->get('season'),
+        'type' => $request->get('type'),
+    ];
+        return $this->userService->getActivitiesPaginationLength($filters);
+    }
+
+    
 }

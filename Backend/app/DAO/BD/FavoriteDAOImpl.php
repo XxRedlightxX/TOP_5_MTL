@@ -39,7 +39,7 @@ class FavoriteDAOImpl implements FavoriteDAO {
     /**
      * @inheritDoc
      */
-    public function getAll() {
+    public function getAll(int $perPage, int $page) {
     }
 
     /**

@@ -1,0 +1,1 @@
+import"./CarouselPhoneComponent.vue_vue_type_style_index_0_lang-CsiOt_C8.js";import{c as e,d as t,ag as o,o as s}from"./index-_L-oGXL_.js";const a={id:"test"},m={__name:"LogoView",setup(c){return(_,r)=>(s(),e("div",a,[t(o,{size:3})]))}};export{m as default};

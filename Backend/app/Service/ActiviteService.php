@@ -93,9 +93,9 @@ class ActiviteService {
         return $this->activiteDAO->getActivitiesMostLiked();
     }
 
-     public function getActivitiesFiltered(array $filters)
+     public function getActivitiesFiltered(array $filters, $perPage = 9, $page = 1)
     {
-        return $this->activiteDAO->getFilteredActivities($filters);
+        return $this->activiteDAO->getFilteredActivities($filters, $perPage , $page );
     }
 
     public function getAllCategoriesActivities() {
@@ -110,12 +110,16 @@ class ActiviteService {
         return $this->activiteDAO->getActivityFromCategoryType($aTypeCategory);
     }
 
-    public function getDaysandNightsActivities($aListActivitiesData) {
+    /*public function getDaysandNightsActivities($aListActivitiesData) {
         return $this->activiteDAO->getDaysandNightsActivities($aListActivitiesData);
-    }
+    }*/
 
     public function getNewestActivitiesbyCreationDate() {
         return $this->activiteDAO->getNewestActivitiesbyCreationDate();
+    
+    }
+    public function getActivitiesPaginationLength(array $filters) {
+        return $this->activiteDAO->getActivitiesPaginationLenght($filters);
     }
 
  

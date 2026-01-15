@@ -42,7 +42,7 @@
   const actualMode = ref(LocalStorageManager.getMode());
   const actualLang = ref(LocalStorageManager.getLang())
   const eventsss = ref([]);
-  const initialized = ref(false); 
+  let initialized = ref(false); 
 
   const wrapper = ref(null);
   const carousel = ref(null);
