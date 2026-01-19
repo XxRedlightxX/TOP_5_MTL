@@ -351,23 +351,23 @@ class ActiviteDAOImpl implements ActiviteDAO
             // BASÉ SUR LES FILTRES APPLIQUÉS
             
             // 1. Pour les événements de jour (statut_journee = 'jour')
-            $queryJour = clone $query;
-            $countJour = $queryJour->where('statut_journee', 'jour')->count();
+           $queryJour = clone $query;
+            $activitiesListJour =  $queryJour->where('statut_journee', 'jour')->get();
+            $activitiesListJour = $queryJour->paginate($perPage, ['*'], 'page', $page);
             
             // 2. Pour les événements de nuit (statut_journee = 'nuit')
             $queryNuit = clone $query;
-            $countNuit = $queryNuit->where('statut_journee', 'nuit')->count();
+           $activitiesListNuit =  $queryNuit->where('statut_journee', 'nuit')->get();
+            $activitiesListNuit = $queryNuit->paginate($perPage, ['*'], 'page', $page);
             
             // 3. Calculer le nombre de pages
-            $pagesJour = ceil($countJour / $perPage);
-            $pagesNuit = ceil($countNuit / $perPage);
+            
 
             return [
-                'data' => $paginatedData,
-                'nbPagination' => [
-                    'jour' => [$pagesJour],
-                    'nuit' => [$pagesNuit]
-                ]
+                //$paginatedData->items(),
+                'jours' =>  $activitiesListJour->items(),
+                'nuit' =>   $activitiesListNuit->items(),
+                
             ];
         }
     );

@@ -64,7 +64,7 @@ Route::get('/categories', [ActiviteController::class, 'getActivitiesCategories']
 Route::get('/user/activite/{activityId}', [ActiviteController::class, 'getUserActivitiesbyId']);
 
 // Multi-filtrage fonctionnel
-Route::get('/activite/filtrer', [ActiviteController::class, 'getActivityFilters']);
+Route::get('/activite/filtrer/per_page={perPage}&page={page}', [ActiviteController::class, 'getActivityFilters']);
 
 Route::post('/activite/{activiteId}', [ActiviteController::class, 'modifyActivity']);
 
