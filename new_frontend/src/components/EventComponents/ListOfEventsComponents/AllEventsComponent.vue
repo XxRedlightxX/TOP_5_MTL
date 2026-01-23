@@ -10,7 +10,7 @@
         </div>
 
         <div class="desc">
-          <strong>{{ item.title }}</strong>
+          <strong>{{ item.titre }}</strong>
           <div class="d1">
             <v-icon icon="mdi-map-marker " :class="['icon', {'justGlow' : !actualMode}]"/>
             {{ item.lieu }}
