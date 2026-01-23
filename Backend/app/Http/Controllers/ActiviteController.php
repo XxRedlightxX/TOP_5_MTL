@@ -215,7 +215,7 @@ class ActiviteController extends Controller
     }
 
 
-    public function getActivityFilters(Request $request)
+    public function getActivityFilters(Request $request,int $perPage,int $page)
     {
         $filters = [
         'daytime' => $request->get('daytime'),
@@ -224,13 +224,13 @@ class ActiviteController extends Controller
         'type' => $request->get('type'),
     ];
     
-    $perPage = $request->get('per_page', 9);
-    $page = $request->get('page', 1);
+    $perPageRequest = $request->get('per_page', $perPage);
+    $pageRequest = $request->get('page', $page);
     
     return $this->userService->getActivitiesFiltered(
         array_filter($filters), // Retire les valeurs null
-        $perPage,
-        $page
+        $perPageRequest,
+        $pageRequest
     );
     }
 

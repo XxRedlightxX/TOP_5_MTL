@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { AuthApi } from '../../api/AuthApi';
+import { AuthApi } from 'Playwright/api/AuthApi';
 import { UserApi } from 'Playwright/api/UserApi';
 import { newUser, validUser } from 'Playwright/mockData/UserData';
 
-const VALID_USER = {
+/*const VALID_USER = {
   username : "brother",
   email: 'JohnBrown@gmail.com',
   num_tel: '5142229495',
@@ -21,36 +21,41 @@ const ANOTHER_VALID_USER = {
 const INVALID_CREDENTIALS = {
   email: 'Marc02@gmail.com',
   password: 'wrongpassword'
-};
+};*/
 
  let email: string;
  let userId : string;
  let authToken: string;
+// let authApi: AuthApi;
 
 test.describe('Authentication API Tests', () => {
   
  test.beforeEach(async ({ request }) => {
 
-  
+  const authApi = new AuthApi(request);
   const userApi = new UserApi(request);
-  const response = await userApi.createUser(validUser);
+  const response = await authApi.register(validUser);
   const body = await response.json();
   userId = body.user.id;
   
   // Login and get token immediately
-  const authApi = new AuthApi(request);
+  
   const loginResponse = await authApi.login(
     validUser.email,
     validUser.password,
     200
   );
+  console.log(loginResponse, "HR")
   const loginBody = await loginResponse.json();
   authToken = loginBody.token;
+
+   console.log('Created user ID:', userId);
 });
 
   test.afterEach(async ({ request }) => {
    if (!userId || !authToken) {
       console.log("Skipping delete - missing userId or authToken");
+         console.log("userId:", userId);
       return;
     }
     const userApi = new UserApi(request);
@@ -65,7 +70,7 @@ test.describe('Authentication API Tests', () => {
   test.describe('Positive Tests (Valid Login)', () => {
     
     test('User Marc02 should login successfully and get token', async ({ request }) => {
-      const authApi = new AuthApi(request);
+     const authApi = new AuthApi(request);
       const response = await authApi.login(
        validUser.email,
         validUser.password,
@@ -219,7 +224,6 @@ test.describe('Authentication API Tests', () => {
 
   test('Should fail when required fields are missing', async ({ request }) => {
     const authApi = new AuthApi(request);
-
     const response = await authApi.register({
       id : null,
       username: '',
