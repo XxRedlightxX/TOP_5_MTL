@@ -15,9 +15,9 @@ const PaginationManager = {
     //console.log("storage pagination lenght : " + paginationLenght.value);
 
     if (paginationLenght.value == null || paginationLenght.value <= 0) {
-      const apiData = await await activitiesStore.getPaginationLenght(value);
-      console.log("retur lenght : ", apiData);
-      //paginationLenght.value = 5;
+      //const apiData = await await activitiesStore.getPaginationLenght(value);
+      //console.log("retur lenght : ", apiData);
+      paginationLenght.value = 5;
       LocalStorageManager.setPaginationTotalNumber(5);
       //console.log("DB pagination lenght : " + paginationLenght.value);
     }
