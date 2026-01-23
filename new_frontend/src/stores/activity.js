@@ -39,81 +39,70 @@ export const useActivityStore = defineStore("activitiesStore", {
     // TOGGLE MODE (DAY ⇄ NIGHT)
     // -----------------------------------
     toggleMode() {
-      this.mode = !this.mode; // Just flip boolean
-      StorageManager.setMode(this.mode);
-    },
-
-    async getPaginationLenght() {
-      ///
-      //return -> data { jour:[9]; nuit:[7] }
-    },
-
-    // -----------------------------------
-    // GET ACTIVITIES (FILTERS)
-    // -----------------------------------
-    async getActivities(parametres = null) {
-      //this.isLoading = true;
-      this.errors = {};
-
-      let query = "";
-
-      if (typeof parametres === "string") {
-        query = parametres; // && `?${parametres}`;
-      } else if (parametres) {
-        query = buildQueryString(parametres);
-      }
-      // else {
-      //   query = buildQueryString(this.filters);
-      // }
-
-      try {
-        //const data = await apiRequest(`/api/activite/filtrer${query || ""}`);
-        const data = await apiRequest(`/api/activite?${query || ""}`);
-        //this.activities = data;
-        console.log("data get : ", data.data  );
-        return data.data;
-      } catch (err) {
-        this.errors = err.errors || { message: "Failed to load activities" };
-        console.log("error get : ", this.errors);
-      }
-      //finally {this.isLoading = false;}
+      // this.mode = !this.mode; // Just flip boolean
+      // StorageManager.setMode(this.mode);
     },
 
     // -----------------------------------
     // GET ACTIVITIES GENERICS
     // -----------------------------------
-    async getEventGeneric(apiUrl) {
+    async getEventGeneric(apiUrl, parametres = null) {
+      this.errors = {};
+      let query = "";
+
+      if (parametres) {
+        query =
+          typeof parametres === "string"
+            ? parametres
+            : buildQueryString(parametres);
+      }
+
+      if (query) {
+        apiUrl += `?${query}`;
+      }
+
       try {
-        //this.isLoading = true; // A quoi ca sert ???
+        console.log("apiURL :", apiUrl);
+
         const res = await fetch(apiUrl, {
           headers: {
             "Content-Type": "application/json",
           },
         });
 
-        const data = await res.json();
+        const data = await res.json(); // ✅ OBLIGATOIRE avec fetch
 
-        if (res.ok) {
-          this.errors = {}; // Clear errors on success
-          //console.log("data :", data);
-          return data;
-        } else if (data.errors) {
-          this.errors = data.errors;
-          console.log("API errors:", data.errors);
-          throw new Error(data.errors.message || "API returned errors");
+        if (!res.ok) {
+          this.errors = data.errors || { message: "Failed to load activities" };
+          throw new Error(this.errors.message);
         }
-      } catch (error) {
-        console.error("getHigherRateEvent failed:", error);
-        this.errors = { higherRate: error.message };
+
+        return data; // ✅ retourne les vraies données
+      } catch (err) {
+        console.error("error get :", err);
+        this.errors = { message: err.message };
       }
-      //finally {this.isLoading = false;}
+    },
+
+    // -----------------------------------
+    // GET PAGINATION LENGHT (FILTERS)
+    // -----------------------------------
+    async getPaginationLenght(parametres) {
+      return this.getEventGeneric("/api/activite/pagination", parametres);
+    },
+
+    // -----------------------------------
+    // GET ACTIVITIES (FILTERS)
+    // -----------------------------------
+    async getActivities(parametres) {
+      return this.getEventGeneric("/api/activite/filtrer", parametres);
     },
 
     // -----------------------------------
     // GET ACTIVITIES BEST RATED
     // -----------------------------------
     async getHigherRateEvent() {
-      return this.getEventGeneric("/api/likedActivities");
+      return this.getEventGeneric(`/api/likedActivities`);
     },
 
     // -----------------------------------
@@ -134,42 +123,28 @@ export const useActivityStore = defineStore("activitiesStore", {
     // USER ACTIVITIES
     // -----------------------------------
     async getUserActivities() {
-      this.isLoading = true;
-      try {
-        this.user = await apiRequest("/api/user/activite");
-        return this.user;
-      } catch (err) {
-        this.errors = err;
-      } finally {
-        this.isLoading = false;
-      }
+      return this.getEventGeneric("/api/user/activite");
     },
 
     // -----------------------------------
     // ACTIVITY BY ID
     // -----------------------------------
     async getActivityById(id) {
-      this.isLoading = true;
-      try {
-        const data = await apiRequest(`/api/activity/${id}/comments`);
-        this.activity = data;
-        return data;
-      } catch (err) {
-        this.errors = err;
-      } finally {
-        this.isLoading = false;
-      }
+      return this.getEventGeneric(`/api/activity/${id}/comments`);
     },
 
     // -----------------------------------
     // OTHER USER ACTIVITIES
     // -----------------------------------
     async getActivitiesByOtherUserId(id) {
-      try {
-        return await apiRequest(`/api/user/activite/${id}`);
-      } catch (err) {
-        this.errors = err;
-      }
+      return this.getEventGeneric(`/api/user/activite/${id}`);
+    },
+
+    // -----------------------------------
+    // CATEGORIES
+    // -----------------------------------
+    async getCategories() {
+      return this.getEventGeneric("/api/categories");
     },
 
     // -----------------------------------
@@ -231,27 +206,6 @@ export const useActivityStore = defineStore("activitiesStore", {
         });
       } catch (err) {
         this.errors = err;
-      }
-    },
-
-    // -----------------------------------
-    // CATEGORIES
-    // -----------------------------------
-    async getCategories() {
-      const res = await fetch("/api/categories", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-
-      if (res.ok) {
-        this.categories = data;
-        //console.log(this.categories);
-        return data;
-      } else if (data.errors) {
-        this.errors = data.errors;
-        console.log(data.errors);
       }
     },
 

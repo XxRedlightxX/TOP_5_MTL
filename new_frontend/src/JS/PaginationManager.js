@@ -10,14 +10,15 @@ const PaginationManager = {
     return LocalStorageManager.getPaginationTotalNumber();
   },
 
-  async paginationLenghtSetup() {
+  async paginationLenghtSetup(value) {
     let paginationLenght = ref(LocalStorageManager.getPaginationTotalNumber());
     //console.log("storage pagination lenght : " + paginationLenght.value);
 
     if (paginationLenght.value == null || paginationLenght.value <= 0) {
-      //const apiData = await  fetchFunction.call(activitiesStore);
-      paginationLenght.value = 5;
-      LocalStorageManager.setPaginationTotalNumber(3);
+      const apiData = await await activitiesStore.getPaginationLenght(value);
+      console.log("retur lenght : ", apiData);
+      //paginationLenght.value = 5;
+      LocalStorageManager.setPaginationTotalNumber(5);
       //console.log("DB pagination lenght : " + paginationLenght.value);
     }
 
@@ -32,14 +33,14 @@ const PaginationManager = {
     onMounted(() => {
       window.addEventListener(
         "PaginationTotalNumber-changed",
-        handleStorageChange
+        handleStorageChange,
       );
     });
 
     onUnmounted(() => {
       window.removeEventListener(
         "PaginationTotalNumber-changed",
-        handleStorageChange
+        handleStorageChange,
       );
     });
   },
@@ -67,14 +68,14 @@ const PaginationManager = {
     onMounted(() => {
       window.addEventListener(
         "ActualPaginationNumber-changed",
-        handleStorageChange
+        handleStorageChange,
       );
     });
 
     onUnmounted(() => {
       window.removeEventListener(
         "ActualPaginationNumber-changed",
-        handleStorageChange
+        handleStorageChange,
       );
     });
   },
@@ -97,12 +98,11 @@ const PaginationManager = {
     if (page == paginationLenght) {
       parameter = PaginationManager.changePageNumber(value, page - 2);
       //console.log("parametre send : " + parameter);
-      const nextPaginationFromLastEvent = await PaginationManager.getEvents(
-        parameter
-      );
+      const nextPaginationFromLastEvent =
+        await PaginationManager.getEvents(parameter);
 
       LocalStorageManager.setNextPaginationNumberFromLast(
-        nextPaginationFromLastEvent
+        nextPaginationFromLastEvent,
       );
       LocalStorageManager.setNextPaginationNumber(null);
     } else {
@@ -117,12 +117,11 @@ const PaginationManager = {
     if (page == 1) {
       parameter = PaginationManager.changePageNumber(value, page + 2);
       //console.log("parametre send : " + parameter);
-      const prevPaginationFromFirstEvent = await PaginationManager.getEvents(
-        parameter
-      );
+      const prevPaginationFromFirstEvent =
+        await PaginationManager.getEvents(parameter);
 
       LocalStorageManager.setPrevPaginationNumberFromFisrt(
-        prevPaginationFromFirstEvent
+        prevPaginationFromFirstEvent,
       );
       LocalStorageManager.setPrevPaginationNumber(null);
     } else {
@@ -310,32 +309,32 @@ const PaginationManager = {
     PaginationManager.afficherStatus(
       "pagination lenght : ",
       paginationLenght,
-      false
+      false,
     );
     PaginationManager.afficherStatus(
       "actual pagination number : ",
       actualPagination,
-      true
+      true,
     );
     PaginationManager.afficherStatus(
       "next pagination number : ",
       nextPagination,
-      true
+      true,
     );
     PaginationManager.afficherStatus(
       "prev pagination number : ",
       prevPagination,
-      true
+      true,
     );
     PaginationManager.afficherStatus(
       "next from last pagination number : ",
       nextPaginationFromLast,
-      true
+      true,
     );
     PaginationManager.afficherStatus(
       "prev from first pagination number : ",
       prevPaginationFromFirst,
-      true
+      true,
     );
     console.log("---------------\n");
   },

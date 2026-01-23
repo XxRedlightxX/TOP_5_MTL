@@ -1,6 +1,6 @@
 export async function apiRequest(url, options = {}) {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token"); /// pourquoi ton le token is back 😭😭😭😭 toi tu veux me tuer
     
     // Create headers object - start with Authorization only
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
