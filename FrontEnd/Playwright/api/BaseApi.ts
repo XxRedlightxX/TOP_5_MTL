@@ -17,20 +17,28 @@ export class BaseApi {
   async post(
     url: string, 
     body: any, 
-    options: { expectedStatus?: number } = {}
+    options: { expectedStatus?: number, token? :string } = {}
   ) {
-    const { expectedStatus } = options;
+
+    const { expectedStatus, token } = options;
+    console.log(token , "toke ")
     const response = await this.request.post(url, { 
       data: body,
-      headers: {
-        'Content-Type': 'application/json'
-      }
+     headers: token ? {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+      
+    } : {
+      'Accept': 'application/json',
+      
+    }
     });
 
     if (expectedStatus !== undefined) {
       expect(response.status()).toBe(expectedStatus);
+       console.log(response, "merde")
     }
-    
+   
     return response;
   }
 
