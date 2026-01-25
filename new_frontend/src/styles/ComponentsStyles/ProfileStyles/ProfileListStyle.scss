@@ -30,7 +30,12 @@
     .body {
         overflow: auto;
         max-height: 500px;
+        display:  flex;
+        flex-direction: column;
 
+        #profileSingleEventComponent {
+            margin-bottom: 10px;
+        }
         .noEvents {
             margin-top: 5%;
             width: 100%;
