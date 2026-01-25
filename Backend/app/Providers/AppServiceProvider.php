@@ -4,13 +4,20 @@ namespace App\Providers;
 
 use App\DAO\BD\ActiviteDAOImpl;
 use App\DAO\BD\ConversationDAOImpl;
+use App\DAO\BD\FavoriteDAOImpl;
+use App\DAO\BD\FollowDAOImpl;
 use App\DAO\BD\LikeDAOImpl;
 use App\DAO\BD\UserDAOImpl;
 use App\DAO\SourceDonnes\ActiviteDAO;
 use App\DAO\SourceDonnes\ConversationDAO;
+use App\DAO\SourceDonnes\FavoriteDAO;
+use App\DAO\SourceDonnes\FollowDAO;
 use App\DAO\SourceDonnes\LikeDAO;
 use App\DAO\SourceDonnes\UserDAO;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ConversationDAO::class, ConversationDAOImpl::class);
         $this->app->bind(ActiviteDAO::class, ActiviteDAOImpl::class);
         $this->app->bind(LikeDAO::class, LikeDAOImpl::class);
+        $this->app->bind(FollowDAO::class, FollowDAOImpl::class);
+         $this->app->bind(FavoriteDAO::class, FavoriteDAOImpl::class);
+        
     }
 
     /**
@@ -30,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+        JsonResource::withoutWrapping();
     }
 }

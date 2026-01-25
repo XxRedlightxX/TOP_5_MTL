@@ -7,9 +7,13 @@
 // Plugins
 import vuetify from './vuetify'
 import router from '@/router'
+import 'leaflet/dist/leaflet.css';
+
+
 
 export function registerPlugins (app) {
   app
     .use(vuetify)
     .use(router)
+    
 }

@@ -1,17 +1,17 @@
 <template>
     <div id="singleEventComponent">
-        <div class="place-overview">
+        <div class="place-overview" >
             <header class="header">
-                <h1 class="header__title">{{event.title}}</h1>
+                <h1 class="header__title">{{props.activityTitle}} </h1>
                 <br>
             </header>
 
             <section class="overview">
                 <div class="overview__image">
-                    <img :src="event.image" alt="Mont Saint-Michel" />
+                    <img :src="getEventUrl(props.activityImage)" alt="Mont Saint-Michel" />
                 </div>
                 <div class="overview__details">
-                    <h3 class="overview__description">{{event.desc}}</h3>
+                    <h3 class="overview__description">{{props.activityDesc}}</h3>
                 </div>
             </section>
         </div>
@@ -19,9 +19,24 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue';
+    import { onMounted, ref, defineProps } from 'vue';
     import LocalStorageManager from "@/JS/LocalStaorageManager";
+    import { useActivityStore } from '@/stores/activity';
+    import { useRoute } from 'vue-router';
+    import { getEventUrl } from '@/JS/GlobalFunctions';
 
+    //const activity = ref(null);
+
+ const props = defineProps({
+  activityTitle: String,
+  activityDesc: String,
+  activityImage: String,
+});
+
+    console.log(props.activityImage +"dd");
+  
+
+    const route = useRoute()
     const event = ref(LocalStorageManager.getEvent())
 
     const defaultEvent = { 
@@ -35,7 +50,7 @@
         event.value = defaultEvent
     }
 
-    console.log("event get : ", event.value);
+    
 </script>
 
 <style src="../../../styles/EventsStyles/SingleEventsStyles/SingleEventComponentStyle.scss"></style>

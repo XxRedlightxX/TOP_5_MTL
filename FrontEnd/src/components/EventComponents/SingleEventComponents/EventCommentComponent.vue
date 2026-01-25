@@ -1,75 +1,94 @@
 <template>
   <div id="EventComment">
-    <h1> {{actualLang ? 'Comments' : "Commentaires"}}</h1>
 
-    <div class="comments-list">
-      <div class="comments" v-for="(personne, index) in persons" :key="personne.id">
+    
+    <h1> {{actualLang ? 'Comments' : "Commentaires"}}</h1>
+    <Loading  v-if="isLoading"/>
+    <div class="comments-list" v-if="props.comments && props.comments.length && !isLoading">
+      <div class="comments"  v-for="comment2 in  props.comments"
+       :key=" comment2.id">
         <div class="glas">
           <div class="section">
-            <img :src="personne.image" :alt="`Image of ${personne.name}`">
+            <img :src="getAvatarUrl(comment2.user?.image_data)" :alt="`Image of ${comment2.name}`">
             <div class="comment">
-              <p>{{ personne.name }}</p>
-              <p>{{actualLang ? '20 days ago' : "Il y'a 20 jours"}}</p>
+              <p>{{ comment2.user?.name  }}</p>
+              <p>{{ formatDateComment(comment2.date,actualLang) }}{{   comment2.user?.date}}</p>
             </div>
+            
           </div>
-          <div class="commen" v-for="comment in getCommentsForPerson(personne.id)" :key="comment.id">
-            <p>{{ comment.text }}</p>
-            <Ratings :rating="comment.rating" :Rate="false"/>
+          <div class="commen" >
+            <p>{{ comment2.contenu }}</p>
+            <Ratings :rating="comment2.etoiles" :Rate="false"/>
           </div>
         </div>
+        
       </div>
+       
     </div>
+  
+     <div v-else>{{actualLang ? 'No comments' : "Aucun commentaires"}}</div>
+
+   
+
   </div>
 </template>
 
-<script>
+<script setup >
 import Ratings from "../../RatingComponent.vue";
 import storageManager from "@/JS/LocalStaorageManager"
-import { ref } from 'vue';
+import { ref, onMounted , onBeforeUnmount, computed  } from 'vue';
+import { getAvatarUrl } from "@/JS/GlobalFunctions";
+import { formatDateComment } from "@/JS/GlobalFunctions";
+import Loading from "@/components/LoadingComponent.vue";
+import { useActivityStore } from "@/stores/activity";
 
-export default {
-  
-  data() {
-    let actualLang = ref(storageManager.getLang());
+const activitiesStore = useActivityStore()
+const isLoading = computed(() => activitiesStore.isLoading);
 
-    if (actualLang.value == null) {
-      storageManager.setLang(true);
-      actualLang.value = storageManager.getLang();
-    }
-    return {
-      actualLang,
-      persons: [
-        { id: 1, name: 'Alice', image: "https://picsum.photos/id/64/200/300" },
-        { id: 2, name: 'Bob', image: "https://picsum.photos/id/375/200/300" },
-        { id: 3, name: 'Michelle', image: "https://picsum.photos/id/65/200/300" },
-        { id: 4, name: 'Nick', image: "https://picsum.photos/id/237/200/300" },
-      ],
-      comments: [
-        { id: 1, personId: 1, text: 'Très bel endroit pour se retrouver dans les journées chaudes de l’été.', rating: 3 },
-        { id: 2, personId: 2, text: 'It was cool to look at and had interesting attractions. Would recommend and is worth the visit. It was very pretty and well kept, something for everyone. But, DO. NOT. GO. ON. THE. FERRIS. WHEEL.', rating: 4 },
-        { id: 3, personId: 3, text: 'Très bel endroit pour se retrouver dans les journées chaudes de l’été.', rating: 1 },
-        { id: 4, personId: 4, text: 'Très bel endroit pour se retrouver dans les journées chaudes de l’été.', rating: 5 },
-      ]
-    };
-  },    
-  components: {
-    Ratings,
-  },
-  methods: {
-    getCommentsForPerson(personId) {
-      return this.comments.filter(comment => comment.personId === personId);
-    },
-    handleLangChange(event) {
-      this.actualLang= JSON.parse(event.detail.storage); // Assigne la nouvelle valeur du mode
-    }
-  },
-  mounted() {
-    window.addEventListener('lang-changed', this.handleLangChange);
-  },
-  beforeUnmount() {
-    window.removeEventListener('lang-changed', this.handleLangChange);
-  },
+
+const props = defineProps({
+  comments: {
+    type: Array,
+    
+  }
+});
+
+/*const avis = computed(() => {
+  return props.activity.avis;
+});
+
+if (avis.value) {
+  console.log(avis.value +"sss")
+} else {
+  console.log("Not Working")
+}*/
+
+
+
+
+
+
+
+const actualLang = ref(storageManager.getLang());
+if (actualLang.value == null) {
+  storageManager.setLang(true);
+  actualLang.value = storageManager.getLang();
+}
+
+;
+
+
+const handleLangChange = (event) => {
+  actualLang.value = JSON.parse(event.detail.storage);
 };
+
+onMounted(() => {
+  window.addEventListener('lang-changed', handleLangChange);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('lang-changed', handleLangChange);
+});
 </script>
 
 

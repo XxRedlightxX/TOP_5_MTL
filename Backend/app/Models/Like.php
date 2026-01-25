@@ -15,8 +15,8 @@ class Like extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function activite()
+    public function activites()
     {
-        return $this->belongsTo(Activite::class);
+        return $this->belongsTo(Activite::class, "activite_id");
     }
 }

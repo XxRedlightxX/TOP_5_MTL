@@ -64,9 +64,11 @@
     
     // Toggle between Sign Up and Sign In
     const toggleSignUp = () => {
+        console.log('toggleSignUp called');
         signUp.value = !signUp.value;
         //storageManager.setLogin(true);
         storageManager.setLogUser(user);
+        console.log('signUp value:', signUp.value); // ← Et cette ligne
         // let theOrganisator = storageManager.getLogUser();
         // console.log('user page view is : ' + storageManager.getLogUser() );
     };

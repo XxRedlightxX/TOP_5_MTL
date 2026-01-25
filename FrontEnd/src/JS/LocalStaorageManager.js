@@ -1,6 +1,6 @@
 const StorageManager = {
   // gere le mode dark-light
-  setMode(value) {
+   setMode(value) {
     localStorage.setItem("mode", JSON.stringify(value));
     window.dispatchEvent(
       new CustomEvent("mode-changed", {
@@ -10,9 +10,27 @@ const StorageManager = {
       })
     );
   },
+  
   getMode() {
-    const mode = localStorage.getItem("mode");
-    return mode ? JSON.parse(mode) : null;
+     const stored = localStorage.getItem("mode");
+    return stored ? JSON.parse(stored) : true;
+  },
+
+
+  setUserList(value) {
+    localStorage.setItem("List", JSON.stringify(value));
+    window.dispatchEvent(
+      new CustomEvent("userlist-changed", {
+        detail: {
+          storage: localStorage.getItem("List"),
+        },
+      })
+    );
+  },
+
+  getUserList() {
+    const list = localStorage.getItem("List");
+    return list ? JSON.parse(list) : [];
   },
 
   // gere les event a afficher a la page single event
@@ -76,7 +94,17 @@ const StorageManager = {
   },
   getLogUser() {
     const logUser = localStorage.getItem("logUserr");
-    return logUser ? JSON.parse(logUser) : null;
+
+    if (!logUser || logUser === "undefined" || logUser === "null") {
+        return null;
+    }
+
+    try {
+        return JSON.parse(logUser);
+    } catch (e) {
+        console.error("Corrupted logUser value:", logUser);
+        return null;
+    }
   },
 
   // gere l'organisateur a afficher

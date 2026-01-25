@@ -10,11 +10,11 @@ class Avis extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['date', 'contenu', 'User_id', 'activite_id'];
+    protected $fillable = ['date', 'contenu', 'etoiles',  'utilisateur_id', 'activite_id'];
 
     public function User()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "utilisateur_id");
     }
 
     public function activite()

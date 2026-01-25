@@ -4,14 +4,14 @@
         
         <div class="info">
             <div class="lol">
-                <p>{{ actualLang ? 'Hosted by ': 'Mise en Ligne par ' }}Jean-Pierre Du Lac  </p>
+                <p>{{ actualLang ? 'Hosted by ': 'Mise en Ligne par ' }}{{hostName}} </p>
             </div>
             
             <div class="ratings">
-                <Ratings :rating="event.rating" :Rate="false"/>
+                <Ratings :rating=Rating :Rate="false"/>
             </div>
-            <h3><strong>{{ actualLang ? 'Location : ': 'Emplacement : ' }}</strong> Normandie, France</h3>
-            <h3><strong>{{ actualLang ? 'Open from : ': 'Ouvert de : ' }}</strong> 9h - 19h, {{ actualLang ? 'everydays': 'tous les jours' }}</h3>
+            <h3><strong>{{ actualLang ? 'Location : ': 'Emplacement : ' }}</strong> {{ place }}</h3>
+            <h3><strong>{{ actualLang ? 'Open from : ': 'Ouvert de : ' }}</strong> {{ formatDateEventStartandEnd(startDate,endDate) }}</h3>
         </div>
     </div>
 
@@ -21,6 +21,7 @@
     import { ref, onMounted, onUnmounted } from 'vue';
     import LocalStorageManager from "@/JS/LocalStaorageManager";
     import Ratings from "../../RatingComponent.vue"
+    import { formatDateEventStartandEnd } from '@/JS/GlobalFunctions';
 
     const event = ref(LocalStorageManager.getEvent())
 
@@ -34,6 +35,15 @@
     if( event.value == null){
         event.value = defaultEvent
     }
+
+    defineProps ({
+        hostName: String,
+        place : String,
+        Rating: Number,
+        startDate: String,
+        endDate: String,
+
+    });
 
 
     let actualLang = ref(LocalStorageManager.getLang());

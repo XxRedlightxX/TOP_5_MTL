@@ -1,6 +1,8 @@
 <template>
     <div id="profileOtherComponent">
+      
         <Logo :size="2"/>
+        
     </div>
   </template>
   

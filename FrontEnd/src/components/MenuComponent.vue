@@ -10,12 +10,12 @@
                 <div class="links">
                     <router-link to="/" :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'">{{actualLang ? 'Home' : 'Accueil'}}</router-link>
                     <router-link to="/Events" :title="actualLang ? 'Go to Event Page' : 'Allez a la page d\'aEvenement'">{{actualLang ? 'Events' : 'Evenement'}}</router-link>
-                    <router-link to="/Profile" class="profile" :title="actualLang ? 'Go to Profile Page' : 'Allez a la page Profile'">{{actualLang ? 'Profil' : 'Profile'}}</router-link>
+                    <router-link to="/Test" :title="actualLang ? 'Go to Event Page' : 'Allez a la page d\'aEvenement'">{{actualLang ? 'Chat' : 'Chat'}}</router-link>
                 </div>
                 <div class="icons">
-                    <!-- <router-link to="/Profile" class="profile" :title="actualLang ? 'Go to Profile Page' : 'Allez a la page Profile'">
+                    <router-link to="/Profile" class="profile" :title="actualLang ? 'Go to Profile Page' : 'Allez a la page Profile'">
                         <v-icon icon="mdi-account-circle" class="icon"/>
-                    </router-link> -->
+                    </router-link>
                     <v-icon 
                         :icon="!actualMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'" 
                         :class="['icon', 'iconn', { 'justGlow': !actualMode }]" 
@@ -29,9 +29,6 @@
         </transition>
 
         <div class="BurgerMenu">
-            <div class="logodiv">
-                <Logo :title="actualLang ? 'Go to Home Page' : 'Allez a la page d\'accueil'" :size="-1" class="logoo"/> 
-            </div>
             <input type="checkbox" name="showMenu" id="showMenu" v-model="seeBurgermenu">
             <label for="showMenu">
                 <v-icon icon="mdi-menu" :class="['icon', {'justGlow' : !actualMode}]" @click="console.log(seeBurgermenu)"/>
@@ -44,7 +41,9 @@
     import storageManager from "../JS/LocalStaorageManager.js"
     import Logo from "../components/Logos/Logo3Component.vue"
     import { ref, onMounted, onUnmounted, watch } from 'vue'
+     import { useActivityStore } from "@/stores/activity.js";
 
+    const activitiesStore = useActivityStore();
     let actualMode = ref(storageManager.getMode());
     let actualLang = ref(storageManager.getLang());
     var lastScrollTop = 0;
@@ -80,8 +79,9 @@
         actualLang.value = storageManager.getLang();
     }
 
-    const changeMode = () => {
-        console.log("new val = " + !actualMode.value)
+   const changeMode = () => {
+        activitiesStore.toggleMode();
+         console.log("new val = " + !actualMode.value)
         storageManager.setMode(!actualMode.value);
         actualMode.value = !actualMode.value
     }
@@ -95,7 +95,7 @@
     }
 
         // Function to handle mode change event
-        const handleLangChange = (event) => {
+    const handleLangChange = (event) => {
         actualLang.value = JSON.parse(event.detail.storage);
     };
 

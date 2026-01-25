@@ -1,7 +1,8 @@
 <template>
     <div id="profileListEventComponent">
+    
       <div class="head">
-        <h4 v-if="props.himself">{{  actualLang ? 'List of event you add' : 'Les evenements que vous avez ajoute' }}</h4>
+        <h4 v-if="props.himself">{{  actualLang ? 'List of events you add' : 'Les événements que vous avez ajoutés' }}</h4>
         <h4 v-else>{{  actualLang ? 'List of event the organisator publish' : 'Les evenements que l\'organisateur a publier' }}</h4>
        
         <div @click="showAdd2()"  class="router"  v-show="props.himself">
@@ -10,27 +11,41 @@
 
       </div>
   
-      <div class="body">
-        <ProfileSingleEvent v-for="(item, index) in props.user.listEvent" :key="index" :event="item"  :himself="props.himself" @popUpdate="showUp2()" @popDelete="showDel2()"/>
+      <div class="body" >
+        <LoadingUserEvents v-if="isLoading" /> 
+        <ProfileSingleEvent v-if="!isLoading" v-for="(item, index) in props.user.listEvent" :key="item.id" :event="item" 
+         :himself="props.himself" @popUpdate="showUp2(item.id)" @popDelete="showDel2(item.id)"/>
+
+         <ProfileSingleEvent v-if="!isLoading" v-show="!props.himself" v-for="(item, index) in props.user" :key="index" :event="item" 
+          :himself="false" @popUpdate="showUp2(item.id)" @popDelete="showDel2(item.id)"/>
       </div>
-      <AddEvent @pop="showAdd2()" v-show="isShowAdd2"/>
-      <UpdateEvent @popUpdate="showUp2()" v-show="isShowUp2"/>
-      <DeleteEvent @popDelete="showDel2()" v-show="isShowDel2"/>
+
+        
+      <AddEvent ref="addEventRef" @pop="showAdd2()" v-show="isShowAdd2 && props.himself"/>
+      <UpdateEvent  :eventId="selectedEventId" @popUpdate="showUp2()" v-show="isShowUp2 && props.himself"/>
+      <DeleteEvent :eventId="selectedEventId"  @popDelete="showDel2()" v-show="isShowDel2 && props.himself"/>
     </div>
   </template>
   
 <script setup>
   import storageManager from "@/JS/LocalStaorageManager";
-  import { ref, onMounted, onUnmounted, defineProps } from "vue";
+  import { ref, onMounted, onUnmounted, defineProps, nextTick, computed } from "vue";
   import ProfileSingleEvent from "./ProfileSingleEventComponent.vue";
   import AddEvent from "./profileEventComponents/AddEventComponent.vue"
   import UpdateEvent from "./profileEventComponents/UpdateEventComponent.vue"
   import DeleteEvent from "./profileEventComponents/DeleteEventComponent.vue"
+  import LoadingUserEvents from "../LoadingUserEvents.vue";
+  import { useActivityStore } from "@/stores/activity";
 
+  const activityStore = useActivityStore();
+
+  const isLoading = computed(() => activityStore.isLoading)
   const props = defineProps({
         himself: Boolean, // Boolean type prop
         user: Object
-    });
+  });
+  const addEventRef = ref(null);
+  let selectedEventId = ref(null);
 
   
   let actualLang = ref(storageManager.getLang());
@@ -78,15 +93,27 @@
   let isShowUp2 = ref(false);
   let isShowDel2 = ref(false);
 
-  const showAdd2 = () => {
+  const showAdd2 = async () => {
+
     isShowAdd2.value = !isShowAdd2.value;
+     if (isShowAdd2.value) {
+        await nextTick();
+    setTimeout(() => {
+      addEventRef.value?.refreshMap?.();
+    }, 300);
+    console.log(addEventRef.value+"k")
   }
-  const showUp2 = () => {
+  }
+  const showUp2 = (id) => {
+    selectedEventId = id
     isShowUp2.value = !isShowUp2.value;
   }
-  const showDel2 = () => {
+  const showDel2 = (id) => {
+    selectedEventId = id
     isShowDel2.value = !isShowDel2.value;
   }
+
+ 
 </script>
   
 

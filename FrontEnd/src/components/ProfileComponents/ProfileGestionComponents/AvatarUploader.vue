@@ -1,22 +1,70 @@
 <template>
-    <div id="avatarUploader">
-        <v-avatar size="180">
+    
+    <div id="avatarUploader"  v-if="authStore.user">
+        <v-avatar size="180" >
             <img
                 alt="John"
-                src="https://picsum.photos/id/375/200/300"
+                :src="getAvatarUrl(authStore?.user.image_data)"
+                :key="authStore?.user.image_data"
             />
         </v-avatar>
-        <input type="file" name="file" id="avatarFile" @change="onFileChange" />
+        <input type="file" name="file" id="avatarFile"  @change="uploadAvatar"  />
         <label for="avatarFile" class="avatarLabel" :title="actualLang ? 'Change Avatar' : 'Changer l\'avatar'">
-            <v-icon icon="mdi-camera-party-mode" :class="['icon', {'justGlowless' : !actualMode}]"/>
+            <v-icon  icon="mdi-camera-party-mode" :class="['icon', {'justGlowless' : !actualMode}]"/>
         </label>
     </div>
+
+    <div>
+    
+    
+  </div>
 </template>
 
 <script setup>
-import defaultImg from '../../../assets/p1.jpg';
+
 import storageManager from "../../../JS/LocalStaorageManager"
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import { useUserStore } from '@/stores/user';
+import { getAvatarUrl } from "@/JS/GlobalFunctions";
+
+
+const authStore = useAuthStore();
+const { addImageProfile } = useUserStore();
+const selectedFile = ref(null)
+const errorMessage = ref(null);
+const  validationErrors  = ref(null);
+
+
+
+
+const uploadAvatar = async (event) => {
+  errorMessage.value = null;
+  validationErrors.value = {};
+  
+  const file = event.target.files[0];
+  if (!file) {
+    errorMessage.value = 'Please select a file first';
+    return;
+  }
+
+  const formData = new FormData();
+  //Lie le chemin du fichier avec l attribut image_data input de l API
+  formData.append('image_data', file);
+  
+  try {
+    const avatarUrl = await addImageProfile(formData);
+    if (avatarUrl) {
+      // Refresh la [age]
+      await authStore.getUser();
+      // Ca reset le Input pour 
+      event.target.value = '';
+    }
+  } catch (error) {
+    errorMessage.value = error.message;
+    console.error("Upload failed:", error);
+  }
+}
 
 const img = ref(null);
 const actualMode = ref(storageManager.getMode());
@@ -53,17 +101,17 @@ onUnmounted(() => {
     window.removeEventListener('mode-changed', handleModeChange);
 });
 
-// Event handler for file input change
+/*// Event handler for file input change
 const onFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
         img.value = URL.createObjectURL(file);  // Create a URL for the selected file
         console.log('New file selected:', img.value);
     }
-};
+};*/
 
 // Initialize with default image if no file selected
-img.value = defaultImg;
+
 
 </script>
 

@@ -25,7 +25,7 @@ return new class extends Migration
 
             $table->string("contenu");
             $table->dateTime("date");
-            $table->unique(['expediteur_id', 'destinataire_id']);
+            
         });
     }
 

@@ -32,8 +32,9 @@ class LikeDAOImpl implements LikeDAO {
 
     public function getLikesByUserId(int $userId) {
         $user=User::findOrFail($userId);
+        
 
-        return $user->activites()->with('likes')->get();
+        return $user->load('likes.activites');;
     }
 
     /**

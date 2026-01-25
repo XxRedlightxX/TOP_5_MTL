@@ -1,38 +1,63 @@
 <template>
     <div id="profileSingleEventComponent" class="glass">
+        <div style="display: none;">{{ console.log('himself value:', props.himself) }}</div>
+        
         <div class="first">
-            <img :src="props.event.image" alt="#">
+            <img :src="imageSrc" alt="#">
         </div>
-
+        
         <div class="middle">
+           
+            <h2>{{ props.event?.titre }}</h2>
+
+            <p>{{ props.event?.description }}</p>
+
             
-            <h2>{{ props.event.title }}</h2>
-
-            <p>{{ props.event.desc }}</p>
 
         </div>
 
-        <div class="last"  v-show="props.himself">
+        <div class="last" v-show="props.himself">
             <v-icon icon="mdi-folder-edit" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Edit this Event' : 'Modifier cet evenement'" @click="showUp()"/>
-            <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Delette this Event' : 'Supprimer cet evenement'" @click="showDel()"/>
+            <v-icon icon="mdi-delete-circle" :class="['icon', {'glowLess' : !actualMode}]" :title="actualLang ? 'Delette this Event' : 'Supprimer cet evenement'"  @click="showDel()"/>
         </div>
+
+        
 
     </div>
   </template>
   
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
-
-
+    import { ref, onMounted, onUnmounted, defineProps, defineEmits, computed } from "vue";
+    import { getEventUrl } from "@/JS/GlobalFunctions";
+    import { useActivityStore } from "@/stores/activity";
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
     let actualMode = ref(storageManager.getMode());
+    let activityId = ref(null);
+
+
+    const imageSrc = computed(() => {
+    return props.event?.image
+        ? getEventUrl(props.event.image)
+        : getEventUrl(props.event?.image_data);
+});
+
+    const activityStore = useActivityStore();
+    const isLoading = computed(() => activityStore.isLoading);
+
+    
+    //const emit = defineEmits(['popUpdate', 'popDelete'])
+    
+
+    
     //var isShowUp = ref(false);
     const props = defineProps({
         event: Object, // Boolean type prop
         himself: Boolean, // Boolean type prop
     });
+    activityId.value =props.event?.id
+   
 
     // Définir les événements émis par ce composant
     const emit = defineEmits(['popUpdate']);
@@ -90,4 +115,4 @@
     });
 </script>
 
-<style src="../../styles/ProfilesStyles/profileSingleEventComponentStyle.scss"></style>
+<style src="../../styles/ProfilesStyles/ProfileSingleEventComponentStyle.scss"></style>

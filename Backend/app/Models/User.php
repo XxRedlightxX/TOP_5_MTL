@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens ,HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +22,12 @@ class User extends Authenticatable
     protected $table = 'Utilisateur';
     protected $fillable = [
         'name',
+        'username',
         'email',
+        'image_data',
+        'num_tel',
+        'description',
+        'type_utilisateur',
         'password',
     ];
 
@@ -51,6 +57,8 @@ class User extends Authenticatable
         ];
     }
 
+ 
+
 
     public function activites()
     {
@@ -59,12 +67,12 @@ class User extends Authenticatable
 
     public function avis()
     {
-        return $this->hasMany(Avis::class);
+        return $this->hasMany(Avis::class, 'utilisateur_id');
     }
 
     public function favoris()
     {
-        return $this->belongsToMany(Activite::class, 'favori', 'User_id', 'activite_id');
+        return $this->belongsToMany(Activite::class, 'favori', 'utilisateur_id', 'activite_id');
     }
 
     public function likes()
@@ -92,5 +100,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'followers', 'followed_id', 'follower_id')->withTimestamps();
     }
+
+    public function likedActivities()
+{
+    return $this->belongsToMany(Activite::class, 'likes', 'utilisateur_id', 'activite_id')->withTimestamps();
+}
 
 }

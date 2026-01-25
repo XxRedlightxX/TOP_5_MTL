@@ -5,17 +5,18 @@
             <div v-for="(item, index) in carouselItems" :key="index" class="item">
             <div class="imgContainer">
                 <div class="overlayGrad"></div>
-                <img :src="item.image">
+                <img :src="getAvatarUrl(item?.image)">
             </div>
             <div class="content">
                 <div :class="index == 0 ? 'titlee' : 'lostTitle'">{{ item.title }}</div>
 
                     <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
-                        <router-link to="/Event" class="btn roundBorderSmall" @click="setEvent(item)">{{ textEvent }}</router-link>
-                        <router-link to="/Event Organisator" class="btn roundBorderSmall" @click="setEvent(item)">Découvrir les Organisateurs</router-link>
+                        <router-link :to="{ name: 'show', params: {id: item.id}}" class="btn roundBorderSmall" @click="setEvent(item)">{{ textEvent }}</router-link>
+                        <router-link :to="{name : 'Event Organisator' , params: {id: item.id}}" class="btn roundBorderSmall" @click="setEvent(item)">{{ textOrganisator }}</router-link>
                     </div>
                     <div :class="index == 0 ? 'desc' : 'lostdesc'">
                         <p>{{ item.desc }}</p>
+                        
                     </div>
             </div>
             </div>
@@ -23,7 +24,7 @@
         <!-- list thumbnail -->
         <div class="thumbnail">
             <div v-for="(item, index) in carouselItems" :key="index" class="item">
-            <img :src="item.image2" class=" roundBorderSmall">
+            <img :src="getAvatarUrl(item.image)" class=" roundBorderSmall">
             <div class="content">
                 <div class="title">{{ item.title }}</div>
             </div>
@@ -39,7 +40,9 @@
     </div>
 </template>
 
-<script src="../../JS/HomeCarousellScript.js" ></script>
+<script src="../../JS/HomeCarousellScript.js" >
+
+</script>
 
 
 

@@ -1,6 +1,6 @@
 <template>
     <div id="login-profileView">
-        <SignIn_SignUp v-if="!isLogged"/>
+        <SignIn_SignUp v-if="!authStore.user"/>
 
         <Profile v-else  :himself="true"/>
     </div>
@@ -10,7 +10,10 @@
     import SignIn_SignUp from "../../components/Login-SignUpComponents/Login-SignUpComponentButBetter.vue"
     import Profile from "../../components/ProfileComponents/ProfileComponent.vue"
     import LocalStorageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, watch} from "vue";
+    import { ref, onMounted, onUnmounted} from "vue";
+    import { useAuthStore } from "@/stores/auth";
+
+    const authStore = useAuthStore();
   
     let isLogged = ref(LocalStorageManager.getLogin());
 

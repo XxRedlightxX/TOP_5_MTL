@@ -12,6 +12,7 @@
         flex-direction: row;
         justify-content: space-between;
         padding: 2% 1% 2% 2%;
+         //border: 2px solid red;
     
         .first {
             //border: 2px solid red;
@@ -38,7 +39,7 @@
         .last {
             //border: 2px solid red;
             width: 15%;
-            display: flex;
+            display: flex;  
             flex-direction: column;
             justify-content: space-around;
             align-items: center;
@@ -58,8 +59,41 @@
                 width: 100%;
                 height: 40%;
                 color: var(--graphite06);
+                background-color: red;
                 font-size: 2.8rem;
+                border-style: none;
                 border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+                
+            }
+            .iconHead:hover {
+                cursor: pointer;
+                color: var(--graphite);
+                border-radius: 47% 53% 36% 64% / 40% 40% 60% 60%  ;
+            }
+        }
+
+         .fourth {
+            //border: 2px solid red;
+            width: 15%;
+            display: flex;  
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 0%;
+
+          
+              
+            
+            .iconHead {
+                width: 100%;
+                height: 40%;
+                color: var(--graphite06);
+                
+                //background-color: grey;
+                font-size: 2.8rem;
+                //border-style:groove;
+                border-radius: 57% 43% 37% 63% / 45% 52% 48% 52%;
+                
             }
             .iconHead:hover {
                 cursor: pointer;
@@ -132,6 +166,8 @@
                 border-radius: 47% 53% 36% 64% / 40% 40% 60% 60%  ;
             }
         }
+
+        
     }
 }
 .light {
@@ -142,7 +178,7 @@
             }
         }
 
-        .last {
+        .last, .fourth {
             .iconHead {
                 color: var(--graphite06);
                 background: transparent;
@@ -165,7 +201,7 @@
             }
         }
 
-        .last {
+        .last, .fourth {
             .iconHead {
                 color: var(--light-trans-text);
                 background: transparent;

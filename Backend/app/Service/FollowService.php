@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Service;
+
+use App\DAO\SourceDonnes\FollowDAO;
+use App\DAO\SourceDonnes\LikeDAO;
+use App\Models\User;
+use App\DAO\SourceDonnes\UserDAO;
+use App\Models\Activite;
+use Illuminate\Validation\ValidationException;
+
+
+
+class FollowService {
+
+   protected UserDAO $userDAO;
+
+    public function __construct(UserDAO $userDAO)
+    {
+        $this->userDAO = $userDAO;
+    }
+
+    public function follow(int $followerId, int $followedId): User|string
+    {
+        $follower = $this->userDAO->findById($followerId);
+        $followed = $this->userDAO->findById($followedId);
+        $isExistingFollower = $this->isFollowing($follower, $followed);
+
+        if (!$follower || !$followed) {
+            return 'user_not_found';
+        }
+        if ($follower->id === $followed->id) {
+            return 'same_user';
+        }
+        if ($isExistingFollower) {
+            $this->userDAO->unfollow($follower, $followed);
+            return 'user_unfollow';
+        }
+
+        $this->userDAO->follow($follower, $followed);
+         return 'followed';
+    }
+
+    public function isFollowing(User $follower, User $followed) {
+        return $this->userDAO->isFollowing($follower, $followed);
+
+    }
+
+    public function unfollow(int $followerId, int $followedId): void
+    {
+        $follower = $this->userDAO->findById($followerId);
+        $followed = $this->userDAO->findById($followedId);
+
+        if ($follower && $followed) {
+            $this->userDAO->unfollow($follower, $followed);
+        }
+    }
+
+    public function getFollowers(int $userId)
+    {
+        $user = $this->userDAO->findById($userId);
+        return $user ? $this->userDAO->getFollowers($user) : [];
+    }
+
+    public function getFollowings(int $userId)
+    {
+        $user = $this->userDAO->findById($userId);
+        return $user ? $this->userDAO->getFollowings($user) : [];
+    }
+     
+
+}

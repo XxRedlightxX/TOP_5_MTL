@@ -1,66 +1,204 @@
 <template>
-    <div id="myModal" class="modal" style="display:none" @click.self="pop">
-        <!-- Modal content -->
+    <div id="myModal" class="modal" style="" @click.self="pop">
         <div class="modal-content" @click.self="pop">
             <div class="event-create-form">
-                <span class="close" @click="pop" >&times;</span>
-                <h2>Create Event</h2>
-                <form>
+                <span class="close" @click="pop">&times;</span>
+                <h2>{{ actualLang ? 'Create an Event' : 'Créer un événement' }}</h2>
+                <form @submit.prevent="testInput">
                     <div class="form-group">
-                        <label for="event-name">Event Name</label>
-                        <input type="text" id="event-name" placeholder="Enter event name" required>
+                        <label for="event-name">{{ actualLang ? "Name of Event" : "Nom de evenement" }}</label>
+                        <input type="text" v-model="formDataEvent.titre" id="event-name"  :placeholder='actualLang ? "Enter event name" : "Entrez le nom évenement"' required>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="event-date">Date</label>
-                            <input type="date" id="event-date" required>
+                            <label for="event-date">{{ actualLang ? "Start Date" : "Date de début" }}</label>
+                            <input type="date" ref="inputRefDate" id="event-date" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="event-time">Time</label>
-                            <input type="time" id="event-time" required>
+                            <label for="event-time">{{ actualLang ? "Start Hour" : "Heure de début" }}</label>
+                            <input type="time" ref="inputRefTime" id="event-time" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="event-duration">Duration (hours)</label>
-                            <input type="number" id="event-duration" placeholder="e.g., 2" min="1" required>
+                            <label for="event-duration">{{ actualLang ? "Duration" : "Durée" }}</label>
+                            <input type="number" ref="inputRefDurationHours" id="event-duration" placeholder="e.g., 2" min="1" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="event-location">Location</label>
-                        <input type="text" id="event-location" placeholder="Enter location" required>
+                        <label for="event-location">{{ actualLang ? "Location" : "Emplacement" }}</label>
+                        <input type="text" v-model="formDataEvent.lieu" id="event-location"  :placeholder="actualLang ? 'Enter Location' : 'Entrez un emplacement'" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="event-description">{{ actualLang ? "Description" : "Description" }}</label>
+                        <input type="text" v-model="formDataEvent.description" id="event-description"  :placeholder="actualLang ? 'Enter description' : 'Entrez une description'" required>
                     </div>
 
+                    <div class="form-row">
+                       <div class="form-group">
+                            <label for="event-type">{{ actualLang ? "Daytime" : "Journée" }}</label>
+                            <select id="event-type" v-model="formDataEvent.statut_journee" required>
+                                <option disabled value="">{{ actualLang ? "Select Daytime" : "Sélectionner la journée" }}</option>
+                                <option value="JOUR">{{ actualLang ? "Day" : "Jour" }}</option>
+                                <option value="NUIT">{{ actualLang ? "Night" : "Nuit" }}</option>
+                            </select>
+                        </div>
+
+
+                         <div class="form-group">
+                            <label for="event-type">{{ actualLang ? "Season" : "Saison" }}</label>
+                            <select id="event-type" v-model="formDataEvent.saison_name" required>
+                                <option disabled value="">{{ actualLang ? "Select  a Season" : "Sélectionner une Saison" }}</option>
+                                <option value="été" selected>{{ actualLang ? "Summer" : "Été" }}</option>
+                                <option value="hiver">{{ actualLang ? "Winter" : "Hiver" }}</option>
+                                <option value="printemps">{{ actualLang ? "Spring" : "Printemps" }}</option>
+                                <option value="automne">{{ actualLang ? "Autumn" : "Automne" }}</option>
+                              
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="event-type">{{ actualLang ? "Category" : "Catégorie" }}</label>
+                            <select id="event-type" v-model="formDataEvent.type_name" required>
+                                <option disabled value="">{{ actualLang ? "Select a Category" : "Sélectionner un Catégorie" }}</option>
+                                <option  v-for="category in listCategories" key="category.id" :value="category.nom"> {{ category.nom }}</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="event-picture">Upload Picture</label>
-                        <input type="file" id="event-picture" accept="image/*">
+                        <input type="file" @change="handleFileUpload" id="event-picture" accept="image/*">
                     </div>
-
-                    <div class="form-group">
-                        <label for="event-hosts">Co-hosts</label>
-                        <input type="text" id="event-hosts" placeholder="Add other hosts (comma-separated)">
-                        <div class="form-group_images">
-                            <img src="https://picsum.photos/id/375/200/300"> <img src="https://picsum.photos/id/375/200/300" alt=""> <img src="https://picsum.photos/id/375/200/300">
-                        </div>
-                    </div>
-                
+                    <MapComponent @event-coords="handleEventCoords"></MapComponent>
+                    
                     <div class="form-actions">
-                        <waterButton :text="actualLang ? 'Create' : 'Creer'" :type="true" class="btnn"/>
-                        <waterButton :text="actualLang ? 'Cancel' : 'Annuler'" :type="false" class="btnn"  @click="pop"/>
+                        
+                        <waterButton :text="actualLang ? 'Create Event' : 'Créer Événement'"  :type="false" 
+                        buttonType="submit" class="btnn" @click="pop"/>
+                        <waterButton :text="actualLang ? 'Cancel' : 'Annuler'" :type="false" class="btnn" @click="pop"/>
                     </div>
                 </form>
+                
             </div>
+            
+              
         </div>
     </div>
-
 </template>
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
+    import { ref, onMounted, onUnmounted, defineProps, defineEmits, reactive } from "vue";
     import waterButton from "@/components/WaterButtonComponent.vue";
-    //import imgUrl from "src/assets/";//"../../../assets/bob.jpg";
+    import { useActivityStore } from "@/stores/activity";
+    import { formatDateApi, formatDateEventEndDate } from "@/JS/GlobalFunctions";
+    import { useAuthStore } from "@/stores/auth";
+    import MapComponent from "@/components/MapComponent.vue";
+
+
+    const {addEvent,} = useActivityStore();
+    const activitiesStore = useActivityStore();
+    const authStore = useAuthStore();
+
+    const inputRefDate = ref(null);
+    const inputRefTime = ref(null);
+    const inputRefDurationHours = ref(null);
+
+    const selectedFile = ref(null)
+    const errorMessage = ref(null);
+    const  validationErrors  = ref(null);
+    const listCategories = ref([])
+  
+
+    const formDataEvent= reactive({
+            titre: "",
+            date_debut: "",
+            date_fin: "",
+            description: "",
+            statut_journee : "",
+            lieu : "",
+            image_data : "",
+            saison_name: "",
+            type_name : "",
+            longitude : "",
+            latitude : ""
+    });
+
+
+    const handleFileUpload = (event) => {
+        errorMessage.value = null;
+        validationErrors.value = {};
+        
+        const file = event.target.files[0];
+        if (!file) {
+            errorMessage.value = 'Please select a file first';
+            return;
+        }
+        selectedFile.value = file;
+        
+    };
+
+
+
+
+const testInput = async(event) => {
+    const dateValue = inputRefDate.value.value;
+    const timeValue = inputRefTime.value.value;
+    const hoursDurationValue =inputRefDurationHours.value.value;
+
+    const formattedStartDateTime = formatDateApi(dateValue, timeValue);
+    const formattedEndDateTime = formatDateEventEndDate(formattedStartDateTime, hoursDurationValue);
+    formDataEvent.date_debut = formattedStartDateTime;
+    formDataEvent.date_fin = formattedEndDateTime;
+
+    const formData = new FormData();
+    formData.append('titre', formDataEvent.titre);
+    formData.append('date_debut', formDataEvent.date_debut);
+    formData.append('date_fin', formDataEvent.date_fin);
+    formData.append('description', formDataEvent.description);
+    formData.append('statut_journee', formDataEvent.statut_journee);
+    formData.append('lieu', formDataEvent.lieu);
+    formData.append('saison_name', String(formDataEvent.saison_name));
+    formData.append('type_name', String(formDataEvent.type_name));
+    formData.append('latitude', String(formDataEvent.latitude));
+    formData.append('longitude', String(formDataEvent.longitude));
+    
+
+    if (selectedFile.value) {
+        formData.append('image_data', selectedFile.value);
+    }
+
+    for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+    }
+
+        try {
+            const eventUrl = await addEvent(formData);
+            if (eventUrl) {
+                console.log(eventUrl, "test2");
+                window.$toast("Saved successfully!")
+                await authStore.getUser();
+                //await authStore.getUpcomingEvents()
+                
+               
+                
+            }
+             console.log(eventUrl, "test2");
+        } catch (error) {
+            errorMessage.value = error.message;
+            console.error("Upload failed:", error);
+        }
+    };
+
+    const handleEventCoords = (coords) => {
+            console.log("Received coordinates:", coords);
+            console.log("Latitude:", coords.lat);
+            console.log("Longitude:", coords.lng);
+            formDataEvent.latitude = coords.lat;
+            formDataEvent.longitude = coords.lng;
+        };
 
     const props = defineProps({
         user: Object
@@ -94,12 +232,19 @@
     isLogged.value = JSON.parse(event.detail.storage);
     };
 
+     onMounted(async () => {
+        listCategories.value =await activitiesStore.getCategories();
+        console.log(listCategories, "liste Categories")
+     
+     });
+
 
 
     // Add event listener for mode changes
     onMounted(() => {
     window.addEventListener('lang-changed', handleLangChange);
     window.addEventListener('login-changed', handleLoginChange);
+
     });
 
     // Remove event listener when component is unmounted
@@ -125,8 +270,11 @@
         top: 0%;
         width: 100%; 
         height: 100%; 
-        overflow: hidden; 
+        //overflow: hidden; 
         z-index: 500; 
+
+        
+        
 
         .modal-content {
             background-color: transparent;
@@ -152,16 +300,35 @@
                     }
                 }
                 form {
+
+                    .glass {
+                        color : black
+                    }
+                        
+                    
                     .form-group {
                         display: flex;
                         flex-direction: column;
-                
+
+                       
+                        
                         label {
                         text-align: left;
                         }
                 
                         input {
                             transition: all 0.3s;
+                            color: black;
+                            border-color: black;
+                        }
+                            
+                        select {
+                          
+                            background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Custom arrow SVG */
+                            background-repeat: no-repeat;
+                            background-position: right 10px center;
+                            padding-right: 30px;
+                            color : black;
                         }
 
                         &_images {

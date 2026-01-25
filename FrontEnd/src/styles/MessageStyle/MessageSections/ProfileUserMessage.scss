@@ -1,0 +1,130 @@
+#ProfileUserMessage {
+    width: 20%;
+    max-height: 600px;
+     border-left: 1px solid #e0e0e0;
+    
+    .profile {
+       
+        
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 20px;
+        gap: 2px;
+        background-color: #f8f9fa;
+
+        .avatar-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            
+            .avatar-img {
+                img {
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    border: 3px solid #e4e6eb;
+                }
+            }
+
+            .name {
+                font-size: 1.4rem;
+                font-weight: 600;
+                color: #1a1a1a;
+                text-align: center;
+            }
+
+            .username {
+                font-size: 1rem;
+                color: #666;
+                text-align: center;
+            }
+        }
+
+        .other-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            
+            .column-info {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                padding: 12px;
+                border-radius: 8px;
+                background: rgba(248, 248, 248, 0.8);
+                border: 1px solid #f0f0f0;
+
+                .label {
+                    font-size: 0.85rem;
+                    font-weight: 500;
+                    color: #888;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+
+                .value {
+                    font-size: 1rem;
+                    color: #333;
+                    font-weight: 400;
+                    word-break: break-word;
+                }
+            }
+        }
+    }
+}
+
+/* Dark mode support */
+.dark #ProfileUserMessage {
+    .profile {
+        border-color: #444;
+        background: rgba(30, 30, 30, 0.8);
+        
+        .avatar-info {
+            .name {
+                color: #fff;
+            }
+            .username {
+                color: #aaa;
+            }
+            .avatar-img img {
+                border-color: #444;
+            }
+        }
+        
+        .other-info {
+            .column-info {
+                background: rgba(40, 40, 40, 0.8);
+                border-color: #444;
+                
+                .label {
+                    color: #888;
+                }
+                .value {
+                    color: #ddd;
+                }
+            }
+        }
+    }
+}
+
+/* Responsive design */
+@media screen and (max-width: 1200px) {
+    #ProfileUserMessage {
+        width: 25%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #ProfileUserMessage {
+        width: 100%;
+        max-height: none;
+    }
+}

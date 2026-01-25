@@ -1,20 +1,23 @@
 <template>
   <div class="upComingEvent" ref="wrapper">
     <span id="left" @click="scroll('left')"><</span>
-    <ul class="carousel" ref="carousel">
-      <router-link to="/Event" v-for="(event, index) in  eventsss" :key="index" class="card"  @click="setEvent(event)">
+    <ul class="carousel" ref="carousel" >
+      
+      <router-link :to="{ name: 'show', params: {id: event.id}}" v-for="(event, index) in listEvent" 
+      :key="index" class="card" >
         <div class="img">
-          <img :src="event.image" alt="img" draggable="false" />
+          
+          <img :src="getEventUrl(event.image)" alt="img" draggable="false" />
         </div>
         <h2>{{ event.title }}</h2>
         <div class="eventDescriptionInfos">
           <div class="d">
             <v-icon icon="mdi-map-marker " :class="['icon', {'justGlow' : !actualMode}]"/>
-            montreal, {{ event.title }}
+            {{ event.lieu }}
           </div>
           <div class="d">
             <v-icon icon="mdi-clock-outline " :class="['icon', {'justGlow' : !actualMode}]"/>
-            12 h
+           {{ formatDateSpecial(event.date,true) }}
           </div>
         </div>
       </router-link>
@@ -24,38 +27,22 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, onBeforeUnmount, onUnmounted, watch } from 'vue';
+  import { ref, onMounted, onBeforeUnmount, onUnmounted, watch,defineProps } from 'vue';
   import LocalStorageManager from "../../../JS/LocalStaorageManager";
+  import { formatDateSpecial, getEventUrl } from '@/JS/GlobalFunctions';
+
+  defineProps( {
+    listEvent : Array
+  });
 
   
   const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
-  const UpComingEvents = ref([
-    { image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3 },
-    { image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 5 },
-    { image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 1 },
-    { image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 2.5 },
-    { image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 3 },
-    { image: "https://picsum.photos/1894/793", title: "Laronde", desc: text, rating: 4 },
-    { image: "https://picsum.photos/1895/795", title: "Mont-Royal", desc: text, rating: 3.5 },
-    { image: "https://picsum.photos/1895/796", title: "Jardin Botanique", desc: text, rating: 1.5 },
-    { image: "https://picsum.photos/1895/794", title: "Vieux-Port", desc: text, rating: 4.5 }
-  ]);
 
-  const UpComingEventsNuit = ref([
-    {image : "https://picsum.photos/1895/795", title: "Bateau Mouche de nuit", desc: text, rating: 4 },
-    {image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
-    {image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
-    {image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 },
-    {image : "https://picsum.photos/1894/795", title: "Pont Jacque Cartier", desc: text, rating: 1 },
-    {image : "https://picsum.photos/1892/795", title: "Casino", desc: text, rating: 2 },
-    {image : "https://picsum.photos/1893/795", title: "La Voute", desc: text, rating: 3.5 }
-  ]);
 
   const actualMode = ref(LocalStorageManager.getMode());
+  const actualLang = ref(LocalStorageManager.getLang())
   const eventsss = ref([]);
-
+  let initialized = ref(false); 
 
   const wrapper = ref(null);
   const carousel = ref(null);
@@ -68,25 +55,33 @@
   if (actualMode.value == null){
        LocalStorageManager.setMode(true);
        actualMode.value = LocalStorageManager.getMode();
-       setEvents();
+      
    }
    // Correction du watcher
-   watch(actualMode, () => {
-    setEvents();
-  });
-
+  
    
    const handleModeChange = (event) => {
        actualMode.value = JSON.parse(event.detail.storage);
        //setEvents();
    };
 
-   const setEvents = () => {
-      eventsss.value = actualMode.value ? UpComingEvents.value : UpComingEventsNuit.value;
+   const handleLangChange = (event) => {
+      actualLang.value = JSON.parse(event.detail.storage);
     };
 
 
+if (actualMode.value == null){
+      LocalStorageManager.setMode(true);
+      actualMode.value = LocalStorageManager.getMode();
+  }
+  
+
+   
+
+
   const initializeCarousel = () => {
+
+
     const firstCardWidth = carousel.value.querySelector('.card').offsetWidth;
     const cardPerView = Math.round(carousel.value.offsetWidth / firstCardWidth);
     
@@ -167,15 +162,20 @@
   });
     // Add event listener for mode changes
   onMounted(async () => {
-      await setEvents(); // Assure que les events sont chargés
+      //await setEvents(); // Assure que les events sont chargés
+      if (!initialized) {
       initializeCarousel();
+      initialized = true;
+    }
+        window.addEventListener('lang-changed', handleLangChange);
       window.addEventListener('mode-changed', handleModeChange);
   });
  
    // Remove event listener when component is unmounted
    onUnmounted(() => {
+      window.addEventListener('lang-changed', handleLangChange);
        window.removeEventListener('mode-changed', handleModeChange);
    });
 </script>
 
-<style src="../../../styles/EventsStyles//ListOfEventsStyles/UpComingEventComponentStyle.scss"></style>
+<style src="../../../styles/EventsStyles/ListOfEventsStyles/UpComingEventComponentStyle.scss"></style>

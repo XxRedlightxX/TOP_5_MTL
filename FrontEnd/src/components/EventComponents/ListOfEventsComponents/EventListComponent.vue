@@ -45,12 +45,12 @@ import { onMounted, ref, watch, onUnmounted } from 'vue'; // Add ref here
         let containerWidth = item.offsetWidth; // Use offsetWidth for more accurate width
         
         nxtBtn[i].addEventListener('click', () => {
-            console.log("Next button clicked"); // For debugging
+            //console.log("Next button clicked"); // For debugging
             item.scrollLeft += containerWidth;
         });
 
         preBtn[i].addEventListener('click', () => {
-            console.log("Previous button clicked"); // For debugging
+            //console.log("Previous button clicked"); // For debugging
             item.scrollLeft -= containerWidth;
         });
     });
@@ -78,7 +78,7 @@ const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo
       window.removeEventListener('mode-changed', handleModeChange);
   });
 
-const newEventJours = [
+/*const newEventJours = [
     { image: "/src/assets/HomeCarousel/Mont-royal.jpg", title: "Mont-Royal", desc: text, rating: 3 },
     { image: "/src/assets/HomeCarousel/Vieux-port.jpg", title: "Vieux-Port", desc: text, rating: 5 },
     { image: "/src/assets/HomeCarousel/LaRonde.jpg", title: "Laronde", desc: text, rating: 1 },
@@ -103,12 +103,12 @@ const newEventJours = [
   ];
 
 
-let newEvent = ref(null);
-  newEvent.value = actualMode.value ? newEventJours : newEventNuit;
+  let newEvent = ref(null);
+  newEvent.value = actualMode.value ? newEventJours : newEventNuit;*/
 
   // Correction du watcher
   watch(actualMode, (newVal, oldVal) => {
-    newEvent.value = newVal ? newEventJours : newEventNuit;
+    //newEvent.value = newVal ? newEventJours : newEventNuit;
   });
 
   // Fonction pour mettre à jour l'index du slide actif

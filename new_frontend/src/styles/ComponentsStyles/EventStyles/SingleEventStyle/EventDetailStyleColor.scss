@@ -1,0 +1,55 @@
+
+.light {
+  #eventDetail{
+    .place-overview {
+      // box-shadow: 0 15px 30px rgba(0, 0, 0, .2),
+      // 0 10px 10px rgba(0, 0, 0, .2);
+  
+      .header {
+          //color: var(--graphite06);
+  
+        &__title {
+          color: var(--graphite);
+        }
+      }
+  
+      .overview {
+        &__details {
+          color: var(--graphite06);
+      
+          &__description {
+            color: var(--graphite06);
+          }
+        }
+      }
+    }
+  }  
+}
+
+
+.dark {
+  #eventDetail{
+    .place-overview {
+      // box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2),
+      // 0 10px 10px rgba(255, 255, 255, 0.2);
+  
+      .header {
+          //color: var(--light-trans-text);
+  
+        &__title {
+          color: var(--light);
+        }
+      }
+  
+      .overview {
+        &__details {
+          color: var(--light-trans-text);
+      
+          &__description {
+            color: var(--light-trans-text);
+          }
+        }
+      }
+    }
+  } 
+}

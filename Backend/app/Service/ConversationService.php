@@ -20,7 +20,14 @@ class ConversationService {
 
     public function getConversationBetweenUsers(int $userA, int $userB)
     {
-        return $this->conversationDAO->getConversation($userA, $userB);
+        $messages= $this->conversationDAO->getConversation($userA, $userB);
+
+        $otherUser = $this->conversationDAO->getById($userB);
+
+         return [
+            'messages' => $messages,
+            'other_user' => $otherUser
+        ];
     }
 
     public function sendMessage(int $senderId, int $receiverId, string $content): Conversation

@@ -44,7 +44,7 @@
             <router-link to="/Profile" :title="actualLang ? 'Go to Profile Page' : 'Allez a la page Profile'">{{actualLang ? 'Profile' : 'Profile'}}</router-link>
         </div>
 
-        <p>&copy Debraise et le touriste</p>
+        <p>&copy Debraise et Jean-Gabriel</p>
     </div>
 </template>
 

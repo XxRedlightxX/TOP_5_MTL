@@ -1,39 +1,40 @@
 <template>
     <div id="updateEvent" @click.self="popUpdate">
         <div class="event-update-form">
-            <span class="close" @click="popUpdate" >&times;</span>
-            <h2>Update Event</h2>
-            <form>
+            <span class="close" @click="popUpdate">&times;</span>
+            
+            
+            <form  @submit.prevent="handleSubmit">
                 <div class="form-group">
                     <label for="event-name">Event Name</label>
-                    <input type="text" id="event-name" placeholder="Enter event name" required>
+                    <input type="text" id="event-name" v-model="formDataEvent.titre" placeholder="Enter event name" required>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="event-date">Date</label>
-                        <input type="date" id="event-date" required>
+                        <input type="date" id="event-date" ref="inputRefDate" >
                     </div>
 
                     <div class="form-group">
                         <label for="event-time">Time</label>
-                        <input type="time" id="event-time" required>
+                        <input type="time" id="event-time" ref="inputRefTime" >
                     </div>
 
                     <div class="form-group">
                         <label for="event-duration">Duration (hours)</label>
-                        <input type="number" id="event-duration" placeholder="e.g., 2" min="1" required>
+                        <input type="number" id="event-duration"   placeholder="e.g., 2" min="1" >
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="event-location">Location</label>
-                    <input type="text" id="event-location" placeholder="Enter location" required>
+                    <input type="text" id="event-location"  v-model="formDataEvent.lieu"placeholder="Enter location" >
                 </div>
 
                 <div class="form-group">
                     <label for="event-picture">Upload Picture</label>
-                    <input type="file" id="event-picture" accept="image/*">
+                    <input type="file" id="event-picture"  ref="inputRefImage" @change="handleFileUpload" accept="image/*">
                 </div>
 
                 <div class="form-group">
@@ -43,11 +44,13 @@
                         <img src="https://picsum.photos/id/375/200/300"> <img src="https://picsum.photos/id/375/200/300" alt=""> <img src="https://picsum.photos/id/375/200/300">
                     </div>
                 </div>
-            
+          
                 <div class="form-actions">
-                    <waterButton :text="actualLang ? 'Update' : 'Mettre a jour'" :type="true" class="btnn"/>
+                    <waterButton  :text="actualLang ? 'Update' : 'Mettre a jour'" :type="true" class="btnn"/>
                     <waterButton :text="actualLang ? 'Cancel' : 'Annuler'" :type="false" class="btnn"  @click="popUpdate"/>
                 </div>
+
+                <button class="primary-btn">Update</button>
             </form>
         </div>
     </div>
@@ -55,21 +58,131 @@
 </template>
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
+    import { ref, onMounted, onUnmounted, defineProps,watch, defineEmits,reactive } from "vue";
     import waterButton from "@/components/WaterButtonComponent.vue";
-    //import imgUrl from "../../../assets/bob.jpg";
-
-    const props = defineProps({
-        user: Object
-    });
-
+    import { useActivityStore } from "@/stores/activity";
+    import { storeToRefs } from "pinia";
+    import { formatDateApi } from "@/JS/GlobalFunctions";
+    import { useAuthStore } from '@/stores/auth';
+    
+    
 
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
+    let activity = ref(null);
+
+    const selectedFile = ref(null);
+    const messagePop = actualLang.value
+      ? "Event modified successfully!" 
+      : "Événement modifié avec succès !" 
+    const inputRefDate = ref(null);
+    const inputRefTime = ref(null);
+    const inputRefImage = ref(null);
+    const errorMessage = ref(null);
+    const  validationErrors  = ref(null);
+    
+    const authStore = useAuthStore();
+    const {getActivityById, updateEvent } = useActivityStore();
+
+    const formDataEvent= reactive({
+            titre: "",
+            date_debut: "",
+            lieu : "",
+            image_data : "",
+    });
+
+
+    const props = defineProps({
+        user: Object,
+        eventId : Number
+    });
+
+    const handleFileUpload = (event) => {
+        errorMessage.value = null;
+        validationErrors.value = {};
+        
+        const file = event.target.files[0];
+        if (!file) {
+            errorMessage.value = 'Please select a file first';
+            return;
+        }
+        selectedFile.value = file;
+    };
+
+
+
+    
+    watch(() => props.eventId, async (newEventId) => {
+        if (!newEventId) return;
+        
+        try {
+            activity.value = await getActivityById(newEventId);
+
+            if(activity.value) {
+                formDataEvent.titre = activity.value.titre;
+            } 
+        
+        } catch (error) {
+            console.error("Error loading activity:", error);
+        }
+    }, { immediate: true });
+
+    /*async () => {
+        activity.value = await getActivityById(props.eventId);
+        console.log(activity.value);
+    }*/
+
+
+    const handleSubmit = async () => {
+        const dateValue = inputRefDate.value?.value;
+        const timeValue = inputRefTime.value?.value;
+    
+        if (!activity.value  || !activity.value.id)  {
+            console.error("Activity not loaded.");
+            return;
+        }
+            const formData = new FormData();
+        const formattedDate = formatDateApi(dateValue, timeValue);
+        
+
+        formData.append("titre", formDataEvent.titre);
+        formData.append("lieu", formDataEvent.lieu);
+        formData.append("date_debut", formattedDate);
+        
+        const imageFile = inputRefImage.value?.files[0];
+        if (imageFile) {
+            formData.append("image_data", imageFile); 
+        }
+        
+        
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+    
+        try {
+            const updated= await updateEvent(activity.value,  formData);
+                console.log("Updated activity:", updated);
+
+                if (updated) {
+                    
+                    activity.value = updated;
+                    
+                    await authStore.getUser();
+                    window.$toast(messagePop);
+                    
+                }
+        } catch (error) {
+            errorMessage.value = error.message;
+            console.error("Upload failed:", error);
+        }
+
+    };
+
+
 
     const Logout = () => {
-    storageManager.setLogin(false);
-    isLogged.value = storageManager.getLogin();
+        storageManager.setLogin(false);
+        isLogged.value = storageManager.getLogin();
     };
 
     if (actualLang.value === null) {

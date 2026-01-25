@@ -3,11 +3,16 @@
  
         <div class="button-container">
             <ul >
-                <li @click="changeEventType(0)"  :class="{ active: eventType === 0 }"><a>{{ actualLang ? "All" : "Tous"}}</a></li>
-                <li @click="changeEventType(1)" :class="{ active: eventType === 1 }"><a>{{ actualLang ? "Night Life" : "De nuit"}}</a></li>
-                <li @click="changeEventType(2)" :class="{ active: eventType === 2 }"><a>{{ actualLang ? "Day life" : "De Jour"}}</a></li>
-                
-                
+                <li @click="eventType = 3" :class="{ active: eventType === 0 }">
+                    <a>{{ actualLang ? "All" : "Tous" }}</a>
+                </li>
+              <li @click="eventType = 1" :class="{ active: eventType === 1 }">
+                  <a>{{ actualLang ? "Night Life" : "De nuit" }}</a>
+              </li>
+              <li @click="eventType = 2" :class="{ active: eventType === 2 }">
+                  <a>{{ actualLang ? "Day Life" : "De Jour" }}</a>
+              </li>
+
                 <li class="button-wrapper">
                   <button @click="toggleCalendarPopup">
                       <v-icon icon="mdi-filter-variant " :class="['icon', {'justGlow' : !actualMode}]"/>
@@ -27,8 +32,10 @@
  import { onMounted, ref, watch, onUnmounted } from 'vue'; 
  import LocalStorageManager from "@/JS/LocalStaorageManager"
  import FilterPopUpComponent from './FilterPopUpComponent.vue';
+ import { useActivityStore } from '@/stores/activity';
  
    const showCalendarPopup = ref(false);
+   const activitiesStore = useActivityStore();
    //const calendarInput = ref(null);
  
    const actualMode = ref(LocalStorageManager.getMode());
@@ -39,22 +46,40 @@
      showCalendarPopup.value = !showCalendarPopup.value;
      console.log(showCalendarPopup)
    };
+
+    
  
    const closePopup = () => {
      showCalendarPopup.value = false
-   } 
+   }
+
+  watch(eventType, async (val) => {
+    if (val === 0) {
+      activitiesStore.filters.daytime = "";
+    } else if (val === 1) {
+      activitiesStore.filters.daytime = "NUIT";   // Night
+    } else if (val === 2) {
+      activitiesStore.filters.daytime = "JOUR";   // Day
+    } else if(val ===3 ) {
+      activitiesStore.filters.daytime = "";
+      activitiesStore.filters.type = "";
+    }
+    await activitiesStore.getActivities();
+});
+
  
-   const changeEventType = (index) => {
+   /*const changeEventType = (index) => {
      eventType.value = index;
      if(index == 1){
        LocalStorageManager.setMode(false);
+       
        actualMode.value = false;
      }
      else if (index ==2){
        LocalStorageManager.setMode(true);
        actualMode.value = true;
      }
-   };
+   };*/
  
    if (actualLang.value === null) {
         LocalStorageManager.setLang(true);
@@ -107,18 +132,24 @@
 #AllEventComponent {
   .button-container {
     margin: 1% 0%;
+   
+     margin: 0 3%;
+
 
     ul {
       display: flex;
       align-items: center;
       list-style-type: none;
-      margin: 0;
+      margin: 3;
       padding: 0;
       width: 100%;
+      //border-style: dashed;
   
       li {
         padding: 10px;
         height: 100%;
+        
+        
 
         a {
           font-family:'Times New Roman', Times, serif;

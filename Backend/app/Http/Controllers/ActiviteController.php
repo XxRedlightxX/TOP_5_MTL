@@ -2,93 +2,266 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ActivityResource;
+use App\Models\Activite;
+use App\Models\Enum\EnumMode;
+use App\Models\User;
+use App\Notifications\NewEventNotification;
 use App\Service\ActiviteService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Notification;
+
 
 class ActiviteController extends Controller
 {
+
     protected $userService;
 
     public function __construct(ActiviteService $userService)
     {
         $this->userService = $userService;
+        $this->middleware('auth:sanctum')->only([
+            'addActivityUser',
+            'modifyActivity',
+            'deleteActivityById',
+            'addCommentToActivity',
+            'getUserActivities',
+
+        ]);
     }
 
-    public function getAllActivities() {
-        return $this->userService->getActivitiesList();
+    public function getAllActivities(Request $request) {
+        return $this->userService-> getActivitiesList(
+            $request->get('per_page', 9),
+            $request->get('page', 1)
+        );
     }
 
-    public function modifyActivity(int $activiteId, Request $request) {
-         try {
+    public function addActivityUser(Request $request)
+    {
+        $path = null;
+        $validated = $request->validate([
+            'titre' => 'required|string|max:255',
+            'description' => 'required|string',
+            'date_debut' => 'required|date',
+            'date_fin' => 'required|date',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
+            'lieu' => 'required|string|max:255',
+             'statut_journee' => 'required|in:' . implode(',', array_column(EnumMode::cases(), 'value')),
+            'saison_name' => 'required|string|exists:saison,statut', // Change to name
+            'type_name' => 'required|string|exists:type,nom',
+            'image_data' => 'nullable|image|mimes:jpeg,png,jpg,gif'
+        ]);
+
+
+        $user = $request->user();
+
+
+        if ($request->hasFile('image_data')) {
+            $path = $request->file('image_data')->store('events', 'public');
+        }
+
+        $saison = $this->userService->getActivityFromSeason($validated['saison_name']);
+        $type = $this->userService->getActivityFromCategory($validated['type_name']);
+
+
+        $validated['saison_id'] = $saison->id;
+        $validated['type_id'] = $type->id;
+
+        $this->authorize('create', $user);
+
+        $activity = $this->userService->createActivite($validated['titre'], $user->id, $validated);
+        $activity->image_data = $path;
+        $activity->update();
+
+        Notification::send($user, new NewEventNotification($activity));
+
+        return response()->json([
+            $path,
+            $activity
+        ], 201);
+    }
+
+    public function modifyActivity(int $activiteId, Request $request)
+    {
+        try {
+
+            $activite = Activite::findOrFail($activiteId);
+            //$this->authorize('update', $activite);
+        
             $validatedInputActivity = $request->validate([
-                'titre' => 'required|string|max:255',
-                'description' => 'required|string',
-                'date' => 'required|date',
-                'lieu' => 'required|string|max:255',
-                'statut_journee' => 'required|in:JOUR,NUIT', 
+                'titre' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
+                'image_data' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'date_debut' => 'nullable|date',
+                'lieu' => 'nullable|string|max:255',
+                'statut_journee' => 'nullable|in:JOUR,NUIT',
             ]);
 
-            $userValidated = $this->userService->updateActiviy($activiteId, $validatedInputActivity);
-            return response()->json($userValidated, 202);
+            if ($request->hasFile('image_data')) {
+                $image = $request->file('image_data');
+                $imagePath = $image->store('events', 'public'); // saves in storage/app/public/activities
+                $validatedInputActivity['image_data'] = $imagePath;
+            } else {
+                // Keep old image if no new file uploaded
+                $validatedInputActivity['image_data'] = $activite->image_data;
+            }
+
+            return response()->json(
+                $this->userService->updateActiviy($activiteId, $validatedInputActivity),
+                202
+            );
         } catch (\Exception $e) {
-            return response()->json($e->getMessage(),500);
+            return response()->json($e->getMessage(), 500);
         }
     }
 
-   public function deleteActivityById(int $activiteId)
-{
-    try {
-        $this->userService->deleteActivity($activiteId);
-    } catch (ModelNotFoundException $e) {
-    return response()->json(['error' => "Activity $activiteId not found"], 404);
-    } catch (\Exception $e) {
-       return response()->json($e->getMessage(),500);
-    }
-}
-    
-   public function getActivityByDayTime(Request $request)
+    public function deleteActivityById(int $activiteId)
     {
-        $validated = $request->validate([
-            'daytime' => 'required|string',
-        ]);
-        $activiteSaison = $this->userService->getActivitiesByDaytime($validated['daytime']);
-        return response()->json($activiteSaison);
+        try {
+            $activite = Activite::findOrFail($activiteId);
+            Gate::authorize('delete', $activite);
+
+            $this->userService->deleteActivity($activiteId);
+            return response()->json(['message' => 'Deleted successfully']);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => "Activity $activiteId not found"], 404);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 500);
+        }
     }
 
-    public function getActivitybyType(Request $request) {
-        $validated =$request->validate([
-            'type' => 'required|string', 
-        ]);
+    public function addCommentToActivity(int $activityId, Request $contenu)
+    {
+        try {
+            $validated = $contenu->validate([
+                'contenu' => 'required|min:3|max:1000',
+                'etoiles' => 'nullable|between:0,5'
+            ]);
 
-        $activiteType = $this->userService->getActivitiesByType($validated['type']);
-        return response()->json(  $activiteType);
+            $user = $contenu->user();
+            $userComment = $this->userService->addCommentToActivityFromUser($user->id, $activityId, $validated['contenu'], $validated['etoiles']);
+
+            $this->userService->getEventAvgEtoiles($activityId);
+            return response()->json($userComment);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
+    public function test(int $userId)
+    {
+        $user = User::findOrFail($userId);
+        return $user->load('avis');
 
     }
+
+    //  public function getUserActivitiesbyId(int $activityId) {
+    //      return Activite::with([
+    //     'User.activites' 
+    // ])->findOrFail($activityId);
+    // }
+
+
+    public function getUserActivities(Request $request) {
+        $authUser = $request->user();
+
+        return $authUser->load('activites');
+    }
+
+    public function getActivityById(int $activityId)
+    {
+        return $this->userService->findActivityById($activityId);
+    }
+
+    public function getUpcomingActivities()
+    {
+        return $this->userService->getActivitiesByUpcoming();
+    }
+
+    public function getAvgRatingActiviy($activityId)
+    {
+        $activityRating = $this->userService->getEventAvgEtoiles($activityId);
+        $activity = Activite::findOrFail($activityId);
+        $activity->nombre_likes = $activityRating;
+        $activity->save();
+
+        return [
+            'average_rating' => round($activityRating, 1),
+            'activity' => $activity
+        ];
+    }
+
+    public function getActivitiesMostLiked()
+    {
+        return $this->userService->getActivitiesMostLiked();
+    }
+
+    public function getActivityWithComments(int $activityId)
+    {
+        $activity = Activite::with([
+            'User',
+            'avis.User'
+        ])->findOrFail($activityId);
+
+
+        return response()->json(
+            (new ActivityResource($activity))
+        );
+    }
+
+
+    public function getActivityFilters(Request $request,int $perPage,int $page)
+    {
+        $filters = [
+        'daytime' => $request->get('daytime'),
+        'title' => $request->get('title'),
+        'season' => $request->get('season'),
+        'type' => $request->get('type'),
+    ];
     
-    public function getActivityBySeason(Request $request) {
-        $validated =$request->validate([
-            'season' => 'required|string', 
-        ]);
-
-        $activiteSaison = $this->userService->getActivitiesBySeason($validated['season']);
-        return response()->json($activiteSaison);
+    $perPageRequest = $request->get('per_page', $perPage);
+    $pageRequest = $request->get('page', $page);
+    
+    return $this->userService->getActivitiesFiltered(
+        array_filter($filters), // Retire les valeurs null
+        $perPageRequest,
+        $pageRequest
+    );
     }
 
-    public function getActivityByName(Request $request) {
-        $validated =$request->validate([
-            'title' => 'required|string', 
-        ]);
+    public function getActivitiesCategories()
+    {
+        return $this->userService->getAllCategoriesActivities();
+    }
 
-        $activiteTitle = $this->userService->getActivitiesByName($validated['title']);
-        return response()->json($activiteTitle);
+    public function getNewestActivitiesbyCreationDate()
+    {
+        return $this->userService->getNewestActivitiesbyCreationDate();
     }
 
 
+    public function getUserActivitiesbyId(int $activityId)
+    {
+        return Activite::with([
+            'User.activites'
+        ])->findOrFail($activityId);
+    }
 
+     public function getActivitiesPaginationLength(Request $request)
+    {
+        $filters = [
+        'daytime' => $request->get('daytime'),
+        'title' => $request->get('title'),
+        'season' => $request->get('season'),
+        'type' => $request->get('type'),
+    ];
+        return $this->userService->getActivitiesPaginationLength($filters);
+    }
 
-
-
-
+    
 }
