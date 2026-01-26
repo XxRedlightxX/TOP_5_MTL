@@ -118,8 +118,8 @@ class ActiviteService {
         return $this->activiteDAO->getNewestActivitiesbyCreationDate();
     
     }
-    public function getActivitiesPaginationLength(array $filters) {
-        return $this->activiteDAO->getActivitiesPaginationLenght($filters);
+    public function getActivitiesPaginationLength(array $filters,  $perPage = 9, $page = 1) {
+        return $this->activiteDAO->getActivitiesPaginationLenght($filters , $perPage, $page);
     }
 
  
