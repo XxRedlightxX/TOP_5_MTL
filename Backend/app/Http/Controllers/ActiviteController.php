@@ -29,7 +29,6 @@ class ActiviteController extends Controller
             'deleteActivityById',
             'addCommentToActivity',
             'getUserActivities',
-
         ]);
     }
 
@@ -252,7 +251,7 @@ class ActiviteController extends Controller
         ])->findOrFail($activityId);
     }
 
-     public function getActivitiesPaginationLength(Request $request)
+     public function getActivitiesPaginationLength(Request $request,int $perPage,int $page)
     {
         $filters = [
         'daytime' => $request->get('daytime'),
@@ -260,7 +259,12 @@ class ActiviteController extends Controller
         'season' => $request->get('season'),
         'type' => $request->get('type'),
     ];
-        return $this->userService->getActivitiesPaginationLength($filters);
+
+        $perPageRequest = $request->get('per_page', $perPage);
+        $pageRequest = $request->get('page', $page);
+        
+
+        return $this->userService->getActivitiesPaginationLength($filters,$perPageRequest,$pageRequest);
     }
 
     

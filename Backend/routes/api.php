@@ -72,7 +72,7 @@ Route::delete('/activite/{activiteId}', [ActiviteController::class, 'deleteActiv
 
 Route::get('/activite/filter', [ActiviteController::class, 'getActivityFilter']);
 
-Route::get('/activite/pagination', [ActiviteController::class, 'getActivitiesPaginationLength']);
+Route::get('/activite/pagination/per_page={perPage}&page={page}', [ActiviteController::class, 'getActivitiesPaginationLength']);
 
 // Conversation 
 Route::get('/messagerie/conversation/{userB}', [ConversationController::class, 'getConversationBySender']);

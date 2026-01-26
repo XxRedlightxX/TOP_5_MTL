@@ -204,7 +204,7 @@ class ActiviteDAOImpl implements ActiviteDAO
     public function getUpcomingActivityByRecent() {
        return Cache::tags('activities')->remember(
         'activities:upcoming',
-        300, // 5 min (time-sensitive)
+        self::CACHE_TTL, // 5 min (time-sensitive)
         function () {
             return [
                 'days' => Activite::whereDate('date_debut', '>=', now())
