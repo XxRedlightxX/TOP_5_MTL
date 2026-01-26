@@ -42,9 +42,11 @@
     for (let i = 1; i <= props.lenght; i++) {
       pages.value.push(i);
     }
+    console.log('pagess : ', pages)
   }
 
   const changePage = (index) => {
+    console.log('page send : '+ index)
     currentPage.value = index;
     emit('paginationChanged', index)
   };

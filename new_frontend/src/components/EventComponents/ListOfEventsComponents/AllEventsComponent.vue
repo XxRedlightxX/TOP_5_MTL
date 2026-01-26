@@ -82,7 +82,8 @@
   }
 
   const paginationUpdate = (index) => {
-    parameter = 'per_page=' + parameterPerPage + '&page=' + index;
+    parameter = 'per_page=' + parameterPerPage.value + '&page=' + index;
+    console.log('pagination update : ' + parameter)
     PaginationManager.getPaginationEvents(parameter)
   }
 

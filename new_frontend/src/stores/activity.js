@@ -95,7 +95,7 @@ export const useActivityStore = defineStore("activitiesStore", {
     // GET ACTIVITIES (FILTERS)
     // -----------------------------------
     async getActivities(parametres) {
-      return this.getEventGeneric("/api/activite/filtrer", parametres);
+      return this.getEventGeneric("/api/activite/filtrer/" + parametres, null);
     },
 
     // -----------------------------------
