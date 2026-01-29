@@ -68,6 +68,13 @@ jobs:
         working-directory: Backend
         run: php artisan migrate --force
 
+      - name: DEBUG — list folders
+        run: |
+          pwd
+          ls -la
+          ls -la Backend
+          ls -la FrontEnd
+
       # -------------------------
       # 6️⃣ Run Laravel tests
       # -------------------------
@@ -75,12 +82,6 @@ jobs:
         working-directory: Backend
         run: php artisan test 
 
-      - name: DEBUG — list folders
-        run: |
-          pwd
-          ls -la
-          ls -la Backend
-          ls -la FrontEnd
 
       # -------------------------
       # 7️⃣ Setup Node.js
