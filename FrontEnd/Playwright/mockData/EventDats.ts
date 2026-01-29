@@ -26,3 +26,16 @@ export const invalidEvent = new EventModal({
   latitude: '45.5017',
   longitude: '-73.5673'
 })
+
+export const emptyEvent = new EventModal({
+  titre: ``,
+  date_debut: '',
+  date_fin : '',
+  statut_journee: '',
+  saison_name: '',
+  type_name : '',
+  description: '',
+  lieu: '',
+  latitude: '',
+  longitude: '-'
+})

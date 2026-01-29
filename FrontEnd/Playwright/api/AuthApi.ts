@@ -1,5 +1,5 @@
 // api/AuthApi.ts
-import { User } from 'Playwright/models/User';
+import { User, UserPayload } from 'Playwright/models/User';
 import { BaseApi } from './BaseApi';
 
 type RegisterPayload = {
@@ -20,7 +20,7 @@ export class AuthApi extends BaseApi {
     }, { expectedStatus });
   }
 
-  async register(payload: User) {
+  async register(payload: UserPayload | User ) {
     return this.post('/api/register', payload);
   }
 }
