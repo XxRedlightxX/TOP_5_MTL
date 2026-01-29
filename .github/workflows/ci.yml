@@ -98,3 +98,23 @@ jobs:
       - name: Build frontend
         working-directory: FrontEnd
         run: npm run build
+
+
+      # -------------------------
+      # 8️⃣ Install Playwright browsers
+      # -------------------------
+      - name: Install Playwright browsers
+        working-directory: FrontEnd/Playwright
+        run: npx playwright install --with-deps chromium
+
+       # -------------------------
+      # 1️⃣2️⃣ Run Playwright tests
+      # -------------------------
+      - name: Run Playwright tests
+        working-directory: FrontEnd
+        env:
+          BASE_URL: http://localhost:8000
+          APP_URL: http://localhost:8000
+        run: |
+          npx playwright test
+        continue-on-error: false
