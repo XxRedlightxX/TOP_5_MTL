@@ -68,7 +68,7 @@ jobs:
         working-directory: Backend
         run: |
           php artisan migrate
-          php artisan db:seed --force
+          php artisan db:seed --class=SaisonSeeder --env=testing php artisan db:seed --class=TypeSeeder --env=testing
 
       - name: DEBUG — list folders
         run: |
