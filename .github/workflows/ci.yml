@@ -79,9 +79,9 @@ jobs:
           
           # Check what's actually in the database
           php artisan tinker --env=testing --execute="
-            echo 'Saisons: ' . DB::table('saison')->count() . '\\n';
-            echo 'Types: ' . DB::table('type')->count() . '\\n';
-            echo 'Users: ' . DB::table('utilisateur')->count() . '\\n';
+            echo 'Saisons: ' . DB::table('saison')->get() . '\\n';
+            echo 'Types: ' . DB::table('type')->get() . '\\n';
+            echo 'Users: ' . DB::table('utilisateur')->get() . '\\n';
           "
 
       # -------------------------
