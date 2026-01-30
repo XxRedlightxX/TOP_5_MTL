@@ -9,21 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    # 🔥 ADD THIS: Set up MySQL service
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: laravel_test
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-        ports:
-          - 3306:3306
 
     steps:
       # -------------------------
@@ -39,8 +24,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          # 🔥 REMOVE sqlite extension, ADD mysql if needed
-          extensions: mbstring, bcmath, pdo_mysql, mysql
+          extensions: mbstring, bcmath, sqlite
           coverage: none
 
       # -------------------------
@@ -53,38 +37,30 @@ jobs:
       # -------------------------
       # 4️⃣ Setup Laravel (.env)
       # -------------------------
-      - name: Prepare Laravel environment (MySQL)  # 🔥 CHANGED FROM SQLite
+      - name: Prepare Laravel environment (SQLite)
         working-directory: Backend
         run: |
           cp .env.example .env.testing
-          
-          # 🔥 REPLACE SQLite config with MySQL
-          echo "APP_NAME=Laravel" > .env.testing
+          rm -f .env
+
+          echo "APP_NAME=Laravel" >> .env.testing
           echo "APP_ENV=testing" >> .env.testing
           echo "APP_DEBUG=true" >> .env.testing
           echo "APP_URL=http://127.0.0.1:8000" >> .env.testing
-          
-          echo "DB_CONNECTION=mysql" >> .env.testing
-          echo "DB_HOST=127.0.0.1" >> .env.testing
-          echo "DB_PORT=3306" >> .env.testing
-          echo "DB_DATABASE=laravel_test" >> .env.testing
-          echo "DB_USERNAME=root" >> .env.testing
-          echo "DB_PASSWORD=password" >> .env.testing
-          
+
+          echo "DB_CONNECTION=sqlite" >> .env.testing
+          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env.testing
+
           echo "CACHE_DRIVER=array" >> .env.testing
           echo "QUEUE_CONNECTION=sync" >> .env.testing
           echo "SESSION_DRIVER=array" >> .env.testing
-          
-          # 🔥 REMOVE SQLite database creation
-          # mkdir -p database
-          # touch database/database.sqlite
-          
+
+          mkdir -p database
+          touch database/database.sqlite
+
           php artisan key:generate --env=testing
           php artisan config:clear --env=testing
           php artisan cache:clear --env=testing
-          
-          # 🔥 ADD: Wait for MySQL to be ready
-          sleep 10
 
       # -------------------------
       # 5️⃣ Run migrations
@@ -92,15 +68,21 @@ jobs:
       - name: Run database migrations
         working-directory: Backend
         run: |
-          # 🔥 ADD: Ensure database exists
           php artisan migrate:fresh --seed --env=testing
 
-      - name: DEBUG — list folders
+      - name: Debug seeders
+        working-directory: Backend
         run: |
-          pwd
-          ls -la
-          ls -la Backend
-          ls -la FrontEnd
+          # See what seeders are being called
+          php artisan db:seed --env=testing --class=SaisonSeeder --verbose
+          php artisan db:seed --env=testing --class=TypeSeeder --verbose
+          
+          # Check what's actually in the database
+          php artisan tinker --env=testing --execute="
+            echo 'Saisons: ' . DB::table('saison')->count() . '\\n';
+            echo 'Types: ' . DB::table('type')->count() . '\\n';
+            echo 'Users: ' . DB::table('utilisateur')->count() . '\\n';
+          "
 
       # -------------------------
       # 6️⃣ Run Laravel tests
@@ -110,8 +92,10 @@ jobs:
         working-directory: Backend
         run: |
           php artisan test --env=testing || echo "tests_failed=true" >> $GITHUB_OUTPUT
+        
+
       
-      # ... rest of your file remains the same ...
+      
      
 
 
