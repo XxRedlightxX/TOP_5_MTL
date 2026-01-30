@@ -83,6 +83,7 @@ test.describe('Event Creation API Tests', () => {
     // 2. Create event
     const event = new EventModal({ ...validEvent.payload }); // or factory
     const res = await eventApi.addEvent(event.payload, body.token);
+    console.log(event, "Evenement")
     
     // 3. Get response body with await
     const responseBody = await res.json();  
