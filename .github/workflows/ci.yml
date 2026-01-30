@@ -41,6 +41,7 @@ jobs:
         working-directory: Backend
         run: |
           cp .env.example .env.testing
+          rm -f .env
 
           echo "APP_NAME=Laravel" >> .env.testing
           echo "APP_ENV=testing" >> .env.testing
@@ -58,8 +59,8 @@ jobs:
           touch database/database.sqlite
 
           php artisan key:generate --env=testing
-          php artisan config:clear
-          php artisan cache:clear
+          php artisan config:clear --env=testing
+          php artisan cache:clear --env=testing
 
       # -------------------------
       # 5️⃣ Run migrations
