@@ -142,7 +142,7 @@ jobs:
         working-directory: FrontEnd/Playwright
         run: npx playwright test tests ../tests
         env:
-          APP_URL: http://localhost:3000
+          APP_URL: http://127.0.0.1:8000
           NODE_ENV: testing
 
       - name: Upload Playwright report
