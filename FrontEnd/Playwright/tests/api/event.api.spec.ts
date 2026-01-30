@@ -65,6 +65,8 @@ test.describe('Event Creation API Tests', () => {
     test('Event Creation without token', async () => {
         const event = new EventModal({ ...validEvent.payload });
         const res = await eventApi.addEvent(event.payload, "");
+        const body = await res.json();
+        console.log(event, "Evenement")
         expect(res.status()).toBe(401);
 
     });
