@@ -40,24 +40,24 @@ jobs:
       - name: Prepare Laravel environment (SQLite)
         working-directory: Backend
         run: |
-          cp .env.example .env
+          cp .env.example .env.testing
 
-          echo "APP_NAME=Laravel" >> .env
-          echo "APP_ENV=testing" >> .env
-          echo "APP_DEBUG=true" >> .env
-          echo "APP_URL=http://localhost" >> .env
+          echo "APP_NAME=Laravel" >> .env.testing
+          echo "APP_ENV=testing" >> .env.testing
+          echo "APP_DEBUG=true" >> .env.testing
+          echo "APP_URL=http://127.0.0.1:8000" >> .env.testing
 
-          echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env
+          echo "DB_CONNECTION=sqlite" >> .env.testing
+          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env.testing
 
-          echo "CACHE_DRIVER=array" >> .env
-          echo "QUEUE_CONNECTION=sync" >> .env
-          echo "SESSION_DRIVER=array" >> .env
+          echo "CACHE_DRIVER=array" >> .env.testing
+          echo "QUEUE_CONNECTION=sync" >> .env.testing
+          echo "SESSION_DRIVER=array" >> .env.testing
 
           mkdir -p database
           touch database/database.sqlite
 
-          php artisan key:generate
+          php artisan key:generate --env=testing
           php artisan config:clear
           php artisan cache:clear
 
@@ -133,8 +133,8 @@ jobs:
       - name: Start Laravel development server
         working-directory: Backend
         run: |
-          php artisan serve --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
-          sleep 10  # Give server time to start
+          php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
+          until curl -s http://127.0.0.1:8000 > /dev/null; do sleep 2; done  # Give server time to start
 
 # -------------------------
 # 1️⃣2️⃣ Run Playwright tests
