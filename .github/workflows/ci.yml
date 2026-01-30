@@ -74,8 +74,7 @@ jobs:
         working-directory: Backend
         run: |
           # See what seeders are being called
-          php artisan db:seed --env=testing --class=SaisonSeeder --verbose
-          php artisan db:seed --env=testing --class=TypeSeeder --verbose
+        
           
           # Check what's actually in the database
           php artisan tinker --env=testing --execute="
