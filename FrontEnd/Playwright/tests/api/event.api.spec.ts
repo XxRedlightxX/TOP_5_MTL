@@ -161,7 +161,8 @@ test('When an authenticacted user with organisateur role delete tries to delete 
 
     const body = await res.json();
     console.log(body)
-    const test =await eventApi.deleteEvent(body[1].id ,otherOrgUser.token )
+    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
+    const test =await eventApi.deleteEvent(eventId ,otherOrgUser.token )
     
     // 4. Assert
     expect(test.status()).toBe(403);
@@ -187,8 +188,9 @@ test('When an authenticacted user with organisateur role  tries to modify event 
     const res = await eventApi.addEvent(event.payload, orgUser.token);
 
     const body = await res.json();
+    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
     console.log(body);
-    const test =await eventApi.modifyEvent(body[1].id ,otherOrgUser.token )
+    const test =await eventApi.modifyEvent(eventId ,otherOrgUser.token )
     
     // 4. Assert
     expect(test.status()).toBe(403);
