@@ -113,3 +113,13 @@ jobs:
       - name: Build frontend
         working-directory: FrontEnd
         run: npm run build
+
+      
+      # -------------------------
+      # 🔟 Install Playwright
+      # -------------------------
+      - name: Install Playwright dependencies
+        working-directory: FrontEnd/Playwright
+        run: |
+          npm install @playwright/test
+          npx playwright install --with-deps
