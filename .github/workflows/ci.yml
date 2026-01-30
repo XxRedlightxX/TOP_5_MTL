@@ -121,11 +121,11 @@ jobs:
       # 10️⃣ Run Playwright UI Tests
       # -------------------------
       - name: Install Playwright Browsers
-        working-directory: FrontEnd
+        working-directory: FrontEnd/Playwright
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        working-directory: FrontEnd
+        working-directory: FrontEnd/Playwright
         run: |
           # Start Laravel server in the background
           php -S 127.0.0.1:8000 -t ../Backend/public & 
