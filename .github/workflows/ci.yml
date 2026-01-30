@@ -114,8 +114,6 @@ jobs:
         working-directory: FrontEnd
         run: npm run build
 
-     
-
       
       # -------------------------
       # 🔟 Install Playwright
@@ -134,18 +132,12 @@ jobs:
         run: |
           php artisan serve --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
           sleep 10  # Give server time to start
-       # -------------------------
-      # 9️⃣ Build Vue frontend
-      # -------------------------
-      - name: Build frontend
-        working-directory: FrontEnd
-        run: npm run build
 
-    # -------------------------
-    # 1️⃣2️⃣ Run Playwright tests
-    # -------------------------
+# -------------------------
+# 1️⃣2️⃣ Run Playwright tests
+# -------------------------
       - name: Run Playwright E2E tests
-        working-directory: FrontEnd
+        working-directory: FrontEnd/Playwright
         run: npx playwright test
         env:
           APP_URL: http://127.0.0.1:8000
