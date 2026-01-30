@@ -13,8 +13,8 @@ class SaisonSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (['été', 'hiver', 'automne', 'printemps'] as $statut) {
-        Saison::create(['statut' => $statut]);
+        foreach (['ete', 'hiver', 'automne', 'printemps'] as $statut) {
+        Saison::firstOrCreate(['statut' => $statut]);
     }
     }
 }

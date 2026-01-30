@@ -21,7 +21,7 @@ class TypeSeeder extends Seeder
     ];
 
     foreach ($types as $type) {
-       Type::create($type);
+       Type::firstOrCreate($type);
     }
     }
 }
