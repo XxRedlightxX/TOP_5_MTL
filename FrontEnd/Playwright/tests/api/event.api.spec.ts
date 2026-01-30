@@ -93,7 +93,6 @@ test.describe('Event Creation API Tests', () => {
 test('When an authenticated user with organisateur role creates an event with nonexistent type/category format, Then the system should return a 422 validation error', async () => {
     // 1. Login
     
-    
     // 2. Create event
     const event = new EventModal({ ...validEvent.payload }); // or factory
     event.update({ type_name: "inactive" });
@@ -114,7 +113,8 @@ test('When an authenticated user with parrticuler role creates an event with val
     const event = new EventModal({ ...validEvent.payload }); // or factory
     
     const res = await eventApi.addEvent(event.payload, regularUser.token);
-    
+    const body = await res.json()
+    console.log(body);
     // 4. Assert
     expect(res.status()).toBe(403);
 });
@@ -125,7 +125,8 @@ test('When an authenticacted user with organisateur role creates an event with i
     event.update({ statut_journee: "inactive" });
 
     const res = await eventApi.addEvent(event.payload, orgUser.token);
-    
+      const body = await res.json();
+    console.log(body);
     // 4. Assert
     expect(res.status()).toBe(422);
 });
@@ -134,7 +135,8 @@ test('When an authenticacted user with organisateur role creates an event with e
    
     const event = new EventModal({ ...emptyEvent.payload }); // or factory
     const res = await eventApi.addEvent(event.payload, orgUser.token);
-    
+    const body = await res.json();
+    console.log(body);
     // 4. Assert
     expect(res.status()).toBe(422);
 });
@@ -146,7 +148,7 @@ test('When an authenticacted user with organisateur role delete is own event, Th
 
     const body = await res.json();
     const response =await eventApi.deleteEvent(body[1].id ,orgUser.token )
-    
+    console.log(response)
     // 4. Assert
     expect(response.status()).toBe(200);
 });
@@ -158,6 +160,7 @@ test('When an authenticacted user with organisateur role delete tries to delete 
     const res = await eventApi.addEvent(event.payload, orgUser.token);
 
     const body = await res.json();
+    console.log(body)
     const test =await eventApi.deleteEvent(body[1].id ,otherOrgUser.token )
     
     // 4. Assert
@@ -184,6 +187,7 @@ test('When an authenticacted user with organisateur role  tries to modify event 
     const res = await eventApi.addEvent(event.payload, orgUser.token);
 
     const body = await res.json();
+    console.log(body);
     const test =await eventApi.modifyEvent(body[1].id ,otherOrgUser.token )
     
     // 4. Assert
@@ -197,6 +201,7 @@ test('When an authenticacted user with organisateur role  tries to modify event 
     const res = await eventApi.addEvent(event.payload, orgUser.token);
 
     const body = await res.json();
+    console.log(body);
     const test =await eventApi.modifyEvent(body[1].id ,orgUser.token )
     
     // 4. Assert
