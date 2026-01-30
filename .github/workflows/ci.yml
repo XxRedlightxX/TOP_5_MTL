@@ -84,7 +84,7 @@ jobs:
         id: backend_tests
         working-directory: Backend
         run: |
-          php artisan test || echo "tests_failed=true" >> $GITHUB_OUTPUT
+          php artisan test --env=testing || echo "tests_failed=true" >> $GITHUB_OUTPUT
         
 
       
