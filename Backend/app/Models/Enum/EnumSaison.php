@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 enum EnumSaison :string
 {
-     case ETE = 'été';
+     case ETE = 'ete';
     case HIVER = 'hiver';
     case AUTOMNE = 'automne';
     case PRINTEMPS = 'printemps';
