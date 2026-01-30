@@ -66,7 +66,9 @@ jobs:
       # -------------------------
       - name: Run database migrations
         working-directory: Backend
-        run: php artisan migrate --force
+        run: |
+          php artisan migrate --force
+          php artisan db:seed --force
 
       - name: DEBUG — list folders
         run: |
@@ -140,7 +142,7 @@ jobs:
         working-directory: FrontEnd/Playwright
         run: npx playwright test tests ../tests
         env:
-          APP_URL: http://127.0.0.1:8000
+          APP_URL: http://localhost:3000
           NODE_ENV: testing
 
       - name: Upload Playwright report
