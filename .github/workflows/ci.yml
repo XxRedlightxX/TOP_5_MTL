@@ -80,10 +80,20 @@ jobs:
       # -------------------------
       - name: Run backend tests
         working-directory: Backend
-        run: php artisan test
+        run: |
+          php artisan test
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+        
+
+      - name: Check Exit Status
+        run: |
+          if [[ "${{ steps.backend_tests.outputs.exit_code }}" -eq 0 ]]; then
+            echo "Backend tests passed"
+          else
+            echo "Backend tests failed"
+          fi
       
-      - name: STOP HERE (debug)
-        run: exit 0
+     
 
 
       # -------------------------
