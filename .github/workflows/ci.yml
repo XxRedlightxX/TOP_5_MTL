@@ -79,6 +79,7 @@ jobs:
       # 6️⃣ Run Laravel tests
       # -------------------------
       - name: Run backend tests
+        id: backend_tests
         working-directory: Backend
         run: |
           php artisan test || echo "tests_failed=true" >> $GITHUB_OUTPUT
