@@ -137,7 +137,7 @@ jobs:
 # 1️⃣2️⃣ Run Playwright tests
 # -------------------------
       - name: Run Playwright E2E tests
-        working-directory: FrontEnd
+        working-directory: FrontEnd/Playwright
         run: npx playwright test tests ../tests
         env:
           APP_URL: http://127.0.0.1:8000
