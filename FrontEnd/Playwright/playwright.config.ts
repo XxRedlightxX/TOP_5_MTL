@@ -35,6 +35,10 @@ export default defineConfig({
       'Accept': 'application/json',
     },
 
+    navigationTimeout: 30 * 1000,
+
+    actionTimeout: 15 * 1000,
+
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
@@ -82,5 +86,6 @@ export default defineConfig({
      command: 'npm run start',
      url: process.env.APP_URL,
      reuseExistingServer: !process.env.CI,
+     timeout: 120 * 1000,
    },
 });
