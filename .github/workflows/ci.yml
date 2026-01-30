@@ -114,6 +114,8 @@ jobs:
         working-directory: FrontEnd
         run: npm run build
 
+     
+
       
       # -------------------------
       # 🔟 Install Playwright
@@ -132,6 +134,13 @@ jobs:
         run: |
           php artisan serve --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
           sleep 10  # Give server time to start
+      
+      # -------------------------
+      # 9️⃣ Start Vue server
+      # -------------------------
+      - name: Start Laravel development server
+        working-directory: FrontEnd
+        run: npm run dev
 
     # -------------------------
     # 1️⃣2️⃣ Run Playwright tests
