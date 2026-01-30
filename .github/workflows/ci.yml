@@ -119,7 +119,7 @@ jobs:
       # 🔟 Install Playwright
       # -------------------------
       - name: Install Playwright dependencies
-        working-directory: FrontEnd/Playwright
+        working-directory: FrontEnd
         run: |
           npm install @playwright/test
           npx playwright install --with-deps
@@ -137,7 +137,7 @@ jobs:
 # 1️⃣2️⃣ Run Playwright tests
 # -------------------------
       - name: Run Playwright E2E tests
-        working-directory: FrontEnd/Playwright
+        working-directory: FrontEnd
         run: npx playwright test
         env:
           APP_URL: http://127.0.0.1:8000
