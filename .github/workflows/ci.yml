@@ -66,7 +66,7 @@ jobs:
       # -------------------------
       - name: Run database migrations
         working-directory: Backend
-       run: |
+        run: |
           php artisan migrate --env=testing
           php artisan db:seed --class=SaisonSeeder --env=testing
           php artisan db:seed --class=TypeSeeder --env=testing
