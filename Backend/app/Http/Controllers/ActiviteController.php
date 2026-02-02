@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\Rule;
 
 
 class ActiviteController extends Controller
@@ -51,8 +52,8 @@ class ActiviteController extends Controller
             'longitude' => 'required|string',
             'lieu' => 'required|string|max:255',
              'statut_journee' => 'required|in:' . implode(',', array_column(EnumMode::cases(), 'value')),
-            'saison_name' => 'required|string|exists:saison,statut', // Change to name
-            'type_name' => 'required|string|exists:type,nom',
+            'saison_name' => 'required|string|exists:main.saison,statut', // Change to name
+            'type_name' => 'required|string|exists:main.type,nom',
             'image_data' => 'nullable|image|mimes:jpeg,png,jpg,gif'
         ]);
 
