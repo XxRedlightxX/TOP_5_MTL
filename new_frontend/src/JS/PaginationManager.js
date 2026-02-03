@@ -174,11 +174,11 @@ const PaginationManager = {
       LocalStorageManager.setActualPaginationNumber(nextPagination);
 
       if (value + 1 > paginationLenght) {
-        const param = PaginationManager.changePageNumber(value - 1);
+        const param = PaginationManager.changePageNumber(parameter, value - 1);
         temp = await PaginationManager.getEvents(param);
         LocalStorageManager.setNextPaginationNumberFromLast(temp);
       } else {
-        const param = PaginationManager.changePageNumber(value + 1);
+        const param = PaginationManager.changePageNumber(parameter, value + 1);
         temp = await PaginationManager.getEvents(param);
         LocalStorageManager.setNextPaginationNumber(temp);
       }
@@ -282,19 +282,19 @@ const PaginationManager = {
     return page;
   },
 
+  // value = per_page=9&page=2
+  // newValuePage = 3
+  // resultat attendu : per_page=9&page=3
   changePageNumber(value, newValuePage) {
-    // Sépare les paramètres
-    const parts = value.value.split("&");
+    console.log("value reçu :", value);
 
-    const updated = parts.map((param) => {
-      if (param.startsWith("page=")) {
-        return `page=${newValuePage}`;
-      }
-      return param;
-    });
-
-    console.log("updated value :" + updated.join("&"));
-    return updated.join("&");
+    const query = value;
+    const params = new URLSearchParams(query);
+    const per_page = Number(params.get("per_page"));
+    console.log("per page get :" + per_page); // per page get :0
+    const page = "per_page=" + per_page + "&page=" + newValuePage;
+    console.log("new value :" + page); // new value :per_page=0&page=undefined
+    return page;
   },
 
   paginationStatus() {
