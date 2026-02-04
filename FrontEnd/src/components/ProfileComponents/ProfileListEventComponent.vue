@@ -6,24 +6,38 @@
         <h4 v-else>{{  actualLang ? 'List of event the organisator publish' : 'Les evenements que l\'organisateur a publier' }}</h4>
        
         <div @click="showAdd2()"  class="router"  v-show="props.himself">
-            <v-icon icon="mdi-plus-box-multiple" class="icon" :title="actualLang ? 'Add an Event' : 'Ajouter un evenement'"/>
+            <v-icon data-testid="add-event-icon" icon="mdi-plus-box-multiple" class="icon" :title="actualLang ? 'Add an Event' : 'Ajouter un evenement'"/>
         </div>
 
       </div>
   
       <div class="body" >
         <LoadingUserEvents v-if="isLoading" /> 
-        <ProfileSingleEvent v-if="!isLoading" v-for="(item, index) in props.user.listEvent" :key="item.id" :event="item" 
-         :himself="props.himself" @popUpdate="showUp2(item.id)" @popDelete="showDel2(item.id)"/>
+        <ProfileSingleEvent 
+      v-if="props.himself"
+      v-for="item in props.user.listEvent" 
+      :key="item.id" 
+      :event="item" 
+      :himself="true" 
+      @popUpdate="showUp2(item.id)" 
+      @popDelete="showDel2(item.id)"
+    />
 
-         <ProfileSingleEvent v-if="!isLoading" v-show="!props.himself" v-for="(item, index) in props.user" :key="index" :event="item" 
-          :himself="false" @popUpdate="showUp2(item.id)" @popDelete="showDel2(item.id)"/>
+    <ProfileSingleEvent 
+      v-else
+      v-for="(item, index) in props.user" 
+      :key="index" 
+      :event="item" 
+      :himself="false" 
+      @popUpdate="showUp2(item.id)" 
+      @popDelete="showDel2(item.id)"
+    />
       </div>
 
         
-      <AddEvent ref="addEventRef" @pop="showAdd2()" v-show="isShowAdd2 && props.himself"/>
-      <UpdateEvent  :eventId="selectedEventId" @popUpdate="showUp2()" v-show="isShowUp2 && props.himself"/>
-      <DeleteEvent :eventId="selectedEventId"  @popDelete="showDel2()" v-show="isShowDel2 && props.himself"/>
+      <AddEvent ref="addEventRef" @pop="showAdd2()" v-if="isShowAdd2 && props.himself"/>
+      <UpdateEvent  :eventId="selectedEventId" @popUpdate="showUp2()" v-if="isShowUp2 && props.himself"/>
+      <DeleteEvent :eventId="selectedEventId"  @popDelete="showDel2()" v-if="isShowDel2 && props.himself"/>
     </div>
   </template>
   

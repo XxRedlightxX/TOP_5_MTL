@@ -44,3 +44,9 @@ export const newUser = new User({
   password: '123',
   password_confirmation: '123'
 });
+
+export const getFreshUser = () => ({
+  username: `user_${Math.random().toString(36).substring(7)}`,
+  email: `test_${Date.now()}_${Math.random().toString(36).substring(7)}@example.com`,
+  password: "SafePassword123!"
+});

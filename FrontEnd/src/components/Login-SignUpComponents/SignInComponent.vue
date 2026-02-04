@@ -9,6 +9,7 @@
         persistent-clear 
         hide-details="auto"
         required
+        data-testid="login-email-input"
         v-model="formData.email"
     ></v-text-field>
     <p v-if="errors.email" class="error">{{ errors.email[0] }}</p>
@@ -17,6 +18,7 @@
         :rules="Password"
         :label="actualLang ? 'Password' : 'Mot de passe'"
         type="password"
+        data-testid="login-password-input"
         clearable
         persistent-clear 
         hide-details="auto"
@@ -29,7 +31,7 @@
     <a href="#" class="forgot">{{actualLang ? 'Forgot your password ?' : 'Vous avez oublié votre mot de passe ?'}}</a>
     <p v-if="errors.general" class="error">{{ errors.general[0] }}</p>
 
-    <waterButton  :text="actualLang ? 'Sign In' : 'Se connecter'" :type="true" @click="Login()" />
+    <waterButton data-testid="btn-sign-in"  :text="actualLang ? 'Sign In' : 'Se connecter'" :type="true" @click="Login()" />
   </form>
 
 </template>
@@ -115,7 +117,7 @@
             errors.value.password = null;
             errors.value.num_tel = null;
             errors.value.general = null;
-        }, 3000)
+        }, 113000)
     }
 });
 

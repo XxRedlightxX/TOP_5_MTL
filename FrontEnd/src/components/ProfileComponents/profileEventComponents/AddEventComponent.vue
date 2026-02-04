@@ -7,40 +7,40 @@
                 <form @submit.prevent="testInput">
                     <div class="form-group">
                         <label for="event-name">{{ actualLang ? "Name of Event" : "Nom de evenement" }}</label>
-                        <input type="text" v-model="formDataEvent.titre" id="event-name"  :placeholder='actualLang ? "Enter event name" : "Entrez le nom évenement"' required>
+                        <input type="text" data-testid="-created-event-name" v-model="formDataEvent.titre" id="event-name"  :placeholder='actualLang ? "Enter event name" : "Entrez le nom évenement"' required>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="event-date">{{ actualLang ? "Start Date" : "Date de début" }}</label>
-                            <input type="date" ref="inputRefDate" id="event-date" required>
+                            <input type="date" data-testid="-created-event-date" ref="inputRefDate" id="event-date" required>
                         </div>
 
                         <div class="form-group">
                             <label for="event-time">{{ actualLang ? "Start Hour" : "Heure de début" }}</label>
-                            <input type="time" ref="inputRefTime" id="event-time" required>
+                            <input type="time" data-testid="-created-event-time" ref="inputRefTime" id="event-time" required>
                         </div>
 
                         <div class="form-group">
                             <label for="event-duration">{{ actualLang ? "Duration" : "Durée" }}</label>
-                            <input type="number" ref="inputRefDurationHours" id="event-duration" placeholder="e.g., 2" min="1" required>
+                            <input type="number" data-testid="-created-event-duration" ref="inputRefDurationHours" id="event-duration" placeholder="e.g., 2" min="1" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="event-location">{{ actualLang ? "Location" : "Emplacement" }}</label>
-                        <input type="text" v-model="formDataEvent.lieu" id="event-location"  :placeholder="actualLang ? 'Enter Location' : 'Entrez un emplacement'" required>
+                        <input type="text" data-testid="-created-event-location" v-model="formDataEvent.lieu" id="event-location"  :placeholder="actualLang ? 'Enter Location' : 'Entrez un emplacement'" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="event-description">{{ actualLang ? "Description" : "Description" }}</label>
-                        <input type="text" v-model="formDataEvent.description" id="event-description"  :placeholder="actualLang ? 'Enter description' : 'Entrez une description'" required>
+                        <input type="text" data-testid="-created-event-description" v-model="formDataEvent.description" id="event-description"  :placeholder="actualLang ? 'Enter description' : 'Entrez une description'" required>
                     </div>
 
                     <div class="form-row">
                        <div class="form-group">
                             <label for="event-type">{{ actualLang ? "Daytime" : "Journée" }}</label>
-                            <select id="event-type" v-model="formDataEvent.statut_journee" required>
+                            <select id="event-type" data-testid="-created-event-daytime" v-model="formDataEvent.statut_journee" required>
                                 <option disabled value="">{{ actualLang ? "Select Daytime" : "Sélectionner la journée" }}</option>
                                 <option value="JOUR">{{ actualLang ? "Day" : "Jour" }}</option>
                                 <option value="NUIT">{{ actualLang ? "Night" : "Nuit" }}</option>
@@ -50,7 +50,7 @@
 
                          <div class="form-group">
                             <label for="event-type">{{ actualLang ? "Season" : "Saison" }}</label>
-                            <select id="event-type" v-model="formDataEvent.saison_name" required>
+                            <select id="event-type" data-testid="-created-event-type" v-model="formDataEvent.saison_name" required>
                                 <option disabled value="">{{ actualLang ? "Select  a Season" : "Sélectionner une Saison" }}</option>
                                 <option value="été" selected>{{ actualLang ? "Summer" : "Été" }}</option>
                                 <option value="hiver">{{ actualLang ? "Winter" : "Hiver" }}</option>
@@ -62,7 +62,7 @@
 
                         <div class="form-group">
                             <label for="event-type">{{ actualLang ? "Category" : "Catégorie" }}</label>
-                            <select id="event-type" v-model="formDataEvent.type_name" required>
+                            <select id="event-type" data-testid="-created-event-category" v-model="formDataEvent.type_name" required>
                                 <option disabled value="">{{ actualLang ? "Select a Category" : "Sélectionner un Catégorie" }}</option>
                                 <option  v-for="category in listCategories" key="category.id" :value="category.nom"> {{ category.nom }}</option>
                             </select>
