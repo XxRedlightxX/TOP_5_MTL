@@ -48,9 +48,7 @@ jobs:
           echo "APP_DEBUG=true" >> .env.testing
           echo "APP_URL=http://127.0.0.1:8000" >> .env.testing
 
-          echo "DB_CONNECTION=sqlite" >> .env.testing
-          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env.testing
-
+          
           echo "CACHE_DRIVER=array" >> .env.testing
           echo "QUEUE_CONNECTION=sync" >> .env.testing
           echo "SESSION_DRIVER=array" >> .env.testing
@@ -58,9 +56,19 @@ jobs:
           mkdir -p database
           touch database/database.sqlite
 
+          echo "DB_CONNECTION=sqlite" >> .env.testing
+          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env.testing
+
+
           php artisan key:generate --env=testing
           php artisan config:clear --env=testing
           php artisan cache:clear --env=testing
+
+      - name: Check SQLite file
+        run: |
+          ls -lh database/
+          file database/database.sqlite
+
 
       # -------------------------
       # 5️⃣ Run migrations
