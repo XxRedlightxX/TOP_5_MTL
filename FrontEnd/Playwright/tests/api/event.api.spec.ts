@@ -178,7 +178,8 @@ test('When an authenticacted user with organisateur role  tries to modify event 
 
     const body = await res.json();
     console.log(body);
-    const test =await eventApi.modifyEvent(body[1].id ,orgUser.token )
+     const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
+    const test =await eventApi.modifyEvent(eventId ,orgUser.token )
     
     // 4. Assert
     expect(test.status()).toBe(202);
@@ -207,7 +208,8 @@ test('When an authenticacted user with organisateur role  tries to modify event 
 
     const body = await res.json();
     console.log(body);
-    const test =await eventApi.modifyEvent(body[1].id ,orgUser.token )
+    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
+    const test =await eventApi.modifyEvent(eventId ,orgUser.token )
     
     // 4. Assert
     expect(test.status()).toBe(202);
