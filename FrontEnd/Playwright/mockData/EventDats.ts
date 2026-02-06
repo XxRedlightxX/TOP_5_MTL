@@ -4,7 +4,7 @@ import { EventModal } from "Playwright/models/EventModal";
 export const validEvent = new EventModal({
   titre: `Event_${Date.now()}_${Math.random()}`,
   date_debut: '2025-12-19 16:40:00',
-  date_fin : '2025-09-30 21:00:00',
+  date_fin : '2025-12-30 21:00:00',
   statut_journee: 'jour',
   saison_name: 'ete',
   type_name : 'Sport',
