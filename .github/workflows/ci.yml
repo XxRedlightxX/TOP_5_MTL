@@ -87,7 +87,7 @@ jobs:
       - name: Run database migrations
         working-directory: Backend
         run: |
-          php artisan migrate:fresh --seed --env=testing
+          php artisan migrate:fresh --seed --database=sqlite --env=testing
 
       - name: Debug seeders
         working-directory: Backend
@@ -157,8 +157,7 @@ jobs:
       - name: Start Laravel development server
         working-directory: Backend
         run: |
-          php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
-          until curl -s  http://127.0.0.1:8000/health > /dev/null; do sleep 2; done  # Give server time to start
+          php artisan serve --env=testing
 
 # -------------------------
 # 1️⃣2️⃣ Run Playwright tests
