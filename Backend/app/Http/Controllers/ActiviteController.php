@@ -52,8 +52,18 @@ class ActiviteController extends Controller
             'longitude' => 'required|string',
             'lieu' => 'required|string|max:255',
              'statut_journee' => 'required|in:' . implode(',', array_column(EnumMode::cases(), 'value')),
-           'saison_name' => ['required', Rule::exists('saison', 'statut')],
-            'type_name'   => ['required', Rule::exists('type', 'nom')],
+           'saison_name' => [
+    'required',
+    Rule::exists('saison', 'statut')->where(function($query) {
+        $query->whereRaw('LOWER(statut) = LOWER(?)', [request('saison_name')]);
+    })
+],
+'type_name' => [
+    'required',
+    Rule::exists('type', 'nom')->where(function($query) {
+        $query->whereRaw('LOWER(nom) = LOWER(?)', [request('type_name')]);
+    })
+],
             'image_data' => 'nullable|image|mimes:jpeg,png,jpg,gif'
         ]);
 
