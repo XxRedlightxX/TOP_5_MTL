@@ -93,7 +93,7 @@ jobs:
         working-directory: Backend
         run: |
           php artisan tinker --env=testing --execute="
-            echo '--- EXISTING TABLES ---\n';
+            echo '--- EXISdTING TABLES ---\n';
             echo implode(', ', Schema::getTableListing()) . '\n\n';
 
             echo '--- TABLE DATA ---\n';
