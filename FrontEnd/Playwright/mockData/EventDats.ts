@@ -2,7 +2,7 @@ import { User } from "Playwright/models/User";
 import { EventModal } from "Playwright/models/EventModal";
 
 export const validEvent = new EventModal({
-  titre: `Test Eventyyyy`,
+  titre: `Event_${Date.now()}`,
   date_debut: '2025-12-19 16:40:00',
   date_fin : '2025-09-30 21:00:00',
   statut_journee: 'jour',

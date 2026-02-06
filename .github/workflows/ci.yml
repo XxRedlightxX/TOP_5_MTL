@@ -139,7 +139,7 @@ jobs:
         working-directory: Backend
         run: |
           php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
-          until curl -s http://127.0.0.1:8000 > /dev/null; do sleep 2; done  # Give server time to start
+          until curl -s  http://127.0.0.1:8000/health > /dev/null; do sleep 2; done  # Give server time to start
 
 # -------------------------
 # 1️⃣2️⃣ Run Playwright tests
