@@ -41,7 +41,7 @@ jobs:
         working-directory: Backend
         run: |
           # 1️⃣ Copy example env
-          cp .env.example .env.testing
+          cp .env.example .env.testing .env
           rm -f .env
 
           # 2️⃣ Create database folder and SQLite file
