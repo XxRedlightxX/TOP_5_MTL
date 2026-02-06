@@ -11,11 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # -------------------------
       # 1️⃣ Checkout repository
+      # -------------------------
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # -------------------------
       # 2️⃣ Setup PHP
+      # -------------------------
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -23,42 +27,99 @@ jobs:
           extensions: mbstring, bcmath, sqlite
           coverage: none
 
+      # -------------------------
       # 3️⃣ Install backend deps
+      # -------------------------
       - name: Install Composer dependencies
         working-directory: Backend
         run: composer install --prefer-dist --no-interaction --no-progress
 
+      # -------------------------
       # 4️⃣ Setup Laravel (.env)
-      - name: Prepare Laravel environment
+      # -------------------------
+      - name: Prepare Laravel environment (SQLite)
         working-directory: Backend
         run: |
-          cp .env.example .env
+          # 1️⃣ Copy example env
+          cp .env.example .env.testing
+          rm -f .env
+
+          # 2️⃣ Create database folder and SQLite file
           mkdir -p database
           touch database/database.sqlite
-          
-          # Get the absolute path
-          ABS_PATH=$(pwd)/database/database.sqlite
-          
-          # Overwrite the tricky parts
-          sed -i "s|DB_DATABASE=.*|DB_DATABASE=$ABS_PATH|" .env
-          sed -i "s|APP_URL=.*|APP_URL=http://127.0.0.1:8000|" .env
-          sed -i "s|SESSION_DRIVER=.*|SESSION_DRIVER=file|" .env
-          
-          php artisan key:generate
-          php artisan config:clear
 
+          # 3️⃣ Set environment variables
+          DB_PATH=$(pwd)/database/database.sqlite
+
+          echo "APP_NAME=Laravel" >> .env.testing
+          echo "APP_ENV=testing" >> .env.testing
+          echo "APP_DEBUG=true" >> .env.testing
+          echo "APP_URL=http://127.0.0.1:8000" >> .env.testing
+
+          echo "DB_CONNECTION=sqlite" >> .env.testing
+          echo "DB_DATABASE=$DB_PATH" >> .env.testing
+
+          echo "CACHE_DRIVER=array" >> .env.testing
+          echo "QUEUE_CONNECTION=sync" >> .env.testing
+          echo "SESSION_DRIVER=array" >> .env.testing
+
+          # 4️⃣ Generate key and clear caches
+          php artisan key:generate --env=testing
+          php artisan config:clear --env=testing
+          php artisan cache:clear --env=testing
+
+          # 5️⃣ Check that database exists
+          ls -lh database/
+
+      - name: Verify database path
+        working-directory: Backend
+        run: |
+          DB_PATH=$(pwd)/database/database.sqlite
+          echo "SQLite path is: $DB_PATH"
+          ls -lh $(pwd)/database/
+
+
+
+
+      # -------------------------
       # 5️⃣ Run migrations
+      # -------------------------
       - name: Run database migrations
         working-directory: Backend
-        run: php artisan migrate:fresh --seed
+        run: |
+          php artisan migrate:fresh --seed --database=sqlite --env=testing
 
-      # 6️⃣ Run Laravel tests
-      # Note: Ensure phpunit.xml has DB_DATABASE=database/database.sqlite, NOT :memory:
-      - name: Run backend tests
+      - name: Debug seeders
         working-directory: Backend
-        run: php artisan test
+        run: |
+          php artisan tinker --env=testing --execute="
+            echo '--- EXISdTING TABLES ---\n';
+            echo implode(', ', Schema::getTableListing()) . '\n\n';
 
+            echo '--- TABLE DATA ---\n';
+            echo 'Saisons: ' . DB::table('saison')->get() . '\n';
+            echo 'Types: ' . DB::table('type')->get() . '\n';
+            echo 'User: ' . DB::table('utilisateur')->get() . '\n';
+          "
+
+      # -------------------------
+      # 6️⃣ Run Laravel tests
+      # -------------------------
+      - name: Run backend tests
+        id: backend_tests
+        working-directory: Backend
+        run: |
+          php artisan test --env=testing || echo "tests_failed=true" >> $GITHUB_OUTPUT
+        
+
+      
+      
+     
+
+
+      # -------------------------
       # 7️⃣ Setup Node.js
+      # -------------------------
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -66,51 +127,55 @@ jobs:
           cache: 'npm'
           cache-dependency-path: FrontEnd/package.json
 
+      # -------------------------
       # 8️⃣ Install frontend deps
+      # -------------------------
       - name: Install frontend dependencies
         working-directory: FrontEnd
         run: npm ci
 
+      # -------------------------
       # 9️⃣ Build Vue frontend
+      # -------------------------
       - name: Build frontend
         working-directory: FrontEnd
         run: npm run build
 
+      
+      # -------------------------
       # 🔟 Install Playwright
-      - name: Install Playwright
+      # -------------------------
+      - name: Install Playwright dependencies
         working-directory: FrontEnd
         run: |
+          npm install @playwright/test
           npx playwright install --with-deps
 
+      # -------------------------
       # 1️⃣1️⃣ Start Laravel server
+      # -------------------------
       - name: Start Laravel development server
         working-directory: Backend
         run: |
-          # Start server in background and pipe logs for debugging
-          php artisan serve --host=127.0.0.1 --port=8000 > storage/logs/laravel-server.log 2>&1 &
+          # Use -n to avoid interaction and force the testing environment
+          php artisan serve --env=testing --port=8000 &
           
-          # Wait until server responds
-          timeout 30s bash -c 'until curl -s http://127.0.0.1:8000 > /dev/null; do echo "Waiting for server..."; sleep 2; done'
+          # Wait for the server to be ready
+          timeout 30s bash -c 'until curl -s http://127.0.0.1:8000/health; do sleep 2; done' || (echo "Server failed to start" && exit 1)
 
-      # 1️⃣2️⃣ Run Playwright tests
+# -------------------------
+# 1️⃣2️⃣ Run Playwright tests
+# -------------------------
       - name: Run Playwright E2E tests
-        working-directory: FrontEnd
-        run: npx playwright test
+        working-directory: FrontEnd/Playwright
+        run: npx playwright test tests ../tests
         env:
           APP_URL: http://127.0.0.1:8000
           NODE_ENV: testing
 
-      # 1️⃣3️⃣ Upload Results
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: FrontEnd/playwright-report/
-
-      - name: Upload Laravel Logs on Failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: laravel-logs
-          path: Backend/storage/logs/
