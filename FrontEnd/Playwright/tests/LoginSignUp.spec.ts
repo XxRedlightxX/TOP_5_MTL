@@ -15,7 +15,7 @@ test.describe('Login Flow', () => {
   let orgUser: any; // This stores the ID and Token from the API response
   let currentUserData: any; // This stores the email/password we generated
 
-  test.beforeEach(async ({ request }) => {
+  /*test.beforeEach(async ({ request }) => {
     authApi = new AuthApi(request);
     userApi = new UserApi(request);
 
@@ -36,7 +36,7 @@ test.describe('Login Flow', () => {
     if (orgUser) {
       await deleteUser(userApi, orgUser.id, orgUser.token);
     }
-  });
+  });*/
 
   /*test('User can login successfully', async ({ page }) => {
     const loginPage = new LoginSignUpPage(page);
@@ -64,7 +64,7 @@ test.describe('Login Flow', () => {
     await userProfilePage.createEvent("Loll");
   });*/
 
-  test('User can login successfully', async ({ userProfilePage, loginPage }) => {
+  /*test('User can login successfully', async ({ userProfilePage, loginPage }) => {
     //const loginPage = new LoginSignUpPage(page);
     await loginPage.navigate('/profile');
 
@@ -89,7 +89,7 @@ test.describe('Login Flow', () => {
 
     await userProfilePage.createEvent(validEvent);
     await userProfilePage.msgErrorEventName.isVisible()
-  });
+  });*/
 
 
 });

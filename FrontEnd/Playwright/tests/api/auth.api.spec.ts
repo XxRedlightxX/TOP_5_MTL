@@ -37,6 +37,7 @@ test.describe('Authentication API Tests', () => {
          console.log("userId:", userId);
       return;
     }*/
+   
     await deleteUser(userApi,orgUser.id,orgUser.token);
     
     

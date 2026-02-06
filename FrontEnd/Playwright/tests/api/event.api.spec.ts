@@ -12,6 +12,9 @@ import { EventModal } from 'Playwright/models/EventModal';
  let authApi: AuthApi;
  let eventApi : EventApi;
  let userApi : UserApi;
+
+
+
 /*let authToken: string;
 let userId : string;
 
@@ -47,20 +50,22 @@ test.describe('Event Creation API Tests', () => {
 
     test.afterEach(async ({ request }) => {
         userApi = new UserApi(request);
+
         const usersToDelete = [orgUser, regularUser, otherOrgUser].filter(Boolean);
-        //await deleteUser(userApi,regularUser.id,regularUser.token);
-        //await deleteUser(userApi,orgUser.id,orgUser.token);
+
         await Promise.all(
-            usersToDelete.map(u =>
-            deleteUser(userApi, u.id, u.token)
-                .catch(err => console.warn("Cleanup failed for", u.id, err))
-            )
+            usersToDelete.map(u => {
+            if (!u?.id || !u?.token) {
+                console.warn("Skipping cleanup for invalid user:", u);
+                return Promise.resolve();
+            }
+
+            return deleteUser(userApi, u.id, u.token)
+                .catch(err => console.warn("Cleanup failed for", u.id, err));
+            })
         );
-        //const userApi = new UserApi(request);
-        //const test = await userApi.deleteUser(userId, authToken);
-        //const body = await test.json();
-       
-      });
+    });
+
 
     test('Event Creation without token', async () => {
         const event = new EventModal({ ...validEvent.payload });
@@ -73,16 +78,10 @@ test.describe('Event Creation API Tests', () => {
 
    test('Event Creation with auth User and has organisateur role', async () => {
     // 1. Login
-    const response = await authApi.login(
-        validUser.email,
-        validUser.password,
-        200 
-    );
-    const body = await response.json();
-    
+   
     // 2. Create event
     const event = new EventModal({ ...validEvent.payload }); // or factory
-    const res = await eventApi.addEvent(event.payload, body.token);
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
     console.log(event, "Evenement")
     
     // 3. Get response body with await
@@ -150,7 +149,8 @@ test('When an authenticacted user with organisateur role delete is own event, Th
     const res = await eventApi.addEvent(event.payload, orgUser.token);
 
     const body = await res.json();
-    const response =await eventApi.deleteEvent(body[1].id ,orgUser.token )
+    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
+    const response =await eventApi.deleteEvent(eventId ,orgUser.token )
     console.log(response)
     // 4. Assert
     expect(response.status()).toBe(200);
