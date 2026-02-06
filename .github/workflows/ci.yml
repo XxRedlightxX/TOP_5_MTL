@@ -40,34 +40,37 @@ jobs:
       - name: Prepare Laravel environment (SQLite)
         working-directory: Backend
         run: |
+          # 1️⃣ Copy example env
           cp .env.example .env.testing
           rm -f .env
+
+          # 2️⃣ Create database folder and SQLite file
+          mkdir -p database
+          touch database/database.sqlite
+
+          # 3️⃣ Set environment variables
+          DB_PATH=$(pwd)/database/database.sqlite
 
           echo "APP_NAME=Laravel" >> .env.testing
           echo "APP_ENV=testing" >> .env.testing
           echo "APP_DEBUG=true" >> .env.testing
           echo "APP_URL=http://127.0.0.1:8000" >> .env.testing
 
-          
+          echo "DB_CONNECTION=sqlite" >> .env.testing
+          echo "DB_DATABASE=$DB_PATH" >> .env.testing
+
           echo "CACHE_DRIVER=array" >> .env.testing
           echo "QUEUE_CONNECTION=sync" >> .env.testing
           echo "SESSION_DRIVER=array" >> .env.testing
 
-          mkdir -p database
-          touch database/database.sqlite
-
-          echo "DB_CONNECTION=sqlite" >> .env.testing
-          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env.testing
-
-
+          # 4️⃣ Generate key and clear caches
           php artisan key:generate --env=testing
           php artisan config:clear --env=testing
           php artisan cache:clear --env=testing
 
-      - name: Check SQLite file
-        run: |
+          # 5️⃣ Check that database exists
           ls -lh database/
-          file database/database.sqlite
+
 
 
       # -------------------------
