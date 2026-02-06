@@ -18,5 +18,15 @@ export async function getDropdownElement(pLocator : Locator, pInput : number) {
     await pLocator.selectOption({index : pInput})
 }
 
+export async function assertElementofListElement(pListLocator : Locator, pText : string) {
+    await pListLocator.waitFor({state : 'visible'})
+    await pListLocator.filter({ hasText: pText  });
+
+    await expect(pListLocator).toContainText(pText)
+     
+};
+
+
+
 
 

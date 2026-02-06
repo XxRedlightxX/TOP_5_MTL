@@ -118,13 +118,20 @@ class ActiviteDAOImpl implements ActiviteDAO
             $countNuit = $queryNuit->where('statut_journee', 'nuit')->count();
             
             // 3. Calculer le nombre de pages
+            $all = $countJour + $countNuit;
+            $totalPages = ceil($all / $perPage);
+
             $pagesJour = ceil($countJour / $perPage);
             $pagesNuit = ceil($countNuit / $perPage);
+            
 
             return [
                 'nbPagination' => [
-                    'jour' => [$pagesJour],
-                    'nuit' => [$pagesNuit]
+                    'jour' => $pagesJour,
+                    'nuit' => $pagesNuit,
+                    'all' => $totalPages
+                    
+
                 ]
             ];
         
@@ -351,7 +358,7 @@ class ActiviteDAOImpl implements ActiviteDAO
             // BASÉ SUR LES FILTRES APPLIQUÉS
             
             // 1. Pour les événements de jour (statut_journee = 'jour')
-           $queryJour = clone $query;
+            $queryJour = clone $query;
             $activitiesListJour =  $queryJour->where('statut_journee', 'jour')->get();
             $activitiesListJour = $queryJour->paginate($perPage, ['*'], 'page', $page);
             
@@ -364,9 +371,10 @@ class ActiviteDAOImpl implements ActiviteDAO
             
 
             return [
-                //$paginatedData->items(),
+                
                 'jours' =>  $activitiesListJour->items(),
                 'nuit' =>   $activitiesListNuit->items(),
+                'all' => $paginatedData->items(),
                 
             ];
         }
@@ -382,9 +390,6 @@ class ActiviteDAOImpl implements ActiviteDAO
     {
         return Type::where('nom', $typeName)->first();
     }
-
-
-
 
 
     /**

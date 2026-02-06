@@ -25,7 +25,7 @@
     const activitiesStore = useActivityStore();
     
     //let upComingEvents = ref([]);
-
+  
    
     const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel nemo laborum ipsum aspernatur mollitia minima quo voluptates repudiandae eum, possimus neque, sapiente nesciunt dolor pariatur veritatis reprehenderit omnis, voluptatum eaque.";
     
@@ -62,6 +62,7 @@
   });
 
    let eventsList = computed(() => {
+      console.log(eventsList.value, "test4")
   return activitiesStore.activities.map(activity => ({
     id: activity.id,
     image: activity.image_data,

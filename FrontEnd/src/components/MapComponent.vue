@@ -36,8 +36,8 @@ onMounted(async () => {
 
   map.value.on("geosearch/showlocation", (result) => {
     coords.value = {
-      lat: result.location.y,
-      lng: result.location.x,
+      lat: result.location.y || 45.5019,
+      lng: result.location.x || -73.5674,
     };
     console.log("Selected:", coords.value);
     emit("event-coords",coords.value);

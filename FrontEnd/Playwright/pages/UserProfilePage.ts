@@ -1,7 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { EventModal, EventPayload } from 'Playwright/models/EventModal';
-import { getDropdownElement, getElement, getStringElement } from 'Playwright/helper/ui/uiDriverHelper.helper';
+import { assertElementofListElement, getDropdownElement, getElement, getStringElement } from 'Playwright/helper/ui/uiDriverHelper.helper';
 import { validEvent } from 'Playwright/mockData/EventDats';
 export class UserProfilePage extends BasePage {
   public readonly profileUsername: Locator;
@@ -15,8 +15,13 @@ export class UserProfilePage extends BasePage {
   public readonly  profileEvent_DaytimeInput: Locator;
   public readonly  profileEvent_SeasonInput: Locator;
   public readonly  profileEvent_TypeInput: Locator;
+
+   public readonly cartItems: Locator;
+
+   public readonly msgErrorEventName : Locator;
   
   public readonly btnPopUpEventWindow: Locator;
+  public readonly btnCreateEvent: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -32,6 +37,13 @@ export class UserProfilePage extends BasePage {
     this.profileEvent_DaytimeInput = createModal.getByTestId('-created-event-daytime');
      this.profileEvent_SeasonInput = createModal.getByTestId('-created-event-type');
     this.profileEvent_TypeInput = createModal.getByTestId('-created-event-category');
+    this.btnCreateEvent = createModal.getByTestId('btn-create-event');
+    this.cartItems = page.locator(".glass .middle h2");
+    this.msgErrorEventName = createModal.locator(".error");
+
+
+
+
   }
 
   async createEvent(pEvent: EventModal) {
@@ -42,13 +54,7 @@ export class UserProfilePage extends BasePage {
     // This solves the "resolved to 3 elements" error
    
     let startDateorHour = getStringElement(validEvent.date_debut)
-    
-    // 3. Wait for the modal animation to finish
-    /*await this.profileEvent_NameInput.waitFor({ state: 'visible' });
 
-    // 4. Fill and Verify
-    await this.profileEvent_NameInput.clear();
-    await this.profileEvent_NameInput.fill(pEvent);*/
 
     await getElement(this.profileEvent_NameInput, pEvent.titre);
     await getElement(this.profileEvent_StartDateInput, startDateorHour[1]);
@@ -58,7 +64,11 @@ export class UserProfilePage extends BasePage {
     await getElement(this.profileEvent_DescriptionInput, "3");
     //await getElement(this.profileEvent_DaytimeInput, "3");
     await getDropdownElement(this.profileEvent_DaytimeInput, 1);
-    await getDropdownElement(this.profileEvent_SeasonInput, 1);
+    await getDropdownElement(this.profileEvent_SeasonInput, 2);
+    await getDropdownElement(this.profileEvent_TypeInput, 1);
+
+    await this.btnCreateEvent.click();
+    //await assertElementofListElement(this.cartItems,pEvent.titre)
     
     // This will fail the test if the field is still empty, 
     // giving you a clear error message.

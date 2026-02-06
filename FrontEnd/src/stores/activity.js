@@ -640,11 +640,8 @@ export const useActivityStore = defineStore("activitiesStore", {
       }
 
       try {
-        const res = await apiRequest(`/api/activite/filtrer${query || ""}`);
-        this.activities = res.data.data || []; 
-       
-         
-        
+        const data = await apiRequest(`/api/activite/filtrer/per_page=9&page=1?${query || ""}`);
+        this.activities = [...data.jours, ...data.nuit]; 
       } catch (err) {
         this.errors = err.errors || { message: "Failed to load activities" };
       } finally {
@@ -661,7 +658,7 @@ export const useActivityStore = defineStore("activitiesStore", {
 
         this.upcoming.days = data.days || [];
         this.upcoming.nights = data.nights || [];
-        console.log(this.upcoming.days, "list event");
+        console.log(data.days, "list event");
       } catch (err) {
         this.errors = { upcoming: err.message };
       }
@@ -745,14 +742,23 @@ export const useActivityStore = defineStore("activitiesStore", {
     // ADD EVENT
     // -----------------------------------
     async addEvent(formData) {
-      console.log(formData, "test");
+      this.isLoading = true;
+      this.errors = {};
+
       try {
-        return await apiRequest("http://127.0.0.1:8000/api/user/activite", {
+        const data = await apiRequest("/api/user/activite", {
           method: "POST",
           body: formData,
         });
+
+        return data;
       } catch (err) {
-        this.errors = err;
+        console.log("API error:", err);
+
+        this.errors = err.errors || { general: err.message || "Something went wrong" };
+        return null;
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -796,6 +802,7 @@ export const useActivityStore = defineStore("activitiesStore", {
       try {
         if (this.categories.length) return;
         const data = await apiRequest("/api/categories");
+      
         this.categories = data;
       } catch (err) {
         this.errors = err;

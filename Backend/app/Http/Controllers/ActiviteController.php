@@ -52,8 +52,8 @@ class ActiviteController extends Controller
             'longitude' => 'required|string',
             'lieu' => 'required|string|max:255',
              'statut_journee' => 'required|in:' . implode(',', array_column(EnumMode::cases(), 'value')),
-            'saison_name' => 'required|string|exists:main.saison,statut', // Change to name
-            'type_name' => 'required|string|exists:main.type,nom',
+            'saison_name' => 'required|string|exists:saison,statut', // Change to name
+            'type_name' => 'required|string|exists:type,nom',
             'image_data' => 'nullable|image|mimes:jpeg,png,jpg,gif'
         ]);
 
@@ -253,11 +253,11 @@ class ActiviteController extends Controller
      public function getActivitiesPaginationLength(Request $request,int $perPage,int $page)
     {
         $filters = [
-        'daytime' => $request->get('daytime'),
-        'title' => $request->get('title'),
-        'season' => $request->get('season'),
-        'type' => $request->get('type'),
-    ];
+            'daytime' => $request->get('daytime'),
+            'title' => $request->get('title'),
+            'season' => $request->get('season'),
+            'type' => $request->get('type'),
+        ];
 
         $perPageRequest = $request->get('per_page', $perPage);
         $pageRequest = $request->get('page', $page);

@@ -10,8 +10,8 @@
 
     </div>
 
-    <div v-if="props.user.activites.length > 0" class="body">
-      <ProfileSingleEvent v-for="(item, index) in props.user.activites" :key="index" :event="item" :himself="props.himself" @popDelete="showDel2()" @popUpdate="showUp2()"/>
+    <div v-if="props.user?.activites.length > 0" class="body">
+      <ProfileSingleEvent v-for="(item, index) in props.user?.activites" :key="index" :event="item" :himself="props.himself" @popDelete="showDel2()" @popUpdate="showUp2()"/>
     </div>
     <div v-else class="body">
       <div class="noEvents">
@@ -65,7 +65,7 @@
   const showDel2 = () => {
     isShowDel2.value = !isShowDel2.value
   }
-  console.log('liste event : ', props.user.activites)
+  console.log('liste event : ', props.user?.activites)
 </script>
 
 <style src="../../styles/ComponentsStyles/ProfileStyles/ProfileListStyle.scss"></style>

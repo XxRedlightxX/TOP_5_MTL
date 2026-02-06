@@ -88,6 +88,7 @@ test.describe('Login Flow', () => {
     await expect(userProfilePage.profileUsername).toContainText(currentUserData.username);
 
     await userProfilePage.createEvent(validEvent);
+    await userProfilePage.msgErrorEventName.isVisible()
   });
 
 

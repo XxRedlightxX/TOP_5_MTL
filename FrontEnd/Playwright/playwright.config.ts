@@ -16,7 +16,7 @@ export default defineConfig({
   
   testDir: './tests',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -30,10 +30,10 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('')`. */
      baseURL: process.env.APP_URL || 'http://localhost:3000',
 
-     extraHTTPHeaders: {
+     /*extraHTTPHeaders: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-    },
+    },*/
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
