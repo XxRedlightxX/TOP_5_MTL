@@ -88,7 +88,10 @@ export const useActivityStore = defineStore("activitiesStore", {
     // GET PAGINATION LENGHT (FILTERS)
     // -----------------------------------
     async getPaginationLenght(parametres) {
-      return this.getEventGeneric("/api/activite/pagination", parametres);
+      return this.getEventGeneric(
+        "/api/activite/pagination/" + parametres,
+        null,
+      );
     },
 
     // -----------------------------------
