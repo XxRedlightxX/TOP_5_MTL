@@ -76,6 +76,7 @@ jobs:
         run: |
           DB_PATH=$(pwd)/database/database.sqlite
           echo "SQLite path is: $DB_PATH"
+          echo config('database.connections.sqlite.database');
           ls -lh $(pwd)/database/
 
 
@@ -87,7 +88,7 @@ jobs:
       - name: Run database migrations
         working-directory: Backend
         run: |
-          php artisan migrate:fresh --seed --database=sqlite --env=testing
+          php artisan migrate:fresh --seed --env=testing
 
       - name: Debug seeders
         working-directory: Backend
@@ -100,7 +101,8 @@ jobs:
             echo 'Saisons: ' . DB::table('saison')->get() . '\n';
             echo 'Types: ' . DB::table('type')->get() . '\n';
             echo 'User: ' . DB::table('utilisateur')->get() . '\n';
-          "
+          ",
+          
 
       # -------------------------
       # 6️⃣ Run Laravel tests
