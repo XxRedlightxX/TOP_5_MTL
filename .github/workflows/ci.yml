@@ -102,7 +102,7 @@ jobs:
             echo 'Saisons: ' . DB::table('saison')->get() . '\n';
             echo 'Types: ' . DB::table('type')->get() . '\n';
             echo 'User: ' . DB::table('utilisateur')->get() . '\n';
-          ",
+          "
           
 
       # -------------------------
