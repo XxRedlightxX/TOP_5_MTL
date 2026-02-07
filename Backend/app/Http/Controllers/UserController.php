@@ -104,9 +104,9 @@ class UserController extends Controller
 
             $userValidated = $this->userService->updateUser( $user2->id, $validatedInputUser);
             return response()->json($userValidated, 202);
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage(),500);
-        }
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => "Activity $userId not found"], 404);
+        } 
     }
 
         public function modifyByIdUser(int $userId, Request $request) {
@@ -139,14 +139,12 @@ class UserController extends Controller
             $user2 = User::findOrFail($userId);
             $currentUser = $request->user();
 
-            //$this->authorize('delete', $user2,  $currentUser);
+            $this->authorize('delete', $user2,  $currentUser);
             $this->userService->deleteUser($userId);
              return response()->json(['message' => 'Deleted successfully']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'User not found'], 404);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        } 
     }
 
     public function index(User $user) {

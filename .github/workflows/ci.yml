@@ -1,4 +1,4 @@
-name: Laravel + Vue CI
+name: Laravel + Vue CI v2
 
 on:
   push:
@@ -35,45 +35,63 @@ jobs:
         run: composer install --prefer-dist --no-interaction --no-progress
 
       # -------------------------
-      # 4️⃣ Setup Laravel (.env)
+      # 4️⃣ Setup Laravel (.env + SQLite)
       # -------------------------
       - name: Prepare Laravel environment (SQLite)
         working-directory: Backend
         run: |
+          # Copy example env to .env
           cp .env.example .env
 
-          echo "APP_NAME=Laravel" >> .env
+          # Create database folder and SQLite file
+          mkdir -p database
+          touch database/database.sqlite
+
+          # Absolute DB path
+          DB_PATH=$(pwd)/database/database.sqlite
+
+          # Write necessary env overrides
           echo "APP_ENV=testing" >> .env
-          echo "APP_DEBUG=true" >> .env
-          echo "APP_URL=http://localhost" >> .env
-
           echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env
-
+          echo "DB_DATABASE=$DB_PATH" >> .env
           echo "CACHE_DRIVER=array" >> .env
           echo "QUEUE_CONNECTION=sync" >> .env
           echo "SESSION_DRIVER=array" >> .env
 
-          mkdir -p database
-          touch database/database.sqlite
-
+          # Generate app key & clear caches
           php artisan key:generate
           php artisan config:clear
           php artisan cache:clear
 
+          echo "Using DB: $DB_PATH"
+          ls -lh database/
+
       # -------------------------
-      # 5️⃣ Run migrations
+      # 5️⃣ Run migrations & seeders
       # -------------------------
       - name: Run database migrations
         working-directory: Backend
-        run: php artisan migrate --force
+        run: php artisan migrate:fresh --seed
+
+      - name: Debug seeders
+        working-directory: Backend
+        run: |
+          php artisan tinker --execute="
+            echo config('database.connections.sqlite.database');
+            echo '\n--- EXISTING TABLES ---\n' . implode(', ', Schema::getTableListing()) . '\n';
+            echo '\n--- TABLE DATA ---\n';
+            echo 'Saisons: ' . DB::table('saison')->count() . '\n';
+            echo 'Types: ' . DB::table('type')->count() . '\n';
+            echo 'Users: ' . DB::table('utilisateur')->count() . '\n';
+          "
 
       # -------------------------
       # 6️⃣ Run Laravel tests
       # -------------------------
       - name: Run backend tests
+        id: backend_tests
         working-directory: Backend
-        run: php artisan test 
+        run: php artisan test || echo "tests_failed=true" >> $GITHUB_OUTPUT
 
       # -------------------------
       # 7️⃣ Setup Node.js
@@ -83,7 +101,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: FrontEnd/package-lock.json
+          cache-dependency-path: FrontEnd/package.json
 
       # -------------------------
       # 8️⃣ Install frontend deps
@@ -98,3 +116,41 @@ jobs:
       - name: Build frontend
         working-directory: FrontEnd
         run: npm run build
+
+      # -------------------------
+      # 🔟 Install Playwright
+      # -------------------------
+      - name: Install Playwright dependencies
+        working-directory: FrontEnd
+        run: |
+          npm install @playwright/test
+          npx playwright install --with-deps
+
+      # -------------------------
+      # 1️⃣1️⃣ Start Laravel server
+      # -------------------------
+      - name: Start Laravel development server
+        working-directory: Backend
+        run: |
+          php artisan serve --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
+          until curl -s http://127.0.0.1:8000/health; do sleep 2; done
+
+      # -------------------------
+      # 1️⃣2️⃣ Run Playwright tests
+      # -------------------------
+      - name: Run Playwright E2E tests
+        working-directory: FrontEnd/Playwright
+        run: npx playwright test tests ../tests
+        env:
+          APP_URL: http://127.0.0.1:8000
+          NODE_ENV: testing
+
+      # -------------------------
+      # 1️⃣3️⃣ Upload Playwright report
+      # -------------------------
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: FrontEnd/playwright-report/

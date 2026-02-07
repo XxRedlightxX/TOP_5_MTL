@@ -1,16 +1,20 @@
 import { test, expect } from '@playwright/test';
 import { AuthApi } from 'Playwright/api/AuthApi';
 import { EventApi } from 'Playwright/api/EventApi';
-import { validEvent, invalidEvent } from 'Playwright/mockData/EventDats';
-import { validUser, validUserWithRegularRole } from 'Playwright/mockData/UserData';
+import { validEvent, invalidEvent, emptyEvent } from 'Playwright/mockData/EventDats';
+import { validUser, validUserWithRegularRole, validOtherOrgUser } from 'Playwright/mockData/UserData';
 import { UserApi } from 'Playwright/api/UserApi';
 import { createUser, deleteUser } from 'Playwright/helper/auth.helper';
 import { User } from 'Playwright/models/User';
+import { EventModal } from 'Playwright/models/EventModal';
 
 
  let authApi: AuthApi;
  let eventApi : EventApi;
  let userApi : UserApi;
+
+
+
 /*let authToken: string;
 let userId : string;
 
@@ -20,6 +24,7 @@ let authToken2 : string;
 
 let orgUser;
 let regularUser;
+let otherOrgUser;
 
 test.describe('Event Creation API Tests', () => {
 
@@ -38,44 +43,46 @@ test.describe('Event Creation API Tests', () => {
         const body =  await res.json();*/
 
         orgUser = await createUser(authApi, validUser);
+        otherOrgUser = await createUser(authApi, validOtherOrgUser);
         regularUser = await createUser(authApi, validUserWithRegularRole);
         
     });
 
     test.afterEach(async ({ request }) => {
         userApi = new UserApi(request);
-        const usersToDelete = [orgUser, regularUser].filter(Boolean);
-        //await deleteUser(userApi,regularUser.id,regularUser.token);
-        //await deleteUser(userApi,orgUser.id,orgUser.token);
+
+        const usersToDelete = [orgUser, regularUser, otherOrgUser].filter(Boolean);
+
         await Promise.all(
-            usersToDelete.map(u =>
-            deleteUser(userApi, u.id, u.token)
-                .catch(err => console.warn("Cleanup failed for", u.id, err))
-            )
+            usersToDelete.map(u => {
+            if (!u?.id || !u?.token) {
+                console.warn("Skipping cleanup for invalid user:", u);
+                return Promise.resolve();
+            }
+
+            return deleteUser(userApi, u.id, u.token)
+                .catch(err => console.warn("Cleanup failed for", u.id, err));
+            })
         );
-        //const userApi = new UserApi(request);
-        //const test = await userApi.deleteUser(userId, authToken);
-        //const body = await test.json();
-       
-      });
+    });
+
 
     test('Event Creation without token', async () => {
-        const res = await eventApi.addEvent(validEvent, "");
+        const event = new EventModal({ ...validEvent.payload });
+        const res = await eventApi.addEvent(event.payload, "");
+        const body = await res.json();
+        console.log(event, "Evenement")
         expect(res.status()).toBe(401);
 
     });
 
    test('Event Creation with auth User and has organisateur role', async () => {
     // 1. Login
-    const response = await authApi.login(
-        validUser.email,
-        validUser.password,
-        200 
-    );
-    const body = await response.json();
-    
+   
     // 2. Create event
-    const res = await eventApi.addEvent(validEvent, body.token);
+    const event = new EventModal({ ...validEvent.payload }); // or factory
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
+    console.log(event, "Evenement")
     
     // 3. Get response body with await
     const responseBody = await res.json();  
@@ -85,17 +92,13 @@ test.describe('Event Creation API Tests', () => {
     expect(res.status()).toBe(201);
 });
 
-test('When an authenticated user with organisateur role creates an event with invalid data format, Then the system should return a 422 validation error', async () => {
+test('When an authenticated user with organisateur role creates an event with nonexistent type/category format, Then the system should return a 422 validation error', async () => {
     // 1. Login
-    const response = await authApi.login(
-        validUser.email,
-        validUser.password,
-        200 
-    );
-    const body = await response.json();
     
     // 2. Create event
-    const res = await eventApi.addEvent(invalidEvent, body.token);
+    const event = new EventModal({ ...validEvent.payload }); // or factory
+    event.update({ type_name: "inactive" });
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
     
     // 3. Get response body with await
     const responseBody = await res.json();  
@@ -106,22 +109,116 @@ test('When an authenticated user with organisateur role creates an event with in
 });
 
 
-test('When an authenticated user with parrticuler role creates an event with alid data format, Then the system should return a 401 validation error', async () => {
+test('When an authenticated user with parrticuler role creates an event with valid data format, Then the system should return a 401 validation error', async () => {
    
-    
-    // 1. Login
-    
-    
     // 2. Create event
-    const res = await eventApi.addEvent(validEvent, regularUser.token);
+    const event = new EventModal({ ...validEvent.payload }); // or factory
     
-    // 3. Get response body with await
-    const responseBody = await res.json();  
-    //console.log(responseBody, "Response body");
-    
+    const res = await eventApi.addEvent(event.payload, regularUser.token);
+    const body = await res.json()
+    console.log(body);
     // 4. Assert
     expect(res.status()).toBe(403);
 });
+
+test('When an authenticacted user with organisateur role creates an event with invalid day format, Then the system should return a 422 validation error', async () => {
+   
+    const event = new EventModal({ ...validEvent.payload }); // or factory
+    event.update({ statut_journee: "inactive" });
+
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
+      const body = await res.json();
+    console.log(body);
+    // 4. Assert
+    expect(res.status()).toBe(422);
+});
+
+test('When an authenticacted user with organisateur role creates an event with empty data format, Then the system should return a 422 validation error', async () => {
+   
+    const event = new EventModal({ ...emptyEvent.payload }); // or factory
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
+    const body = await res.json();
+    console.log(body);
+    // 4. Assert
+    expect(res.status()).toBe(422);
+});
+
+test('When an authenticacted user with organisateur role delete is own event, Then the system should return a 200 ', async () => {
+   
+    const event = new EventModal({ ...validEvent.payload }); // or factory
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
+
+    const body = await res.json();
+    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
+    const response =await eventApi.deleteEvent(eventId ,orgUser.token )
+    console.log(response)
+    // 4. Assert
+    expect(response.status()).toBe(200);
+});
+
+
+test('When an authenticacted user with organisateur role delete tries to delete event that doesnt belong to him, Then the system should return a 403 ', async () => {
+   
+    const event = new EventModal({ ...validEvent.payload }); // or factory
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
+
+    const body = await res.json();
+    console.log(body)
+    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
+    const test =await eventApi.deleteEvent(eventId ,otherOrgUser.token )
+    
+    // 4. Assert
+    expect(test.status()).toBe(403);
+});
+
+test('When an authenticacted user with organisateur role  tries to modify event that belong to him, Then the system should return a 403 ', async () => {
+   
+    const event = new EventModal({ ...validEvent.payload }); 
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
+
+    const body = await res.json();
+    console.log(body);
+     const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
+    const test =await eventApi.modifyEvent(eventId ,orgUser.token )
+    
+    // 4. Assert
+    expect(test.status()).toBe(202);
+});
+
+
+test('When an authenticacted user with organisateur role  tries to modify event that doesnt belong to him, Then the system should return a 403 ', async () => {
+   
+    const event = new EventModal({ ...validEvent.payload }); // or factory
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
+
+    const body = await res.json();
+    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
+    console.log(body);
+    const test =await eventApi.modifyEvent(eventId ,otherOrgUser.token )
+    
+    // 4. Assert
+    expect(test.status()).toBe(403);
+});
+
+
+test('When an authenticacted user with organisateur role  tries to modify event that belong to him, Then the system should return a 200 ', async () => {
+   
+    const event = new EventModal({ ...validEvent.payload }); // or factory
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
+
+    const body = await res.json();
+    console.log(body);
+    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
+    const test =await eventApi.modifyEvent(eventId ,orgUser.token )
+    
+    // 4. Assert
+    expect(test.status()).toBe(202);
+});
+
+
+
+
+
 
 
 });

@@ -30,10 +30,10 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('')`. */
      baseURL: process.env.APP_URL || 'http://localhost:3000',
 
-     extraHTTPHeaders: {
+     /*extraHTTPHeaders: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-    },
+    },*/
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -77,10 +77,10 @@ export default defineConfig({
     // },
   ],
 
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+   //Run your local dev server before starting the tests 
+  /* webServer: {
+     command: 'npm run start',
+     url: process.env.APP_URL,
+     reuseExistingServer: !process.env.CI,
+   },*/
 });

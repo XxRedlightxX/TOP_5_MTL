@@ -9,6 +9,9 @@ export async function apiRequest(url, options = {}) {
     if (options.body && !(options.body instanceof FormData) && !options.headers?.['Content-Type']) {
       headers['Content-Type'] = 'application/json';
     }
+
+      // For FormData, we need to accept JSON
+    headers['Accept'] = 'application/json';
     
     const res = await fetch(url, {
       ...options,
@@ -19,6 +22,7 @@ export async function apiRequest(url, options = {}) {
     });
 
     const data = await res.json();
+    
 
     if (!res.ok) throw data;
 

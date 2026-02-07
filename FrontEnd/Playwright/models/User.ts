@@ -1,5 +1,6 @@
 export type UserPayload = {
-    id : number;
+  id : number;
+  name : string;
   username: string;
   email: string;
   num_tel: string;
@@ -10,7 +11,8 @@ export type UserPayload = {
 
 
 export class User {
-     id : number;
+    id : number;
+    name? : string;
     username?: string;
     email?: string;
     num_tel?: string;
@@ -18,8 +20,9 @@ export class User {
     password?: string;
     password_confirmation?: string;
 
-   constructor(payload: UserPayload) {
+   constructor(public payload: UserPayload) {
     this.id = payload.id;
+     this.name = payload.name;
     this.username = payload.username;
     this.email = payload.email;
     this.num_tel = payload.num_tel;
@@ -27,4 +30,8 @@ export class User {
     this.password = payload.password;
     this.password_confirmation = payload.password_confirmation;
   }
+
+   update(fields: Partial<UserPayload>) {
+      Object.assign(this.payload, fields);
+    }
 }

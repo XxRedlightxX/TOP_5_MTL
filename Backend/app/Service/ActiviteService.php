@@ -21,6 +21,7 @@ class ActiviteService {
     }
 
     public function updateActiviy(int $activityId, $activity) {
+        
         return $this->activiteDAO->update($activityId, $activity);
     }
 

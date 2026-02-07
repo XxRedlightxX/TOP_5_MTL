@@ -1,56 +1,58 @@
 <template>
     <div id="myModal" class="modal" style="" @click.self="pop">
-        <div class="modal-content" @click.self="pop">
+        <div class="modal-content" >
             <div class="event-create-form">
                 <span class="close" @click="pop">&times;</span>
                 <h2>{{ actualLang ? 'Create an Event' : 'Créer un événement' }}</h2>
                 <form @submit.prevent="testInput">
                     <div class="form-group">
                         <label for="event-name">{{ actualLang ? "Name of Event" : "Nom de evenement" }}</label>
-                        <input type="text" v-model="formDataEvent.titre" id="event-name"  :placeholder='actualLang ? "Enter event name" : "Entrez le nom évenement"' required>
+                        <input type="text" data-testid="-created-event-name" v-model="formDataEvent.titre" id="event-name"  :placeholder='actualLang ? "Enter event name" : "Entrez le nom évenement"' required>
+                        
                     </div>
+                    <p v-if="errors.titre" class="error">{{ errors.titre[0] }}</p>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="event-date">{{ actualLang ? "Start Date" : "Date de début" }}</label>
-                            <input type="date" ref="inputRefDate" id="event-date" required>
+                            <input type="date" data-testid="-created-event-date" ref="inputRefDate" id="event-date" required>
                         </div>
 
                         <div class="form-group">
                             <label for="event-time">{{ actualLang ? "Start Hour" : "Heure de début" }}</label>
-                            <input type="time" ref="inputRefTime" id="event-time" required>
+                            <input type="time" data-testid="-created-event-time" ref="inputRefTime" id="event-time" required>
                         </div>
 
                         <div class="form-group">
                             <label for="event-duration">{{ actualLang ? "Duration" : "Durée" }}</label>
-                            <input type="number" ref="inputRefDurationHours" id="event-duration" placeholder="e.g., 2" min="1" required>
+                            <input type="number" data-testid="-created-event-duration" ref="inputRefDurationHours" id="event-duration" placeholder="e.g., 2" min="1" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="event-location">{{ actualLang ? "Location" : "Emplacement" }}</label>
-                        <input type="text" v-model="formDataEvent.lieu" id="event-location"  :placeholder="actualLang ? 'Enter Location' : 'Entrez un emplacement'" required>
+                        <input type="text" data-testid="-created-event-location" v-model="formDataEvent.lieu" id="event-location"  :placeholder="actualLang ? 'Enter Location' : 'Entrez un emplacement'" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="event-description">{{ actualLang ? "Description" : "Description" }}</label>
-                        <input type="text" v-model="formDataEvent.description" id="event-description"  :placeholder="actualLang ? 'Enter description' : 'Entrez une description'" required>
+                        <input type="text" data-testid="-created-event-description" v-model="formDataEvent.description" id="event-description"  :placeholder="actualLang ? 'Enter description' : 'Entrez une description'" required>
                     </div>
 
                     <div class="form-row">
                        <div class="form-group">
                             <label for="event-type">{{ actualLang ? "Daytime" : "Journée" }}</label>
-                            <select id="event-type" v-model="formDataEvent.statut_journee" required>
+                            <select id="event-type" data-testid="-created-event-daytime" v-model="formDataEvent.statut_journee" required>
                                 <option disabled value="">{{ actualLang ? "Select Daytime" : "Sélectionner la journée" }}</option>
-                                <option value="JOUR">{{ actualLang ? "Day" : "Jour" }}</option>
-                                <option value="NUIT">{{ actualLang ? "Night" : "Nuit" }}</option>
+                                <option value="jour">{{ actualLang ? "Day" : "Jour" }}</option>
+                                <option value="nuit">{{ actualLang ? "Night" : "Nuit" }}</option>
                             </select>
                         </div>
 
 
                          <div class="form-group">
                             <label for="event-type">{{ actualLang ? "Season" : "Saison" }}</label>
-                            <select id="event-type" v-model="formDataEvent.saison_name" required>
+                            <select id="event-type" data-testid="-created-event-type" v-model="formDataEvent.saison_name" required>
                                 <option disabled value="">{{ actualLang ? "Select  a Season" : "Sélectionner une Saison" }}</option>
                                 <option value="été" selected>{{ actualLang ? "Summer" : "Été" }}</option>
                                 <option value="hiver">{{ actualLang ? "Winter" : "Hiver" }}</option>
@@ -62,9 +64,9 @@
 
                         <div class="form-group">
                             <label for="event-type">{{ actualLang ? "Category" : "Catégorie" }}</label>
-                            <select id="event-type" v-model="formDataEvent.type_name" required>
+                            <select id="event-type" data-testid="-created-event-category" v-model="formDataEvent.type_name" required>
                                 <option disabled value="">{{ actualLang ? "Select a Category" : "Sélectionner un Catégorie" }}</option>
-                                <option  v-for="category in listCategories" key="category.id" :value="category.nom"> {{ category.nom }}</option>
+                                <option  v-for="category in listCategories" key="category.id" :value="category.Title"> {{ category.Title }}</option>
                             </select>
                         </div>
                     </div>
@@ -77,7 +79,7 @@
                     <div class="form-actions">
                         
                         <waterButton :text="actualLang ? 'Create Event' : 'Créer Événement'"  :type="false" 
-                        buttonType="submit" class="btnn" @click="pop"/>
+                        buttonType="submit" class="btnn" data-testid="btn-create-event" />
                         <waterButton :text="actualLang ? 'Cancel' : 'Annuler'" :type="false" class="btnn" @click="pop"/>
                     </div>
                 </form>
@@ -90,17 +92,19 @@
 </template>
 <script setup>
     import storageManager from "@/JS/LocalStaorageManager";
-    import { ref, onMounted, onUnmounted, defineProps, defineEmits, reactive } from "vue";
+    import { ref, onMounted, onUnmounted, defineProps, defineEmits, reactive, watch } from "vue";
     import waterButton from "@/components/WaterButtonComponent.vue";
     import { useActivityStore } from "@/stores/activity";
     import { formatDateApi, formatDateEventEndDate } from "@/JS/GlobalFunctions";
     import { useAuthStore } from "@/stores/auth";
     import MapComponent from "@/components/MapComponent.vue";
+    import { storeToRefs } from "pinia";
 
 
-    const {addEvent,} = useActivityStore();
+    const {addEvent} = useActivityStore();
     const activitiesStore = useActivityStore();
     const authStore = useAuthStore();
+     const { errors } = storeToRefs(useActivityStore());
 
     const inputRefDate = ref(null);
     const inputRefTime = ref(null);
@@ -122,8 +126,8 @@
             image_data : "",
             saison_name: "",
             type_name : "",
-            longitude : "",
-            latitude : ""
+            longitude : "-73.5674",
+            latitude : "45.5019"
     });
 
 
@@ -144,6 +148,7 @@
 
 
 const testInput = async(event) => {
+    event.preventDefault();
     const dateValue = inputRefDate.value.value;
     const timeValue = inputRefTime.value.value;
     const hoursDurationValue =inputRefDurationHours.value.value;
@@ -164,6 +169,11 @@ const testInput = async(event) => {
     formData.append('type_name', String(formDataEvent.type_name));
     formData.append('latitude', String(formDataEvent.latitude));
     formData.append('longitude', String(formDataEvent.longitude));
+
+    
+
+     console.log("Event dada Name (titre):", formDataEvent.titre);
+   
     
 
     if (selectedFile.value) {
@@ -175,15 +185,16 @@ const testInput = async(event) => {
     }
 
         try {
+            console.log(formData, "Shit code")
             const eventUrl = await addEvent(formData);
             if (eventUrl) {
+                pop()
                 console.log(eventUrl, "test2");
                 window.$toast("Saved successfully!")
                 await authStore.getUser();
                 //await authStore.getUpcomingEvents()
                 
                
-                
             }
              console.log(eventUrl, "test2");
         } catch (error) {
@@ -192,22 +203,40 @@ const testInput = async(event) => {
         }
     };
 
+    watch([
+        () => errors.value.titre,
+        () => errors.value.general,
+    ], ([newTitle, newPassword]) => {
+    if (newTitle || newPassword) {
+        setTimeout(() => {
+             errors.value.titre = null;
+            errors.value.general = null;
+           
+        }, 3000)
+    }
+});
+
     const handleEventCoords = (coords) => {
             console.log("Received coordinates:", coords);
             console.log("Latitude:", coords.lat);
             console.log("Longitude:", coords.lng);
-            formDataEvent.latitude = coords.lat;
-            formDataEvent.longitude = coords.lng;
+            if(coords.lat != null && coords.lng != null ) {
+                formDataEvent.latitude = coords.lat;
+                formDataEvent.longitude = coords.lng;
+            }
+
+            formDataEvent.latitude = "45.5019";
+            formDataEvent.longitude ="-73.5674"
         };
 
     const props = defineProps({
         user: Object
     });
 
-
+    let  isLoading = ref(false);
     let actualLang = ref(storageManager.getLang());
     let isLogged = ref(storageManager.getLogin());
-
+   
     const Logout = () => {
     storageManager.setLogin(false);
     isLogged.value = storageManager.getLogin();
@@ -219,8 +248,10 @@ const testInput = async(event) => {
     }
 
     if (isLogged.value === null) {
-    Logout();
+        Logout();
     }
+
+     onMounted(() => (errors.value = {}));
 
     // Function to handle mode change event
     const handleLangChange = (event) => {
@@ -233,8 +264,22 @@ const testInput = async(event) => {
     };
 
      onMounted(async () => {
-        listCategories.value =await activitiesStore.getCategories();
-        console.log(listCategories, "liste Categories")
+         try {
+            await activitiesStore.getCategories();
+
+            if (activitiesStore.categories?.length > 0) {
+            listCategories.value = activitiesStore.categories.map(category => ({
+                id: category.id,
+                Title: category.nom,
+                icon: category.image_data,
+            }));
+            }
+        } catch (error) {
+            console.error('Failed to load categories:', error);
+        } finally {
+            isLoading.value = false;
+        }
+         
      
      });
 
@@ -288,6 +333,10 @@ const testInput = async(event) => {
                 scrollbar-width: thin;
                 h2 {
                 text-align: center;
+                }
+
+                .error {
+                    color : red
                 }
                 .close {
                     float: right;

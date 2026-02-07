@@ -7,39 +7,39 @@
             <form  @submit.prevent="handleSubmit">
                 <div class="form-group">
                     <label for="event-name">Event Name</label>
-                    <input type="text" id="event-name" v-model="formDataEvent.titre" placeholder="Enter event name" required>
+                    <input type="text" data-testid="-updated-event-name" id="event-name" v-model="formDataEvent.titre" placeholder="Enter event name" required>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="event-date">Date</label>
-                        <input type="date" id="event-date" ref="inputRefDate" >
+                        <input type="date" data-testid="-updated-event-date" id="event-date" ref="inputRefDate" >
                     </div>
 
                     <div class="form-group">
                         <label for="event-time">Time</label>
-                        <input type="time" id="event-time" ref="inputRefTime" >
+                        <input type="time" data-testid="-updated-event-time" id="event-time" ref="inputRefTime" >
                     </div>
 
                     <div class="form-group">
                         <label for="event-duration">Duration (hours)</label>
-                        <input type="number" id="event-duration"   placeholder="e.g., 2" min="1" >
+                        <input type="number" data-testid="-updated-event-duration" id="event-duration"   placeholder="e.g., 2" min="1" >
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="event-location">Location</label>
-                    <input type="text" id="event-location"  v-model="formDataEvent.lieu"placeholder="Enter location" >
+                    <input type="text" data-testid="-updated-event-location" id="event-location"  v-model="formDataEvent.lieu"placeholder="Enter location" >
                 </div>
 
                 <div class="form-group">
                     <label for="event-picture">Upload Picture</label>
-                    <input type="file" id="event-picture"  ref="inputRefImage" @change="handleFileUpload" accept="image/*">
+                    <input type="file" data-testid="-updated-event-picture" id="event-picture"  ref="inputRefImage" @change="handleFileUpload" accept="image/*">
                 </div>
 
                 <div class="form-group">
                     <label for="event-hosts">Co-hosts</label>
-                    <input type="text" id="event-hosts" placeholder="Add other hosts (comma-separated)">
+                    <input type="text" data-testid="-updated-event-hosts" id="event-hosts" placeholder="Add other hosts (comma-separated)">
                     <div class="form-group_images">
                         <img src="https://picsum.photos/id/375/200/300"> <img src="https://picsum.photos/id/375/200/300" alt=""> <img src="https://picsum.photos/id/375/200/300">
                     </div>

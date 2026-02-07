@@ -11,7 +11,6 @@ use App\Models\Type;
 use App\Models\User;
 use App\Service\ActiviteService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Mockery;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -54,7 +53,7 @@ class ActiviteControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        // ✅ Mock SERVICE, not DAO
+        //  Mock SERVICE,
         $mockService = Mockery::mock(ActiviteService::class);
 
         $mockService->shouldReceive('getAllCategoriesActivities')

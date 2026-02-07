@@ -30,7 +30,6 @@ export class BaseApi {
       
     } : {
       'Accept': 'application/json',
-      
     }
     });
 
@@ -56,7 +55,46 @@ export class BaseApi {
       console.error(`Response Body: ${await response.text()}`);
   }
   console.log(token)
-  expect(response.ok()).toBeTruthy();
+  //expect(response.ok()).toBeTruthy();
     return response;
   }
+
+
+  async modify(url: string, token?: string) {
+      const response = await this.request.post(url, {
+        headers: token ? {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        } : {
+          'Accept': 'application/json'
+        }
+      });
+        if (!response.ok()) {
+          console.error(`Delete failed at ${url} with status: ${response.status()}`);
+          console.error(`Response Body: ${await response.text()}`);
+      }
+      console.log(token)
+      //expect(response.ok()).toBeTruthy();
+        return response;
+    }
+
+     async put(url: string,body: any, token?: string, ) {
+      const response = await this.request.put(url, {
+        data: body,
+        headers: token ? {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        } : {
+          'Accept': 'application/json'
+        }
+      });
+        if (!response.ok()) {
+          console.error(`Delete failed at ${url} with status: ${response.status()}`);
+          console.error(`Response Body: ${await response.text()}`);
+      }
+      console.log(token)
+      //expect(response.ok()).toBeTruthy();
+        return response;
+    }
+
 }

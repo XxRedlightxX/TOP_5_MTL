@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\Rule;
 
 
 class ActiviteController extends Controller
@@ -51,8 +52,18 @@ class ActiviteController extends Controller
             'longitude' => 'required|string',
             'lieu' => 'required|string|max:255',
              'statut_journee' => 'required|in:' . implode(',', array_column(EnumMode::cases(), 'value')),
-            'saison_name' => 'required|string|exists:saison,statut', // Change to name
-            'type_name' => 'required|string|exists:type,nom',
+           'saison_name' => [
+    'required',
+    Rule::exists('saison', 'statut')->where(function($query) {
+        $query->whereRaw('LOWER(statut) = LOWER(?)', [request('saison_name')]);
+    })
+],
+'type_name' => [
+    'required',
+    Rule::exists('type', 'nom')->where(function($query) {
+        $query->whereRaw('LOWER(nom) = LOWER(?)', [request('type_name')]);
+    })
+],
             'image_data' => 'nullable|image|mimes:jpeg,png,jpg,gif'
         ]);
 
@@ -90,7 +101,7 @@ class ActiviteController extends Controller
         try {
 
             $activite = Activite::findOrFail($activiteId);
-            //$this->authorize('update', $activite);
+            $this->authorize('update', $activite);
         
             $validatedInputActivity = $request->validate([
                 'titre' => 'nullable|string|max:255',
@@ -114,9 +125,9 @@ class ActiviteController extends Controller
                 $this->userService->updateActiviy($activiteId, $validatedInputActivity),
                 202
             );
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage(), 500);
-        }
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => "Activity $activiteId not found"], 404);
+        } 
     }
 
     public function deleteActivityById(int $activiteId)
@@ -129,9 +140,7 @@ class ActiviteController extends Controller
             return response()->json(['message' => 'Deleted successfully']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => "Activity $activiteId not found"], 404);
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage(), 500);
-        }
+        } 
     }
 
     public function addCommentToActivity(int $activityId, Request $contenu)
@@ -254,11 +263,11 @@ class ActiviteController extends Controller
      public function getActivitiesPaginationLength(Request $request,int $perPage,int $page)
     {
         $filters = [
-        'daytime' => $request->get('daytime'),
-        'title' => $request->get('title'),
-        'season' => $request->get('season'),
-        'type' => $request->get('type'),
-    ];
+            'daytime' => $request->get('daytime'),
+            'title' => $request->get('title'),
+            'season' => $request->get('season'),
+            'type' => $request->get('type'),
+        ];
 
         $perPageRequest = $request->get('per_page', $perPage);
         $pageRequest = $request->get('page', $page);

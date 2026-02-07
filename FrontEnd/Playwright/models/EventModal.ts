@@ -24,7 +24,7 @@ export class EventModal {
     latitude?: string;
     longitude?: string;
 
-   constructor(payload: EventPayload) {
+   constructor( public payload: EventPayload) {
     
     this.titre = payload.titre;
     this.date_debut = payload.date_debut;
@@ -36,7 +36,14 @@ export class EventModal {
     this.lieu = payload.lieu;
     this.latitude = payload.latitude;
     this.longitude = payload.longitude;
+    
   }
+
+  update(fields: Partial<EventPayload>) {
+    Object.assign(this.payload, fields);
+  }
+
+  
 }
 
 

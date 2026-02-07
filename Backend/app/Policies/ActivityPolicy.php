@@ -58,7 +58,7 @@ class ActivityPolicy
     {
          return $user->id == $activite->utilisateur_id
             ? Response::allow()
-            : Response::deny(self::NOT_ALLOWED, 403);
+            : Response::deny(self::NOT_ALLOWED, self::NOT_ALLOWED);
     }
 
 
