@@ -4,7 +4,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 
 const PaginationManager = {
   async paginationSetup(value) {
-    await PaginationManager.paginationLenghtSetup();
+    await PaginationManager.paginationLenghtSetup(value);
     await PaginationManager.paginationNumberSetup(value);
 
     return LocalStorageManager.getPaginationTotalNumber();
@@ -16,10 +16,17 @@ const PaginationManager = {
     //console.log("storage pagination lenght : " + paginationLenght.value);
 
     if (paginationLenght.value == null || paginationLenght.value <= 0) {
-      //const apiData = await activitiesStore.getPaginationLenght(value);
-      //console.log("retur lenght : " + apiData);
-      paginationLenght.value = 3;
-      LocalStorageManager.setPaginationTotalNumber(3);
+      const param = PaginationManager.changePageNumber(value, 1);
+      console.log("param icit : " + param);
+      const apiData = await activitiesStore.getPaginationLenght(param);
+      console.log("retur lenght : " + apiData);
+      const tempPaginationLenght = {
+        days: apiData.nbPagination.jour,
+        night: apiData.nbPagination.nuit,
+        all: apiData.nbPagination.all,
+      };
+      paginationLenght.value = tempPaginationLenght;
+      LocalStorageManager.setPaginationTotalNumber(tempPaginationLenght);
       //console.log("DB pagination lenght : " + paginationLenght.value);
     }
 
@@ -297,12 +304,12 @@ const PaginationManager = {
   },
 
   changePageNumber(value, newValuePage) {
-    //console.log("value reçu :", value);
+    console.log("value reçu :", value);
 
     const query = value;
     const params = new URLSearchParams(query);
     const per_page = Number(params.get("per_page"));
-    //console.log("per page get :" + per_page); // per page get :0
+    console.log("per page get :" + per_page); // per page get :0
     const page = "per_page=" + per_page + "&page=" + newValuePage;
     //("new value :" + page); // new value :per_page=0&page=undefined
     return page;

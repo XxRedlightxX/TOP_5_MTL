@@ -22,18 +22,6 @@ export const useActivityStore = defineStore("activitiesStore", {
     errors: {},
   }),
 
-  getters: {
-    // upcomingItems(state) {
-    //   return state.mode === true ? state.upcoming.days : state.upcoming.nights;
-    // },
-    // carouselItems(state) {
-    //   return state.mode === true ? state.carousel.days : state.carousel.nights;
-    // },
-    // currentActivities(state) {
-    //   return state.activities;
-    // },
-  },
-
   actions: {
     // -----------------------------------
     // TOGGLE MODE (DAY ⇄ NIGHT)

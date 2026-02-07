@@ -22,7 +22,7 @@
         </div>
       </router-link>
     </div>
-    <PaginationComponent :lenght="pagination" :page="page" @paginationChanged="paginationUpdate"/>
+    <PaginationComponent :lenght="pagination.days" :page="page" @paginationChanged="paginationUpdate"/>
   </div>
 
   <div v-else id="AllEventComponent">
@@ -75,10 +75,12 @@
   let events = ref(null);
   const width = ref(window.innerWidth);
 
-  if (width.value >= 1025) {
-    parameterPerPage.value = 9;
-  } else {
-    parameterPerPage.value = 6;
+  const perPageFunction = async () => {
+    if (width.value >= 1025) {
+      parameterPerPage.value = 9;
+    } else {
+      parameterPerPage.value = 6;
+    }
   }
 
   const paginationUpdate = (index) => {
@@ -103,10 +105,13 @@
   };
 
   const setup = async () => {
+    await perPageFunction()
+    console.log('perPage -> ' + parameterPerPage.value )
     const event = LocalStorageManager.getActualPaginationNumber()
     page = event != null ? event.number : 1
     console.log('page -> ' + page)
-    parameter.value = 'per_page=' + parameterPerPage.value + '&page=' + page;
+    console.log('parameter -> ' + parameter.value)
+    return 'per_page=' + parameterPerPage.value + '&page=' + page;
   };
 
   watch(actualMode, (newVal, oldVal) => {
@@ -142,7 +147,8 @@
     
   };
   onMounted(async () => {
-    await setup()
+    parameter.value = await setup()
+    console.log('parameter 2 -> ' + parameter.value)
     pagination.value = await PaginationManager.paginationSetup(parameter.value)
     //PaginationManager.paginationStatus()
     window.addEventListener(
