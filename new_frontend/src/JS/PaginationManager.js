@@ -5,7 +5,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 const PaginationManager = {
   async paginationSetup(value) {
     await PaginationManager.paginationLenghtSetup();
-    //await PaginationManager.paginationNumberSetup(value);
+    await PaginationManager.paginationNumberSetup(value);
 
     return LocalStorageManager.getPaginationTotalNumber();
   },
@@ -16,8 +16,8 @@ const PaginationManager = {
     //console.log("storage pagination lenght : " + paginationLenght.value);
 
     if (paginationLenght.value == null || paginationLenght.value <= 0) {
-      const apiData = await activitiesStore.getPaginationLenght(value);
-      console.log("retur lenght : " + apiData);
+      //const apiData = await activitiesStore.getPaginationLenght(value);
+      //console.log("retur lenght : " + apiData);
       paginationLenght.value = 3;
       LocalStorageManager.setPaginationTotalNumber(3);
       //console.log("DB pagination lenght : " + paginationLenght.value);
