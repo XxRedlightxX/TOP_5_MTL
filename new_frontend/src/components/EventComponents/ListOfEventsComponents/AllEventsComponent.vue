@@ -114,6 +114,7 @@
   });
 
   watch(width, async (newVal, oldVal) => {
+    console.log('watch size')
     if (oldVal >= 1025 && newVal < 1025) {
       parameterPerPage.value = 6;
       parameter.value = 'per_page=' + parameterPerPage.value + '&page=' + page;

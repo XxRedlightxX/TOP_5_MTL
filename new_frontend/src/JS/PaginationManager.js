@@ -12,11 +12,12 @@ const PaginationManager = {
 
   async paginationLenghtSetup(value) {
     let paginationLenght = ref(LocalStorageManager.getPaginationTotalNumber());
+    const activitiesStore = useActivityStore();
     //console.log("storage pagination lenght : " + paginationLenght.value);
 
     if (paginationLenght.value == null || paginationLenght.value <= 0) {
-      //const apiData = await await activitiesStore.getPaginationLenght(value);
-      //console.log("retur lenght : ", apiData);
+      //const apiData = await activitiesStore.getPaginationLenght(value);
+      //console.log("retur lenght : " + apiData);
       paginationLenght.value = 3;
       LocalStorageManager.setPaginationTotalNumber(3);
       //console.log("DB pagination lenght : " + paginationLenght.value);
@@ -49,7 +50,7 @@ const PaginationManager = {
     let paginationNumber = ref(LocalStorageManager.getActualPaginationNumber());
     //console.log("storage pagination number : " + paginationNumber.value.number);
 
-    console.log("value send : ", value);
+    //console.log("value send : ", value);
     //console.log("paginationNumber value : ", paginationNumber.value);
     if (paginationNumber.value == null) {
       await PaginationManager.gestionPaginationNumber(value);
@@ -136,8 +137,8 @@ const PaginationManager = {
 
   async getPaginationEvents(parameter) {
     const value = PaginationManager.getActualPageNumber(parameter);
-    console.log("parameter send : " + parameter);
-    console.log("value get : " + value);
+    //console.log("parameter send : " + parameter);
+    //console.log("value get : " + value);
 
     const paginationLenght = LocalStorageManager.getPaginationTotalNumber();
     const actualPagination = LocalStorageManager.getActualPaginationNumber();
@@ -161,89 +162,102 @@ const PaginationManager = {
      * -------------------------- */
     if (actualPagination?.number != null && value === actualPagination.number) {
       //console.log("actual pagination number, no change");
+    } else if (
       /** --------------------------
        * NEXT PAGINATION
        * -------------------------- */
-    } else if (
       nextPagination?.number != null &&
       value === nextPagination.number
     ) {
-      //console.log("not actual pagination number, change to next");
-
+      temp = prevPagination;
       LocalStorageManager.setPrevPaginationNumber(actualPagination);
       LocalStorageManager.setActualPaginationNumber(nextPagination);
 
+      // 2 3 (4) [5] -> nextFromLast = 3
       if (value + 1 > paginationLenght) {
-        const param = PaginationManager.changePageNumber(value - 1);
-        temp = await PaginationManager.getEvents(param);
         LocalStorageManager.setNextPaginationNumberFromLast(temp);
       } else {
-        const param = PaginationManager.changePageNumber(value + 1);
-        temp = await PaginationManager.getEvents(param);
-        LocalStorageManager.setNextPaginationNumber(temp);
+        // (1) [2] 3 4 -> next = 3
+        if (value + 1 == prevPaginationFromFirst.number) {
+          LocalStorageManager.setNextPaginationNumber(prevPaginationFromFirst);
+        }
+        // 1 (2) [3] 4 -> next = 4
+        else {
+          const param = PaginationManager.changePageNumber(
+            parameter,
+            value + 1,
+          );
+          temp = await PaginationManager.getEvents(param);
+          LocalStorageManager.setNextPaginationNumber(temp);
+        }
       }
-
+    } else if (
       /** --------------------------
        * PREV PAGINATION
        * -------------------------- */
-    } else if (
       prevPagination?.number != null &&
       value === prevPagination.number
     ) {
-      //console.log("not actual pagination number, change to prev");
-
+      temp = nextPagination;
       LocalStorageManager.setNextPaginationNumber(actualPagination);
       LocalStorageManager.setActualPaginationNumber(prevPagination);
 
-      if (value - 1 < 0) {
-        const param = PaginationManager.changePageNumber(parameter, value + 2);
-        temp = await PaginationManager.getEvents(param);
+      // [1] (2) 3 4 -> prevFromForst = 3
+      if (value - 1 <= 0) {
         LocalStorageManager.setPrevPaginationNumberFromFisrt(temp);
       } else {
-        const param = PaginationManager.changePageNumber(parameter, value - 1);
-        temp = await PaginationManager.getEvents(param);
-        LocalStorageManager.setPrevPaginationNumber(temp);
+        // 1 2 [3] (4) -> prev = 2
+        if (value - 1 == nextPaginationFromLast.number) {
+          LocalStorageManager.setPrevPaginationNumber(nextPaginationFromLast);
+        }
+        // 1 [2] (3) 4 -> prev = 1
+        else {
+          const param = PaginationManager.changePageNumber(
+            parameter,
+            value - 1,
+          );
+          temp = await PaginationManager.getEvents(param);
+          LocalStorageManager.setPrevPaginationNumber(temp);
+        }
       }
-
+    } else if (
       /** --------------------------
        * NEXT FROM LAST
        * -------------------------- */
-    } else if (
       nextPaginationFromLast?.number != null &&
       value === nextPaginationFromLast.number
     ) {
-      //console.log("not actual pagination number, change to next from last");
-
+      temp = actualPagination;
       LocalStorageManager.setNextPaginationNumber(prevPagination);
       LocalStorageManager.setActualPaginationNumber(nextPaginationFromLast);
 
-      if (value - 1 < 0) {
-        const param = PaginationManager.changePageNumber(parameter, value + 2);
-        temp = await PaginationManager.getEvents(param);
+      // [1] 2 (3) -> prevFromLast = 3
+      if (value - 1 <= 0) {
         LocalStorageManager.setPrevPaginationNumberFromFisrt(temp);
-      } else {
+      }
+      // 1 [2] 3 (4) -> prev = 1
+      else {
         const param = PaginationManager.changePageNumber(parameter, value - 1);
         temp = await PaginationManager.getEvents(param);
         LocalStorageManager.setPrevPaginationNumber(temp);
       }
-
+    } else if (
       /** --------------------------
        * PREV FROM FIRST
        * -------------------------- */
-    } else if (
       prevPaginationFromFirst?.number != null &&
       value === prevPaginationFromFirst.number
     ) {
-      //console.log("not actual pagination number, change to prev from first");
-
+      temp = actualPagination;
       LocalStorageManager.setPrevPaginationNumber(nextPagination);
       LocalStorageManager.setActualPaginationNumber(prevPaginationFromFirst);
 
-      if (value - 1 < 0) {
-        const param = PaginationManager.changePageNumber(parameter, value - 2);
-        temp = await PaginationManager.getEvents(param);
+      // (1) 2 [3] -> nextFromLast = 1
+      if (value + 1 > paginationLenght) {
         LocalStorageManager.setNextPaginationNumberFromLast(temp);
-      } else {
+      }
+      // (1) 2 [3] 4 -> next = 4
+      else {
         const param = PaginationManager.changePageNumber(parameter, value + 1);
         temp = await PaginationManager.getEvents(param);
         LocalStorageManager.setNextPaginationNumber(temp);
@@ -262,7 +276,7 @@ const PaginationManager = {
 
   async getEvents(value) {
     const activitiesStore = useActivityStore();
-    console.log("value send : ", value);
+    //console.log("value send : ", value);
     const data = await activitiesStore.getActivities(value);
     console.log("data get : ", data);
     return PaginationManager.setPaginationEventData(value, data);
@@ -271,7 +285,7 @@ const PaginationManager = {
   setPaginationEventData(value, data) {
     let page = PaginationManager.getActualPageNumber(value);
     let donnee = { number: page, days: data.jours, nights: data.nuit };
-    console.log("donnee get : ", donnee);
+    //console.log("donnee get : ", donnee);
     return donnee;
   },
 
@@ -283,18 +297,15 @@ const PaginationManager = {
   },
 
   changePageNumber(value, newValuePage) {
-    // Sépare les paramètres
-    const parts = value.value.split("&");
+    //console.log("value reçu :", value);
 
-    const updated = parts.map((param) => {
-      if (param.startsWith("page=")) {
-        return `page=${newValuePage}`;
-      }
-      return param;
-    });
-
-    console.log("updated value :" + updated.join("&"));
-    return updated.join("&");
+    const query = value;
+    const params = new URLSearchParams(query);
+    const per_page = Number(params.get("per_page"));
+    //console.log("per page get :" + per_page); // per page get :0
+    const page = "per_page=" + per_page + "&page=" + newValuePage;
+    //("new value :" + page); // new value :per_page=0&page=undefined
+    return page;
   },
 
   paginationStatus() {

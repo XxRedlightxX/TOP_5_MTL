@@ -59,7 +59,7 @@
   };
 
   const nextPage = () => {
-    if (currentPage.value < pages.length - 1) {
+    if (currentPage.value < pages.value.length) {
       currentPage.value++;
       emit('paginationChanged', currentPage.value);
     }
