@@ -1,11 +1,10 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { EventModal, EventPayload } from 'Playwright/models/EventModal';
-import { assertElementofListElement, getDropdownElement, getElement, getStringElement } from 'Playwright/helper/ui/uiDriverHelper.helper';
-import { validEvent } from 'Playwright/mockData/EventDats';
+import { assertToolTipElement, getDropdownElement, getElement, getStringElement } from 'Playwright/helper/ui/uiDriverHelper.helper';
+import { invalidEvent, validEvent } from 'Playwright/mockData/EventDats';
 export class UserProfilePage extends BasePage {
   public readonly profileUsername: Locator;
-  
   public readonly  profileEvent_NameInput: Locator;
   public readonly  profileEvent_StartDateInput: Locator;
   public readonly  profileEvent_StartHourInput: Locator;
@@ -16,9 +15,17 @@ export class UserProfilePage extends BasePage {
   public readonly  profileEvent_SeasonInput: Locator;
   public readonly  profileEvent_TypeInput: Locator;
 
-   public readonly cartItems: Locator;
+  public readonly cartItems: Locator;
 
-   public readonly msgErrorEventName : Locator;
+  public readonly msgErrorEventName : Locator;
+  public readonly msgErrorEventCategory : Locator;
+
+  public readonly MSG_SELECT_ITEM = "Sélectionnez un élément dans la liste.";
+  public readonly MSG_EVENT_TITRE = "Veuillez remplir ce champ."
+  public readonly MSG_EVENT_DATE = "The date debut field must be a date after or equal to today.";
+
+   
+
   
   public readonly btnPopUpEventWindow: Locator;
   public readonly btnCreateEvent: Locator;
@@ -35,23 +42,51 @@ export class UserProfilePage extends BasePage {
     this.profileEvent_LocationInput = createModal.getByTestId('-created-event-location');
     this.profileEvent_DescriptionInput = createModal.getByTestId('-created-event-description');
     this.profileEvent_DaytimeInput = createModal.getByTestId('-created-event-daytime');
-     this.profileEvent_SeasonInput = createModal.getByTestId('-created-event-type');
+    this.profileEvent_SeasonInput = createModal.getByTestId('-created-event-type');
     this.profileEvent_TypeInput = createModal.getByTestId('-created-event-category');
     this.btnCreateEvent = createModal.getByTestId('btn-create-event');
     this.cartItems = page.locator(".glass .middle h2");
     this.msgErrorEventName = createModal.locator(".error");
+    this.msgErrorEventCategory = createModal.locator("")
+
+  }
+
+  public async getMessageErrorAsync(isErrorVisible: boolean): Promise<string> {
+    return isErrorVisible
+      ? "Veuillez remplir ce champ."
+      : "Veuillez renseigner ce champ.";
+  }
 
 
 
 
+ 
+
+  async fillEventFields(pEvent: EventModal, 
+    pEventDayTime : number | null = null,
+    pEventSeason : number | null = null,
+    pEventType : number | null = null) {
+
+    await this.btnPopUpEventWindow.click();
+
+    let startDateorHour = getStringElement(invalidEvent.date_debut);
+
+    await getElement(this.profileEvent_NameInput, pEvent.titre);
+    await getElement(this.profileEvent_StartDateInput, startDateorHour[1]);
+    await getElement(this.profileEvent_StartHourInput, startDateorHour[0]);
+    await getElement(this.profileEvent_DurationInput, "3");
+    await getElement(this.profileEvent_LocationInput, "3");
+    await getElement(this.profileEvent_DescriptionInput, "3");
+    //await getElement(this.profileEvent_DaytimeInput, "3");
+    await getDropdownElement(this.profileEvent_DaytimeInput, pEventDayTime);
+    await getDropdownElement(this.profileEvent_SeasonInput, pEventSeason);
+    await getDropdownElement(this.profileEvent_TypeInput, pEventType);
   }
 
   async createEvent(pEvent: EventModal) {
     // 1. Click the add icon
     await this.btnPopUpEventWindow.click();
 
-    // 2. Define the locator for the input INSIDE the visible modal
-    // This solves the "resolved to 3 elements" error
    
     let startDateorHour = getStringElement(validEvent.date_debut)
 

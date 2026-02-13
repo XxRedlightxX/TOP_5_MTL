@@ -10,6 +10,13 @@ type MyFixtures = {
 
 // 2. Extend the base 'test' to create your own "Manager"
 export const test = base.extend<MyFixtures>({
+
+    page: async ({ browser }, use) => {
+        const context = await browser.newContext(); 
+        const page = await context.newPage();
+        await use(page);
+        await context.close();
+    },
     
     // This fixture creates the LoginPage and hands it to the test
     loginPage: async ({ page }, use) => {

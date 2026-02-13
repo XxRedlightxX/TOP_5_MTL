@@ -46,24 +46,24 @@ class ActiviteController extends Controller
         $validated = $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
-            'date_debut' => 'required|date',
+            'date_debut' => 'required|date|after_or_equal:today',
             'date_fin' => 'required|date',
             'latitude' => 'required|string',
             'longitude' => 'required|string',
             'lieu' => 'required|string|max:255',
-             'statut_journee' => 'required|in:' . implode(',', array_column(EnumMode::cases(), 'value')),
+            'statut_journee' => 'required|in:' . implode(',', array_column(EnumMode::cases(), 'value')),
            'saison_name' => [
-    'required',
-    Rule::exists('saison', 'statut')->where(function($query) {
-        $query->whereRaw('LOWER(statut) = LOWER(?)', [request('saison_name')]);
-    })
-],
-'type_name' => [
-    'required',
-    Rule::exists('type', 'nom')->where(function($query) {
-        $query->whereRaw('LOWER(nom) = LOWER(?)', [request('type_name')]);
-    })
-],
+                'required',
+                Rule::exists('saison', 'statut')->where(function($query) {
+                    $query->whereRaw('LOWER(statut) = LOWER(?)', [request('saison_name')]);
+                })
+            ],
+            'type_name' => [
+                'required',
+                Rule::exists('type', 'nom')->where(function($query) {
+                    $query->whereRaw('LOWER(nom) = LOWER(?)', [request('type_name')]);
+                })
+            ],
             'image_data' => 'nullable|image|mimes:jpeg,png,jpg,gif'
         ]);
 

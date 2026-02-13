@@ -17,6 +17,7 @@
                             <label for="event-date">{{ actualLang ? "Start Date" : "Date de début" }}</label>
                             <input type="date" data-testid="-created-event-date" ref="inputRefDate" id="event-date" required>
                         </div>
+                       
 
                         <div class="form-group">
                             <label for="event-time">{{ actualLang ? "Start Hour" : "Heure de début" }}</label>
@@ -28,6 +29,7 @@
                             <input type="number" data-testid="-created-event-duration" ref="inputRefDurationHours" id="event-duration" placeholder="e.g., 2" min="1" required>
                         </div>
                     </div>
+                     <p v-if="errors.date_debut" class="error">{{ errors.date_debut[0] }}</p>
 
                     <div class="form-group">
                         <label for="event-location">{{ actualLang ? "Location" : "Emplacement" }}</label>
@@ -38,6 +40,7 @@
                         <label for="event-description">{{ actualLang ? "Description" : "Description" }}</label>
                         <input type="text" data-testid="-created-event-description" v-model="formDataEvent.description" id="event-description"  :placeholder="actualLang ? 'Enter description' : 'Entrez une description'" required>
                     </div>
+                     <p v-if="errors.type_name" class="error">{{ errors.type_name[0] }}</p>
 
                     <div class="form-row">
                        <div class="form-group">
@@ -181,7 +184,7 @@ const testInput = async(event) => {
     }
 
     for (let [key, value] of formData.entries()) {
-        console.log(key, value);
+        console.log(key, value +"format");
     }
 
         try {
@@ -205,11 +208,13 @@ const testInput = async(event) => {
 
     watch([
         () => errors.value.titre,
+        () => errors.value.date_debut,
         () => errors.value.general,
-    ], ([newTitle, newPassword]) => {
-    if (newTitle || newPassword) {
+    ], ([newTitle, newPassword, newDate]) => {
+    if (newTitle || newPassword ||newDate ) {
         setTimeout(() => {
-             errors.value.titre = null;
+            errors.value.titre = null;
+            errors.value.date_debut = null;
             errors.value.general = null;
            
         }, 3000)
