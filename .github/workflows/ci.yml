@@ -89,9 +89,11 @@ jobs:
       # 6️⃣ Run Laravel tests
       # -------------------------
       - name: Run backend tests
-        id: backend_tests
         working-directory: Backend
-        run: php artisan test || echo "tests_failed=true" >> $GITHUB_OUTPUT
+        run: php artisan test
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite # This will use the file we touched in step 4
 
       # -------------------------
       # 7️⃣ Setup Node.js
