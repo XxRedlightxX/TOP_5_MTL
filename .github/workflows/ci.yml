@@ -125,13 +125,23 @@ jobs:
           npx playwright install --with-deps
 
       # -------------------------
-      # 1️⃣1️⃣ Start Laravel server
+      # 1️⃣1️⃣ Start Laravel & Vue
       # -------------------------
-      - name: Start Laravel development server
-        working-directory: Backend
+      - name: Start Servers
+        working-directory: .
         run: |
+          # Start Backend
+          cd Backend
           php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
-          until curl -s http://127.0.0.1:8000/api/health; do sleep 2; done
+          
+          # Start Frontend Preview (Serves the 'build' folder)
+          cd ../FrontEnd
+          npm run preview -- --port 5173 & 
+          
+          # Wait for Backend
+          until curl -s http://127.0.0.1:8000 > /dev/null; do echo "Waiting for Backend..."; sleep 2; done
+          # Wait for Frontend
+          until curl -s http://localhost:5173 > /dev/null; do echo "Waiting for Frontend..."; sleep 2; done
 
       # -------------------------
       # 1️⃣2️⃣ Run Playwright tests
