@@ -53,11 +53,17 @@ jobs:
           
           # 3. Ensure other drivers are sync/array for CI speed
           sed -i "s|CACHE_DRIVER=.*|CACHE_DRIVER=array|" .env.testing
+          sed -i "s|CACHE_STORE=.*|CACHE_STORE=array|" .env.testing
           sed -i "s|SESSION_DRIVER=.*|SESSION_DRIVER=array|" .env.testing
+          sed -i "s|QUEUE_CONNECTION=.*|QUEUE_CONNECTION=sync|" .env.testing
+          
+          # Force Redis to use a dummy/local host just in case 
+          sed -i "s|REDIS_HOST=.*|REDIS_HOST=127.0.0.1|" .env.testing
           
           # 4. Generate key specifically for the testing env
           php artisan key:generate --env=testing
-
+          # Clear any leftover config to ensure it reads the new .env.testing
+          php artisan config:clear --env=testing
       # -------------------------
       # 5️⃣ Run migrations & seeders
       # -------------------------
