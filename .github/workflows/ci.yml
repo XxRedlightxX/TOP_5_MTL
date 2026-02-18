@@ -131,7 +131,7 @@ jobs:
         working-directory: Backend
         run: |
           php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
-          until curl -s http://127.0.0.1:8000/health; do sleep 2; done
+          until curl -s http://127.0.0.1:8000/api/health; do sleep 2; done
 
       # -------------------------
       # 1️⃣2️⃣ Run Playwright tests
