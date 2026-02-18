@@ -42,20 +42,28 @@ jobs:
         run: |
           mkdir -p database
           touch database/database.sqlite
+          
+          # 1. Copy to .env.testing specifically
           cp .env.example .env.testing
           
-          # Force ABSOLUTE path for SQLite so everyone sees the same file
+          # 2. Update .env.testing with absolute SQLite path (Crucial for 422 errors)
           DB_PATH=$(pwd)/database/database.sqlite
           sed -i "s|DB_CONNECTION=.*|DB_CONNECTION=sqlite|" .env.testing
           sed -i "s|DB_DATABASE=.*|DB_DATABASE=$DB_PATH|" .env.testing
           
-          # Force drivers to 'array' to avoid Redis issues we had earlier
-          sed -i "s|CACHE_STORE=.*|CACHE_STORE=array|" .env.testing
-          sed -i "s|CACHE_DRIVER=.*|CACHE_DRIVER=array|" .env.testing
-          sed -i "s|SESSION_DRIVER=.*|SESSION_DRIVER=array|" .env.testing
+          # 3. Fix Authentication & Sessions (Crucial for 401/403 errors)
+          # We use 'file' because 'array' forgets the user immediately after login
+          sed -i "s|SESSION_DRIVER=.*|SESSION_DRIVER=file|" .env.testing
+          sed -i "s|SANCTUM_STATEFUL_DOMAINS=.*|SANCTUM_STATEFUL_DOMAINS=localhost:3000,127.0.0.1:3000,127.0.0.1:8000|" .env.testing
+          sed -i "s|SESSION_DOMAIN=.*|SESSION_DOMAIN=localhost|" .env.testing
           
+          # 4. Ensure other drivers are sync/array for CI speed
+          sed -i "s|CACHE_DRIVER=.*|CACHE_DRIVER=array|" .env.testing
+          sed -i "s|CACHE_STORE=.*|CACHE_STORE=array|" .env.testing
+          sed -i "s|QUEUE_CONNECTION=.*|QUEUE_CONNECTION=sync|" .env.testing
+          
+          # 5. Generate key and clear config
           php artisan key:generate --env=testing
-          # Clear config to ensure the new DB_DATABASE path is loaded
           php artisan config:clear --env=testing
 
       # -------------------------
