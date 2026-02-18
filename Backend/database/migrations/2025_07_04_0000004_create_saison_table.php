@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::create('saison', function (Blueprint $table) {
             $table->id();
-             $table->enum('statut', array_column(EnumSaison::cases(), 'value'))
-                    ->default(EnumSaison::ETE->value);
+            $table->string('statut')->default(EnumSaison::ETE->value);
             
         });
     }
