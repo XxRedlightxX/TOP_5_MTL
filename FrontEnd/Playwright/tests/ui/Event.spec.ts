@@ -4,9 +4,15 @@
 import fs from 'fs';
 
 
-const userData = JSON.parse(fs.readFileSync('playwright/.auth/user_data.json', 'utf-8'));
+//const userData = JSON.parse(fs.readFileSync('playwright/.auth/user_data.json', 'utf-8'));
 
 test.describe('Event Creation Flow', () => {
+
+  let userData: any;
+
+  test.beforeAll(() => {
+  userData = JSON.parse(fs.readFileSync('playwright/.auth/user_data.json', 'utf-8'));
+})
 
 
   test('Scenario: User attempts to create an event with missing event title', async ({ userProfilePage, loginPage }) => {

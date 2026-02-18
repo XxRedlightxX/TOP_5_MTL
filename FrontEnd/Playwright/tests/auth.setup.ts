@@ -2,7 +2,8 @@ import { AuthApi } from 'Playwright/api/AuthApi';
 import { expect, test as setup } from '../fixtures/baseTest';
 import { createUser } from 'Playwright/helper/auth.helper';
 import { validUser } from 'Playwright/mockData/UserData';
-import fs from 'fs'; 
+import fs from 'fs';
+import path from 'path';
 
 const authFile = 'playwright/.auth/user.json';
 const dataFile = 'playwright/.auth/user_data.json'
@@ -30,6 +31,8 @@ setup('authenticate', async ({ userProfilePage,loginPage, page, request }) => {
 
     // 4. Now save the cookies or local storage
     await page.context().storageState({ path: authFile });
+
+    fs.mkdirSync(path.dirname(dataFile), { recursive: true });
 
     // 5. Save the metadata (username) for your test assertions in json file
     const combinedData = { ...apiResponse, username: userInputs.username };
