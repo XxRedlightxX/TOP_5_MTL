@@ -46,6 +46,7 @@ jobs:
           # Create database folder and SQLite file
           mkdir -p database
           touch database/database.sqlite
+          chmod 777 database/database.sqlite
 
           # Absolute DB path
           DB_PATH=$(pwd)/database/database.sqlite
