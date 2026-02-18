@@ -63,7 +63,7 @@ jobs:
       # -------------------------
       - name: Run database migrations
         working-directory: Backend
-        run: php artisan migrate:fresh --seed
+        run: php artisan migrate:fresh --seed --env=testing --force
 
       - name: Debug seeders
         working-directory: Backend
