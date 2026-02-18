@@ -42,6 +42,13 @@ jobs:
         run: |
           mkdir -p database
           touch database/database.sqlite
+
+          # Create storage folders to prevent file_get_contents warnings
+          mkdir -p storage/app/public
+          mkdir -p storage/framework/cache
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/views
+          chmod -R 775 storage bootstrap/cache
           
           # 1. Copy to .env.testing specifically
           cp .env.example .env.testing
@@ -84,6 +91,11 @@ jobs:
             echo 'Types: ' . DB::table('type')->count() . '\n';
             echo 'Users: ' . DB::table('utilisateur')->count() . '\n';
           "
+
+
+      - name: Create storage link
+        working-directory: Backend
+        run: php artisan storage:link --env=testing
 
       # -------------------------
       # 6️⃣ Run Laravel tests
