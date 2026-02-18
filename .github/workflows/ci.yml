@@ -40,32 +40,23 @@ jobs:
       - name: Prepare Laravel environment (SQLite)
         working-directory: Backend
         run: |
-          # Copy example env to .env
-          cp .env.example .env.testing
-
-          # Create database folder and SQLite file
           mkdir -p database
           touch database/database.sqlite
-          chmod 777 database/database.sqlite
-
-          # Absolute DB path
+          
+          # 1. Copy to .env.testing specifically
+          cp .env.example .env.testing
+          
+          # 2. Update .env.testing with absolute SQLite path
           DB_PATH=$(pwd)/database/database.sqlite
-
-          # Write necessary env overrides
-          echo "APP_ENV=testing" >> .env
-          echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=$DB_PATH" >> .env
-          echo "CACHE_DRIVER=array" >> .env
-          echo "QUEUE_CONNECTION=sync" >> .env
-          echo "SESSION_DRIVER=array" >> .env
-
-          # Generate app key & clear caches
-          php artisan key:generate
-          php artisan config:clear
-          php artisan cache:clear
-
-          echo "Using DB: $DB_PATH"
-          ls -lh database/
+          sed -i "s|DB_CONNECTION=.*|DB_CONNECTION=sqlite|" .env.testing
+          sed -i "s|DB_DATABASE=.*|DB_DATABASE=$DB_PATH|" .env.testing
+          
+          # 3. Ensure other drivers are sync/array for CI speed
+          sed -i "s|CACHE_DRIVER=.*|CACHE_DRIVER=array|" .env.testing
+          sed -i "s|SESSION_DRIVER=.*|SESSION_DRIVER=array|" .env.testing
+          
+          # 4. Generate key specifically for the testing env
+          php artisan key:generate --env=testing
 
       # -------------------------
       # 5️⃣ Run migrations & seeders
@@ -133,7 +124,7 @@ jobs:
       - name: Start Laravel development server
         working-directory: Backend
         run: |
-          php artisan serve --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
+          php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
           until curl -s http://127.0.0.1:8000/health; do sleep 2; done
 
       # -------------------------
