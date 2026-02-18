@@ -130,28 +130,30 @@ jobs:
       - name: Start Servers
         working-directory: .
         run: |
-          # Start Backend
+          # Start Backend (API)
           cd Backend
           php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
           
-          # Start Frontend Preview (Serves the 'build' folder)
+          # Start Frontend Preview on port 3000
           cd ../FrontEnd
-          npm run preview -- --port 5173 & 
+          npm run preview -- --port 3000 > /dev/null 2>&1 & 
           
-          # Wait for Backend
+          # Wait for Backend (8000)
           until curl -s http://127.0.0.1:8000 > /dev/null; do echo "Waiting for Backend..."; sleep 2; done
-          # Wait for Frontend
-          until curl -s http://localhost:5173 > /dev/null; do echo "Waiting for Frontend..."; sleep 2; done
+          # Wait for Frontend (3000)
+          until curl -s http://localhost:3000 > /dev/null; do echo "Waiting for Frontend..."; sleep 2; done
 
       # -------------------------
       # 1️⃣2️⃣ Run Playwright tests
       # -------------------------
       - name: Run Playwright E2E tests
         working-directory: FrontEnd/Playwright
-        run: npx playwright test tests ../tests
+        run: npx playwright test
         env:
-          APP_URL: http://127.0.0.1:8000
+          # This tells Playwright to open the Vue app on 3000
+          APP_URL: http://localhost:3000
           NODE_ENV: testing
+
 
       # -------------------------
       # 1️⃣3️⃣ Upload Playwright report
