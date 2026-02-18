@@ -34,7 +34,7 @@ jobs:
         working-directory: Backend
         run: composer install --prefer-dist --no-interaction --no-progress
 
-      # -------------------------
+     # -------------------------
       # 4️⃣ Setup Laravel (.env + SQLite)
       # -------------------------
       - name: Prepare Laravel environment (SQLite)
@@ -42,28 +42,22 @@ jobs:
         run: |
           mkdir -p database
           touch database/database.sqlite
-          
-          # 1. Copy to .env.testing specifically
           cp .env.example .env.testing
           
-          # 2. Update .env.testing with absolute SQLite path
+          # Force ABSOLUTE path for SQLite so everyone sees the same file
           DB_PATH=$(pwd)/database/database.sqlite
           sed -i "s|DB_CONNECTION=.*|DB_CONNECTION=sqlite|" .env.testing
           sed -i "s|DB_DATABASE=.*|DB_DATABASE=$DB_PATH|" .env.testing
           
-          # 3. Ensure other drivers are sync/array for CI speed
-          sed -i "s|CACHE_DRIVER=.*|CACHE_DRIVER=array|" .env.testing
+          # Force drivers to 'array' to avoid Redis issues we had earlier
           sed -i "s|CACHE_STORE=.*|CACHE_STORE=array|" .env.testing
+          sed -i "s|CACHE_DRIVER=.*|CACHE_DRIVER=array|" .env.testing
           sed -i "s|SESSION_DRIVER=.*|SESSION_DRIVER=array|" .env.testing
-          sed -i "s|QUEUE_CONNECTION=.*|QUEUE_CONNECTION=sync|" .env.testing
           
-          # Force Redis to use a dummy/local host just in case 
-          sed -i "s|REDIS_HOST=.*|REDIS_HOST=127.0.0.1|" .env.testing
-          
-          # 4. Generate key specifically for the testing env
           php artisan key:generate --env=testing
-          # Clear any leftover config to ensure it reads the new .env.testing
+          # Clear config to ensure the new DB_DATABASE path is loaded
           php artisan config:clear --env=testing
+
       # -------------------------
       # 5️⃣ Run migrations & seeders
       # -------------------------
@@ -124,24 +118,21 @@ jobs:
           npm install @playwright/test
           npx playwright install --with-deps
 
-      # -------------------------
+     # -------------------------
       # 1️⃣1️⃣ Start Laravel & Vue
       # -------------------------
       - name: Start Servers
         working-directory: .
         run: |
-          # Start Backend (API)
           cd Backend
+          # Explicitly tell 'serve' to use the testing environment
           php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
           
-          # Start Frontend Preview on port 3000
           cd ../FrontEnd
           npm run preview -- --port 3000 > /dev/null 2>&1 & 
           
-          # Wait for Backend (8000)
-          until curl -s http://127.0.0.1:8000 > /dev/null; do echo "Waiting for Backend..."; sleep 2; done
-          # Wait for Frontend (3000)
-          until curl -s http://localhost:3000 > /dev/null; do echo "Waiting for Frontend..."; sleep 2; done
+          until curl -s http://127.0.0.1:8000 > /dev/null; do echo "Waiting for API..."; sleep 2; done
+          until curl -s http://localhost:3000 > /dev/null; do echo "Waiting for Vue..."; sleep 2; done
 
       # -------------------------
       # 1️⃣2️⃣ Run Playwright tests
