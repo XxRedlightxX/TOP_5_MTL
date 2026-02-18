@@ -12,6 +12,7 @@
                 persistent-clear 
                 hide-details="auto"
                 v-model="formData.username"
+                data-testid="register-username-input"
                 required
             ></v-text-field>
             <p v-if="errors.username" class="error">{{ errors.username[0] }}</p>
@@ -27,6 +28,7 @@
                     clearable
                     persistent-clear 
                     hide-details="auto"
+                    data-testid="register-email-input"
                     v-model="formData.email"
                     required
                 ></v-text-field>
@@ -42,6 +44,7 @@
                     clearable
                     persistent-clear 
                     hide-details="auto"
+                    data-testid="register-phone-input"
                     v-model="formData.num_tel"
                 ></v-text-field>
                 <p v-if="errors.num_tel" class="error">{{ errors.num_tel[0] }}</p>
@@ -57,6 +60,7 @@
                 clearable
                 persistent-clear 
                 hide-details="auto"
+                data-testid="register-password-input"
                 v-model="formData.password"
             ></v-text-field>
             <p v-if="errors.password" class="error">{{ errors.password[0] }}</p>
@@ -71,6 +75,7 @@
                 clearable
                 persistent-clear 
                 hide-details="auto"
+                data-testid="register-password_confirmation-input"
                 required
                 v-model="formData.password_confirmation"
             ></v-text-field>
@@ -81,16 +86,18 @@
             v-model="formData.type_utilisateur" 
             :rules="[v => !!v || 'User type is required']"
             required
+            data-testid="user-type-group"
         >
             <v-radio
                 v-for="(item, index) in items"
                 :key="index"
                 :label="item"
                 :value="item"
+                :data-testid="`user-type-option-${item}`"
             ></v-radio>
         </v-radio-group>
 
-        <waterButton :text="actualLang ? 'Sign Up' : 'S\'inscrire'" :type="true" @click="Login()" />
+        <waterButton data-testid="btn-new-register" :text="actualLang ? 'Sign Up' : 'S\'inscrire'" :type="true" @click="Login()" />
     </form>
 </template>
 

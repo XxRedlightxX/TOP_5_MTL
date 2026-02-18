@@ -1,224 +1,207 @@
 import { test, expect } from '@playwright/test';
 import { AuthApi } from 'Playwright/api/AuthApi';
 import { EventApi } from 'Playwright/api/EventApi';
+import { UserApi } from 'Playwright/api/UserApi';
 import { validEvent, invalidEvent, emptyEvent } from 'Playwright/mockData/EventDats';
 import { validUser, validUserWithRegularRole, validOtherOrgUser } from 'Playwright/mockData/UserData';
-import { UserApi } from 'Playwright/api/UserApi';
 import { createUser, deleteUser } from 'Playwright/helper/auth.helper';
-import { User } from 'Playwright/models/User';
 import { EventModal } from 'Playwright/models/EventModal';
+import { HttpStatus } from 'Playwright/helper/api/statusCodes';
 
+let authApi: AuthApi;
+let eventApi: EventApi;
+let userApi: UserApi;
 
- let authApi: AuthApi;
- let eventApi : EventApi;
- let userApi : UserApi;
-
-
-
-/*let authToken: string;
-let userId : string;
-
-let userId2 : string;
-let authToken2 : string;
-*/
-
-let orgUser;
-let regularUser;
-let otherOrgUser;
+let orgUser: any;
+let regularUser: any;
+let otherOrgUser: any;
 
 test.describe('Event Creation API Tests', () => {
 
-    test.beforeEach(async ({ request }) => {
-        authApi = new AuthApi(request);
-        eventApi = new EventApi(request);
-        //userApi = new UserApi(request);
-        
-        /*if( orgUser != null || regularUser != null ) {
-            await deleteUser(userApi, orgUser.id, orgUser.token);
-            await deleteUser(userApi, regularUser.id, regularUser.token);
-        }*/
-       
+  // -----------------------------
+  // Setup and Teardown
+  // -----------------------------
+  test.beforeEach(async ({ request }) => {
+    authApi = new AuthApi(request);
+    eventApi = new EventApi(request);
 
-        /*const res = await authApi.register(validUser);
-        const body =  await res.json();*/
+    // Register users for tests
+    orgUser = await createUser(authApi, validUser);
+    otherOrgUser = await createUser(authApi, validOtherOrgUser);
+    regularUser = await createUser(authApi, validUserWithRegularRole);
+  });
 
-        orgUser = await createUser(authApi, validUser);
-        otherOrgUser = await createUser(authApi, validOtherOrgUser);
-        regularUser = await createUser(authApi, validUserWithRegularRole);
-        
-    });
+  test.afterEach(async ({ request }) => {
+    userApi = new UserApi(request);
 
-    test.afterEach(async ({ request }) => {
-        userApi = new UserApi(request);
+    const usersToDelete = [orgUser, regularUser, otherOrgUser].filter(Boolean);
+    await Promise.all(
+      usersToDelete.map(u => {
+        if (!u?.id || !u?.token) {
+          console.warn("Skipping cleanup for invalid user:", u);
+          return Promise.resolve();
+        }
+        return deleteUser(userApi, u.id, u.token)
+          .catch(err => console.warn("Cleanup failed for", u.id, err));
+      })
+    );
+  });
 
-        const usersToDelete = [orgUser, regularUser, otherOrgUser].filter(Boolean);
+  // -----------------------------
+  // Event Creation Tests
+  // -----------------------------
 
-        await Promise.all(
-            usersToDelete.map(u => {
-            if (!u?.id || !u?.token) {
-                console.warn("Skipping cleanup for invalid user:", u);
-                return Promise.resolve();
-            }
+  test('Scenario: Event creation fails without authentication token', async () => {
+    // Given: an event payload and no auth token
+    const event = new EventModal({ ...validEvent.payload });
 
-            return deleteUser(userApi, u.id, u.token)
-                .catch(err => console.warn("Cleanup failed for", u.id, err));
-            })
-        );
-    });
+    // When: attempting to create the event
+    const res = await eventApi.addEvent(event.payload, "");
 
+    // Then: the API should return 401 Unauthorized
+    expect(res.status()).toBe(HttpStatus.UNAUTHORIZED);
+  });
 
-    test('Event Creation without token', async () => {
-        const event = new EventModal({ ...validEvent.payload });
-        const res = await eventApi.addEvent(event.payload, "");
-        const body = await res.json();
-        console.log(event, "Evenement")
-        expect(res.status()).toBe(401);
+  test('Scenario: Authenticated organisateur creates event successfully', async () => {
+    // Given: a valid event payload and an authenticated organisateur
+    const event = new EventModal({ ...validEvent.payload });
 
-    });
-
-   test('Event Creation with auth User and has organisateur role', async () => {
-    // 1. Login
-   
-    // 2. Create event
-    const event = new EventModal({ ...validEvent.payload }); // or factory
+    // When: creating the event
     const res = await eventApi.addEvent(event.payload, orgUser.token);
-    console.log(event, "Evenement")
-    
-    // 3. Get response body with await
-    const responseBody = await res.json();  
-    console.log(responseBody, "Response body");
-    
-    // 4. Assert
-    expect(res.status()).toBe(201);
-});
 
-test('When an authenticated user with organisateur role creates an event with nonexistent type/category format, Then the system should return a 422 validation error', async () => {
-    // 1. Login
-    
-    // 2. Create event
-    const event = new EventModal({ ...validEvent.payload }); // or factory
+    // Then: the API should return 201 Created
+    expect(res.status()).toBe(HttpStatus.CREATED);
+  });
+
+  test('Scenario: Event creation fails with invalid type/category by organisateur', async () => {
+    // Given: a valid event payload with invalid type
+    const event = new EventModal({ ...validEvent.payload });
     event.update({ type_name: "inactive" });
+
+    // When: attempting to create the event
     const res = await eventApi.addEvent(event.payload, orgUser.token);
-    
-    // 3. Get response body with await
-    const responseBody = await res.json();  
-    console.log(responseBody, "Response body");
-    
-    // 4. Assert
-    expect(res.status()).toBe(422);
-});
 
+    // Then: the API should return 422 Unprocessable Entity
+    expect(res.status()).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+  });
 
-test('When an authenticated user with parrticuler role creates an event with valid data format, Then the system should return a 401 validation error', async () => {
-   
-    // 2. Create event
-    const event = new EventModal({ ...validEvent.payload }); // or factory
-    
+  test('Scenario: Event creation fails with valid data by a particulier', async () => {
+    // Given: a valid event payload and a regular user (particulier)
+    const event = new EventModal({ ...validEvent.payload });
+
+    // When: attempting to create the event
     const res = await eventApi.addEvent(event.payload, regularUser.token);
-    const body = await res.json()
-    console.log(body);
-    // 4. Assert
-    expect(res.status()).toBe(403);
-});
 
-test('When an authenticacted user with organisateur role creates an event with invalid day format, Then the system should return a 422 validation error', async () => {
-   
-    const event = new EventModal({ ...validEvent.payload }); // or factory
+    // Then: the API should return 403 Forbidden
+    expect(res.status()).toBe(HttpStatus.FORBIDDEN);
+  });
+
+  test('Scenario: Event creation fails with invalid day format by organisateur', async () => {
+    // Given: a valid event payload with invalid day
+    const event = new EventModal({ ...validEvent.payload });
     event.update({ statut_journee: "inactive" });
 
-    const res = await eventApi.addEvent(event.payload, orgUser.token);
-      const body = await res.json();
-    console.log(body);
-    // 4. Assert
-    expect(res.status()).toBe(422);
-});
-
-test('When an authenticacted user with organisateur role creates an event with empty data format, Then the system should return a 422 validation error', async () => {
-   
-    const event = new EventModal({ ...emptyEvent.payload }); // or factory
-    const res = await eventApi.addEvent(event.payload, orgUser.token);
-    const body = await res.json();
-    console.log(body);
-    // 4. Assert
-    expect(res.status()).toBe(422);
-});
-
-test('When an authenticacted user with organisateur role delete is own event, Then the system should return a 200 ', async () => {
-   
-    const event = new EventModal({ ...validEvent.payload }); // or factory
+    // When: attempting to create the event
     const res = await eventApi.addEvent(event.payload, orgUser.token);
 
-    const body = await res.json();
-    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
-    const response =await eventApi.deleteEvent(eventId ,orgUser.token )
-    console.log(response)
-    // 4. Assert
-    expect(response.status()).toBe(200);
-});
+    // Then: the API should return 422 Unprocessable Entity
+    expect(res.status()).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+  });
 
+  test('Scenario: Event creation fails with empty payload by organisateur', async () => {
+    // Given: an empty event payload
+    const event = new EventModal({ ...emptyEvent.payload });
 
-test('When an authenticacted user with organisateur role delete tries to delete event that doesnt belong to him, Then the system should return a 403 ', async () => {
-   
-    const event = new EventModal({ ...validEvent.payload }); // or factory
+    // When: attempting to create the event
     const res = await eventApi.addEvent(event.payload, orgUser.token);
 
-    const body = await res.json();
-    console.log(body)
-    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
-    const test =await eventApi.deleteEvent(eventId ,otherOrgUser.token )
-    
-    // 4. Assert
-    expect(test.status()).toBe(403);
-});
+    // Then: the API should return 422 Unprocessable Entity
+    expect(res.status()).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+  });
 
-test('When an authenticacted user with organisateur role  tries to modify event that belong to him, Then the system should return a 403 ', async () => {
-   
-    const event = new EventModal({ ...validEvent.payload }); 
+  // -----------------------------
+  // Event Deletion Tests
+  // -----------------------------
+  test('Scenario: Organisateur deletes own event successfully', async () => {
+    // Given: an event created by the organisateur
+    const event = new EventModal({ ...validEvent.payload });
     const res = await eventApi.addEvent(event.payload, orgUser.token);
-
-    const body = await res.json();
-    console.log(body);
-     const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
-    const test =await eventApi.modifyEvent(eventId ,orgUser.token )
-    
-    // 4. Assert
-    expect(test.status()).toBe(202);
-});
-
-
-test('When an authenticacted user with organisateur role  tries to modify event that doesnt belong to him, Then the system should return a 403 ', async () => {
-   
-    const event = new EventModal({ ...validEvent.payload }); // or factory
-    const res = await eventApi.addEvent(event.payload, orgUser.token);
-
     const body = await res.json();
     const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
-    console.log(body);
-    const test =await eventApi.modifyEvent(eventId ,otherOrgUser.token )
-    
-    // 4. Assert
-    expect(test.status()).toBe(403);
-});
 
+    // When: the organisateur deletes the event
+    const deleteRes = await eventApi.deleteEvent(eventId, orgUser.token);
 
-test('When an authenticacted user with organisateur role  tries to modify event that belong to him, Then the system should return a 200 ', async () => {
-   
-    const event = new EventModal({ ...validEvent.payload }); // or factory
+    // Then: deletion should succeed with 200 OK
+    expect(deleteRes.status()).toBe(HttpStatus.OK);
+  });
+
+  test('Scenario: Organisateur cannot delete event created by another organisateur', async () => {
+    // Given: an event created by orgUser
+    const event = new EventModal({ ...validEvent.payload });
     const res = await eventApi.addEvent(event.payload, orgUser.token);
-
     const body = await res.json();
-    console.log(body);
     const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
-    const test =await eventApi.modifyEvent(eventId ,orgUser.token )
-    
-    // 4. Assert
-    expect(test.status()).toBe(202);
-});
+
+    // When: another organisateur attempts to delete it
+    const deleteRes = await eventApi.deleteEvent(eventId, otherOrgUser.token);
+
+    // Then: deletion should fail with 403 Forbidden
+    expect(deleteRes.status()).toBe(HttpStatus.FORBIDDEN);
+  });
+
+   test('Scenario: Delete non-existent event should return 404 NOT FOUND', async () => {
+    const nonExistentEventId = "-33";
+
+    // When: an organisateur attempts to delete a non-existent event
+    const deleteRes = await eventApi.deleteEvent(nonExistentEventId, otherOrgUser.token);
+
+    // Then: API should return 404 NOT FOUND
+    expect(deleteRes.status()).toBe(HttpStatus.NOT_FOUND);
+    });
 
 
+  // -----------------------------
+  // Event Modification Tests
+  // -----------------------------
+  test('Scenario: Organisateur modifies own event successfully', async () => {
+    // Given: an event created by the organisateur
+    const event = new EventModal({ ...validEvent.payload });
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
+    const body = await res.json();
+    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
+
+    // When: the organisateur modifies the event
+    const modifyRes = await eventApi.modifyEvent(eventId, orgUser.token);
+
+    // Then: modification should succeed with 202 Accepted
+    expect(modifyRes.status()).toBe(HttpStatus.ACCEPTED);
+  });
+
+  test('Scenario: Organisateur cannot modify event created by another organisateur', async () => {
+    // Given: an event created by orgUser
+    const event = new EventModal({ ...validEvent.payload });
+    const res = await eventApi.addEvent(event.payload, orgUser.token);
+    const body = await res.json();
+    const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
+
+    // When: another organisateur attempts to modify it
+    const modifyRes = await eventApi.modifyEvent(eventId, otherOrgUser.token);
+
+    // Then: modification should fail with 403 Forbidden
+    expect(modifyRes.status()).toBe(HttpStatus.FORBIDDEN);
+  });
 
 
+    test('Scenario: Modify non-existent event should return 404 NOT FOUND', async () => {
+        // Given: a non-existent event ID
+        const nonExistentEventId = "-33";
 
+        // When: an organisateur attempts to modify it
+        const modifyRes = await eventApi.modifyEvent(nonExistentEventId, otherOrgUser.token);
 
+        // Then: the API should return 404 NOT FOUND
+        expect(modifyRes.status()).toBe(HttpStatus.NOT_FOUND);
+    });
 
 });

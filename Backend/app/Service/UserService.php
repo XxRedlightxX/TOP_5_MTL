@@ -30,10 +30,10 @@ class UserService {
         $existUsername=$this->daoUser->getByUsername($user['username']);
 
         if ($existUserEmail->isNotEmpty()) {
-            throw new UserConflictException("There is already a user with email: {$user['email']}");
+            throw new UserConflictException("There is already a user with email: {$user['email']}", 'email');
         }
         if ($existUsername->isNotEmpty()) {
-            throw new UserConflictException("There is already a user with username: {$user['username']}");
+            throw new UserConflictException("There is already a user with username: {$user['username']}", 'username');
         }
         return $this->daoUser->save($user);
     }

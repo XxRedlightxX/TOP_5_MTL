@@ -4,7 +4,7 @@ import { defineConfig, devices } from '@playwright/test';
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
+ import dotenv from 'dotenv';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
@@ -33,6 +33,8 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('')`. */
      baseURL: process.env.APP_URL || 'http://localhost:3000',
 
+       // automatically use logged-in state
+
      /*extraHTTPHeaders: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -44,9 +46,19 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    { name: 'setup', testMatch: /.*\.setup\.ts/,
+      teardown: 'cleanup'
+     }, // This tells Playwright to treat .setup files as tests
+
+     {
+      name: 'cleanup',
+      testMatch: /.*\.teardown\.ts/, // Matches your cleanup file name
+    },
+
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
+      dependencies: ['setup'],
     },
 
     /*{

@@ -10,14 +10,14 @@
                     <h2>{{actualLang ? 'Welcome Back!' : 'Bon retour'}}</h2>
                     <p>{{actualLang ? 'If you already have an account please Sign In' : 'Si vous avez déjà un compte, veuillez vous connecter'}}</p>
                     <!--<button class="invert" id="signIn" @click="toggleSignUp">{{actualLang ? 'here !' : 'ici !'}}</button>-->
-                    <waterButton :text="actualLang ? 'here !' : 'ici !'" :type="false" @click="toggleSignUp"/>
+                    <waterButton  :text="actualLang ? 'here !' : 'ici !'" :type="false" @click="toggleSignUp"/>
                 </div>
 
                 <div class="overlay-right">
                     <h2>{{actualLang ? 'Welcome' : 'Bienvenu'}}</h2>
                     <p>{{actualLang ? 'You don\'t have an account ? Please Sign Up' : 'Vous n\'avez pas de compte ? Veuillez vous inscrire'}} </p>
                     <!--<button class="invert" id="signUp" @click="toggleSignUp">{{actualLang ? 'here !' : 'ici !'}}</button>-->
-                    <waterButton :text="actualLang ? 'here !' : 'ici !'" :type="false" @click="toggleSignUp" />
+                    <waterButton data-testid="toggle-auth-mode" :text="actualLang ? 'here !' : 'ici !'" :type="false" @click="toggleSignUp" />
                 </div>
 
             </div>

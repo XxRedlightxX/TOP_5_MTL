@@ -13,11 +13,11 @@ type RegisterPayload = {
 
 export class AuthApi extends BaseApi {
 
-  async login(email: string, password: string,expectedStatus?: number) {
+  async login(email: string, password: string,pExpectedStatus?: number) {
     return this.post('/api/login', {
       email,
       password
-    }, { expectedStatus });
+    }, { pExpectedStatus });
   }
 
   async register(payload: UserPayload | User ) {

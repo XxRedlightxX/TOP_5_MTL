@@ -1,14 +1,37 @@
-
-import { test as setup } from '../fixtures/baseTest'; // Import your custom fixture
+import { AuthApi } from 'Playwright/api/AuthApi';
+import { expect, test as setup } from '../fixtures/baseTest';
+import { createUser } from 'Playwright/helper/auth.helper';
+import { validUser } from 'Playwright/mockData/UserData';
+import fs from 'fs'; 
 
 const authFile = 'playwright/.auth/user.json';
+const dataFile = 'playwright/.auth/user_data.json'
 
-setup('authenticate', async ({ loginPage, page }) => {
-    await page.goto('/login');
+/**
+ * Global Setup: Authenticate and Save Session State
+ * * This setup script prepares a fresh authenticated environment before tests run.
+ * 1. Generates a unique user
+ * 2. Performs a UI login to capture browser-side cookies/session storage
+ * 3. Saves the session and user metadata to files for use in the test suite in json file
+ **/
+setup('authenticate', async ({ userProfilePage,loginPage, page, request }) => {
+    const id = Date.now();
+    const userInputs = { ...validUser, email: `test_${id}@example.com`, username: `user_${id}` };
     
-    // Use the fixture directly!
-    await loginPage.login('user@laravel.com', 'password123');
-    
-    // Save the state for all other tests
+    // 1. Create the user via API
+    const apiResponse = await createUser(new AuthApi(request), userInputs as any);
+
+    // Setup User credentials
+    await loginPage.navigate('/profile'); 
+    await loginPage.login(userInputs.email, userInputs.password); 
+
+    // 3. Wait to ensure the login finished and cookies are set
+    await expect(userProfilePage.profileUsername).toContainText(userInputs.username);
+
+    // 4. Now save the cookies or local storage
     await page.context().storageState({ path: authFile });
+
+    // 5. Save the metadata (username) for your test assertions in json file
+    const combinedData = { ...apiResponse, username: userInputs.username };
+    fs.writeFileSync(dataFile, JSON.stringify(combinedData));
 });
