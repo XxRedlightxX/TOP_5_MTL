@@ -73,8 +73,7 @@ jobs:
           php artisan key:generate --env=testing
           php artisan config:clear --env=testing
 
-          php artisan tinker
-          config('database.default');
+         
 
       # -------------------------
       # 5️⃣ Run migrations & seeders
