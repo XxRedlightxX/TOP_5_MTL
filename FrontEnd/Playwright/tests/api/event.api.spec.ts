@@ -18,6 +18,8 @@ let otherOrgUser: any;
 
 test.describe('Event Creation API Tests', () => {
 
+    test.describe.configure({ mode: 'serial' });
+
   // -----------------------------
   // Setup and Teardown
   // -----------------------------

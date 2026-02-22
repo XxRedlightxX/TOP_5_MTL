@@ -17,6 +17,8 @@ let currentUserData: any;
 
 test.describe('Authentication API Tests', () => {
 
+  test.describe.configure({ mode: 'serial' });
+
   // -----------------------------
   // Setup and Teardown
   // -----------------------------
