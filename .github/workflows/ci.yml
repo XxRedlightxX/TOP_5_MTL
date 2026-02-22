@@ -1,4 +1,7 @@
-name: Laravel + Vue CI v2
+name: Laravel + Vue CI (Secure)
+
+permissions:
+  contents: read
 
 on:
   push:
@@ -10,204 +13,180 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      APP_ENV: testing
+      APP_DEBUG: false
+
     steps:
-      # -------------------------
-      # 1️⃣ Checkout repository
-      # -------------------------
-      - name: Checkout code
-        uses: actions/checkout@v4
 
-      # -------------------------
-      # 2️⃣ Setup PHP
-      # -------------------------
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: mbstring, bcmath, sqlite
-          coverage: none
+    # -------------------------
+    # 1. Checkout code
+    # -------------------------
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      # -------------------------
-      # 3️⃣ Install backend deps
-      # -------------------------
-      - name: Install Composer dependencies
-        working-directory: Backend
-        run: composer install --prefer-dist --no-interaction --no-progress
+    # -------------------------
+    # 2. Setup PHP
+    # -------------------------
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, bcmath, sqlite
+        coverage: none
 
-     # -------------------------
-      # 4️⃣ Setup Laravel (.env + SQLite)
-      # -------------------------
-      - name: Prepare Laravel environment (SQLite)
-        working-directory: Backend
-        run: |
-          mkdir -p database
-          touch database/database.sqlite
+    # -------------------------
+    # 3. Install backend dependencies securely
+    # -------------------------
+    - name: Install Composer dependencies
+      working-directory: Backend
+      run: |
+        composer install \
+          --prefer-dist \
+          --no-interaction \
+          --no-progress \
+          --no-scripts
 
-          # Create storage folders to prevent file_get_contents warnings
-          mkdir -p storage/app/public
-          mkdir -p storage/framework/cache
-          mkdir -p storage/framework/sessions
-          mkdir -p storage/framework/views
-          chmod -R 775 storage bootstrap/cache
-          
-          # 1. Copy to .env.testing specifically
-          cp .env.example .env.testing
-          
-          # 2. Update .env.testing with absolute SQLite path (Crucial for 422 errors)
-          DB_PATH=$(pwd)/database/database.sqlite
-          sed -i "s|DB_CONNECTION=.*|DB_CONNECTION=sqlite|" .env.testing
-          sed -i "s|DB_DATABASE=.*|DB_DATABASE=$DB_PATH|" .env.testing
-          
-          # 3. Fix Authentication & Sessions (Crucial for 401/403 errors)
-          # We use 'file' because 'array' forgets the user immediately after login
-          sed -i "s|SESSION_DRIVER=.*|SESSION_DRIVER=file|" .env.testing
-          sed -i "s|SANCTUM_STATEFUL_DOMAINS=.*|SANCTUM_STATEFUL_DOMAINS=localhost:3000,127.0.0.1:3000,127.0.0.1:8000|" .env.testing
-          sed -i "s|SESSION_DOMAIN=.*|SESSION_DOMAIN=localhost|" .env.testing
-          
-          # 4. Ensure other drivers are sync/array for CI speed
-          sed -i "s|CACHE_DRIVER=.*|CACHE_DRIVER=array|" .env.testing
-          sed -i "s|CACHE_STORE=.*|CACHE_STORE=array|" .env.testing
-          sed -i "s|QUEUE_CONNECTION=.*|QUEUE_CONNECTION=sync|" .env.testing
-          
-          # 5. Generate key and clear config
-          php artisan key:generate --env=testing
-          php artisan config:clear --env=testing
+        composer audit || true
 
-         
+    # -------------------------
+    # 4. Create secure Laravel environment
+    # -------------------------
+    - name: Prepare Laravel environment securely
+      working-directory: Backend
+      run: |
 
-      # -------------------------
-      # 5️⃣ Run migrations & seeders
-      # -------------------------
-      - name: Run database migrations
-        working-directory: Backend
-        run: php artisan migrate:fresh --seed --env=testing --force
+        mkdir -p database
+        touch database/database.sqlite
 
-      - name: Debug seeders
-        working-directory: Backend
-        run: |
-          php artisan tinker --execute="
-            echo config('database.connections.sqlite.database');
-            echo '\n--- EXISTING TABLES ---\n' . implode(', ', Schema::getTableListing()) . '\n';
-            echo '\n--- TABLE DATA ---\n';
-            echo 'Saisons: ' . DB::table('saison')->count() . '\n';
-            echo 'Types: ' . DB::table('type')->count() . '\n';
-            echo 'Users: ' . DB::table('utilisateur')->count() . '\n';
-          "
+        mkdir -p storage/framework/{cache,sessions,views}
+        mkdir -p storage/app/public
+        chmod -R 775 storage bootstrap/cache
 
+        DB_PATH=$(pwd)/database/database.sqlite
 
-      - name: Create storage link
-        working-directory: Backend
-        run: php artisan storage:link --env=testing
+        cat <<EOF > .env.testing
+        APP_NAME=Laravel
+        APP_ENV=testing
+        APP_KEY=${{ secrets.APP_KEY }}
+        APP_DEBUG=false
+        APP_URL=http://127.0.0.1:8000
 
+        LOG_CHANNEL=stack
+        LOG_LEVEL=error
 
-      # -------------------------
-      # 7️⃣ Debug (Only runs if tests fail/warn)
-      # -------------------------
-      - name: Debug Missing Files
-        if: failure()
-        working-directory: Backend
-        run: |
-          echo "--- Checking for missing files ---"
-          # This command searches your code for file_get_contents and checks if paths exist
-          php artisan tinker --execute="echo 'Current Path: ' . base_path();"
-          ls -R storage/framework
+        DB_CONNECTION=sqlite
+        DB_DATABASE=$DB_PATH
 
-      # -------------------------
-      # 6️⃣ Run Laravel tests
-      # -------------------------
-      - name: Run backend tests
-        id: backend_tests
-        working-directory: Backend
-        run: php artisan test --env=testing || echo "tests_failed=true" >> $GITHUB_OUTPUT
-      
+        CACHE_DRIVER=array
+        SESSION_DRIVER=file
+        QUEUE_CONNECTION=sync
 
+        SANCTUM_STATEFUL_DOMAINS=localhost:3000,127.0.0.1:3000,127.0.0.1:8000
+        SESSION_DOMAIN=localhost
+        EOF
 
-      # -------------------------
-      # 7️⃣ Setup Node.js
-      # -------------------------
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-          cache-dependency-path: FrontEnd/package.json
+        php artisan config:clear --env=testing
+        php artisan config:cache --env=testing
 
-      # -------------------------
-      # 8️⃣ Install frontend deps
-      # -------------------------
-      - name: Install frontend dependencies
-        working-directory: FrontEnd
-        run: npm ci
+    # -------------------------
+    # 5. Run migrations and seeders
+    # -------------------------
+    - name: Run database migrations and seeders
+      working-directory: Backend
+      run: php artisan migrate:fresh --seed --env=testing --force
 
-      # -------------------------
-      # 9️⃣ Build Vue frontend
-      # -------------------------
-      - name: Build frontend
-        working-directory: FrontEnd
-        run: npm run build
+    # -------------------------
+    # 6. Run backend tests
+    # -------------------------
+    - name: Run backend tests
+      working-directory: Backend
+      run: php artisan test --env=testing
 
-     
-      # -------------------------
-      # 5️⃣ Run migrations & seeders
-      # -------------------------
-      - name: Run database migrations for  Playwright
-        working-directory: Backend
-        run: php artisan migrate:fresh --seed --env=testing --force
+    # -------------------------
+    # 7. Re-seed database for Playwright
+    # -------------------------
+    - name: Re-seed database for Playwright
+      working-directory: Backend
+      run: php artisan migrate:fresh --seed --env=testing --force
 
-      - name: Debug seeders
-        working-directory: Backend
-        run: |
-          php artisan tinker --execute="
-            echo config('database.connections.sqlite.database');
-            echo '\n--- EXISTING TABLES ---\n' . implode(', ', Schema::getTableListing()) . '\n';
-            echo '\n--- TABLE DATA ---\n';
-            echo 'Saisons: ' . DB::table('saison')->count() . '\n';
-            echo 'Types: ' . DB::table('type')->count() . '\n';
-            echo 'Users: ' . DB::table('utilisateur')->count() . '\n';
-          "
-      # -------------------------
-      # 🔟 Install Playwright
-      # -------------------------
-      - name: Install Playwright dependencies
-        working-directory: FrontEnd
-        run: |
-          npm install @playwright/test
-          npx playwright install --with-deps
+    # -------------------------
+    # 8. Setup Node.js securely
+    # -------------------------
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: npm
+        cache-dependency-path: FrontEnd/package.json
 
-     # -------------------------
-      # 1️⃣1️⃣ Start Laravel & Vue
-      # -------------------------
-      - name: Start Servers
-        working-directory: .
-        run: |
-          cd Backend
-          # Explicitly tell 'serve' to use the testing environment
-          php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
-          
-          cd ../FrontEnd
-          npm run preview -- --port 3000 > /dev/null 2>&1 & 
-          
-          until curl -s http://127.0.0.1:8000 > /dev/null; do echo "Waiting for API..."; sleep 2; done
-          until curl -s http://localhost:3000 > /dev/null; do echo "Waiting for Vue..."; sleep 2; done
+    # -------------------------
+    # 9. Install frontend dependencies securely
+    # -------------------------
+    - name: Install frontend dependencies
+      working-directory: FrontEnd
+      run: |
+        npm ci
+        npm audit --audit-level=high || true
 
-      # -------------------------
-      # 1️⃣2️⃣ Run Playwright tests
-      # -------------------------
-      - name: Run Playwright E2E tests
-        working-directory: FrontEnd/Playwright
-        run: npx playwright test tests/api/auth.api.spec.ts
-        env:
-          # This tells Playwright to open the Vue app on 3000
-          APP_URL: http://localhost:3000
-          NODE_ENV: testing
+    # -------------------------
+    # 10. Build Vue frontend
+    # -------------------------
+    - name: Build frontend
+      working-directory: FrontEnd
+      run: npm run build
 
+    # -------------------------
+    # 11. Install Playwright securely
+    # -------------------------
+    - name: Install Playwright
+      working-directory: FrontEnd
+      run: |
+        npm install --save-dev @playwright/test
+        npx playwright install --with-deps
 
-      # -------------------------
-      # 1️⃣3️⃣ Upload Playwright report
-      # -------------------------
-      - name: Upload Playwright report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: FrontEnd/playwright-report/
+    # -------------------------
+    # 12. Start Laravel and Vue servers
+    # -------------------------
+    - name: Start servers
+      run: |
+
+        cd Backend
+        php artisan serve \
+          --env=testing \
+          --host=127.0.0.1 \
+          --port=8000 \
+          > /dev/null 2>&1 &
+
+        cd ../FrontEnd
+        npm run preview -- --port 3000 > /dev/null 2>&1 &
+
+        echo "Waiting for Laravel..."
+        until curl -s http://127.0.0.1:8000 > /dev/null; do
+          sleep 2
+        done
+
+        echo "Waiting for Vue..."
+        until curl -s http://127.0.0.1:3000 > /dev/null; do
+          sleep 2
+        done
+
+    # -------------------------
+    # 13. Run Playwright tests
+    # -------------------------
+    - name: Run Playwright tests
+      working-directory: FrontEnd/Playwright
+      run: npx playwright test
+      env:
+        APP_URL: http://127.0.0.1:3000
+        NODE_ENV: testing
+
+    # -------------------------
+    # 14. Upload Playwright report
+    # -------------------------
+    - name: Upload Playwright report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report
+        path: FrontEnd/playwright-report/
