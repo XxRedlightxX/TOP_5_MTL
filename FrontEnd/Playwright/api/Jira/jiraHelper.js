@@ -1,5 +1,5 @@
 require('dotenv').config({ path: '../.env' });
-
+const { request } = require('@playwright/test');
 const JIRA_HOST = process.env.JIRA_HOST;
 const JIRA_EMAIL = process.env.JIRA_EMAIL;
 const JIRA_API_TOKEN = process.env.JIRA_API_TOKEN;
