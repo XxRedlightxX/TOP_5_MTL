@@ -156,8 +156,7 @@ jobs:
         php artisan serve \
           --env=testing \
           --host=127.0.0.1 \
-          --port=8000 \
-          > /dev/null 2>&1 &
+          --port=8000 \ > /dev/null 2 >&1 &
 
         cd ../FrontEnd
         npm run preview -- --port 3000 > /dev/null 2>&1 &
