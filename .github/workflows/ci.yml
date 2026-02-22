@@ -70,7 +70,7 @@ jobs:
         APP_ENV=testing
         APP_KEY=${{ secrets.APP_KEY }}
         APP_DEBUG=false
-        APP_URL=http://127.0.0.1:8000
+        APP_URL=${{ secrets.APP_URL }}
 
         LOG_CHANNEL=stack
         LOG_LEVEL=error
@@ -82,8 +82,8 @@ jobs:
         SESSION_DRIVER=file
         QUEUE_CONNECTION=sync
 
-        SANCTUM_STATEFUL_DOMAINS=localhost:3000,127.0.0.1:3000,127.0.0.1:8000
-        SESSION_DOMAIN=localhost
+        SANCTUM_STATEFUL_DOMAINS=${{ secrets.SANCTUM_STATEFUL_DOMAINS }}
+        SESSION_DOMAIN=${{ secrets.SESSION_DOMAIN }}
         EOF
 
         php artisan config:clear --env=testing
@@ -159,8 +159,8 @@ jobs:
         cd ../FrontEnd
         npm run preview -- --port 3000 > /dev/null 2>&1 & 
         
-        until curl -s http://127.0.0.1:8000 > /dev/null; do echo "Waiting for API..."; sleep 2; done
-        until curl -s http://localhost:3000 > /dev/null; do echo "Waiting for Vue..."; sleep 2; done
+        until curl -s ${{ secrets.APP_URL }} > /dev/null; do echo "Waiting for API..."; sleep 2; done
+        until curl -s ${{ secrets.FRONTEND_APP_URL }} > /dev/null; do echo "Waiting for Vue..."; sleep 2; done
 
 
     # -------------------------
@@ -170,7 +170,7 @@ jobs:
       working-directory: FrontEnd/Playwright
       run: npx playwright test
       env:
-        APP_URL:  http://localhost:3000
+        APP_URL: ${{ secrets.FRONTEND_APP_URL }}
         NODE_ENV: testing
 
     # -------------------------
