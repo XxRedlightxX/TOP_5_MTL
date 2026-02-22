@@ -1,7 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { EventModal, EventPayload } from 'Playwright/models/Event';
-import { assertToolTipElement, getDropdownElement, getElement, getStringElement } from 'Playwright/helper/ui/uiDriverHelper.helper';
+import { assertToolTipElement, getDropdownElement, getElement, getStringElement, waitForResponseAfterClick } from 'Playwright/helper/ui/uiDriverHelper.helper';
 import { invalidEvent, validEvent } from 'Playwright/mockData/EventData';
 export class UserProfilePage extends BasePage {
   public readonly profileUsername: Locator;
@@ -57,11 +57,6 @@ export class UserProfilePage extends BasePage {
       : "Please fill out this field.";
   }
 
-
-
-
- 
-
   async fillEventFields(pEvent: EventModal, 
     pEventDayTime : number | null = null,
     pEventSeason : number | null = null,
@@ -77,19 +72,16 @@ export class UserProfilePage extends BasePage {
     await getElement(this.profileEvent_DurationInput, "3");
     await getElement(this.profileEvent_LocationInput, "3");
     await getElement(this.profileEvent_DescriptionInput, "3");
-    //await getElement(this.profileEvent_DaytimeInput, "3");
+   
     await getDropdownElement(this.profileEvent_DaytimeInput, pEventDayTime);
     await getDropdownElement(this.profileEvent_SeasonInput, pEventSeason);
     await getDropdownElement(this.profileEvent_TypeInput, pEventType);
   }
 
   async createEvent(pEvent: EventModal) {
-    // 1. Click the add icon
+    
     await this.btnPopUpEventWindow.click();
-
-   
     let startDateorHour = getStringElement(validEvent.date_debut)
-
 
     await getElement(this.profileEvent_NameInput, pEvent.titre);
     await getElement(this.profileEvent_StartDateInput, startDateorHour[1]);
@@ -97,17 +89,11 @@ export class UserProfilePage extends BasePage {
     await getElement(this.profileEvent_DurationInput, "3");
     await getElement(this.profileEvent_LocationInput, "3");
     await getElement(this.profileEvent_DescriptionInput, "3");
-    //await getElement(this.profileEvent_DaytimeInput, "3");
     await getDropdownElement(this.profileEvent_DaytimeInput, 1);
     await getDropdownElement(this.profileEvent_SeasonInput, 2);
     await getDropdownElement(this.profileEvent_TypeInput, 1);
 
-    await this.btnCreateEvent.click();
-    //await assertElementofListElement(this.cartItems,pEvent.titre)
-    
-    // This will fail the test if the field is still empty, 
-    // giving you a clear error message.
-    //await expect(this.profileEvent_NameInput).toHaveValue(pEvent.titre);
+    await waitForResponseAfterClick(this.page,'api/user/activite', this.btnCreateEvent)
 }
 
     

@@ -1,4 +1,4 @@
-import {  Locator, expect } from '@playwright/test';
+import {  Locator, Page, expect } from '@playwright/test';
 
 /**
  * Enum for user roles in the system.
@@ -30,6 +30,9 @@ export async function getElement(pLocator: Locator, pInput: string) {
     // This ensures the v-model has finished its "sync"
     await expect(target).toHaveValue(pInput);
 }
+
+
+
 
 /**
  * Splits a date-time string into [hour, date].
@@ -111,6 +114,30 @@ export async function assertToolTipElement(pLocator: Locator, expectedMessage: s
     const validationMessage = await pLocator.evaluate((el: HTMLInputElement) => el.validationMessage);
     // Use expect so the test fails if the message is wrong
     expect(validationMessage).toBe(expectedMessage);
+}
+
+
+
+/**
+ * Waits for a network response whose URL includes a specific substring
+ * while clicking a given locator filtered for visible elements.
+ *
+ * @param {Page} page - The Playwright Page object.
+ * @param {string} urlSubstring - Substring to match in the response URL.
+ * @param {Locator} locator - The locator to click.
+ */
+export async function waitForResponseAfterClick(
+  page: Page,
+  urlSubstring: string,
+  locator: Locator
+): Promise<void> {
+  // Filter locator for visible elements
+  const visibleLocator = locator.filter({ visible: true });
+
+  await Promise.all([
+    page.waitForResponse(resp => resp.url().includes(urlSubstring)),
+    visibleLocator.click()
+  ]);
 }
 
 

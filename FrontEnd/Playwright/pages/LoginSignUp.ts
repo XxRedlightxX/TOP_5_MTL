@@ -2,13 +2,12 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { UserProfilePage } from './UserProfilePage';
-import { getElement, getRadioGroupElement, UserRole } from 'Playwright/helper/ui/uiDriverHelper.helper';
+import { getElement, getRadioGroupElement, UserRole, waitForResponseAfterClick } from 'Playwright/helper/ui/uiDriverHelper.helper';
 
 export class LoginSignUpPage extends BasePage {
-  private usernameInput: Locator;
-  private passwordInput: Locator;
-  private loginButton: Locator;
-
+  public readonly login_UsernameInput: Locator;
+  public readonly login_PasswordInput: Locator;
+ 
   public readonly register_UsernameInput : Locator;
   public readonly register_EmailInput : Locator;
   public readonly register_PhoneInput : Locator;
@@ -16,7 +15,8 @@ export class LoginSignUpPage extends BasePage {
   public readonly register_Confirmation_PasswordInput : Locator;
 
   public readonly btn_register : Locator;
-  public readonly btnToggleAuth : Locator;
+  public readonly btn_toggleAuth : Locator;
+  public readonly btn_login: Locator;
   
   public readonly msgErrorEventName : Locator;
   public readonly radioGroupUserType : Locator;
@@ -30,41 +30,42 @@ export class LoginSignUpPage extends BasePage {
   public readonly MSG_USER_NOT_SAME_PASSWORD = "The password field confirmation does not match."
   public readonly MSG_USER_INVALID = "The password field is required"
   public readonly MSG_USER_PHONE = "The num tel field is required.";
-   public readonly MSG_USER_USERNAME = "The username field is required."
+  public readonly MSG_USER_USERNAME = "The username field is required."
   public readonly MSG_USER_EXIST_USERNAME = "There is already a user with username: "
-
   public readonly MSG_USER_INVALID_CREDENTIELS = "Invalid credentials."
 
 
   constructor(page: Page) {
     super(page);
-    this.usernameInput = page.getByTestId('login-email-input').filter({ visible: true }).locator('input');
-    this.passwordInput = page.getByTestId('login-password-input').filter({ visible: true }).locator('input');
-    this.loginButton = page.getByTestId('btn-sign-in').filter({ visible: true });
-    this.btnToggleAuth = page.getByTestId("toggle-auth-mode").filter({ visible: true });
-    this.register_UsernameInput = page.getByTestId("register-username-input").filter({ visible: true }).locator('input');;
-    this.register_EmailInput = page.getByTestId("register-email-input").filter({ visible: true }).locator('input');;
-    this.register_PhoneInput = page.getByTestId("register-phone-input").filter({ visible: true }).locator('input');;
-    this.register_PasswordInput = page.getByTestId("register-password-input").filter({ visible: true }).locator('input');;
-    this.register_Confirmation_PasswordInput = page.getByTestId("register-password_confirmation-input").filter({ visible: true }).locator('input');;
+    this.login_UsernameInput = page.getByTestId('login-email-input').locator('input');
+    this.login_PasswordInput = page.getByTestId('login-password-input').locator('input');
+    this.btn_login = page.getByTestId('btn-sign-in')
+    this.btn_toggleAuth = page.getByTestId("toggle-auth-mode").filter({ visible: true });
+    this.register_UsernameInput = page.getByTestId("register-username-input").locator('input');
+    this.register_EmailInput = page.getByTestId("register-email-input").locator('input');
+    this.register_PhoneInput = page.getByTestId("register-phone-input").locator('input');
+    this.register_PasswordInput = page.getByTestId("register-password-input").locator('input');
+    this.register_Confirmation_PasswordInput = page.getByTestId("register-password_confirmation-input").locator('input');
     this.btn_register = page.getByTestId("btn-new-register").first();
-    this.btnToggleAuth = page.getByTestId("toggle-auth-mode").filter({ visible: true }).first()
+    this.btn_toggleAuth = page.getByTestId("toggle-auth-mode").filter({ visible: true }).first()
     this.msgErrorEventName = page.locator(".error");
     this.radioGroupUserType = page.getByTestId("user-type-group");
 
   }
 
-  async login(username: string, password: string) {
-    await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
-
+  async login(pUsername: string, pPassword: string) {
+    await getElement(this.login_UsernameInput,pUsername);
+    await getElement(this.login_PasswordInput,pPassword);
+    await waitForResponseAfterClick(this.page, 'api/login', this.btn_login);
     await this.page.waitForLoadState('networkidle');
   }
 
-    async register(pUsername: string,pEmail: string,pPhone: string, pPassword: string, pPassword_Confirmation, pRadioChoice : string) {
-       await this.page.waitForLoadState('networkidle'); 
-      await this.btnToggleAuth.click();
+  async register(
+      pUsername: string, pEmail: string,pPhone: string,
+      pPassword: string, pPassword_Confirmation, pRadioChoice : string
+    ) {
+      await this.page.waitForLoadState('networkidle'); 
+      await this.btn_toggleAuth.click();
       await getElement(this.register_UsernameInput,pUsername);
       await getElement(this.register_EmailInput,pEmail);
       await getElement(this.register_PhoneInput,pPhone);
@@ -72,17 +73,7 @@ export class LoginSignUpPage extends BasePage {
       await getElement(this.register_Confirmation_PasswordInput,pPassword_Confirmation);
      
       await getRadioGroupElement(this.radioGroupUserType, pRadioChoice);
-
-      const [response] = await Promise.all([
-      this.page.waitForResponse(resp =>
-      resp.url().includes('api/register') 
-      ),
-      this.btn_register.click()
-    ]);
-      
-      //await this.btn_register.click();
-      
-     
+      await waitForResponseAfterClick(this.page, 'api/register', this.btn_register);
   }
 
   async goToUserProfile() : Promise<UserProfilePage> {
