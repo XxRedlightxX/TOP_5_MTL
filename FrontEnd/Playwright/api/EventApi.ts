@@ -1,4 +1,4 @@
-import { EventPayload } from 'Playwright/models/EventModal';
+import { EventPayload } from 'Playwright/models/Event';
 import { BaseApi } from './BaseApi';
 
 export class EventApi extends BaseApi {

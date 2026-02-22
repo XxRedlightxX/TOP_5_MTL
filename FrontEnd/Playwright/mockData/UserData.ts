@@ -35,8 +35,8 @@ export const validUserWithRegularRole = new User({
 
 
 export const newUser = new User({
-    id : null,
-    name : `user_New_${Date.now()}`,
+  id : null,
+  name : `user_New_${Date.now()}`,
   username: `userNew_${Date.now()}`,
   email: `user_${Date.now()}@gmail.com`,
   num_tel: '5143819396',

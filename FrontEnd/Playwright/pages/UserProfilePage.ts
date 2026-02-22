@@ -1,8 +1,8 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
-import { EventModal, EventPayload } from 'Playwright/models/EventModal';
+import { EventModal, EventPayload } from 'Playwright/models/Event';
 import { assertToolTipElement, getDropdownElement, getElement, getStringElement } from 'Playwright/helper/ui/uiDriverHelper.helper';
-import { invalidEvent, validEvent } from 'Playwright/mockData/EventDats';
+import { invalidEvent, validEvent } from 'Playwright/mockData/EventData';
 export class UserProfilePage extends BasePage {
   public readonly profileUsername: Locator;
   public readonly  profileEvent_NameInput: Locator;
@@ -20,7 +20,7 @@ export class UserProfilePage extends BasePage {
   public readonly msgErrorEventName : Locator;
   public readonly msgErrorEventCategory : Locator;
 
-  public readonly MSG_SELECT_ITEM = "Sélectionnez un élément dans la liste.";
+  public readonly MSG_SELECT_ITEM = "Please select an item in the list.";
   public readonly MSG_EVENT_TITRE = "Veuillez remplir ce champ."
   public readonly MSG_EVENT_DATE = "The date debut field must be a date after or equal to today.";
 
@@ -54,7 +54,7 @@ export class UserProfilePage extends BasePage {
   public async getMessageErrorAsync(isErrorVisible: boolean): Promise<string> {
     return isErrorVisible
       ? "Veuillez remplir ce champ."
-      : "Veuillez renseigner ce champ.";
+      : "Please fill out this field.";
   }
 
 

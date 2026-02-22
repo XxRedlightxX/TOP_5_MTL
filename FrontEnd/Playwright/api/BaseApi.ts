@@ -54,13 +54,7 @@ export class BaseApi {
       'Accept': 'application/json',
     }
     });
-    if (!response.ok()) {
-        const errorData = await response.json().catch(() => "No JSON body");
-        console.error(`❌ API Error ${response.status()} at ${url}`);
-        console.error('Response Body:', JSON.stringify(errorData, null, 2));
-        console.error('Request Body Sent:', JSON.stringify(body, null, 2));
-    }
-
+   
     if (pExpectedStatus !== undefined) {
       expect(response.status()).toBe(pExpectedStatus);
       console.log(response.json())

@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test';
 import { AuthApi } from 'Playwright/api/AuthApi';
 import { EventApi } from 'Playwright/api/EventApi';
 import { UserApi } from 'Playwright/api/UserApi';
-import { validEvent, invalidEvent, emptyEvent } from 'Playwright/mockData/EventDats';
+import { validEvent, invalidEvent, emptyEvent, otherValidEvent } from 'Playwright/mockData/EventData';
 import { validUser, validUserWithRegularRole, validOtherOrgUser } from 'Playwright/mockData/UserData';
 import { createUser, deleteUser } from 'Playwright/helper/auth.helper';
-import { EventModal } from 'Playwright/models/EventModal';
+import { EventModal } from 'Playwright/models/Event';
 import { HttpStatus } from 'Playwright/helper/api/statusCodes';
 
 let authApi: AuthApi;
@@ -166,14 +166,17 @@ test.describe('Event Creation API Tests', () => {
   // -----------------------------
   test('Scenario: Organisateur modifies own event successfully', async () => {
     // Given: an event created by the organisateur
-    const event = new EventModal({ ...validEvent.payload });
+    const event = new EventModal({ ...otherValidEvent.payload });
+
     const res = await eventApi.addEvent(event.payload, orgUser.token);
     const body = await res.json();
+  
     const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
 
     // When: the organisateur modifies the event
     const modifyRes = await eventApi.modifyEvent(eventId, orgUser.token);
 
+   
     // Then: modification should succeed with 202 Accepted
     expect(modifyRes.status()).toBe(HttpStatus.ACCEPTED);
   });

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Notification;
 
 class ActiviteControllerTest extends TestCase
 {
-    //use RefreshDatabase;
+    use RefreshDatabase;
     
     protected function tearDown(): void
     {

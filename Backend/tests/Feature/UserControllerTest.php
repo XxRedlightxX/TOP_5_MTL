@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
-    //use RefreshDatabase;
+    use RefreshDatabase;
     
     protected function tearDown(): void
     {

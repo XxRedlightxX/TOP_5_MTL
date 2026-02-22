@@ -1,5 +1,5 @@
  import { test, expect } from "Playwright/fixtures/baseTest";;
- import { emptyEvent, invalidEventDate, invalidEventTitle, validEvent } from "Playwright/mockData/EventDats";
+ import { emptyEvent, invalidEventDate, invalidEventTitle, validEvent } from "Playwright/mockData/EventData";
  import { assertElementofListElement, assertToolTipElement } from "Playwright/helper/ui/uiDriverHelper.helper";
 import fs from 'fs';
 
