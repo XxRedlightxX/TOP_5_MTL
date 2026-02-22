@@ -160,17 +160,17 @@ test.describe('User Authentication Flow', () => {
 
     // Given: the user navigates to the profile registration page
     await loginPage.navigate('/profile');
-
+    
     // When: the user submits the form with a username that already exists
     await loginPage.register(
-      currentUserData.username,"DD@gmail.com",currentUserData.num_tel,
+     otherUserOrg.username,`test3${Date.now()}@gmail.com`,currentUserData.num_tel,
       currentUserData.password,currentUserData.password,currentUserData.type_utilisateur
     );
 
     // Then: the system should display an existing username error
     await assertElementofListElement(
       loginPage.msgErrorEventName,
-      loginPage.MSG_USER_EXIST_USERNAME + currentUserData.username
+      loginPage.MSG_USER_EXIST_USERNAME + otherUserOrg.username
     );
   });
 
@@ -182,13 +182,13 @@ test.describe('User Authentication Flow', () => {
       
       // When: the user submits the form with a email that already exists
       await loginPage.register(
-        currentUserData.username,"DD@gmail.com",
+        `test3${Date.now()}`, otherUserOrg.email,
         currentUserData.num_tel,currentUserData.password,
         currentUserData.password, currentUserData.type_utilisateur
       );
 
       // Then: the system should display an existing username error
-      await assertElementofListElement(loginPage.msgErrorEventName, loginPage.MSG_USER_EXIST_USERNAME +  currentUserData.username);
+      await assertElementofListElement(loginPage.msgErrorEventName, loginPage.MSG_USER__EXIST_EMAIL + otherUserOrg.email );
   });
 });
 
