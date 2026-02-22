@@ -149,27 +149,19 @@ jobs:
     # -------------------------
     # 12. Start Laravel and Vue servers
     # -------------------------
-    - name: Start servers
+    - name: Start Servers
+      working-directory: 
       run: |
-
         cd Backend
-        php artisan serve \
-          --env=testing \
-          --host=127.0.0.1 \
-          --port=8000 \ > /dev/null 2 >&1 &
-
+        # Explicitly tell 'serve' to use the testing environment
+        php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
+        
         cd ../FrontEnd
-        npm run preview -- --port 3000 > /dev/null 2>&1 &
+        npm run preview -- --port 3000 > /dev/null 2>&1 & 
+        
+        until curl -s http://127.0.0.1:8000 > /dev/null; do echo "Waiting for API..."; sleep 2; done
+        until curl -s http://localhost:3000 > /dev/null; do echo "Waiting for Vue..."; sleep 2; done
 
-        echo "Waiting for Laravel..."
-        until curl -s http://127.0.0.1:8000 > /dev/null; do
-          sleep 2
-        done
-
-        echo "Waiting for Vue..."
-        until curl -s http://127.0.0.1:3000 > /dev/null; do
-          sleep 2
-        done
 
     # -------------------------
     # 13. Run Playwright tests
