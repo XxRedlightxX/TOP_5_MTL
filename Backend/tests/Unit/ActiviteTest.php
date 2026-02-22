@@ -15,7 +15,7 @@ use Mockery;
 class ActiviteTest extends TestCase
 {
 
-     use RefreshDatabase;
+     //use RefreshDatabase;
 
     protected function tearDown(): void
     {

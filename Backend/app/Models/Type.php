@@ -9,7 +9,7 @@ class Type extends Model
 {
     use HasFactory;
 
-      protected $table = 'type';
+    protected $table = 'type';
     protected $fillable = ['nom', 'image_data'];
 
     public function activites()
