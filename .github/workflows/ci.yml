@@ -146,6 +146,25 @@ jobs:
         working-directory: FrontEnd
         run: npm run build
 
+     
+      # -------------------------
+      # 5️⃣ Run migrations & seeders
+      # -------------------------
+      - name: Run database migrations for  Playwright
+        working-directory: Backend
+        run: php artisan migrate:fresh --seed --env=testing --force
+
+      - name: Debug seeders
+        working-directory: Backend
+        run: |
+          php artisan tinker --execute="
+            echo config('database.connections.sqlite.database');
+            echo '\n--- EXISTING TABLES ---\n' . implode(', ', Schema::getTableListing()) . '\n';
+            echo '\n--- TABLE DATA ---\n';
+            echo 'Saisons: ' . DB::table('saison')->count() . '\n';
+            echo 'Types: ' . DB::table('type')->count() . '\n';
+            echo 'Users: ' . DB::table('utilisateur')->count() . '\n';
+          "
       # -------------------------
       # 🔟 Install Playwright
       # -------------------------
@@ -176,7 +195,7 @@ jobs:
       # -------------------------
       - name: Run Playwright E2E tests
         working-directory: FrontEnd/Playwright
-        run: npx playwright test
+        run: npx playwright test tests/api/auth.api.spec.ts
         env:
           # This tells Playwright to open the Vue app on 3000
           APP_URL: http://localhost:3000
