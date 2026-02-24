@@ -1,5 +1,6 @@
 import { Reporter, TestCase, TestResult } from '@playwright/test/reporter';
-import { createJiraTicket } from '../api/jira/jiraHelper';
+import { createJiraTicket } from 'Playwright/api/jira/jiraHelper';
+
 
 class JiraReporter implements Reporter {
 
