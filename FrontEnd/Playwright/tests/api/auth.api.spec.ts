@@ -40,9 +40,15 @@ test.describe('Authentication API Tests', () => {
   test.afterEach(async ({ request }) => {
     userApi = new UserApi(request);
 
+
+    const usersToDelete = [orgUser, otherUserOrg].filter(Boolean);
+    
     // Clean up created users
-    await deleteUser(userApi, orgUser.id, orgUser.token);
-    await deleteUser(userApi, otherUserOrg.id, otherUserOrg.token);
+    await Promise.all(
+          usersToDelete.map(u =>
+            deleteUser(userApi, u.id, u.token).catch(err => console.warn("Cleanup failed for", u.id, err))
+          )
+    );
   });
 
   // -----------------------------

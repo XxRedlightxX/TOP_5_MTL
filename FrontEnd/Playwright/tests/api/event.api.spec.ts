@@ -44,15 +44,12 @@ test.describe('Event Creation API Tests', () => {
     userApi = new UserApi(request);
 
     const usersToDelete = [orgUser, regularUser, otherOrgUser].filter(Boolean);
+
+    // Clean up created users
     await Promise.all(
-      usersToDelete.map(u => {
-        if (!u?.id || !u?.token) {
-          console.warn("Skipping cleanup for invalid user:", u);
-          return Promise.resolve();
-        }
-        return deleteUser(userApi, u.id, u.token)
-          .catch(err => console.warn("Cleanup failed for", u.id, err));
-      })
+        usersToDelete.map(u =>
+          deleteUser(userApi, u.id, u.token).catch(err => console.warn("Cleanup failed for", u.id, err))
+        )
     );
   });
 

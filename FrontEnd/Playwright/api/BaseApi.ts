@@ -54,7 +54,8 @@ export class BaseApi {
       'Accept': 'application/json',
     }
     });
-   
+    
+
     if (pExpectedStatus !== undefined) {
       expect(response.status()).toBe(pExpectedStatus);
       console.log(response.json())
@@ -81,10 +82,10 @@ export class BaseApi {
       }
     });
 
-    if (!response.ok()) {
+    /*if (!response.ok()) {
         console.error(`Delete failed at ${url} with status: ${response.status()}`);
         console.error(`Response Body: ${await response.text()}`);
-    }
+    }*/
     return response;
   }
 
@@ -129,10 +130,10 @@ export class BaseApi {
         'Accept': 'application/json'
       }
     });
-      if (!response.ok()) {
+      /*if (!response.ok()) {
         console.error(`Delete failed at ${url} with status: ${response.status()}`);
         console.error(`Response Body: ${await response.text()}`);
-    }
+    }*/
     return response;
   }
 

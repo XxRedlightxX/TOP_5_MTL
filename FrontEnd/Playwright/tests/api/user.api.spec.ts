@@ -38,6 +38,7 @@ test.describe.configure({ mode: 'serial' });
 
     const usersToDelete = [orgUser, regularUser, otherOrgUser].filter(Boolean);
 
+     // Clean up created users
     await Promise.all(
       usersToDelete.map(u =>
         deleteUser(userApi, u.id, u.token).catch(err => console.warn("Cleanup failed for", u.id, err))
