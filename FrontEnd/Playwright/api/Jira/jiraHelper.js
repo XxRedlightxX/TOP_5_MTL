@@ -2,12 +2,29 @@ import dotenv from 'dotenv';
 import { request } from '@playwright/test';
 dotenv.config({ path: '../.env' });
 
+
+// Jira Credentials
 const JIRA_HOST = process.env.JIRA_HOST;
 const JIRA_EMAIL = process.env.JIRA_EMAIL;
 const JIRA_API_TOKEN = process.env.JIRA_API_TOKEN;
 const JIRA_PROJECT_KEY = process.env.JIRA_PROJECT_KEY;
 
-export async function createJiraTicket(title, error, file) {
+
+
+/**
+ * Creates a Jira ticket for a failed test execution.
+ * 
+ * This function connects to the Jira REST API using Basic Authentication
+ * and creates a new issue in the specified project.
+ * 
+ * @param pTitle - The pTitle of the failed test.
+ * @param pError - The pError message associated with the failure.
+ * @param pFile - The pFile path where the test failure occurred.
+ * 
+ * @returns A Promise that resolves when the Jira issue creation request completes.
+ * 
+ */
+export async function createJiraTicket(pTitle, pError, pFile) {
   const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString('base64');
 
   const apiContext = await request.newContext({
@@ -23,19 +40,19 @@ export async function createJiraTicket(title, error, file) {
     data: {
       fields: {
         project: { key: JIRA_PROJECT_KEY },
-        summary: `Test Failed: ${title}`,
+        summary: `Test Failed: ${pTitle}`,
         description: {
           type: 'doc',
           version: 1,
           content: [
             {
               type: 'paragraph',
-              content: [{ type: 'text', text: `File: ${file}` }]
+              content: [{ type: 'text', text: `pFile: ${pFile}` }]
             },
             {
               type: 'paragraph',
               content: [
-                { type: 'text', text: `Error: ${error}` }
+                { type: 'text', text: `pError: ${pError}` }
               ]
             }
           ]
@@ -49,6 +66,6 @@ export async function createJiraTicket(title, error, file) {
     const data = await response.json();
     console.log(' Issue created:', data.key);
   } else {
-    console.error(' Failed:', await response.text());
+    console.pError(' Failed:', await response.text());
   }
 }
