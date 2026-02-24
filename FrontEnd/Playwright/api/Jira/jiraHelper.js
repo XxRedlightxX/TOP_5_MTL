@@ -49,7 +49,7 @@ export async function createJiraTicket(title, error, file) {
     
     console.log('✅ Issue created:', data.key);
   } else {
-    console.error('❌ Failed:', await response.text());
+    console.error(' Failed:', await response.text());
     
   }
 };
