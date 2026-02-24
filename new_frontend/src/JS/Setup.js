@@ -42,14 +42,14 @@ const Setup = {
    *
    * @returns {Ref<boolean>} Référence réactive du mode actuel (true = mode jour)
    */
-  modeSetup() {
+  async modeSetup() {
     const actualMode = ref(LocalStorageManager.getMode());
 
     Setup.nullInitialiser(
       actualMode,
       LocalStorageManager.setMode,
       LocalStorageManager.getMode,
-      true // valeur par défaut = mode jour activé
+      true, // valeur par défaut = mode jour activé
     );
 
     const handleModeChange = (event) => {
@@ -83,7 +83,7 @@ const Setup = {
       actualLang,
       LocalStorageManager.setLanguage,
       LocalStorageManager.getLanguage,
-      "fr" // valeur par défaut = français
+      "fr", // valeur par défaut = français
     );
 
     const handleLanguageChange = (event) => {
@@ -103,6 +103,29 @@ const Setup = {
 
   /**
    * ----------------------------------------------------------
+   * EVENTMODE JOUR / NUIT / ALL
+   * ----------------------------------------------------------
+   * Initialise et gère le eventMode d’affichage (darkEvent / lightEvent / allEvent).
+   * Met à jour automatiquement quand un `eventMode-changed` est émis.
+   *
+   * @returns {Ref<boolean>} Référence réactive du eventMode actuel
+   */
+  async eventModeSetup() {
+    const actualEventMode = ref(LocalStorageManager.getEventMode());
+    const mode = await Setup.modeSetup();
+    const eventModeDefaultValue = mode ? "days" : "nights";
+
+    Setup.nullInitialiser(
+      actualEventMode,
+      LocalStorageManager.setEventMode,
+      LocalStorageManager.getEventMode,
+      eventModeDefaultValue,
+    );
+    return actualEventMode;
+  },
+
+  /**
+   * ----------------------------------------------------------
    * ÉVÉNEMENT SÉLECTIONNÉ
    * ----------------------------------------------------------
    * Conserve l’événement actuellement visualisé ou sélectionné.
@@ -117,7 +140,7 @@ const Setup = {
       actualEvent,
       LocalStorageManager.setEvent,
       LocalStorageManager.getEvent,
-      {} // valeur par défaut = objet vide
+      {}, // valeur par défaut = objet vide
     );
 
     const handleEventChange = (event) => {
@@ -151,7 +174,7 @@ const Setup = {
       actualLogin,
       LocalStorageManager.setLogin,
       LocalStorageManager.getLogin,
-      false // valeur par défaut = non connecté
+      false, // valeur par défaut = non connecté
     );
 
     const handleLoginChange = (event) => {
@@ -185,7 +208,7 @@ const Setup = {
       actualUser,
       LocalStorageManager.setLogUser,
       LocalStorageManager.getLogUser,
-      {} // valeur par défaut = objet vide
+      {}, // valeur par défaut = objet vide
     );
 
     const handleUserChange = (event) => {
@@ -219,7 +242,7 @@ const Setup = {
       actualOrganisator,
       LocalStorageManager.setOrganisator,
       LocalStorageManager.getOrganisator,
-      {} // valeur par défaut = objet vide
+      {}, // valeur par défaut = objet vide
     );
 
     const handleOrganisatorChange = (event) => {
@@ -233,7 +256,7 @@ const Setup = {
     onUnmounted(() => {
       window.removeEventListener(
         "organisator-changed",
-        handleOrganisatorChange
+        handleOrganisatorChange,
       );
     });
 

@@ -17,9 +17,9 @@ const PaginationManager = {
 
     if (paginationLenght.value == null || paginationLenght.value <= 0) {
       const param = PaginationManager.changePageNumber(value, 1);
-      console.log("param icit : " + param);
+      //console.log("param icit : " + param);
       const apiData = await activitiesStore.getPaginationLenght(param);
-      console.log("retur lenght : " + apiData);
+      //console.log("retur lenght : " + apiData);
       const tempPaginationLenght = {
         days: apiData.nbPagination.jour,
         night: apiData.nbPagination.nuit,
@@ -160,7 +160,7 @@ const PaginationManager = {
 
     // sécurité minimale
     if (value == null || actualPagination == null) {
-      console.log("pagination invalide");
+      //console.log("pagination invalide");
       return;
     }
 
@@ -285,7 +285,7 @@ const PaginationManager = {
     const activitiesStore = useActivityStore();
     //console.log("value send : ", value);
     const data = await activitiesStore.getActivities(value);
-    console.log("data get : ", data);
+    //console.log("data get : ", data);
     return PaginationManager.setPaginationEventData(value, data);
   },
 
@@ -304,12 +304,12 @@ const PaginationManager = {
   },
 
   changePageNumber(value, newValuePage) {
-    console.log("value reçu :", value);
+    //console.log("value reçu :", value);
 
     const query = value;
     const params = new URLSearchParams(query);
     const per_page = Number(params.get("per_page"));
-    console.log("per page get :" + per_page); // per page get :0
+    //console.log("per page get :" + per_page); // per page get :0
     const page = "per_page=" + per_page + "&page=" + newValuePage;
     //("new value :" + page); // new value :per_page=0&page=undefined
     return page;

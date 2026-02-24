@@ -50,7 +50,7 @@ export const useActivityStore = defineStore("activitiesStore", {
       }
 
       try {
-        console.log("apiURL :", apiUrl);
+        //console.log("apiURL :", apiUrl);
 
         const res = await fetch(apiUrl, {
           headers: {

@@ -22,7 +22,7 @@
         </div>
       </router-link>
     </div>
-    <PaginationComponent :lenght="pagination.days" :page="page" @paginationChanged="paginationUpdate"/>
+    <PaginationComponent :lenght="paginationLenght" :page="page" @paginationChanged="paginationUpdate"/>
   </div>
 
   <div v-else id="AllEventComponent">
@@ -64,6 +64,8 @@
   import LoadingComponent from '@/components/StaticComponents/LoadingComponent.vue';
 
   const actualMode = Setup.modeSetup();
+  let actualEventMode = ref(null);
+  let paginationLenght = ref(null)
   const fakeevents = FakeDataBase.getNewEvents();
 
   const pagination = ref(null)
@@ -85,7 +87,7 @@
 
   const paginationUpdate = (index) => {
     parameter = 'per_page=' + parameterPerPage.value + '&page=' + index;
-    console.log('pagination update : ' + parameter)
+    //console.log('pagination update : ' + parameter)
     PaginationManager.getPaginationEvents(parameter)
   }
 
@@ -95,9 +97,25 @@
 
   const setEvent = (value) => {
     LocalStorageManager.setEvent(value);
-    console.log("event value : ", value);
+    //console.log("event value : ", value);
   };
 
+  const getPaginationLenght = () => {
+    if(actualEventMode.value === 'days') { 
+      paginationLenght.value = pagination.value.days 
+      console.log("pagination lenght updated (days) -> " + paginationLenght.value)
+    }
+    else if(actualEventMode.value === 'nights') { 
+      paginationLenght.value = pagination.value.night 
+      console.log("pagination lenght updated (night) -> " + paginationLenght.value)
+    }
+    else { 
+      paginationLenght.value = pagination.value.all 
+      console.log("pagination lenght updated (all) -> " + paginationLenght.value)
+    }
+    //console.log("pagination lenght updated -> " + paginationLenght.value)
+  }
+  
   const getEvents = () => {
     allEvent.value = LocalStorageManager.getActualPaginationNumber();
     events.value = actualMode ? allEvent.value.days : allEvent.value.nights;
@@ -106,11 +124,11 @@
 
   const setup = async () => {
     await perPageFunction()
-    console.log('perPage -> ' + parameterPerPage.value )
+    //console.log('perPage -> ' + parameterPerPage.value )
     const event = LocalStorageManager.getActualPaginationNumber()
     page = event != null ? event.number : 1
-    console.log('page -> ' + page)
-    console.log('parameter -> ' + parameter.value)
+    //console.log('page -> ' + page)
+    //console.log('parameter -> ' + parameter.value)
     return 'per_page=' + parameterPerPage.value + '&page=' + page;
   };
 
@@ -119,36 +137,42 @@
   });
 
   watch(width, async (newVal, oldVal) => {
-    console.log('watch size')
+    //console.log('watch size')
     if (oldVal >= 1025 && newVal < 1025) {
       parameterPerPage.value = 6;
       parameter.value = 'per_page=' + parameterPerPage.value + '&page=' + page;
-      console.log('Retour petit ecrant :', newVal);
-      console.log('parameterPerPage -> ' + parameterPerPage.value + ' page -> ' + page)
+      //console.log('Retour petit ecrant :', newVal);
+      //console.log('parameterPerPage -> ' + parameterPerPage.value + ' page -> ' + page)
       LocalStorageManager.setActualPaginationNumber(null);
       events.value = null;
-      console.log('parameter -> ' + parameter.value)
+      //console.log('parameter -> ' + parameter.value)
       pagination.value = await PaginationManager.paginationSetup(parameter.value)
     }
     else if (oldVal < 1025 && newVal >= 1025) {
       parameterPerPage.value = 9;
       parameter.value = 'per_page=' + parameterPerPage.value + '&page=' + page;
-      console.log('Retour plein écran :', newVal);
-      console.log('parameterPerPage -> ' + parameterPerPage.value + ' page -> ' + page)
+      //console.log('Retour plein écran :', newVal);
+      //console.log('parameterPerPage -> ' + parameterPerPage.value + ' page -> ' + page)
       LocalStorageManager.setActualPaginationNumber(null);
       events.value = null;
-      console.log('parameter -> ' + parameter.value)
+      //console.log('parameter -> ' + parameter.value)
       pagination.value = await PaginationManager.paginationSetup(parameter.value)
     }
   });
 
+  const handleEventModeChange = (event) => {
+    actualEventMode.value = event.detail.storage.data;
+    getPaginationLenght()
+  };
   const handleStorageChange = (event) => {
     getEvents()
     
   };
   onMounted(async () => {
     parameter.value = await setup()
-    console.log('parameter 2 -> ' + parameter.value)
+    const tempActualEventMode = await Setup.eventModeSetup();
+    actualEventMode.value = tempActualEventMode.value;
+    //console.log('parameter 2 -> ' + parameter.value)
     pagination.value = await PaginationManager.paginationSetup(parameter.value)
     //PaginationManager.paginationStatus()
     window.addEventListener(
@@ -157,6 +181,8 @@
     );
     
     window.addEventListener('resize', updateDimensions);
+    window.addEventListener("eventMode-changed", handleEventModeChange);
+    getPaginationLenght()
     getEvents()
   })
 </script>

@@ -1,11 +1,11 @@
 <template>
-  <div id="filterrComponent">
+  <div v-if="actualEventMode != null" id="filterrComponent">
 
     <div class="button-container">
       <ul>
-        <li @click="changeEventType(0)"  :class="{ active: eventType === 0 }"><a>{{ actualLang ? "All" : "Tous"}}</a></li>
-        <li @click="changeEventType(1)" :class="{ active: eventType === 1 }"><a>{{ actualLang ? "Night Life" : "De nuit"}}</a></li>
-        <li @click="changeEventType(2)" :class="{ active: eventType === 2 }"><a>{{ actualLang ? "Day life" : "De Jour"}}</a></li>
+        <li @click="changeEventType('all')"  :class="{ active: actualEventMode === 'all' }"><a>{{ actualLang ? "All" : "Tous"}}</a></li>
+        <li @click="changeEventType('nights')" :class="{ active: actualEventMode === 'nights' }"><a>{{ actualLang ? "Night Life" : "De nuit"}}</a></li>
+        <li @click="changeEventType('days')" :class="{ active: actualEventMode === 'days' }"><a>{{ actualLang ? "Day life" : "De Jour"}}</a></li>
 
 
         <li class="button-wrapper">
@@ -23,7 +23,7 @@
 </template>
 
  <script setup>
-  import { ref, watch } from 'vue';
+  import { ref, watch, onMounted } from 'vue';
   import LocalStorageManager from '@/JS/LocalStorageManager';
   import Setup from '@/JS/Setup';
   import FilterPopUpComponent from './FilterPopUpComponent.vue';
@@ -33,7 +33,8 @@
 
   let actualMode = Setup.modeSetup();
   let actualLang = Setup.languageSetup();
-  const eventType = ref(0);
+  let actualEventMode = ref(null);
+  //const eventType = ref(null);
 
   const toggleCalendarPopup = () => {
     showCalendarPopup.value = !showCalendarPopup.value;
@@ -45,19 +46,20 @@
   }
 
   const changeEventType = (index) => {
-    eventType.value = index;
-    if (index == 1) {
-      LocalStorageManager.changeMode(false)
+    actualEventMode.value = index;
+    if (index == "nights") {
+      LocalStorageManager.setMode(false)
+      LocalStorageManager.setEventMode("nights")
       // actualMode.value = false;
-    } else if (index == 2) {
-      LocalStorageManager.changeMode(true)
+    } else if (index == "days") {
+      LocalStorageManager.setMode(true)
+      LocalStorageManager.setEventMode("days")
       // actualMode.value = true;
     }
+    else {
+      LocalStorageManager.setEventMode("all")
+    }
   };
-
-  if (actualMode.value == false) {
-    eventType.value = 1;
-  }
 
   watch(showCalendarPopup, (newVal, oldVal) => {
     showCalendarPopup.value = newVal;
@@ -65,7 +67,14 @@
 
   // Correction du watcher
   watch(actualMode, (newVal, oldVal) => {
-    eventType.value = newVal == false ? 1 : 2;
+    let index = newVal == false ? 'nights' : 'days';
+    changeEventType(index)
+  });
+
+  onMounted(async () => {
+    const tempActualEventMode = await Setup.eventModeSetup();
+    actualEventMode.value = tempActualEventMode.value;
+    console.log("actual event mode : " + actualEventMode.value)
   });
  </script>
 

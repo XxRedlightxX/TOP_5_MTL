@@ -22,11 +22,12 @@
 </template>
 
 <script setup >
-  import { ref, defineProps, defineEmits, onMounted } from 'vue';
+  import { ref, defineProps, defineEmits, onMounted, watch } from 'vue';
   import Setup from '@/JS/Setup';
 
   
   let actualLang = Setup.languageSetup();
+
   const props = defineProps({
     lenght: {type: Number},
     page: {type: Number},
@@ -38,15 +39,16 @@
   const currentPage =ref(props.page)// ref(null);
 
   const createPagination = () => {
+    console.log("taille : " + props.lenght)
     pages.value = []; // reset pour éviter doublons
     for (let i = 1; i <= props.lenght; i++) {
       pages.value.push(i);
     }
-    console.log('pagess : ', pages)
+    //console.log('pagess : ', pages)
   }
 
   const changePage = (index) => {
-    console.log('page send : '+ index)
+    //console.log('page send : '+ index)
     currentPage.value = index;
     emit('paginationChanged', index)
   };
@@ -65,11 +67,21 @@
     }
   };
 
-  onMounted(async () => {
-    createPagination()
-    currentPage.value = props.page
-    console.log('current page = ' + currentPage.value + ' props page = ' + props.page)
-  })
+  watch(() => props.lenght, (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      createPagination();
+
+      if (currentPage.value > newVal) {
+        currentPage.value = newVal > 0 ? newVal : 1;
+        emit('paginationChanged', currentPage.value);
+      }
+    }
+  });
+
+  onMounted(() => {
+    createPagination();
+    currentPage.value = props.page;
+  });
  </script>
 
  <style lang="scss">

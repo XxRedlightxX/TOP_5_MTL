@@ -21,7 +21,7 @@ const LocalStorageManager = {
     window.dispatchEvent(
       new CustomEvent(key + "-changed", {
         detail: { storage: localStorage.getItem(key) },
-      })
+      }),
     );
   },
 
@@ -56,7 +56,7 @@ const LocalStorageManager = {
     window.dispatchEvent(
       new CustomEvent(key + "-changed", {
         detail: { storage: payload },
-      })
+      }),
     );
   },
 
@@ -175,6 +175,29 @@ const LocalStorageManager = {
   },
 
   /**
+   * Définit le eventMode (ex : "day", "night" ou "all") et le stocke dans localStorage.
+   * Déclenche ensuite un événement "eventMode-changed" pour avertir l’UI.
+   *
+   * @param {string} value - Le mode sélectionné par l'utilisateur.
+   */
+  setEventMode(value) {
+    LocalStorageManager.setWithExpiry(
+      "eventMode",
+      value,
+      LocalStorageManager.t1,
+    );
+  },
+
+  /**
+   * Récupère le eventMode stocké dans localStorage.
+   *
+   * @returns {string|null} - Le eventMode enregistré ou null si absent.
+   */
+  getEventMode() {
+    return LocalStorageManager.getWithExpiry("eventMode");
+  },
+
+  /**
    * Stocke les événements les mieux notés.
    *
    * @param {any} value - Données d'événements.
@@ -183,7 +206,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "HightEvent",
       value,
-      LocalStorageManager.t1
+      LocalStorageManager.t1,
     );
   },
 
@@ -203,7 +226,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "ActualHightEvent",
       value,
-      LocalStorageManager.t1
+      LocalStorageManager.t1,
     );
   },
 
@@ -221,7 +244,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "NewEvent",
       value,
-      LocalStorageManager.t1
+      LocalStorageManager.t1,
     );
   },
 
@@ -239,7 +262,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "ActualNewEvent",
       value,
-      LocalStorageManager.t1
+      LocalStorageManager.t1,
     );
   },
 
@@ -257,7 +280,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "UpcomingEvent",
       value,
-      LocalStorageManager.t1
+      LocalStorageManager.t1,
     );
   },
 
@@ -275,7 +298,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "ActualUpcomingEvent",
       value,
-      LocalStorageManager.t1
+      LocalStorageManager.t1,
     );
   },
 
@@ -299,7 +322,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "PaginationTotalNumber",
       value,
-      LocalStorageManager.t2
+      LocalStorageManager.t2,
     );
   },
 
@@ -320,7 +343,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "ActualPaginationNumber",
       value,
-      LocalStorageManager.t2
+      LocalStorageManager.t2,
     );
   },
 
@@ -340,7 +363,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "NextPaginationNumber",
       value,
-      LocalStorageManager.t2
+      LocalStorageManager.t2,
     );
   },
 
@@ -360,7 +383,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "PrevPaginationNumber",
       value,
-      LocalStorageManager.t2
+      LocalStorageManager.t2,
     );
   },
 
@@ -384,7 +407,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "NextPaginationNumberFromLast",
       value,
-      LocalStorageManager.t2
+      LocalStorageManager.t2,
     );
   },
 
@@ -408,7 +431,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "PrevPaginationNumberFromFisrt",
       value,
-      LocalStorageManager.t2
+      LocalStorageManager.t2,
     );
   },
 
@@ -448,7 +471,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "logUserr",
       value,
-      LocalStorageManager.t3
+      LocalStorageManager.t3,
     );
   },
 
@@ -471,7 +494,7 @@ const LocalStorageManager = {
     LocalStorageManager.setWithExpiry(
       "organisator",
       value,
-      LocalStorageManager.t3
+      LocalStorageManager.t3,
     );
   },
 
