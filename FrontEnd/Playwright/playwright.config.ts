@@ -5,6 +5,7 @@ require('dotenv').config({ path: '../.env' });
  * https://github.com/motdotla/dotenv
  */
  import dotenv from 'dotenv';
+import path from 'path';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
@@ -31,7 +32,7 @@ export default defineConfig({
   reporter: [
     ['html'],
     ['list'],
-    ['./reporters/jira-reporter.ts']
+     [path.join(__dirname, 'reporters/jira-reporter.ts')]
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
