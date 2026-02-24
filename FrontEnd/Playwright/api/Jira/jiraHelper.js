@@ -47,7 +47,7 @@ export async function createJiraTicket(title, error, file) {
 
   if (response.ok()) {
     const data = await response.json();
-    console.log('✅ Issue created:', data.key);
+    console.log(' Issue created:', data.key);
   } else {
     console.error(' Failed:', await response.text());
   }
