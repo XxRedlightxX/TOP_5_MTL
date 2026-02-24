@@ -19,22 +19,22 @@ setup('authenticate', async ({ userProfilePage,loginPage, page, request }) => {
     const id = Date.now();
     const userInputs = { ...validUser, email: `test_${id}@example.com`, username: `user_${id}` };
     
-    // 1. Create the user via API
+    //  Create the user via API
     const apiResponse = await createUser(new AuthApi(request), userInputs as any);
 
     // Setup User credentials
     await loginPage.navigate('/profile'); 
     await loginPage.login(userInputs.email, userInputs.password); 
 
-    // 3. Wait to ensure the login finished and cookies are set
+    //  Wait to ensure the login finished and cookies are set
     await expect(userProfilePage.profileUsername).toContainText(userInputs.username);
 
-    // 4. Now save the cookies or local storage
+    //  Now save the cookies or local storage
     await page.context().storageState({ path: authFile });
 
     fs.mkdirSync(path.dirname(dataFile), { recursive: true });
 
-    // 5. Save the metadata (username) for your test assertions in json file
+    //  Save the metadata (username) for your test assertions in json file
     const combinedData = { ...apiResponse, username: userInputs.username };
     fs.writeFileSync(dataFile, JSON.stringify(combinedData));
 });
