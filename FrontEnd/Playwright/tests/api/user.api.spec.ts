@@ -16,7 +16,7 @@ let otherOrgUser: any;
 
 test.describe('User Creation API Tests', () => {
 
-    test.describe.configure({ mode: 'serial' });
+test.describe.configure({ mode: 'serial' });
 
   // -----------------------------
   // Setup and Teardown
@@ -26,6 +26,7 @@ test.describe('User Creation API Tests', () => {
     userApi = new UserApi(request);
     eventApi = new EventApi(request);
 
+    
     // Create test users
     orgUser = await createUser(authApi, validUser);
     otherOrgUser = await createUser(authApi, validOtherOrgUser);

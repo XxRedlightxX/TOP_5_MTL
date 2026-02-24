@@ -1,9 +1,15 @@
 import { Reporter, TestCase, TestResult } from '@playwright/test/reporter';
-import { createJiraTicket } from 'Playwright/api/Jira/jiraHelper';
-
+import { createJiraTicket } from 'Playwright/api/jira/JiraHelper';
+require('dotenv').config({ path: '../.env' });
 class JiraReporter implements Reporter {
 
   async onTestEnd(test: TestCase, result: TestResult) {
+
+
+    // Only run in CI
+    if (!process.env.CI) {
+      return;
+    }
 
     if (result.status !== 'failed') return;
 
@@ -12,7 +18,7 @@ class JiraReporter implements Reporter {
     const error = result.error?.message || 'Unknown error';
 
     await createJiraTicket(title, error, file);
-    
+
   }
 
 }

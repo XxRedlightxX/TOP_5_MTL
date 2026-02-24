@@ -15,8 +15,10 @@ let userApi: UserApi;
 let orgUser: any;
 let regularUser: any;
 let otherOrgUser: any;
+let currentEventData : any;
 
 test.describe('Event Creation API Tests', () => {
+
 
     test.describe.configure({ mode: 'serial' });
 
@@ -26,6 +28,11 @@ test.describe('Event Creation API Tests', () => {
   test.beforeEach(async ({ request }) => {
     authApi = new AuthApi(request);
     eventApi = new EventApi(request);
+
+     currentEventData  = {
+      ...validEvent,
+      titre: `${validEvent.titre}_${Math.floor(Math.random() * 1000)}`
+    };
 
     // Register users for tests
     orgUser = await createUser(authApi, validUser);
@@ -126,11 +133,12 @@ test.describe('Event Creation API Tests', () => {
   // -----------------------------
   test('Scenario: Organisateur deletes own event successfully', async () => {
     // Given: an event created by the organisateur
-    const event = new EventModal({ ...validEvent.payload });
+    const event = new EventModal({ ...otherValidEvent.payload });
     const res = await eventApi.addEvent(event.payload, orgUser.token);
     const body = await res.json();
+    
     const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
-
+    expect(res.status()).toBe(HttpStatus.CREATED);
     // When: the organisateur deletes the event
     const deleteRes = await eventApi.deleteEvent(eventId, orgUser.token);
 
@@ -139,10 +147,11 @@ test.describe('Event Creation API Tests', () => {
   });
 
   test('Scenario: Organisateur cannot delete event created by another organisateur', async () => {
+
     // Given: an event created by orgUser
-    const event = new EventModal({ ...validEvent.payload });
-    const res = await eventApi.addEvent(event.payload, orgUser.token);
+    const res = await eventApi.addEvent(currentEventData, orgUser.token);
     const body = await res.json();
+    console.log(body)
     const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
 
     // When: another organisateur attempts to delete it
@@ -168,9 +177,9 @@ test.describe('Event Creation API Tests', () => {
   // -----------------------------
   test('Scenario: Organisateur modifies own event successfully', async () => {
     // Given: an event created by the organisateur
-    const event = new EventModal({ ...otherValidEvent.payload });
+    
 
-    const res = await eventApi.addEvent(event.payload, orgUser.token);
+    const res = await eventApi.addEvent(currentEventData, orgUser.token);
     const body = await res.json();
   
     const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
@@ -186,7 +195,7 @@ test.describe('Event Creation API Tests', () => {
   test('Scenario: Organisateur cannot modify event created by another organisateur', async () => {
     // Given: an event created by orgUser
     const event = new EventModal({ ...validEvent.payload });
-    const res = await eventApi.addEvent(event.payload, orgUser.token);
+    const res = await eventApi.addEvent(currentEventData, orgUser.token);
     const body = await res.json();
     const eventId = Array.isArray(body) ? body.at(-1).id : body.id;
 
