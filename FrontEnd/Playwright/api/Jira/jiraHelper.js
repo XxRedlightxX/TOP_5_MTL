@@ -1,10 +1,11 @@
-require('dotenv').config({ path: '../.env' });
-const { request } = require('@playwright/test');
+import dotenv from 'dotenv';
+import { request } from '@playwright/test';
+dotenv.config({ path: '../.env' });
+
 const JIRA_HOST = process.env.JIRA_HOST;
 const JIRA_EMAIL = process.env.JIRA_EMAIL;
 const JIRA_API_TOKEN = process.env.JIRA_API_TOKEN;
-const JIRA_PROJECT_KEY=process.env.JIRA_PROJECT_KEY;
-
+const JIRA_PROJECT_KEY = process.env.JIRA_PROJECT_KEY;
 
 export async function createJiraTicket(title, error, file) {
   const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString('base64');
@@ -39,17 +40,15 @@ export async function createJiraTicket(title, error, file) {
             }
           ]
         },
-        issuetype: { name: 'Tâche'  }
+        issuetype: { name: 'Tâche' }
       }
     }
   });
 
   if (response.ok()) {
     const data = await response.json();
-    
     console.log('✅ Issue created:', data.key);
   } else {
     console.error(' Failed:', await response.text());
-    
   }
-};
+}
