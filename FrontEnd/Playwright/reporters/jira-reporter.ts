@@ -1,6 +1,10 @@
 import { Reporter, TestCase, TestResult } from '@playwright/test/reporter';
-import { createJiraTicket } from '../api/jira/jiraHelper.js';
-require('dotenv').config({ path: '../.env' });
+import { createJiraTicket } from '../api/jira/jiraHelper';
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config({
+  path: path.resolve(process.cwd(), '.env')
+});
 
 class JiraReporter implements Reporter {
 
