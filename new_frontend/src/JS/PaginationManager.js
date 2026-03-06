@@ -10,14 +10,15 @@ const PaginationManager = {
     return LocalStorageManager.getPaginationTotalNumber();
   },
 
-  async paginationLenghtSetup(value) {
+  async paginationLenghtSetup(value, filter = null) {
     let paginationLenght = ref(LocalStorageManager.getPaginationTotalNumber());
     const activitiesStore = useActivityStore();
     //console.log("storage pagination lenght : " + paginationLenght.value);
 
     if (paginationLenght.value == null || paginationLenght.value <= 0) {
-      const param = PaginationManager.changePageNumber(value, 1);
-      //console.log("param icit : " + param);
+      let param = PaginationManager.changePageNumber(value, 1);
+      param = filter != null ? param + "?" + filter : param;
+      console.log("param icit : " + param);
       const apiData = await activitiesStore.getPaginationLenght(param);
       //console.log("retur lenght : " + apiData);
       const tempPaginationLenght = {
@@ -142,7 +143,88 @@ const PaginationManager = {
     }
   },
 
-  async getPaginationEvents(parameter) {
+  async gestionPaginationNumber(value, filter = null) {
+    PaginationManager.paginationLenghtSetup();
+    const paginationLenght = LocalStorageManager.getPaginationTotalNumber(
+      value,
+      filter,
+    );
+    let page = PaginationManager.getActualPageNumber(value);
+    let parameter = value;
+
+    let actualPaginationEvent = null;
+
+    LocalStorageManager.setActualPaginationNumber(actualPaginationEvent);
+
+    if (page == 1) {
+      actualPaginationEvent = await PaginationManager.getEvents(
+        parameter,
+        filter,
+      );
+
+      parameter = PaginationManager.changePageNumber(value, page + 2);
+      const prevPaginationFromFirstEvent = await PaginationManager.getEvents(
+        parameter,
+        filter,
+      );
+
+      parameter = PaginationManager.changePageNumber(value, page + 1);
+      const nextPaginationEvent = await PaginationManager.getEvents(
+        parameter,
+        filter,
+      );
+
+      LocalStorageManager.setActualPaginationNumber(actualPaginationEvent);
+      LocalStorageManager.setPrevPaginationNumberFromFisrt(
+        prevPaginationFromFirstEvent,
+      );
+      LocalStorageManager.setNextPaginationNumber(nextPaginationEvent);
+    } else if (page == paginationLenght) {
+      actualPaginationEvent = await PaginationManager.getEvents(
+        parameter,
+        filter,
+      );
+
+      parameter = PaginationManager.changePageNumber(value, page - 1);
+      const prevPaginationEvent = await PaginationManager.getEvents(
+        parameter,
+        filter,
+      );
+
+      parameter = PaginationManager.changePageNumber(value, page - 2);
+      const nextPaginationFromLastEvent = await PaginationManager.getEvents(
+        parameter,
+        filter,
+      );
+
+      LocalStorageManager.setActualPaginationNumber(actualPaginationEvent);
+      LocalStorageManager.setPrevPaginationNumber(prevPaginationEvent);
+      LocalStorageManager.setNextPaginationNumberFromLast(
+        nextPaginationFromLastEvent,
+      );
+    } else {
+      actualPaginationEvent = await PaginationManager.getEvents(
+        parameter,
+        filter,
+      );
+      parameter = PaginationManager.changePageNumber(value, page - 1);
+      const prevPaginationEvent = await PaginationManager.getEvents(
+        parameter,
+        filter,
+      );
+      parameter = PaginationManager.changePageNumber(value, page + 1);
+      const nextPaginationEvent = await PaginationManager.getEvents(
+        parameter,
+        filter,
+      );
+
+      LocalStorageManager.setActualPaginationNumber(actualPaginationEvent);
+      LocalStorageManager.setPrevPaginationNumber(prevPaginationEvent);
+      LocalStorageManager.setNextPaginationNumber(nextPaginationEvent);
+    }
+  },
+
+  async getPaginationEvents(parameter, filter = null) {
     const value = PaginationManager.getActualPageNumber(parameter);
     //console.log("parameter send : " + parameter);
     //console.log("value get : " + value);
@@ -159,22 +241,27 @@ const PaginationManager = {
     let temp = null;
 
     // sécurité minimale
-    if (value == null || actualPagination == null) {
-      //console.log("pagination invalide");
-      return;
-    }
+    // if (value == null || actualPagination == null || filter == null) {
+    //   //console.log("pagination invalide");
+    //   return;
+    // }
 
     /** --------------------------
      * ACTUAL PAGINATION
      * -------------------------- */
-    if (actualPagination?.number != null && value === actualPagination.number) {
+    if (
+      actualPagination?.number != null &&
+      value === actualPagination.number &&
+      filter == null
+    ) {
       //console.log("actual pagination number, no change");
     } else if (
       /** --------------------------
        * NEXT PAGINATION
        * -------------------------- */
       nextPagination?.number != null &&
-      value === nextPagination.number
+      value === nextPagination.number &&
+      filter == null
     ) {
       temp = prevPagination;
       LocalStorageManager.setPrevPaginationNumber(actualPagination);
@@ -203,7 +290,8 @@ const PaginationManager = {
        * PREV PAGINATION
        * -------------------------- */
       prevPagination?.number != null &&
-      value === prevPagination.number
+      value === prevPagination.number &&
+      filter == null
     ) {
       temp = nextPagination;
       LocalStorageManager.setNextPaginationNumber(actualPagination);
@@ -232,7 +320,8 @@ const PaginationManager = {
        * NEXT FROM LAST
        * -------------------------- */
       nextPaginationFromLast?.number != null &&
-      value === nextPaginationFromLast.number
+      value === nextPaginationFromLast.number &&
+      filter == null
     ) {
       temp = actualPagination;
       LocalStorageManager.setNextPaginationNumber(prevPagination);
@@ -253,7 +342,8 @@ const PaginationManager = {
        * PREV FROM FIRST
        * -------------------------- */
       prevPaginationFromFirst?.number != null &&
-      value === prevPaginationFromFirst.number
+      value === prevPaginationFromFirst.number &&
+      filter == null
     ) {
       temp = actualPagination;
       LocalStorageManager.setPrevPaginationNumber(nextPagination);
@@ -275,16 +365,22 @@ const PaginationManager = {
        * -------------------------- */
     } else {
       //console.log("not actual pagination number, change to wathever");
-      PaginationManager.gestionPaginationNumber(parameter);
+      if (filter == null) {
+        console.log("nullllllllllllllllllllllllllllllllllllllllllll");
+        PaginationManager.gestionPaginationNumber(parameter);
+      } else {
+        console.log("non nullllllllllllllllllllllllllllllllllllllllllll");
+        PaginationManager.gestionPaginationNumber(parameter, filter);
+      }
     }
 
     PaginationManager.paginationStatus();
   },
 
-  async getEvents(value) {
+  async getEvents(value, filter = null) {
     const activitiesStore = useActivityStore();
-    //console.log("value send : ", value);
-    const data = await activitiesStore.getActivities(value);
+    console.log("value send : " + value + "?" + filter);
+    const data = await activitiesStore.getActivities(value, filter);
     //console.log("data get : ", data);
     return PaginationManager.setPaginationEventData(value, data);
   },
@@ -292,7 +388,7 @@ const PaginationManager = {
   setPaginationEventData(value, data) {
     let page = PaginationManager.getActualPageNumber(value);
     let donnee = { number: page, days: data.jours, nights: data.nuit };
-    //console.log("donnee get : ", donnee);
+    console.log("donnee get : ", donnee);
     return donnee;
   },
 
@@ -361,8 +457,20 @@ const PaginationManager = {
 
   afficherStatus(message, value, boolean) {
     let donnee = null;
-    donnee = value != null ? (boolean ? value.number : value) : null;
-    console.log("" + message + " : " + donnee);
+    if (value != null && boolean) {
+      donnee = value.number;
+    } else if (value != null && !boolean) {
+      donnee =
+        "days -> " +
+        value.days +
+        " nights -> " +
+        value.night +
+        " all -> " +
+        value.all;
+    } else {
+      donnee = null;
+    }
+    console.log("" + message + " " + donnee);
   },
 };
 

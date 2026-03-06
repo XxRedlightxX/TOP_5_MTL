@@ -1,10 +1,10 @@
 <template>
   <div id="allEvent">
     <EventsTag />
-    <div class="comingEvent">
+    <!-- <div class="comingEvent">
       <h3>{{ actualLang ? 'Up coming events' : 'Evenement en approche'}}</h3>
       <UpComingEvent />
-    </div>
+    </div> -->
     <AllEvents />
   </div>
 </template>

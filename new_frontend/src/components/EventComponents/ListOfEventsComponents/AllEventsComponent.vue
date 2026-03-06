@@ -85,11 +85,23 @@
     }
   }
 
-  const paginationUpdate = (index) => {
+  const setup = async () => {
+    await perPageFunction()
+    //console.log('perPage -> ' + parameterPerPage.value )
+    const events = LocalStorageManager.getActualPaginationNumber()
+    page = events != null ? events.number : 1
+    //console.log('page -> ' + page)
+    //console.log('parameter -> ' + parameter.value)
+    return 'per_page=' + parameterPerPage.value + '&page=' + page;
+  }
+
+  const paginationUpdate = (index, filter = null) => {
     parameter = 'per_page=' + parameterPerPage.value + '&page=' + index;
     //console.log('pagination update : ' + parameter)
-    PaginationManager.getPaginationEvents(parameter)
+    PaginationManager.getPaginationEvents(parameter, filter)
   }
+
+  
 
   function updateDimensions() {
     width.value = window.innerWidth;
@@ -122,14 +134,11 @@
     //console.log('all events : ', events.value)
   };
 
-  const setup = async () => {
-    await perPageFunction()
-    //console.log('perPage -> ' + parameterPerPage.value )
-    const event = LocalStorageManager.getActualPaginationNumber()
-    page = event != null ? event.number : 1
-    //console.log('page -> ' + page)
-    //console.log('parameter -> ' + parameter.value)
-    return 'per_page=' + parameterPerPage.value + '&page=' + page;
+ const handleTagModeChange = (event) => {
+    let tag = LocalStorageManager.getTag()
+    let filter = "type=" + tag;
+    //console.log('tag cherched ' + filter + " page = " + page)
+    paginationUpdate(page, filter)
   };
 
   watch(actualMode, (newVal, oldVal) => {
@@ -182,6 +191,7 @@
     
     window.addEventListener('resize', updateDimensions);
     window.addEventListener("eventMode-changed", handleEventModeChange);
+    window.addEventListener("tag-changed", handleTagModeChange);
     getPaginationLenght()
     getEvents()
   })

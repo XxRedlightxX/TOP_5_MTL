@@ -133,8 +133,8 @@
   };
 
   const setTag = (tag) => {
-    LocalStorageManager.setTag(tag);
-    console.log('Tag selected :', tag);
+    LocalStorageManager.setTag(tag.nom);
+    console.log('Tag selected :', tag.nom);
   };
 
   onMounted(async () => {
