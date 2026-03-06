@@ -1,34 +1,61 @@
-import { test as teardown } from '@playwright/test';
+import {  request, test as teardown } from '@playwright/test';
 import { UserApi } from 'Playwright/api/UserApi';
 import { deleteUser } from '../helper/auth.helper'; // Import your helper
 import fs from 'fs';
 import path from 'path';
 
-// Ensure this matches the path in your playwright.config.ts
-const dataFile = path.join(process.cwd(), 'playwright/.auth/user.json');
 
-teardown('Cleanup: Delete setup user', async ({ request }) => {
-  // 1. Read the data saved during setup
-  if (fs.existsSync(dataFile)) {
-    const rawData = fs.readFileSync(dataFile, 'utf-8');
-    const userData = JSON.parse(rawData);
+/**
+ * Global teardown function for Playwright tests.
+ *
+ * This function runs after all tests have finished and performs cleanup by:
+ *   1. Reading all authentication and user-data files in the `playwright/.auth` directory.
+ *   2. Deleting the corresponding users via API using `UserApi`.
+ *   3. Removing the files from disk.
+ *
+ * It ensures that test users created during setup do not persist and avoids conflicts
+ * for subsequent test runs.
+ */
+export default async function globalTeardown() {
+  // Directory containing user auth and user-data files
+  const authDir = path.join(process.cwd(), 'playwright/.auth');
 
-    // 2. Initialize the User API
-    const userApi = new UserApi(request);
+  //filtering the dir ending with...
+  const files = fs
+    .readdirSync(authDir)
+    .filter(f => f.endsWith('-user-data.json') || f.endsWith('-user.json'));
 
-    console.log(`Cleaning up user: ${userData.username} (ID: ${userData.id})`);
+  // Create a new Playwright API request context
+  const requestContext = await request.newContext({
+    baseURL: process.env.APP_URL,
+  });
+  
+  // Initialize the API helper
+  const userApi = new UserApi(requestContext);
 
-    /** * 3. Use your helper function
-     * userData.id and userData.token were saved in combinedData 
-     * during your 'authenticate' setup.
-     */
+  for (const file of files) {
+    const filePath = path.join(authDir, file);
+    if (!fs.existsSync(filePath)) continue;
+
+    const raw = fs.readFileSync(filePath, 'utf-8');
+
     try {
-      await deleteUser(userApi, userData.id, userData.token);
-      console.log('✅ User deleted successfully.');
-    } catch (error) {
-      console.error('❌ Failed to delete user during teardown:', error);
+      const userData = JSON.parse(raw);
+
+       // Delete user via API if both id and token exist
+      if (userData.id && userData.token) {
+        await deleteUser(userApi, userData.id, userData.token);
+      }
+
+      // Delete the file (both storage state and user-data)
+      fs.unlinkSync(filePath);
+      
+    } catch (err) {
+      console.error(`Failed to delete ${file}`, err);
     }
-  } else {
-    console.warn('⚠️ No user data file found for cleanup.');
   }
-});
+
+  await requestContext.dispose();
+}
+
+

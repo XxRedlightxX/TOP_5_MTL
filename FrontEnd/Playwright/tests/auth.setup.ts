@@ -16,6 +16,7 @@ const dataFile = 'playwright/.auth/user_data.json'
  * 3. Saves the session and user metadata to files for use in the test suite in json file
  **/
 setup('authenticate', async ({ userProfilePage,loginPage, page, request }) => {
+    
     const id = Date.now();
     const userInputs = { ...validUser, email: `test_${id}@example.com`, username: `user_${id}` };
     

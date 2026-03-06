@@ -10,6 +10,16 @@ export enum UserRole  {
 
 
 /**
+ * Clicks on a locator after ensuring it is visible.
+ *
+ * @param {Locator} pLocator - Playwright Locator representing the element to click.
+ */
+export async function clickElement(pLocator : Locator) {
+    await expect(pLocator).toBeVisible();
+    await pLocator.click();
+}
+
+/**
  * Fills an input element safely, ensuring Vue v-model has synced.
  *
  * @param {Locator} pLocator - The Playwright locator for the input field.
@@ -22,17 +32,17 @@ export async function getElement(pLocator: Locator, pInput: string) {
     //  Wait for it to be ready
     await target.waitFor({ state: 'visible' });
 
+    //  Wait until enabled and ready for input
+    await expect(target).toBeEnabled();
+
     // Clear and Fill
     await target.clear();
     await target.fill(pInput);
 
-    // 4. THE FIX: Wait for the value to be reflected
+    //  Wait for the value to be reflected
     // This ensures the v-model has finished its "sync"
     await expect(target).toHaveValue(pInput);
 }
-
-
-
 
 /**
  * Splits a date-time string into [hour, date].
@@ -55,7 +65,8 @@ export function getStringElement(pInput : string)  : string[]{
 export async function getDropdownElement(pLocator : Locator, pInput : number | null = null) {
     if (pInput === null) return;
 
-    await pLocator.waitFor({state : 'visible'})
+    await pLocator.waitFor({state : 'visible'});
+    await expect(pLocator).toBeEnabled();
     await pLocator.selectOption({index : pInput})
 }
 
@@ -68,20 +79,19 @@ export async function getDropdownElement(pLocator : Locator, pInput : number | n
 export async function getRadioGroupElement(pLocator: Locator, pInput: string) {
     if (!pInput) return;
      
-    // 1. Target the visible group
+    //  Target the visible group
     const visibleGroup = pLocator.filter({ visible: true });
 
-    // 2. Wait for the group to be ready
+    //  Wait for the group to be ready
     await visibleGroup.waitFor({ state: 'visible' });
 
-    // 3. Find the specific radio option by its label
+    //  Find the specific radio option by its label
     // Using { exact: false } handles case sensitivity (e.g., "Particulier" vs "particulier")
     const radioOption = visibleGroup.getByLabel(pInput, { exact: false });
 
-    // 4. Perform the click
+    //  Perform the click
     await radioOption.click();
 
-    // 5. THE FIX: Verify it is checked
     // This forces Playwright to wait until the Vue state (v-model) is updated
     await expect(radioOption).toBeChecked();
 }

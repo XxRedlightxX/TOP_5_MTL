@@ -1,11 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
 require('dotenv').config({ path: '../.env' });
+import path from 'path';
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
- import dotenv from 'dotenv';
-import path from 'path';
+
+
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
@@ -14,8 +15,10 @@ import path from 'path';
  */
 export default defineConfig({
 
-  /*Timeout 60 sec */
-  timeout: 60000,
+  /*Timeout 70 sec */
+  timeout: 70000,
+
+  globalTeardown : './tests/global.teardown.ts',
 
   
   testDir: './tests',
@@ -37,9 +40,11 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-     baseURL: process.env.APP_URL || 'http://localhost:3000' ,
-
-       // automatically use logged-in state
+     baseURL: process.env.APP_URL || 'http://127.0.0.1:3000' ,
+      locale: 'en-US',
+      timezoneId: 'America/New_York',
+      navigationTimeout: 60000,
+      // automatically use logged-in state
 
      /*extraHTTPHeaders: {
       'Content-Type': 'application/json',
@@ -50,35 +55,70 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
-  /* Configure projects for major browsers */
   projects: [
-    { name: 'setup', testMatch: /.*\.setup\.ts/,
-      teardown: 'cleanup'
-     }, // This tells Playwright to treat .setup files as tests
 
-     {
-      name: 'cleanup',
-      testMatch: /.*\.teardown\.ts/, // Matches your cleanup file name
+  // ========== SETUP PROJECTS (RUN FIRST) ==========
+    {
+      name: 'setup-chromium',
+      testMatch: /setup\.chromium\.ts/,
+      testDir: './tests/setup',
+      use: { ...devices['Desktop Chrome'], locale: 'en-US', 
+        launchOptions: { args: ['--lang=en-US'], channel: 'chromium' }
+      },
     },
+    {
+      name: 'setup-firefox',
+      testMatch: /setup\.firefox\.ts/,
+      testDir: './tests/setup',
+      use: { ...devices['Desktop Firefox'], locale: 'en-US',
+        launchOptions: { args: ['--lang=en-US'] }
+      }
+    },
+    {
+      name: 'setup-edge',
+      testMatch: /setup\.edge\.ts/,
+      testDir: './tests/setup',
+      use: {
+        ...devices['Desktop Edge'], locale: 'en-US', 
+        launchOptions:{ args: ['--lang=en-US'], channel: 'msedge' }
+      }
+    },
+    
 
+    // ========== BROWSER TESTS (RUN AFTER SETUP) ==========
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
-      dependencies: ['setup'],
+      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/chromium-user.json', locale: 'en-US', launchOptions: { args: ['--lang=en-US'], channel: 'chromium' } },
+      dependencies: ['setup-chromium'],
+      testDir: './tests',
+      testIgnore: /.*\.(setup|teardown)\..*\.ts/
     },
-
-    /*{
+    {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'],  storageState: 'playwright/.auth/user.json' },
-      dependencies: ['setup'],
-    },*/
-
-    /*{
-      name: 'Microsoft Edge',
-      use: { ...devices['Desktop Edge'],  storageState: 'playwright/.auth/user.json' },
-      dependencies: ['setup'],
-    },*/
-    
+      use: { 
+        ...devices['Desktop Firefox'], 
+        storageState: 'playwright/.auth/firefox-user.json',
+        locale: 'en-US',
+        timezoneId: 'America/New_York',
+      },
+      dependencies: ['setup-firefox'],
+      testDir: './tests',
+      testIgnore: /.*\.(setup|teardown)\..*\.ts/
+    },
+    {
+    name: 'Microsoft Edge',
+    use: { 
+      ...devices['Desktop Edge'], 
+      channel: 'msedge', // This is correct
+      storageState: 'playwright/.auth/edge-user.json', 
+      locale: 'en-US',
+      launchOptions: {
+      args: ['--lang=en-US'],
+      }
+    },
+    dependencies: ['setup-edge'],
+    testDir: './tests',
+  },
     /*
 
     {

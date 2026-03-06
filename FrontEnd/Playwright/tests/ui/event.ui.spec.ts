@@ -1,40 +1,31 @@
- import { test, expect } from "Playwright/fixtures/baseTest";;
- import { emptyEvent, invalidEventDate, invalidEventTitle, validEvent } from "Playwright/mockData/EventData";
- import { assertElementofListElement, assertToolTipElement } from "Playwright/helper/ui/uiDriverHelper.helper";
-import fs from 'fs';
+import { test, expect } from "Playwright/fixtures/baseTest";;
+import { emptyEvent, invalidEventDate, invalidEventTitle, validEvent } from "Playwright/mockData/EventData";
+import { assertElementofListElement, assertToolTipElement } from "Playwright/helper/ui/uiDriverHelper.helper";
 
+const TIMEOUT_SEC = 30000;
 
-//const userData = JSON.parse(fs.readFileSync('playwright/.auth/user_data.json', 'utf-8'));
 
 test.describe('Event Creation Flow', () => {
 
-  let userData: any;
-
-  test.beforeAll(() => {
-  userData = JSON.parse(fs.readFileSync('playwright/.auth/user_data.json', 'utf-8'));
-})
-
-
-  test('Scenario: User attempts to create an event with missing event title', async ({ userProfilePage, loginPage }) => {
+  test('Scenario: User attempts to create an event with missing event title', async ({ userProfilePage, loginPage,userData }) => {
   
     // Given: The user is logged into their profile page
     await loginPage.navigate('/profile');
-    //await loginPage.login(currentUserData.email, currentUserData.password);
 
    // And: The user is on the User Profile dashboard (Assertion to confirm state)
-    await expect(userProfilePage.profileUsername).toContainText(userData.username, { timeout: 15000 });
+    await expect(userProfilePage.profileUsername).toContainText(userData.username, { timeout: TIMEOUT_SEC });
     
     // When: The user attempts to create a new event
     await userProfilePage.fillEventFields(invalidEventTitle,1,1,1);
+    await userProfilePage.btnCreateEvent.click();
     
     const msg = await userProfilePage.getMessageErrorAsync(await userProfilePage.msgErrorEventName.isVisible());
     
     // Then: An error message "The titre field is required." should be displayed
-    // Setting 60s timeout as requested previously to ensure the message has time to appear
    await assertToolTipElement(userProfilePage.profileEvent_NameInput, msg);
   });
 
-  test('Scenario: User attempts to create an event with missing category information', async ({ userProfilePage, loginPage, page }) => {
+  test('Scenario: User attempts to create an event with missing category information', async ({ userProfilePage, loginPage,userData }) => {
   
     // Given: The user is logged into their profile page
     await loginPage.navigate('/profile');
@@ -43,32 +34,25 @@ test.describe('Event Creation Flow', () => {
     const uniqueEvent = { ...validEvent, titre: `Event_${Date.now()}_${Math.random()}` } as any;
 
     // And: The user is on the User Profile dashboard
-    await expect(userProfilePage.profileUsername).toContainText(userData.username, { timeout: 15000 });
+    await expect(userProfilePage.profileUsername).toContainText(userData.username, { timeout: TIMEOUT_SEC  });
     
     // When: The user attempts to create a new event without selecting a category
     await userProfilePage.fillEventFields(uniqueEvent,1,1);
-
-    // And: The user clicks the submit button
     await userProfilePage.btnCreateEvent.click();
 
     // Then: A browser tooltip should appear on the Category input
     await assertToolTipElement(userProfilePage.profileEvent_TypeInput, userProfilePage.MSG_SELECT_ITEM)
   });
 
- 
-
-
-   test('Scenario: User attempts to create an event with all fields empty', async ({ userProfilePage, loginPage }) => {
+   test('Scenario: User attempts to create an event with all fields empty', async ({  userProfilePage, loginPage,userData }) => {
     // Given: The user is logged into their profile page
     await loginPage.navigate('/profile');
     
    // And: The user is on the User Profile dashboard
-    await expect(userProfilePage.profileUsername).toContainText(userData.username, { timeout: 15000 });
+    await expect(userProfilePage.profileUsername).toContainText(userData.username, { timeout: TIMEOUT_SEC  });
     
     // When: The user attempts to create a new event leaving all fields empty
     await userProfilePage.fillEventFields(emptyEvent);
-
-    // And: The user clicks the submit button
     await userProfilePage.btnCreateEvent.click();
 
     const msg = await userProfilePage.getMessageErrorAsync(await userProfilePage.msgErrorEventName.isVisible());
@@ -77,13 +61,13 @@ test.describe('Event Creation Flow', () => {
     await assertToolTipElement(userProfilePage.profileEvent_NameInput, msg)
   });
 
-  test('Scenario: User attempts to create an event with a duplicate title', async ({ userProfilePage, loginPage }) => {
+  test('Scenario: User attempts to create an event with a duplicate title', async ({ userProfilePage, loginPage,userData}) => {
   
     // Given: The user is logged into their profile page
     await loginPage.navigate('/profile');
     const uniqueEvent = { ...validEvent, titre: `Event_${Date.now()}_${Math.random()}` } as any;
    // And: The user is on the User Profile dashboard
-    await expect(userProfilePage.profileUsername).toContainText(userData.username, { timeout: 15000 });
+    await expect(userProfilePage.profileUsername).toContainText(userData.username, { timeout: TIMEOUT_SEC  });
     
     // And: An event with a specific title already exists
     await userProfilePage.createEvent(uniqueEvent);
@@ -93,13 +77,13 @@ test.describe('Event Creation Flow', () => {
     await expect(userProfilePage.msgErrorEventName).toContainText("An activity with this name already exists.")
   });
 
-  test('Scenario: Successful creation of a new event', async ({ userProfilePage, loginPage }) => {
+  test('Scenario: Successful creation of a new event', async ({  userProfilePage, loginPage,userData}) => {
   const uniqueEvent = { ...validEvent, titre: `Event_${Date.now()}_${Math.random()}` } as any;
     // Given: The user is logged into their profile page
     await loginPage.navigate('/profile');
 
    // And: The user is on the User Profile dashboard
-    await expect(userProfilePage.profileUsername).toContainText(userData.username);
+    await expect(userProfilePage.profileUsername).toContainText(userData.username, { timeout: TIMEOUT_SEC  });
     
     // When: The user creates a new event with valid information
     await userProfilePage.createEvent(uniqueEvent);
@@ -108,19 +92,17 @@ test.describe('Event Creation Flow', () => {
     await assertElementofListElement(userProfilePage.cartItems,uniqueEvent.titre)
   });
 
-
-
-  test('Scenario: User attempts to create an event with non valid date', async ({ userProfilePage, loginPage }) => {
+  test('Scenario: User attempts to create an event with non valid date', async ({  userProfilePage, loginPage,userData,browserName, }) => {
   
     // Given: The user is logged into their profile page
     await loginPage.navigate('/profile');
     
    // And: The user is on the User Profile dashboard
-    await expect(userProfilePage.profileUsername).toContainText(userData.username);
+    await expect(userProfilePage.profileUsername).toContainText(userData.username, { timeout: TIMEOUT_SEC  });
     
     // When: The user creates a new event with valid information
     await userProfilePage.fillEventFields(invalidEventDate,1,1,1);
-    await userProfilePage.btnCreateEvent.click();
+    await userProfilePage.clickEvent();
 
     // Then: The event should be visible in the user's activity list
     await expect(userProfilePage.msgErrorEventName).toContainText(userProfilePage.MSG_EVENT_DATE)

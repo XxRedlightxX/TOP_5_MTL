@@ -1,5 +1,5 @@
 <template>
-    <div id="myModal" class="modal" style="" @click.self="pop">
+    <div id="myModal" class="modal" data-testid="-created-event-modal" style="" @click.self="pop">
         <div class="modal-content" >
             <div class="event-create-form">
                 <span class="close" @click="pop">&times;</span>

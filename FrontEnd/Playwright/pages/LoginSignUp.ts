@@ -2,7 +2,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { UserProfilePage } from './UserProfilePage';
-import { getElement, getRadioGroupElement, UserRole, waitForResponseAfterClick } from 'Playwright/helper/ui/uiDriverHelper.helper';
+import { clickElement, getElement, getRadioGroupElement, UserRole, waitForResponseAfterClick } from 'Playwright/helper/ui/uiDriverHelper.helper';
 
 export class LoginSignUpPage extends BasePage {
   public readonly login_UsernameInput: Locator;
@@ -54,8 +54,12 @@ export class LoginSignUpPage extends BasePage {
   }
 
   async login(pUsername: string, pPassword: string) {
+    //Fills the form fields
     await getElement(this.login_UsernameInput,pUsername);
     await getElement(this.login_PasswordInput,pPassword);
+
+    
+    // Wait for Api response and then click
     await waitForResponseAfterClick(this.page, 'api/login', this.btn_login);
     await this.page.waitForLoadState('networkidle');
   }
@@ -65,14 +69,17 @@ export class LoginSignUpPage extends BasePage {
       pPassword: string, pPassword_Confirmation, pRadioChoice : string
     ) {
       await this.page.waitForLoadState('networkidle'); 
-      await this.btn_toggleAuth.click();
+      await clickElement(this.btn_toggleAuth);
+
+      //Fills the fields
       await getElement(this.register_UsernameInput,pUsername);
       await getElement(this.register_EmailInput,pEmail);
       await getElement(this.register_PhoneInput,pPhone);
       await getElement(this.register_PasswordInput,pPassword);
       await getElement(this.register_Confirmation_PasswordInput,pPassword_Confirmation);
-     
       await getRadioGroupElement(this.radioGroupUserType, pRadioChoice);
+      
+    // Wait for Api response and then click
       await waitForResponseAfterClick(this.page, 'api/register', this.btn_register);
   }
 
