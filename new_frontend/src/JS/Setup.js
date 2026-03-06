@@ -42,7 +42,7 @@ const Setup = {
    *
    * @returns {Ref<boolean>} Référence réactive du mode actuel (true = mode jour)
    */
-  async modeSetup() {
+  modeSetup() {
     const actualMode = ref(LocalStorageManager.getMode());
 
     Setup.nullInitialiser(
@@ -56,13 +56,7 @@ const Setup = {
       actualMode.value = JSON.parse(event.detail.storage);
     };
 
-    onMounted(() => {
-      window.addEventListener("mode-changed", handleModeChange);
-    });
-
-    onUnmounted(() => {
-      window.removeEventListener("mode-changed", handleModeChange);
-    });
+    window.addEventListener("mode-changed", handleModeChange);
 
     return actualMode;
   },
@@ -90,13 +84,7 @@ const Setup = {
       actualLang.value = JSON.parse(event.detail.storage);
     };
 
-    onMounted(() => {
-      window.addEventListener("lang-changed", handleLanguageChange);
-    });
-
-    onUnmounted(() => {
-      window.removeEventListener("lang-changed", handleLanguageChange);
-    });
+    window.addEventListener("lang-changed", handleLanguageChange);
 
     return actualLang;
   },

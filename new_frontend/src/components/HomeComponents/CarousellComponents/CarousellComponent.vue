@@ -1,11 +1,11 @@
 <template>
   <div v-if="hightRatedActivities.length > 0" id="carousellComponent">
-    <CarousellGrandEcrant :events="hightRatedActivities" />
+    <CarousellGrandEcrant :events="hightRatedActivities"/>
     <CarousellPhone :events="hightRatedActivities" />
   </div>
   <div v-else id="carousellComponent">
-    <CarousellGrandEcrant :events="fakeData" />
-    <CarousellPhone :events="fakeData" />
+    <CarousellGrandEcrant :events="fakeData" :fake="false" />
+    <CarousellPhone :events="fakeData" :fake="false"/>
     <LoadingComponent :size="200" />
   </div>
 </template>
@@ -24,6 +24,8 @@
   let fakeData = AsyncData.getEvents(4)
 
   const handleModeChange = (event) => {
+    let mode = LocalStorageManager.getMode();
+    console.log('mode changed to ' + mode)
     SetupEvent.actualEventModeManagerGeneric(LocalStorageManager.getHightRateEvents, hightRatedActivities)
   };
 

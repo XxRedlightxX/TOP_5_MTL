@@ -1,8 +1,8 @@
 <template>
-  <div v-if="props.events.length > 0" id="carouselGrand">
+  <div v-if="sliderEvents.length > 0" id="carouselGrand">
     <!-- list item -->
     <div class="list">
-      <div v-for="(item, index) in props.events" :key="index" class="item">
+      <div v-for="(item, index) in sliderEvents" :key="index" class="item">
         <div class="imgContainer">
           <div class="overlayGrad"></div>
           <img :src="item.image">
@@ -11,11 +11,9 @@
           <div :class="[index == 0 ? 'titlee' : 'lostTitle', item.id == -1 ? 'fakeTitle' : '']"> {{ item.title }} </div>
 
           <div :class="index == 0 ? 'buttons' : 'lostBouttons'">
-            <button class="btn roundBorderSmall" @click="goToEvent(item.id)"> {{actualLang.value ? "See the event" : "Voir l'evenement" }}</button>
+            <button class="btn roundBorderSmall" @click="props.fake && goToEvent(item.id)"> {{actualLang ? "See the event" : "Voir l'evenement" }}</button>
 
-            <button class="btn roundBorderSmall" @click="goToOrganisator(item.id)"> {{ actualLang.value ? "Organisator" : "Découvrir les Organisateurs"  }}</button>
-            <!-- <router-link class="btn roundBorderSmall" to="/Event" @click="setEvent(item.id)">{{ textEvent }} {{ item.id }}</router-link> -->
-            <!-- <router-link class="btn roundBorderSmall" to="/Event Organisator" @click="setOrganisator()">Découvrir les Organisateurs</router-link> -->
+            <button class="btn roundBorderSmall" @click="props.fake && goToOrganisator(item.id)"> {{ actualLang ? "Organisator" : "Découvrir les Organisateurs"  }}</button>
           </div>
           <div :class="index == 0 ? 'desc' : 'lostdesc'">
             <p :class="item.id == -1 ? 'fakeDesc' : ''">{{ item.desc }}</p>
@@ -25,7 +23,7 @@
     </div>
     <!-- list thumbnail -->
     <div class="thumbnail">
-      <div v-for="(item, index) in props.events" :key="index" class="item">
+      <div v-for="(item, index) in sliderEvents" :key="index" class="item">
         <img class=" roundBorderSmall" :src="item.image2">
         <div class="content">
           <div :class="['title', item.id == -1 ? 'fakeTitle' : '']">{{ item.title }}</div>
@@ -34,8 +32,8 @@
     </div>
     <!-- next prev -->
     <div class="arrows">
-      <button @click="showSlider('prev')"><</button>
-      <button @click="showSlider('next')">></button>
+      <button @click="props.fake && showSlider('prev')"><</button>
+      <button @click="props.fake && showSlider('next')">></button>
     </div>
     <!-- time running -->
     <div class="time"></div>
@@ -45,30 +43,29 @@
 <script setup>
   import { ref, watch, onMounted, defineProps } from "vue";
   import { useRouter } from "vue-router";
-  import LocalStorageManager from "../../../JS/LocalStorageManager";
   import Setup from "../../../JS/Setup";
   import SetupEvents from "@/JS/SetupEvents";
-  import FakeDataBase from "../../../JS/ToBeDeleted/FakeDataBase";
 
   // router
   const router = useRouter();
-
-  // Mode & Lang depuis Setup
-  const actualMode = ref(Setup.modeSetup().value);
-  const actualLang = ref(Setup.languageSetup().value);
-
-  const props = defineProps({
-    events: {
-      type: Array,
-      default: () => []
-    }
-  });
-
+  const actualLang = Setup.languageSetup();
 
   const timeRunning = 3000;
   const timeAutoNext = 5000;
   let runTimeOut = null;
   let runNextAuto = null;
+  const sliderEvents = ref([]);
+
+  const props = defineProps({
+    events: {
+      type: Array,
+      default: () => []
+    },
+    fake: {
+      type: Boolean,
+      default: true
+    }
+  });
 
   // Méthodes
   async function goToEvent(id) {
@@ -95,17 +92,11 @@
     router.push({ name: "Event" });
   }
 
-  //Lifecycle
-  onMounted(() => {
-    //props.events.value = props.events;
-    setNextAuto();
-  });
-
   function showSlider(direction) {
     if (direction === "next") {
-      props.events.value.push(props.events.value.shift());
+      sliderEvents.value.push(sliderEvents.value.shift());
     } else {
-      props.events.value.unshift(props.events.value.pop());
+      sliderEvents.value.unshift(sliderEvents.value.pop());
     }
     resetSlider();
   }
@@ -126,14 +117,20 @@
     }, timeAutoNext);
   }
 
-  // to be deleted
-  watch(actualLang, (newVal) => {
-    textEvent.value = newVal ? text1a : text1b;
-    textOrganisator.value = newVal ? text2a : text2b;
+  watch(
+    () => props.events,
+    (newEvents) => {
+      sliderEvents.value = [...newEvents];
+    },
+    { immediate: true }
+  );
+
+  onMounted(() => {
+    if (props.fake) {
+      setNextAuto();
+    }
   });
-  ///
 </script>
-<!-- <script src='../../../JS/ToBeDeleted/CarousellScript.js'></script> -->
 
 <style src="../../../styles/ComponentsStyles/HomeStyles/CarousellGrandStyle.scss"></style>
 <style src="../../../styles/ComponentsStyles/HomeStyles/CarousellGrandStyleColor.scss"></style>

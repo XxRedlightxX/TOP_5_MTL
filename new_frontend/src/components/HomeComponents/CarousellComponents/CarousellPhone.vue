@@ -1,6 +1,6 @@
 <template>
-  <div v-if="props.events.length > 0 && eventInfo != null" id="carousellPhoneComponent">
-    <CarouselSwipper :events="props.events" @phone-event-swiped="changeInfos" />
+  <div v-if="sliderEvents.length > 0 && eventInfo != null" id="carousellPhoneComponent">
+    <CarouselSwipper :events="sliderEvents" @phone-event-swiped="props.fake && changeInfos" />
 
     <div class="reste">
       <div class="carousellPhoneSwipperInfos">
@@ -8,8 +8,8 @@
         <p :class="eventInfo.id == -1 ? 'fakeDesc' : ''">{{ eventInfo.desc }}</p>
       </div>
       <div class="carousellPhoneSwipperBtn">
-        <button class="button" @click="goToEvent(eventInfo.id)"> {{ actualLang ? "See the event" : "Voir l'evenement" }}</button>
-        <router-link class="button" to="/Event Organisator" @click="setEvent()">{{ actualLang ? "Organisator" : "Découvrir les Organisateurs" }}</router-link>
+        <button class="button" @click="props.fake && goToEvent(eventInfo.id)"> {{ actualLang ? "See the event" : "Voir l'evenement" }}</button>
+        <router-link class="button" to="/Event Organisator" @click="props.fake && setEvent()">{{ actualLang ? "Organisator" : "Découvrir les Organisateurs" }}</router-link>
       </div>
     </div>
   </div>
@@ -23,11 +23,17 @@
 
   let actualMode = Setup.modeSetup()
   let actualLang = Setup.languageSetup()
+  const sliderEvents = ref([]);
+
   const props = defineProps({
     events: {
       type: Array,
       default: () => [],
     },
+    fake: {
+      type: Boolean,
+      default: true
+    }
   })
 
   const router = useRouter();
@@ -53,8 +59,15 @@
     const event = await SetupEvents.singleEventSetup(id)
   }
 
+  watch(
+    () => props.events,
+    (newEvents) => {
+      sliderEvents.value = [...newEvents];
+    },
+    { immediate: true }
+  );
+
   onMounted(() => {
-    //props.events.value = props.events
     eventInfo.value = props.events[0]
   })
 </script>

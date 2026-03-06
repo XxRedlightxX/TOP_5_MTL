@@ -10,11 +10,11 @@
 </template>
 
 <script setup>
+  import { onMounted, onUnmounted, ref } from 'vue'
   import Footer from '@/components/StaticComponents/FooterComponent.vue';
   import Language from './components/StaticComponents/LanguageComponent.vue';
   import Menu from './components/StaticComponents/MenuComponent.vue';
   import Setup from './JS/Setup';
-  //import { useAuthStore } from "./stores/auth";
 
   let actualMode = Setup.modeSetup();
 </script>

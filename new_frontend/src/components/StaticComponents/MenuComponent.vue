@@ -43,7 +43,7 @@
   import Logo from '@/components/LogoComponent/LogoComponent.vue';
   import Setup from '@/JS/Setup.js';
 
-  let actualMode = Setup.modeSetup();
+  let actualMode = Setup.modeSetup()
   let actualLang = Setup.languageSetup();
 
   let lastScrollTop = 0;
@@ -86,8 +86,9 @@
       console.log('Retour plein écran :', newVal);
     }
   });
+
   // Add event listener for mode changes
-  onMounted(() => {
+  onMounted(async () => {
     window.addEventListener("scroll", handleScroll);
     window.addEventListener('resize', updateDimensions);
   });
