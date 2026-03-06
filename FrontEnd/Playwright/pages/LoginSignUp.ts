@@ -79,7 +79,7 @@ export class LoginSignUpPage extends BasePage {
       await getElement(this.register_Confirmation_PasswordInput,pPassword_Confirmation);
       await getRadioGroupElement(this.radioGroupUserType, pRadioChoice);
       
-    // Wait for Api response and then click
+    // Waits for Api response and then click
       await waitForResponseAfterClick(this.page, 'api/register', this.btn_register);
   }
 
