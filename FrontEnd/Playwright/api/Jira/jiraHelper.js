@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { request } from '@playwright/test';
+import fs from 'fs';
 dotenv.config({ path: '../.env' });
 
 
@@ -24,7 +25,7 @@ const JIRA_PROJECT_KEY = process.env.JIRA_PROJECT_KEY;
  * @returns A Promise that resolves when the Jira issue creation request completes.
  * 
  */
-export async function createJiraTicket(pTitle, pError, pFile) {
+export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
   const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString('base64');
 
   const apiContext = await request.newContext({
@@ -54,6 +55,10 @@ export async function createJiraTicket(pTitle, pError, pFile) {
               content: [
                 { type: 'text', text: `pError: ${pError}` }
               ]
+            },
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: `Screenshot: ${pScreenshot}` }]
             }
           ]
         },
@@ -63,9 +68,35 @@ export async function createJiraTicket(pTitle, pError, pFile) {
   });
 
   if (response.ok()) {
+
     const data = await response.json();
-    console.log(' Issue created:', data.key);
+    const issueKey = data.key;
+
+    console.log('Issue created:', issueKey);
+
+    // Attach screenshot if it exists
+    if (pScreenshot && fs.existsSync(pScreenshot)) {
+
+      await apiContext.post(`/rest/api/3/issue/${issueKey}/attachments`, {
+        multipart: {
+           file: {
+                name: 'failure.png',
+                mimeType: 'image/png',
+                buffer: fs.readFileSync(pScreenshot)
+            }
+        },
+        headers: {
+          'X-Atlassian-Token': 'no-check',
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      console.log('Screenshot attached');
+    }
+
   } else {
-    console.pError(' Failed:', await response.text());
+    console.error('Failed:', await response.text());
   }
+
+  await apiContext.dispose();
 }
