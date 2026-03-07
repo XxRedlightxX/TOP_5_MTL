@@ -56,10 +56,7 @@ export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
                 { type: 'text', text: `pError: ${pError}` }
               ]
             },
-            {
-              type: 'paragraph',
-              content: [{ type: 'text', text: `Screenshot: ${pScreenshot}` }]
-            }
+             { type: 'inlineCard', attrs: { url: `https://${JIRA_HOST}/secure/attachment/${filename}` } }
           ]
         },
         issuetype: { name: 'Tâche' }
