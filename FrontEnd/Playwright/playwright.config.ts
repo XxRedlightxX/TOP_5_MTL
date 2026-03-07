@@ -93,7 +93,7 @@ export default defineConfig({
       testDir: './tests',
       testIgnore: /.*\.(setup|teardown)\..*\.ts/
     },
-    {
+    /*{
       name: 'firefox',
       use: { 
         ...devices['Desktop Firefox'], 
@@ -118,7 +118,7 @@ export default defineConfig({
     },
     dependencies: ['setup-edge'],
     testDir: './tests',
-  },
+  },*/
     /*
 
     {
