@@ -33,7 +33,7 @@ export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
     extraHTTPHeaders: {
       Authorization: `Basic ${auth}`,
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      
     }
   });
 
@@ -48,12 +48,12 @@ export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
           content: [
             {
               type: 'paragraph',
-              content: [{ type: 'text', text: `pFile: ${pFile}` }]
+              content: [{ type: 'text', text: `File : ${pFile}` }]
             },
             {
               type: 'paragraph',
               content: [
-                { type: 'text', text: `pError: ${pError}` }
+                { type: 'text', text: `Error: ${pError}` }
               ]
             },
              { type: 'inlineCard', attrs: { url: `https://${JIRA_HOST}/secure/attachment/${filename}` } }
@@ -76,20 +76,40 @@ export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
 
       await apiContext.post(`/rest/api/3/issue/${issueKey}/attachments`, {
         multipart: {
-           file: {
-                name: 'failure.png',
-                mimeType: 'image/png',
-                buffer: fs.readFileSync(pScreenshot)
-            }
+           file: fs.createReadStream(pScreenshot)
         },
         headers: {
           'X-Atlassian-Token': 'no-check',
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Basic ${auth}`,
         }
       });
 
       console.log('Screenshot attached');
     }
+
+    const attachResp = await apiContext.post(`/rest/api/3/issue/${issueKey}/attachments`, {
+  multipart: { file: fs.createReadStream(pScreenshot) },
+  headers: { 'X-Atlassian-Token': 'no-check' }
+});
+const attachData = await attachResp.json();
+const attachmentUrl = attachData[0].content; // Jira returns array
+
+// Update description to include the image
+await apiContext.put(`/rest/api/3/issue/${issueKey}`, {
+  data: {
+    fields: {
+      description: {
+        type: 'doc',
+        version: 1,
+        content: [
+          { type: 'paragraph', content: [{ type: 'text', text: `Error screenshot:` }] },
+          { type: 'image', attrs: { src: attachmentUrl } }
+        ]
+      }
+    }
+  }
+});
 
   } else {
     console.error('Failed:', await response.text());
