@@ -25,7 +25,7 @@ const JIRA_PROJECT_KEY = process.env.JIRA_PROJECT_KEY;
  * @returns A Promise that resolves when the Jira issue creation request completes.
  * 
  */
-export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
+export async function createJiraTicket(pTitle, pError, pFile, pScreenshot) {
   const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString('base64');
 
   const apiContext = await request.newContext({
@@ -33,7 +33,7 @@ export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
     extraHTTPHeaders: {
       Authorization: `Basic ${auth}`,
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      
     }
   });
 
@@ -79,7 +79,7 @@ export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
   const fileBuffer = fs.readFileSync(pScreenshot);
 
   const attachResponse = await apiContext.post(`/rest/api/3/issue/${issueKey}/attachments`, {
-    // DO NOT manualy set 'Content-Type' here. 
+    
     // Playwright needs to generate the boundary automatically.
     headers: {
       'X-Atlassian-Token': 'no-check',
