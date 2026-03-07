@@ -25,8 +25,6 @@ class JiraReporter implements Reporter {
    * @returns A Promise that resolves when Jira ticket creation is complete.
    */
   async onTestEnd(pTest: TestCase, pResult: TestResult) {
-
-
     // Only run in CI
     if (!process.env.CI) {
       return;
@@ -37,8 +35,11 @@ class JiraReporter implements Reporter {
     const title = pTest.title;
     const file = pTest.location.file;
     const error = pResult.error?.message || 'Unknown error';
+    const screenshot = pResult.attachments.find(a => a.name === 'screenshot');
 
-    await createJiraTicket(title, error, file);
+   if (pResult.status === 'failed' && pResult.retry === pTest.retries) {
+      await createJiraTicket(title, error, file, screenshot?.path );
+    }
 
   }
 

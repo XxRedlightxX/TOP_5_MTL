@@ -44,6 +44,7 @@ export default defineConfig({
       locale: 'en-US',
       timezoneId: 'America/New_York',
       navigationTimeout: 60000,
+      screenshot: 'only-on-failure',
       // automatically use logged-in state
 
      /*extraHTTPHeaders: {
