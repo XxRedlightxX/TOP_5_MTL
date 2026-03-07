@@ -76,23 +76,30 @@ export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
 
     // Attach screenshot if it exists
     if (pScreenshot && fs.existsSync(pScreenshot)) {
+  const fileBuffer = fs.readFileSync(pScreenshot);
 
-      await apiContext.post(`/rest/api/3/issue/${issueKey}/attachments`, {
-        multipart: {
-           file: {
-                name: 'failure.png',
-                mimeType: 'image/png',
-                buffer: fs.readFileSync(pScreenshot)
-            }
-        },
-        headers: {
-          'X-Atlassian-Token': 'no-check',
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-
-      console.log('Screenshot attached');
+  const attachResponse = await apiContext.post(`/rest/api/3/issue/${issueKey}/attachments`, {
+    // DO NOT manualy set 'Content-Type' here. 
+    // Playwright needs to generate the boundary automatically.
+    headers: {
+      'X-Atlassian-Token': 'no-check',
+      'Accept': 'application/json'
+    },
+    multipart: {
+      file: {
+        name: 'failure.png',
+        mimeType: 'image/png',
+        buffer: fileBuffer,
+      }
     }
+  });
+
+  if (attachResponse.ok()) {
+    console.log('Screenshot attached successfully');
+  } else {
+    console.error('Failed to attach screenshot:', await attachResponse.text());
+  }
+}
 
   } else {
     console.error('Failed:', await response.text());
