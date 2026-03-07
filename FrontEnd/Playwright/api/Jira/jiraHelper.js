@@ -33,7 +33,7 @@ export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
     extraHTTPHeaders: {
       Authorization: `Basic ${auth}`,
       Accept: 'application/json',
-      
+      'Content-Type': 'application/json'
     }
   });
 
@@ -48,12 +48,12 @@ export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
           content: [
             {
               type: 'paragraph',
-              content: [{ type: 'text', text: `File : ${pFile}` }]
+              content: [{ type: 'text', text: `pFile: ${pFile}` }]
             },
             {
               type: 'paragraph',
               content: [
-                { type: 'text', text: `Error: ${pError}` }
+                { type: 'text', text: `pError: ${pError}` }
               ]
             },
              { type: 'inlineCard', attrs: { url: `https://${JIRA_HOST}/secure/attachment/${filename}` } }
@@ -76,19 +76,20 @@ export async function createJiraTicket(pTitle, pError, pFile, pScreenshot="") {
 
       await apiContext.post(`/rest/api/3/issue/${issueKey}/attachments`, {
         multipart: {
-           file: fs.createReadStream(pScreenshot)
+           file: {
+                name: 'failure.png',
+                mimeType: 'image/png',
+                buffer: fs.readFileSync(pScreenshot)
+            }
         },
         headers: {
           'X-Atlassian-Token': 'no-check',
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Basic ${auth}`,
+          'Content-Type': 'multipart/form-data'
         }
       });
 
       console.log('Screenshot attached');
     }
-
-    
 
   } else {
     console.error('Failed:', await response.text());
