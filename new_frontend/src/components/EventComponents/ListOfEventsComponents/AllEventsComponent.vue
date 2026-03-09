@@ -134,11 +134,20 @@
     //console.log('all events : ', events.value)
   };
 
- const handleTagModeChange = (event) => {
+ const handleTagChange = (event) => {
     let tag = LocalStorageManager.getTag()
-    let filter = "type=" + tag;
-    //console.log('tag cherched ' + filter + " page = " + page)
+    let filter = tag == null ? null : "type=" + tag;
+    console.log('tag cherched ' + filter + " page = " + page)
     paginationUpdate(page, filter)
+  };
+
+    const handleEventModeChange = (event) => {
+    actualEventMode.value = event.detail.storage.data;
+    getPaginationLenght()
+  };
+
+  const handleStorageChange = (event) => {
+    getEvents()
   };
 
   watch(actualMode, (newVal, oldVal) => {
@@ -169,14 +178,6 @@
     }
   });
 
-  const handleEventModeChange = (event) => {
-    actualEventMode.value = event.detail.storage.data;
-    getPaginationLenght()
-  };
-  const handleStorageChange = (event) => {
-    getEvents()
-    
-  };
   onMounted(async () => {
     parameter.value = await setup()
     const tempActualEventMode = await Setup.eventModeSetup();
@@ -191,7 +192,7 @@
     
     window.addEventListener('resize', updateDimensions);
     window.addEventListener("eventMode-changed", handleEventModeChange);
-    window.addEventListener("tag-changed", handleTagModeChange);
+    window.addEventListener("tag-changed", handleTagChange);
     getPaginationLenght()
     getEvents()
   })

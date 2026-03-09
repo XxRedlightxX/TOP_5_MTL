@@ -10,6 +10,7 @@
             <li @click="changeEventType(2)" :class="{ active: eventType === 2 }"><a>{{ actualLang ? "Day life" : "De Jour"}}</a></li>
           </ul>
         </div>
+        <WaterButtonComponent class="btn" :text="actualLang ? 'Reset' : 'Renitialiser'" :type="true" @click="clearFilter()"/>
       </form>
     </div>
   </div>
@@ -19,6 +20,7 @@
   import Setup from "@/JS/Setup";
   import LocalStorageManager from "@/JS/LocalStorageManager";
   import { ref, onMounted, onUnmounted, defineProps, defineEmits, watch } from "vue";
+  import WaterButtonComponent from "@/components/StaticComponents/WaterButtonComponent.vue";
 
   // let trans = ref(null);
   let actualLang = Setup.languageSetup();
@@ -57,6 +59,13 @@
       // actualMode.value = true;
     }
   };
+
+  const clearFilter = () => {
+    LocalStorageManager.setTag(null)
+    let tag = LocalStorageManager.getTag()
+    console.log('tag cleared ' + tag)
+    popClosee();
+  }
 
   watch(actualMode, (newVal, oldVal) => {
     eventType.value = newVal == false ? 1 : 2;
@@ -108,12 +117,21 @@
                 }
             }
             form {
-                margin-top: 7%;
+                margin-top: 3%;
+                display: flex;
+                height: 90%;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+                //border:  2px solid red;
                 h2 {
                     text-align: center;
                     margin-bottom: 1rem;
                     color: #333;
                     font-size: 1.8rem;
+                }
+                .btn {
+                    width: 30%;
                 }
                 .form-actions {
                     display: flex;

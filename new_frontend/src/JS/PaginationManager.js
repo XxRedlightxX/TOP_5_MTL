@@ -18,7 +18,7 @@ const PaginationManager = {
     if (paginationLenght.value == null || paginationLenght.value <= 0) {
       let param = PaginationManager.changePageNumber(value, 1);
       param = filter != null ? param + "?" + filter : param;
-      console.log("param icit : " + param);
+      //console.log("param icit : " + param);
       const apiData = await activitiesStore.getPaginationLenght(param);
       //console.log("retur lenght : " + apiData);
       const tempPaginationLenght = {
@@ -226,8 +226,36 @@ const PaginationManager = {
 
   async getPaginationEvents(parameter, filter = null) {
     const value = PaginationManager.getActualPageNumber(parameter);
-    //console.log("parameter send : " + parameter);
-    //console.log("value get : " + value);
+    const actualPagination = LocalStorageManager.getActualPaginationNumber();
+    console.log("filter get : " + filter);
+
+    //sécurité minimale
+    if (value == null || actualPagination == null) {
+      //console.log("pagination invalide");
+      return;
+    }
+
+    if (filter == null) {
+      console.log("nullllllllllllllllllllllllllllllllllllllllllll");
+      const localFilter = LocalStorageManager.getFilter();
+
+      if (localFilter == null) {
+        PaginationManager.paginationNavigation(parameter);
+      } else {
+        LocalStorageManager.setFilter(null);
+        PaginationManager.gestionPaginationNumber(parameter);
+      }
+    } else {
+      console.log("non nullllllllllllllllllllllllllllllllllllllllllll");
+      LocalStorageManager.setFilter(filter);
+      PaginationManager.gestionPaginationNumber(parameter, filter);
+    }
+
+    PaginationManager.paginationStatus();
+  },
+
+  async paginationNavigation(parameter) {
+    const value = PaginationManager.getActualPageNumber(parameter);
 
     const paginationLenght = LocalStorageManager.getPaginationTotalNumber();
     const actualPagination = LocalStorageManager.getActualPaginationNumber();
@@ -239,12 +267,6 @@ const PaginationManager = {
       LocalStorageManager.getPrevPaginationNumberFromFisrt();
 
     let temp = null;
-
-    // sécurité minimale
-    // if (value == null || actualPagination == null || filter == null) {
-    //   //console.log("pagination invalide");
-    //   return;
-    // }
 
     /** --------------------------
      * ACTUAL PAGINATION
@@ -359,27 +381,17 @@ const PaginationManager = {
         temp = await PaginationManager.getEvents(param);
         LocalStorageManager.setNextPaginationNumber(temp);
       }
-
+    } else {
       /** --------------------------
        * DEFAULT
        * -------------------------- */
-    } else {
-      //console.log("not actual pagination number, change to wathever");
-      if (filter == null) {
-        console.log("nullllllllllllllllllllllllllllllllllllllllllll");
-        PaginationManager.gestionPaginationNumber(parameter);
-      } else {
-        console.log("non nullllllllllllllllllllllllllllllllllllllllllll");
-        PaginationManager.gestionPaginationNumber(parameter, filter);
-      }
+      PaginationManager.gestionPaginationNumber(parameter);
     }
-
-    PaginationManager.paginationStatus();
   },
 
   async getEvents(value, filter = null) {
     const activitiesStore = useActivityStore();
-    console.log("value send : " + value + "?" + filter);
+    //console.log("value send : " + value + "?" + filter);
     const data = await activitiesStore.getActivities(value, filter);
     //console.log("data get : ", data);
     return PaginationManager.setPaginationEventData(value, data);
@@ -388,7 +400,7 @@ const PaginationManager = {
   setPaginationEventData(value, data) {
     let page = PaginationManager.getActualPageNumber(value);
     let donnee = { number: page, days: data.jours, nights: data.nuit };
-    console.log("donnee get : ", donnee);
+    //console.log("donnee get : ", donnee);
     return donnee;
   },
 
@@ -470,7 +482,7 @@ const PaginationManager = {
     } else {
       donnee = null;
     }
-    console.log("" + message + " " + donnee);
+    //console.log("" + message + " " + donnee);
   },
 };
 

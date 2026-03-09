@@ -314,6 +314,23 @@ const LocalStorageManager = {
    * -------------------------- */
 
   /**
+   * Définit le filtre.
+   * Stockée avec expiration afin d’éviter la persistance inutile.
+   * @param {Number} value - Le filtre
+   */
+  setFilter(value) {
+    LocalStorageManager.setWithExpiry("Filter", value, LocalStorageManager.t2);
+  },
+
+  /**
+   * Récupère le filtre.
+   * @returns {Number|null} Filtre
+   */
+  getFilter() {
+    return LocalStorageManager.getWithExpiry("Filter");
+  },
+
+  /**
    * Définit le nombre page total de la pagination.
    * Stockée avec expiration afin d’éviter la persistance inutile.
    * @param {Number} value - Nombre page total de la pagination.
