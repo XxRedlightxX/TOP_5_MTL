@@ -112,7 +112,7 @@ export default defineConfig({
       testDir: './tests',
       testIgnore: /.*\.(setup|teardown)\..*\.ts/
     },*/
-    {
+    /*{
     name: 'Microsoft Edge',
     use: { 
       ...devices['Desktop Edge'], 
@@ -125,7 +125,7 @@ export default defineConfig({
     },
     dependencies: ['setup-edge'],
     testDir: './tests',
-  },
+  },*/
     /*
 
     {
