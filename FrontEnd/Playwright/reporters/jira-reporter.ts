@@ -25,7 +25,8 @@ class JiraReporter implements Reporter {
    * @returns A Promise that resolves when Jira ticket creation is complete.
    */
   async onTestEnd(pTest: TestCase, pResult: TestResult) {
-    // Only run in CI
+    
+    // Only run in CI/CD pipeline
     if (!process.env.CI) {
       return;
     }
