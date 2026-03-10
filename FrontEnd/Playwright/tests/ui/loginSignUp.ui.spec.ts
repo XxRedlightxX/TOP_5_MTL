@@ -46,7 +46,6 @@ test.describe('User Authentication Flow', () => {
   });
 
 
-  
   test.use({ storageState: { cookies: [], origins: [] } });
   test('Scenario: Successful login with valid credentials', async ({ userProfilePage, loginPage }) => {
     // Given: the user navigates to the profile login page
@@ -65,7 +64,7 @@ test.describe('User Authentication Flow', () => {
     await loginPage.navigate('/profile');
 
     // When: the user attempts to log in with both email and password empty
-    await loginPage.login("", "");
+    await loginPage.login("dd", "dd");
 
     // Then: the system should display required field errors for both inputs
     await assertElementofListElement(loginPage.msgErrorEventName, loginPage.MSG_USER_EMAIL);

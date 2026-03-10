@@ -15,12 +15,11 @@ import path from 'path';
  */
 export default defineConfig({
 
-  /*Timeout 70 sec */
-  timeout: 70000,
+  /*Timeout 50 sec */
+  timeout: 50000,
 
   globalTeardown : './tests/global.teardown.ts',
 
-  
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -45,6 +44,10 @@ export default defineConfig({
       timezoneId: 'America/New_York',
       navigationTimeout: 60000,
       screenshot: 'only-on-failure',
+      video: 'off',
+      launchOptions: {
+        args: ['--disable-gpu']
+      },
       // automatically use logged-in state
 
      /*extraHTTPHeaders: {
@@ -64,7 +67,8 @@ export default defineConfig({
       testMatch: /setup\.chromium\.ts/,
       testDir: './tests/setup',
       use: { ...devices['Desktop Chrome'], locale: 'en-US', 
-        launchOptions: { args: ['--lang=en-US'], channel: 'chromium' }
+        launchOptions: { args: ['--lang=en-US'], channel: 'chromium' },
+        video: 'off',
       },
     },
     {
@@ -72,7 +76,8 @@ export default defineConfig({
       testMatch: /setup\.firefox\.ts/,
       testDir: './tests/setup',
       use: { ...devices['Desktop Firefox'], locale: 'en-US',
-        launchOptions: { args: ['--lang=en-US'] }
+        launchOptions: { args: ['--lang=en-US'] },
+        video: 'off',
       }
     },
     {
@@ -81,7 +86,8 @@ export default defineConfig({
       testDir: './tests/setup',
       use: {
         ...devices['Desktop Edge'], locale: 'en-US', 
-        launchOptions:{ args: ['--lang=en-US'], channel: 'msedge' }
+        launchOptions:{ args: ['--lang=en-US'], channel: 'msedge' },
+        video: 'off',
       }
     },
     
@@ -105,7 +111,7 @@ export default defineConfig({
       dependencies: ['setup-firefox'],
       testDir: './tests',
       testIgnore: /.*\.(setup|teardown)\..*\.ts/
-    },
+    },*/
     {
     name: 'Microsoft Edge',
     use: { 
@@ -119,7 +125,7 @@ export default defineConfig({
     },
     dependencies: ['setup-edge'],
     testDir: './tests',
-  },*/
+  },
     /*
 
     {

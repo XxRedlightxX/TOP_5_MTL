@@ -22,7 +22,6 @@ export class LoginSignUpPage extends BasePage {
   public readonly radioGroupUserType : Locator;
 
 
-  
   public readonly MSG_USER_EMAIL = "The email field is required";
   public readonly MSG_USER__EXIST_EMAIL = "There is already a user with email: ";
   public readonly MSG_USER_WRONGFORMAT_EMAIL = "The email field must be a valid email address.";
@@ -50,7 +49,6 @@ export class LoginSignUpPage extends BasePage {
     this.btn_toggleAuth = page.getByTestId("toggle-auth-mode").filter({ visible: true }).first()
     this.msgErrorEventName = page.locator(".error");
     this.radioGroupUserType = page.getByTestId("user-type-group");
-
   }
 
   async login(pUsername: string, pPassword: string) {
@@ -85,7 +83,6 @@ export class LoginSignUpPage extends BasePage {
 
   async goToUserProfile() : Promise<UserProfilePage> {
     await expect(this.page).toHaveURL(/.*profile/);
-   
     return new UserProfilePage(this.page);
   }
 }
