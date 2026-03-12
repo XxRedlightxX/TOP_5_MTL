@@ -22,23 +22,34 @@ export const test = base.extend<MyFixtures>({
     },
     
     userData: async ({ browserName }, use, testInfo) => {
+
         let nameToLookup = browserName;
 
-        // If the project name is "Microsoft Edge", use "edge" to find the file
         if (testInfo.project.name.toLowerCase().includes('edge')) {
-            nameToLookup = 'edge';
+        nameToLookup = 'edge';
         }
 
+    // 1. Check if we are in a setup project
+         const isSetup = testInfo.project.name.toLowerCase().includes('setup');
+
         const userData = getBrowserUserData(nameToLookup);
-        
-        if (!userData) {
+    
+    // 2. ONLY throw the error if we AREN'T in setup.
+    // In setup, we provide an empty object because we are about to create the data.
+        if (!isSetup && (!userData || Object.keys(userData).length === 0)) {
             throw new Error(`❌ No user data found for: ${nameToLookup}. 
-                Check playwright/.auth/ for ${nameToLookup}-user-data.json`);
+                Check playwright/.auth/ for ${nameToLookup}-user-data.json. 
+                Current Project: ${testInfo.project.name}`);
         }
-        
-        console.log(`Loaded user data for ${testInfo.project.name}: ${userData.username}`);
-        await use(userData);
-    },
+    
+        if (userData?.username) {
+            console.log(`✅ Loaded user data for ${testInfo.project.name}: ${userData.username}`);
+        } else {
+            console.log(`ℹ️ Running setup for ${testInfo.project.name}: providing empty userData.`);
+        }
+
+        await use(userData || {}); 
+},
 });
 
 export { expect } from '@playwright/test';
