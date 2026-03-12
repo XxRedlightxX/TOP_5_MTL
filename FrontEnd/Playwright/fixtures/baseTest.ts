@@ -22,33 +22,21 @@ export const test = base.extend<MyFixtures>({
     },
     
     userData: async ({ browserName }, use, testInfo) => {
-
+    // We return a function that the test calls to get the data
+    const getData = () => {
         let nameToLookup = browserName;
-
-        if (testInfo.project.name.toLowerCase().includes('edge')) {
-        nameToLookup = 'edge';
+        if (testInfo.project.name.toLowerCase().includes('edge')) nameToLookup = 'edge';
+        
+        const data = getBrowserUserData(nameToLookup);
+        
+        // Only throw if we are NOT in a setup test
+        if (!testInfo.project.name.includes('setup') && (!data || !data.username)) {
+            throw new Error(`❌ Required auth data missing for ${nameToLookup}`);
         }
+        return data || {};
+    };
 
-    // 1. Check if we are in a setup project
-         const isSetup = testInfo.project.name.toLowerCase().includes('setup');
-
-        const userData = getBrowserUserData(nameToLookup);
-    
-    // 2. ONLY throw the error if we AREN'T in setup.
-    // In setup, we provide an empty object because we are about to create the data.
-        if (!isSetup && (!userData || Object.keys(userData).length === 0)) {
-            throw new Error(`❌ No user data found for: ${nameToLookup}. 
-                Check playwright/.auth/ for ${nameToLookup}-user-data.json. 
-                Current Project: ${testInfo.project.name}`);
-        }
-    
-        if (userData?.username) {
-            console.log(`✅ Loaded user data for ${testInfo.project.name}: ${userData.username}`);
-        } else {
-            console.log(`ℹ Running setup for ${testInfo.project.name}: providing empty userData.`);
-        }
-
-        await use(userData || {}); 
+    await use(getData()); // If you want to keep the current usage, or pass getData if you want lazy loading
 },
 });
 
