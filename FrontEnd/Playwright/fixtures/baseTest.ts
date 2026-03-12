@@ -45,7 +45,7 @@ export const test = base.extend<MyFixtures>({
         if (userData?.username) {
             console.log(`✅ Loaded user data for ${testInfo.project.name}: ${userData.username}`);
         } else {
-            console.log(`ℹ️ Running setup for ${testInfo.project.name}: providing empty userData.`);
+            console.log(`ℹ Running setup for ${testInfo.project.name}: providing empty userData.`);
         }
 
         await use(userData || {}); 
