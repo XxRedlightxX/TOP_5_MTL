@@ -15,7 +15,7 @@ This project demonstrates QA automation practices including:
 - CI/CD integration
 - Automatic Jira ticket creation on test failures with screenshots
 - HTML test reporting
-- Authentication reuse with storageState with browser cookies
+- Authentication reuse with storageState 
 
 
 ## Prerequisite
@@ -195,6 +195,7 @@ FrontEnd/
 │   ├── tests/          # UI/API test cases
 │   ├── pages/          # Page Object Models
 |   ├── mockData/       # Data
+|   ├── mockData/       # Api & Ui helpers
 |   ├── models/         # Models
 │   ├── fixtures/       # Shared test fixtures
 │   ├── api/            # API helpers
@@ -224,12 +225,6 @@ cd your-repository
  Install Backend (Laravel)
 ```
 cd Backend
-composer install
-cp .env.example .env
-touch database/database.sqlite
-php artisan key:generate
-php artisan migrate
-
 # Create .env.testing
 
     APP_NAME=Laravel
@@ -281,13 +276,20 @@ php artisan migrate
     DB_DATABASE=database/database.sqlite
 
 
+composer install
+cp .env.example .env
+touch database/database.sqlite
+php artisan key:generate
+php artisan migrate:fresh --seed --env=testing --force
+
+
 ```
 
 Install frontend dependencies:
 
 ```
 cd FrontEnd
-npm install 
+npm install / npm install -i
     .env 
     # -----------------------
     # Application URLs
@@ -331,7 +333,8 @@ npm install
 ```
 
 Install Playwright browsers:
-
+ cd FrontEnd/Playwright
+ 
 ```
 npx playwright install
 ```
