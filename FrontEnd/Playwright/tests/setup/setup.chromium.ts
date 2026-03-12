@@ -12,14 +12,13 @@ setup('Chromium-specific authentication', async ({ userProfilePage, loginPage, p
     console.log(' Setting up Chromium browser...');
     
     // Ensure directory exists
-    const dir = path.dirname(authFile);
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-    }
+    fs.mkdirSync(path.dirname(authFile), { recursive: true });
     
     // if file already exists remove old state of that file
-    if (fs.existsSync(authFile)) { fs.unlinkSync(authFile); }
-    if (fs.existsSync(dataFile)) { fs.unlinkSync(dataFile); }
+    if (fs.existsSync(authFile)) {
+        fs.unlinkSync(authFile);
+        return;
+    }
     
     const id = Date.now();
     const userInputs = { 
