@@ -95,16 +95,22 @@ jobs:
       working-directory: FrontEnd
       run: npx playwright install --with-deps
 
+    # -------------------------
+    # 12. Start Laravel and Vue servers
+    # -------------------------
     - name: Start Servers
       run: |
         cd Backend
         php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
         
         cd ../FrontEnd
-        npm run preview -- --port 3000 > /dev/null 2>&1 & 
+        # Adding --host 127.0.0.1 ensures Vite binds to the same IP curl is checking
+        npm run preview -- --port 3000 --host 127.0.0.1 > /dev/null 2>&1 & 
         
-        # Wait for actual local URLs
+        echo "Checking API on http://127.0.0.1:8000"
         timeout 60s bash -c 'until curl -s http://127.0.0.1:8000 > /dev/null; do echo "Waiting for API..."; sleep 2; done'
+        
+        echo "Checking Vue on http://127.0.0.1:3000"
         timeout 60s bash -c 'until curl -s http://127.0.0.1:3000 > /dev/null; do echo "Waiting for Vue..."; sleep 2; done'
 
     - name: Run Playwright tests
