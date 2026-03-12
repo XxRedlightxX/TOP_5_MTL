@@ -12,6 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     env:
       APP_ENV: testing
@@ -114,9 +115,9 @@ jobs:
         timeout 60s bash -c 'until curl -s http://127.0.0.1:3000 > /dev/null; do echo "Waiting for Vue..."; sleep 2; done'
 
     - name: Run Playwright tests
+      timeout-minutes: 8
       working-directory:  FrontEnd/Playwright
       run: |
-        mkdir -p playwright/.auth
         npx playwright test
       env: 
         APP_URL: http://127.0.0.1:3000
