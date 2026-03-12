@@ -115,8 +115,10 @@ jobs:
 
     - name: Run Playwright tests
       working-directory: FrontEnd
-      run: npx playwright test
-      env:
+      run: |
+        mkdir -p playwright/.auth
+        npx playwright test
+      env: 
         # Use literal localhost URLs to match the servers we just started
         APP_URL: http://127.0.0.1:3000
         JIRA_HOST: ${{ secrets.JIRA_HOST }}
