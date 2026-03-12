@@ -22,22 +22,23 @@ export const test = base.extend<MyFixtures>({
     },
     
     userData: async ({ browserName }, use, testInfo) => {
-    // We return a function that the test calls to get the data
-    const getData = () => {
         let nameToLookup = browserName;
-        if (testInfo.project.name.toLowerCase().includes('edge')) nameToLookup = 'edge';
-        
-        const data = getBrowserUserData(nameToLookup);
-        
-        // Only throw if we are NOT in a setup test
-        if (!testInfo.project.name.includes('setup') && (!data || !data.username)) {
-            throw new Error(`❌ Required auth data missing for ${nameToLookup}`);
-        }
-        return data || {};
-    };
 
-    await use(getData()); // If you want to keep the current usage, or pass getData if you want lazy loading
-},
+        // If the project name is "Microsoft Edge", use "edge" to find the file
+        if (testInfo.project.name.toLowerCase().includes('edge')) {
+            nameToLookup = 'edge';
+        }
+
+        const userData = getBrowserUserData(nameToLookup);
+        
+        if (!userData) {
+            throw new Error(`No user data found for: ${nameToLookup}. 
+                Check playwright/.auth/ for ${nameToLookup}-user-data.json`);
+        }
+        
+        console.log(`Loaded user data for ${testInfo.project.name}: ${userData.username}`);
+        await use(userData);
+    },
 });
 
 export { expect } from '@playwright/test';

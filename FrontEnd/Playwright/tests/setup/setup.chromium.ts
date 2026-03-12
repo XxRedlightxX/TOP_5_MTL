@@ -30,7 +30,7 @@ setup('Chromium-specific authentication', async ({ userProfilePage, loginPage, p
     
     // Create user via API
     const apiResponse = await createUser(new AuthApi(request), userInputs as any);
-    
+    console.log(apiResponse,"test")
     // Perform UI login
     await loginPage.navigate('/profile');
     await loginPage.login(userInputs.email, userInputs.password);
