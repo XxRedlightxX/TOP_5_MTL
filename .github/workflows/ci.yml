@@ -114,7 +114,7 @@ jobs:
         timeout 60s bash -c 'until curl -s http://127.0.0.1:3000 > /dev/null; do echo "Waiting for Vue..."; sleep 2; done'
 
     - name: Run Playwright tests
-      working-directory: FrontEnd
+      working-directory:  FrontEnd/Playwright
       run: |
         mkdir -p playwright/.auth
         npx playwright test
@@ -129,11 +129,6 @@ jobs:
       
 
 
-    - name: Debug environment
-      working-directory: FrontEnd
-      run: |
-        echo "APP_URL=$APP_URL"
-        echo "API_BASE_URL=$API_BASE_URL"
 
 
     - name: Upload Playwright report
