@@ -12,13 +12,14 @@ setup('Firefox-specific authentication', async ({ userProfilePage, loginPage, pa
     console.log(' Setting up Firefox browser...');
     
     // Ensure directory exists
-    fs.mkdirSync(path.dirname(authFile), { recursive: true });
-    
-    // if file already exists remove old state of that file
-    if (fs.existsSync(authFile)) {
-        console.log('✅ Firefox auth file already exists, skipping');
-        return;
+    const dir = path.dirname(authFile);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
     }
+           
+    // if file already exists remove old state of that file
+    if (fs.existsSync(authFile)) { fs.unlinkSync(authFile); }
+    if (fs.existsSync(dataFile)) { fs.unlinkSync(dataFile); }
     
     const id = Date.now();
     const userInputs = { 
