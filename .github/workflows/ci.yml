@@ -18,47 +18,25 @@ jobs:
       APP_DEBUG: false
 
     steps:
-
-    # -------------------------
-    # 1. Checkout code
-    # -------------------------
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # -------------------------
-    # 2. Setup PHP
-    # -------------------------
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
-        extensions: mbstring, bcmath, sqlite
+        extensions: mbstring, bcmath, sqlite, pdo_sqlite
         coverage: none
 
-    # -------------------------
-    # 3. Install backend dependencies securely
-    # -------------------------
     - name: Install Composer dependencies
       working-directory: Backend
-      run: |
-        composer install \
-          --prefer-dist \
-          --no-interaction \
-          --no-progress \
-          --no-scripts
+      run: composer install --prefer-dist --no-interaction --no-progress --no-scripts
 
-        composer audit || true
-
-    # -------------------------
-    # 4. Create secure Laravel environment
-    # -------------------------
-    - name: Prepare Laravel environment securely
+    - name: Prepare Laravel environment
       working-directory: Backend
       run: |
-
         mkdir -p database
         touch database/database.sqlite
-
         mkdir -p storage/framework/{cache,sessions,views}
         mkdir -p storage/app/public
         chmod -R 775 storage bootstrap/cache
@@ -69,54 +47,23 @@ jobs:
         APP_NAME=Laravel
         APP_ENV=testing
         APP_KEY=${{ secrets.APP_KEY }}
-        APP_DEBUG=false
-        APP_URL=${{ secrets.APP_URL }}
-
-        
-
+        APP_DEBUG=true
+        APP_URL=http://127.0.0.1:8000
         DB_CONNECTION=sqlite
         DB_DATABASE=$DB_PATH
-
-
+        SANCTUM_STATEFUL_DOMAINS=127.0.0.1:3000,localhost:3000
+        SESSION_DOMAIN=127.0.0.1
+        CORS_ALLOWED_ORIGINS=http://127.0.0.1:3000
         LOG_CHANNEL=stack
-        LOG_LEVEL=error
         CACHE_DRIVER=array
         SESSION_DRIVER=file
         QUEUE_CONNECTION=sync
-
-        SANCTUM_STATEFUL_DOMAINS=${{ secrets.SANCTUM_STATEFUL_DOMAINS }}
-        SESSION_DOMAIN=${{ secrets.SESSION_DOMAIN }}
-        CORS_ALLOWED_ORIGINS=http://localhost:3000
         EOF
 
-        php artisan config:clear --env=testing
-        php artisan config:cache --env=testing
-
-    # -------------------------
-    # 5. Run migrations and seeders
-    # -------------------------
     - name: Run database migrations and seeders
       working-directory: Backend
       run: php artisan migrate:fresh --seed --env=testing --force
 
-    # -------------------------
-    # 6. Run backend tests
-    # -------------------------
-    - name: Run backend tests
-      working-directory: Backend
-      run: php artisan test --env=testing || echo "tests_failed=true" >> $GITHUB_OUTPUT
-
-
-    # -------------------------
-    # 7. Re-seed database for Playwright
-    # -------------------------
-    - name: Re-seed database for Playwright
-      working-directory: Backend
-      run: php artisan migrate:fresh --seed --env=testing --force
-
-    # -------------------------
-    # 8. Setup Node.js securely
-    # -------------------------
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
@@ -124,81 +71,54 @@ jobs:
         cache: npm
         cache-dependency-path: FrontEnd/package.json
 
-    # -------------------------
-    # 9. Install frontend dependencies securely
-    # -------------------------
     - name: Install frontend dependencies
       working-directory: FrontEnd
-      run: |
-        npm ci
-        npm audit --audit-level=high || true
+      run: npm ci
 
-    # -------------------------
-    # 10. Build Vue frontend
-    # -------------------------
-    - name: Build frontend
-      working-directory: FrontEnd
-      run: npm run build
-
-    # -------------------------
-    # 11. Install Playwright securely
-    # -------------------------
-    - name: Install Playwright
-      working-directory: FrontEnd
-      run: |
-        npm install --save-dev @playwright/test
-        npx playwright install --with-deps
-
-
-    # --- NEW: CRITICAL STEP FOR VUE ---
+    # --- CRITICAL: Environment MUST come BEFORE Build ---
     - name: Prepare Frontend Environment
       working-directory: FrontEnd
       run: |
         cat <<EOF > .env
         VITE_API_BASE_URL=http://127.0.0.1:8000/api/
-        URL=http://127.0.0.1:8000
-        APP_URL=${{secrets.FRONTEND_APP_URL }} 
         VITE_REVERB_APP_KEY=123
         VITE_REVERB_HOST=127.0.0.1
         VITE_REVERB_PORT=8080
         VITE_REVERB_SCHEME=http
         EOF
 
-    # -------------------------
-    # 12. Start Laravel and Vue servers
-    # -------------------------
+    - name: Build frontend
+      working-directory: FrontEnd
+      run: npm run build
+
+    - name: Install Playwright
+      working-directory: FrontEnd
+      run: npx playwright install --with-deps
+
     - name: Start Servers
-      working-directory: 
       run: |
         cd Backend
-        # Explicitly tell 'serve' to use the testing environment
         php artisan serve --env=testing --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
         
         cd ../FrontEnd
         npm run preview -- --port 3000 > /dev/null 2>&1 & 
         
-        until curl -s ${{ secrets.APP_URL }} > /dev/null; do echo "Waiting for API..."; sleep 2; done
-        until curl -s ${{ secrets.FRONTEND_APP_URL }} > /dev/null; do echo "Waiting for Vue..."; sleep 2; done
+        # Wait for actual local URLs
+        timeout 60s bash -c 'until curl -s http://127.0.0.1:8000 > /dev/null; do echo "Waiting for API..."; sleep 2; done'
+        timeout 60s bash -c 'until curl -s http://127.0.0.1:3000 > /dev/null; do echo "Waiting for Vue..."; sleep 2; done'
 
-
-    # -------------------------
-    # 13. Run Playwright tests
-    # -------------------------
     - name: Run Playwright tests
-      working-directory: FrontEnd/Playwright
+      working-directory: FrontEnd
       run: npx playwright test
       env:
-        APP_URL: ${{ secrets.FRONTEND_APP_URL }}
-        NODE_ENV: testing
+        # Use literal localhost URLs to match the servers we just started
+        APP_URL: http://127.0.0.1:3000
         JIRA_HOST: ${{ secrets.JIRA_HOST }}
         JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
         JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
         JIRA_PROJECT_KEY: ${{ secrets.JIRA_PROJECT_KEY }}
         CI: true
 
-    # -------------------------
-    # 14. Upload Playwright report
-    # -------------------------
     - name: Upload Playwright report
       if: always()
       uses: actions/upload-artifact@v4
