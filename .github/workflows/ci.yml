@@ -156,7 +156,7 @@ jobs:
       run: |
         cat <<EOF > .env
         VITE_API_BASE_URL=http://127.0.0.1:8000/api/
-        URL=${{ secrets.APP_URL }}
+        URL=http://127.0.0.1:8000
         APP_URL=${{secrets.FRONTEND_APP_URL }} 
         VITE_REVERB_APP_KEY=123
         VITE_REVERB_HOST=127.0.0.1
