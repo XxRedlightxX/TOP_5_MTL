@@ -401,7 +401,7 @@ Add screenshots demonstrating:
 
 
 # Sources 
-
+- Playwright : https://playwright.dev/docs/intro
 - Jira API : https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/#about
 - GitHub Actions : https://docs.github.com/en/actions
 - Typescript : https://www.typescriptlang.org/docs/
