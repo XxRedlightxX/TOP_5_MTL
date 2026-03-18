@@ -129,7 +129,7 @@ CI Pipeline includes:
 2. Setup Laravel testing environment
 3. Run backend tests
 4. Build Vue frontend
-5. Run Playwright UI tests
+5. Run Playwright UI/API tests
 6. Generate Playwright reports
 7. Create Jira tickets on test failures
 
@@ -195,7 +195,7 @@ FrontEnd/
 │   ├── tests/          # UI/API test cases
 │   ├── pages/          # Page Object Models
 |   ├── mockData/       # Data
-|   ├── mockData/       # Api & Ui helpers
+|   ├── helpers/       # Api & Ui helpers
 |   ├── models/         # Models
 │   ├── fixtures/       # Shared test fixtures
 │   ├── api/            # API helpers
