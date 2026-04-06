@@ -1,5 +1,5 @@
 <template>
-  <div id="profileSingleEventComponent" class="glass">
+  <div id="profileSingleEventComponent" class="glass" @click="goToEvent(event.id)" :title="actualLang ? 'Go to the event page' : 'Allez a la page de l\'event'">
     <div class="first">
       <img alt="#" :src="props.event.image_data">
     </div>
@@ -23,12 +23,15 @@
 <script setup>
   import { defineEmits, defineProps } from 'vue'
   import LocalStorageManager from '@/JS/LocalStorageManager'
+  import SetupEvent from "@/JS/SetupEvents";
   import Setup from '@/JS/Setup'
+  import { useRouter } from "vue-router";
 
   let actualLang = Setup.languageSetup()
   let isLogged = Setup.loginSetup()
   let actualMode = Setup.modeSetup()
 
+  const router = useRouter();
   const props = defineProps({
     event: Object, // Boolean type prop
     himself: Boolean, // Boolean type prop
@@ -36,6 +39,15 @@
 
   // Définir les événements émis par ce composant
   const emit = defineEmits(['popUpdate'])
+
+  async function goToEvent(id) {
+    await setEvent(id);   // 1) stocker l’event
+    router.push("/Event"); // 2) naviguer ensuite
+  } 
+
+  async function setEvent(id) {
+    const event = await SetupEvent.singleEventSetup(id)
+  }
 
   const showUp = () => {
     emit('popUpdate')

@@ -21,9 +21,11 @@
             p {
                 strong {
                     cursor: pointer;
+                    text-decoration: underline;
                 }
                 strong:hover {
-                    text-decoration: underline;
+                    //text-decoration: underline;
+                    //font-weight: bolder;
                 }
             }
         }
@@ -55,6 +57,9 @@
         p, h3 {
             color: var(--graphite06);
         }
+        p strong:hover {
+            color: var(--graphite02);
+        }
     }
 }
   
@@ -71,7 +76,10 @@
             color: var(--light);
         }
         p, h3 {
-            color: var(--light-trans-text);
+            color: var(--light07);
+        }
+        p strong:hover {
+            color: var(--light015);
         }
     }
 }

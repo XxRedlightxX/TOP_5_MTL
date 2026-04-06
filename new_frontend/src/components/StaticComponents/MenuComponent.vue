@@ -70,7 +70,7 @@
 
   const handleScroll = () => {
     let scrollTop = window.scrollY || document.documentElement.scrollTop;
-    console.log("scroll : ", scrollTop)
+    //console.log("scroll : ", scrollTop)
     if (scrollTop > lastScrollTop && width.value >= 1025) {
       document.querySelector('#menuComponent').style.top = '-80px'; // Hide the navbar on scroll down
     } else if(scrollTop < lastScrollTop && width.value >= 1025) {

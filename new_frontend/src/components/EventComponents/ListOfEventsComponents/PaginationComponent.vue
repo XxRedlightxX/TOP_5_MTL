@@ -25,25 +25,28 @@
   import { ref, defineProps, defineEmits, onMounted } from 'vue';
   import Setup from '@/JS/Setup';
 
+  
+  let actualLang = Setup.languageSetup();
   const props = defineProps({
-    lenght: {
-      type: Number,
-    },
+    lenght: {type: Number},
+    page: {type: Number},
   })
 
   const emit = defineEmits(['paginationChanged'])
 
   const pages = ref([]);
-  const currentPage = ref(1);
+  const currentPage =ref(props.page)// ref(null);
 
   const createPagination = () => {
     pages.value = []; // reset pour éviter doublons
     for (let i = 1; i <= props.lenght; i++) {
       pages.value.push(i);
     }
+    console.log('pagess : ', pages)
   }
 
   const changePage = (index) => {
+    console.log('page send : '+ index)
     currentPage.value = index;
     emit('paginationChanged', index)
   };
@@ -56,16 +59,17 @@
   };
 
   const nextPage = () => {
-    if (currentPage.value < pages.length - 1) {
+    if (currentPage.value < pages.value.length) {
       currentPage.value++;
       emit('paginationChanged', currentPage.value);
     }
   };
 
   onMounted(async () => {
-    await createPagination()
+    createPagination()
+    currentPage.value = props.page
+    console.log('current page = ' + currentPage.value + ' props page = ' + props.page)
   })
-  let actualLang = Setup.languageSetup();
  </script>
 
  <style lang="scss">

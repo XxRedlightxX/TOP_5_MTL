@@ -73,7 +73,7 @@
 
           <v-textarea v-model="messageData" :label="actualLang ? 'Type your Message' : 'Entrez votre message'"></v-textarea>
 
-          <waterButton class="btn" :text="actualLang ? 'Send' : 'Envoyer'" :type="true" />
+          <waterButton class="btn" :text="actualLang ? 'Send' : 'Envoyer'" :type="true" @click="sendEmail()"/>
         </form>
       </div>
     </div>

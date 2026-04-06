@@ -10,6 +10,7 @@
 
 <style lang="scss">
     #eventOrganisatorView {
-        padding: 8% 0% 3% 0%;
+      padding: 1% 0% 3% 0%;
+      //border: 2px solid red;
     }
 </style>
