@@ -5,7 +5,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
 # Playwright QA Automation Framework
 
-End-to-end **QA automation framework** built with **Playwright** for a full-stack application using **Laravel (Backend)** and **Vue.js (Frontend)**.
+End-to-end/API **QA automation framework** built with **Playwright** for a full-stack application using **Laravel (Backend)** and **Vue.js (Frontend)**.
 
 This project demonstrates QA automation practices including:
 
